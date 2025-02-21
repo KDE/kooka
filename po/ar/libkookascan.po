@@ -1,42 +1,42 @@
-# KDE Finnish translation sprint participants:
-# Author: Artnay
-# Author: Lliehu
-# SPDX-FileCopyrightText: 2018, 2021, 2024 Tommi Nieminen <translator@legisign.org>
-# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2016.
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kooka package.
+# SPDX-FileCopyrightText: 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: libkscan\n"
+"Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-10-18 18:35+0300\n"
-"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
-"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
-"Language: fi\n"
+"PO-Revision-Date: 2025-01-04 21:33+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Tommi Nieminen"
+msgstr "زايد السعيدي"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "translator@legisign.org"
+msgstr "zayed.alsaidi@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:85
 #, kde-format
 msgid "All Image Files"
-msgstr "Kaikki kuvatiedostot"
+msgstr "كل ملفّات الصّور"
 
 #: ../libdialogutil/imagefilter.cpp:90
 #, kde-format
 msgid "All Files"
-msgstr "Kaikki tiedostot"
+msgstr "كلّ الملفّات"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -50,40 +50,39 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
-"Ellei kuvanlukijaa tunnistettu automaattisesti, sen voi asettaa tässä. "
-"<interface>Kuvanlukulaite</interface> on SANE-taustajärjestelmän laitenimi. "
-"<interface>Valmistaja</interface>-, <interface>Tyyppi</interface>- ja "
-"<interface>Kuvaus</interface>-kentistä laitteen voi tunnistaa myöhemmin.<nl/"
-"><nl/>Lisätietoa <link url=\"?1\">SANE-taustajärjestelmistä</link>, <link "
-"url=\"?2\">laitteiden paikannuksesta</link>, <link url=\"?3\">HP-"
-"kuvanlukijoista</link>, <link url=\"?4\">laitetta ei löytynyt</link> -"
-"ilmoituksesta."
+"إذا لم يكتشف الماسح الضوئي الخاص بك تلقائيًا، فيمكنك تحديده هنا. "
+"<interface>جهاز الماسح الضوئي</interface> هو اسم جهاز SANE الخلفي. يمكن "
+"استخدام <interface>الشركة المصنعة</interface> و<interface>النوع</interface> "
+"و<interface>الوصف</interface> لتحديد الماسح الضوئي لاحقًا.<nl/><nl/>مزيد من "
+"المعلومات حول <link url=\"?1\">أجهزة SANE الخلفية</link>، و<link url=\"?"
+"2\">تحديد موقع الأجهزة</link>، و<link url=\"?3\">أجهزة المسح الضوئي HP</"
+"link>، و<link url=\"?4\">لم يتم العثور على الجهاز</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
 msgid "Scanner device:"
-msgstr "Kuvanlukulaite:"
+msgstr "جهاز المسح:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr "Käyttäjän määritys"
+msgstr "مخصص من قبل المستخدم"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr "Valmistaja:"
+msgstr "المصنّع:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
 msgid "Device type:"
-msgstr "Laitetyyppi:"
+msgstr "نوع الجهاز:"
 
 #: adddevicedialog.cpp:90
 #, kde-format
 msgid "Description:"
-msgstr "Kuvaus:"
+msgstr "الوصف:"
 
 #: adddevicedialog.cpp:126
 #, kde-kuit-format
@@ -94,10 +93,10 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
-"<interface>Kuvanlukulaitteen</interface> tulisi olla SANEn ymmärtämä "
-"taustajärjestelmänimi (valinnaisin parametrein). Lisätietoa saatavilla "
-"olevista taustajärjestelmistä ja laitenimien muodosta: <link url=\"man:/sane"
-"\">sane(7)</link> tai <link url=\"man:/sane-dll\">sane&#8209;dll</link>."
+"يجب أن يكون <interface>جهاز المسح</interface> اسمًا خلفيًا (مع معلمات "
+"اختيارية) يمكن فهمه بواسطة SANE. راجع <link url=\"man:/sane\">sane(7)</link> "
+"أو <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> لمزيد من المعلومات "
+"حول الواجهات الخلفية المتاحة وتنسيق أسماء الأجهزة."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -110,11 +109,6 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
-"Tähän tarvittavan tiedon voi löytää etsimällä SCSI-, USB- tai "
-"rinnakkaisporttilaitetta komennolla <link url=\"man:/sane-find-scanner"
-"\">sane&#8209;find&#8209;scanner(1)</link> tai verkkolaitetta <link url="
-"\"man:/scanimage\">scanimage(1)</link>-komennon <icode>&#8209;L</icode>-"
-"valitsimella. Jos kuvanlukija löytyy, syötä komennon näyttämä laitenimi."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -127,12 +121,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
-"<link url=\"http://hplip.sourceforge.net/\">HPLIP</link>iä käyttävän HP:n "
-"USB- tai verkkokuvanlukijan voi yrittää löytää  <command>hp&#8209;probe</"
-"command>-komennolla, esimerkiksi <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;"
-"usb</icode> tai <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. "
-"Huomaa, että jos HPLIP löytää laitteen, sen näyttämä <icode>hp:</icode>-"
-"laitenimi tulee korvata SANEa varten jonolla <icode>hpaio:</icode>."
+"بالنسبة إلى الماسح الضوئي HP USB أو الشبكي الذي يستخدم <link url=\"http://"
+"hplip.sourceforge.net/\">HPLIP</link>، حاول استخدام الأمر <command>hp&#8209;"
+"probe</command> لتحديد موقعه، على سبيل المثال <icode>hp&#8209;probe&nbsp;"
+"&#8209;b&nbsp;usb</icode> أو <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</"
+"icode>. لاحظ أنه إذا تم العثور على الماسح الضوئي بواسطة HPLIP، فيجب استبدال "
+"اسم الجهاز <icode>hp:</icode> الذي يعرضه بـ <icode>hpaio:</icode> لـ SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -142,327 +136,324 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
-"Elleivät nämä komennot löydä kuvanlukijaa, SANE ei ehkä tue sitä. Tarkista "
-"SANEn ohjeista <link url=\"http://www.sane-project.org/sane-supported-"
-"devices.html\">tuetut laitteet</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr "<subtitle>Automaattinen valinta</subtitle>"
+msgstr "<subtitle>تحديد آلي</subtitle>"
 
 #: autoselectbar.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the grayscale value of the selected threshold"
-msgstr "Tämä on valitun kynnyksen harmaasävyarvo"
+msgstr ""
 
 #: autoselectbar.cpp:90
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform the auto-detection again"
-msgstr "Tee automaattitunnistus uudelleen"
+msgstr ""
 
 #: autoselectbar.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Advanced settings for auto-detection"
-msgstr "Automaattitunnuksen lisäasetukset"
+msgstr ""
 
 #: autoselectdialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr "Valitse asetukset automaattisesti"
+msgstr "إعدادات التحديد التلقائي"
 
 #: autoselectdialog.cpp:82
 #, kde-format
 msgid "Black"
-msgstr "Musta"
+msgstr "أسود"
 
 #: autoselectdialog.cpp:83
 #, kde-format
 msgid "White"
-msgstr "Valkoinen"
+msgstr "أبيض"
 
 #: deviceselector.cpp:58
 #, kde-format
 msgid "Select"
-msgstr "Valitse"
+msgstr "اختر"
 
 #: deviceselector.cpp:59
 #, kde-format
 msgid "Select Scan Device"
-msgstr "Valitse kuvanlukulaite"
+msgstr "اختر جهاز المسح الضوئي"
 
 #: deviceselector.cpp:71
 #, kde-format
 msgid "Available Scanners:"
-msgstr "Käytettävissä olevat kuvanlukijat:"
+msgstr "المساحات المتوفرة:"
 
 #: deviceselector.cpp:82
 #, kde-format
 msgid "Always use this device at startup"
-msgstr "Käytä tätä laitetta aina käynnistettäessä"
+msgstr "استخدم هذا الجهاز دائمًا عند بدء التشغيل"
 
 #: gammadialog.cpp:53
 #, kde-format
 msgid "Edit Gamma Table"
-msgstr "Muokkaa gammataulukkoa"
+msgstr "حرر جدول غاما"
 
 #: gammadialog.cpp:61
 #, kde-format
 msgid "Brightness"
-msgstr "Kirkkaus"
+msgstr "السطوع"
 
 #: gammadialog.cpp:71
 #, kde-format
 msgid "Contrast"
-msgstr "Kontrasti"
+msgstr "التباين"
 
 #: gammadialog.cpp:81
 #, kde-format
 msgid "Gamma"
-msgstr "Gamma"
+msgstr "غاما"
 
 #: gammadialog.cpp:95
 #, kde-format
 msgid "This gamma table is passed to the scanner hardware."
-msgstr "Tämä gammataulukko välitetään kuvanlukulaitteistolle."
+msgstr "يمرر جدول غاما هذا إلى أجهزة الماسح الضوئي."
 
 #: imagecanvas.cpp:785
 #, kde-format
 msgid "Fit Best"
-msgstr "Paras sovitus"
+msgstr "الأفضل ملائمة"
 
 #: imagecanvas.cpp:786
 #, kde-format
 msgid "Original size"
-msgstr "Alkuperäinen koko"
+msgstr "الحجم الأصلي"
 
 #: imagecanvas.cpp:787
 #, kde-format
 msgid "Fit Width"
-msgstr "Sovita leveys"
+msgstr "لائم العرض"
 
 #: imagecanvas.cpp:788
 #, kde-format
 msgid "Fit Height"
-msgstr "Sovita korkeus"
+msgstr "ملائمة الارتفاع"
 
 #: imagecanvas.cpp:789
 #, kde-format
 msgid "Zoom %1%"
-msgstr "Lähennys %1 %"
+msgstr "تكبير %1٪"
 
 #: imagecanvas.cpp:790
 #, kde-format
 msgid "Unknown"
-msgstr "Tuntematon"
+msgstr "مجهول"
 
 #: imagecanvas.cpp:888
 #, kde-format
 msgid "%1x%2 pix, %3 bpp"
-msgstr "%1 × %2 pix, %3 bpp"
+msgstr ""
 
 #: imgscaledialog.cpp:51
 #, kde-format
 msgid "Image Zoom"
-msgstr "Kuvan lähennys"
+msgstr "تكبير الصورة"
 
 #: imgscaledialog.cpp:72
 #, kde-format
 msgid "25 %"
-msgstr "25 %"
+msgstr "25 ٪"
 
 #: imgscaledialog.cpp:79
 #, kde-format
 msgid "50 %"
-msgstr "50 %"
+msgstr "50 ٪"
 
 #: imgscaledialog.cpp:86
 #, kde-format
 msgid "75 %"
-msgstr "75 %"
+msgstr "75 ٪"
 
 #: imgscaledialog.cpp:93
 #, kde-format
 msgid "&100 %"
-msgstr "&100 %"
+msgstr "&100 ٪"
 
 #: imgscaledialog.cpp:105
 #, kde-format
 msgid "150 &%"
-msgstr "150 &%"
+msgstr "150 &٪"
 
 #: imgscaledialog.cpp:112
 #, kde-format
 msgid "200 %"
-msgstr "200 %"
+msgstr "200 ٪"
 
 #: imgscaledialog.cpp:119
 #, kde-format
 msgid "300 %"
-msgstr "300 %"
+msgstr "300 ٪"
 
 #: imgscaledialog.cpp:126
 #, kde-format
 msgid "400 %"
-msgstr "400 %"
+msgstr "400 ٪"
 
 #: imgscaledialog.cpp:141
 #, kde-format
 msgid "Custom:"
-msgstr "Mukautettu:"
+msgstr "مخصص:"
 
 #: kscancontrols.cpp:67
 #, kde-format
 msgid "(Unknown)"
-msgstr "(Tuntematon)"
+msgstr "(مجهول)"
 
 #: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
-msgstr "Palauta tämä asetus vakioarvoonsa, %1"
+msgstr ""
 
 #: kscancontrols.cpp:419
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr "PNM-kuvatiedostot (*.pnm *.pbm *.pgm *.ppm)"
+msgstr ""
 
 #: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
-msgstr "Kuvanlukulaitetta ei ole valittu"
+msgstr ""
 
 #: kscandevice.cpp:1380
 #, kde-format
 msgid "Default startup configuration"
-msgstr "Käynnistyksen oletusasetukset"
+msgstr ""
 
 #: kscandevice.cpp:1480
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
-msgstr "Kuvanlukija<nl/><icode>%1</icode><nl/>vaatii tunnistautumista."
+msgstr ""
 
 #: kscandevice.cpp:1481
 #, kde-format
 msgid "Scanner Authentication"
-msgstr "Kuvanlukijan tunnistautuminen"
+msgstr ""
 
 #: kscandevice.cpp:1525
 #, kde-format
 msgid "OK"
-msgstr "OK"
+msgstr "حسنًا"
 
 #: kscandevice.cpp:1526
 #, kde-format
 msgid "No device"
-msgstr "Ei laitetta"
+msgstr "لا يوجد جهاز"
 
 #: kscandevice.cpp:1527
 #, kde-format
 msgid "Bad parameter"
-msgstr "Virheellinen parametri"
+msgstr "مُعامِل سيء"
 
 #: kscandevice.cpp:1528
 #, kde-format
 msgid "Cannot open device"
-msgstr "Laitetta ei voida avata"
+msgstr ""
 
 #: kscandevice.cpp:1529
 #, kde-format
 msgid "sane_control_option() failed"
-msgstr "sane_control_option() epäonnistui"
+msgstr ""
 
 #: kscandevice.cpp:1530
 #, kde-format
 msgid "Error while scanning"
-msgstr "Virhe luettaessa kuvaa"
+msgstr ""
 
 #: kscandevice.cpp:1531
 #, kde-format
 msgid "Empty picture"
-msgstr "Tyhjä kuva"
+msgstr ""
 
 #: kscandevice.cpp:1532
 #, kde-format
 msgid "Out of memory"
-msgstr "Muisti loppui"
+msgstr "نفذت الذّاكرة"
 
 #: kscandevice.cpp:1533
 #, kde-format
 msgid "Needs reload"
-msgstr "Vaatii uudelleenlatauksen"
+msgstr ""
 
 #: kscandevice.cpp:1534
 #, kde-format
 msgid "Cancelled"
-msgstr "Peruttu"
+msgstr "أُلغيت"
 
 #: kscandevice.cpp:1535
 #, kde-format
 msgid "Not active"
-msgstr "Ei aktiivinen"
+msgstr "غير نشط"
 
 #: kscandevice.cpp:1536
 #, kde-format
 msgid "Not supported"
-msgstr "Ei tuettu"
+msgstr "غير مدعوم"
 
 #: kscandevice.cpp:1537
 #, kde-format
 msgid "Unknown status %1"
-msgstr "Tuntematon tila %1"
+msgstr "حالة مجهولة %1"
 
 #: kscanoption.cpp:1027
 #, kde-format
 msgid "pixels"
-msgstr "kuvapistettä"
+msgstr "بكسل"
 
 #: kscanoption.cpp:1028
 #, kde-format
 msgid "bits"
-msgstr "bittiä"
+msgstr "بت"
 
 #: kscanoption.cpp:1029
 #, kde-format
 msgid "mm"
-msgstr "mm"
+msgstr "مم"
 
 #: kscanoption.cpp:1030
 #, kde-format
 msgid "dpi"
-msgstr "dpi"
+msgstr "نقطة/بوصة"
 
 #: kscanoption.cpp:1031
 #, kde-format
 msgid "%"
-msgstr "%"
+msgstr "٪"
 
 #: kscanoption.cpp:1032
 #, kde-format
 msgid "µsec"
-msgstr "µs"
+msgstr "م.ث"
 
 #: kscanoptset.cpp:190
 #, kde-format
 msgid "No description"
-msgstr "Ei kuvausta"
+msgstr "لا يوجد وصف"
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
-msgstr "%1 × %2 mm, %3 × %4 pix"
+msgstr "%1×%2مم, %3×%4بكسل"
 
 #: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
-msgstr "%1 × %2"
+msgstr "%1×%2مم"
 
 #: previewer.cpp:340
 #, kde-format
@@ -472,43 +463,39 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
-"Esikatselun kuvien automaattitunnistus riippuu esikatselukuvan taustaväristä "
-"(joka on tulos tyhjän kuvan luvusta).\n"
-"\n"
-"Valitse, onko esikatselukuvan taustaväri musta vai valkoinen."
 
 #: previewer.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
-msgstr "Taustan automaattinen tunnistus"
+msgstr ""
 
 #: previewer.cpp:342
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
-msgstr "Valkoinen"
+msgstr "أبيض"
 
 #: previewer.cpp:343
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
-msgstr "Musta"
+msgstr "أسود"
 
 #: scandevices.cpp:204
 #, kde-format
 msgid "Unknown device '%1'"
-msgstr "Tuntematon laite \"%1\""
+msgstr "جهاز مجهول '%1'"
 
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr "SANE – Scanner Access Now Easy"
+msgstr ""
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr "Kuvanlukukäyttö- ja ajurikirjasto"
+msgstr ""
 
 #: scanglobal.cpp:144
 #, kde-format
@@ -518,7 +505,7 @@ msgstr "LibTIFF"
 #: scanglobal.cpp:145
 #, kde-format
 msgid "TIFF image format library"
-msgstr "TIFF-kuvamuotokirjasto"
+msgstr ""
 
 #: scanglobal.cpp:158
 #, kde-format
@@ -528,93 +515,93 @@ msgstr "libpaper"
 #: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
-msgstr "Paperikoon määrityskirjasto"
+msgstr ""
 
 #: scanimage.cpp:76
 #, kde-format
 msgid "Loading non-local images is not yet implemented"
-msgstr "Ei-paikallisten kuvien lataamista ei ole vielä toteutettu"
+msgstr ""
 
 #: scanimage.cpp:128
 #, kde-format
 msgid "Image loading failed"
-msgstr "Kuvan lataaminen epäonnistui"
+msgstr "فشل تحميل الصورة"
 
 #: scanimage.cpp:162
 #, kde-format
 msgid "Failed to open TIFF file"
-msgstr "TIFF-tiedoston avaaminen epäonnistui"
+msgstr "فشل فتح ملفّ TIFF"
 
 #: scanimage.cpp:169
 #, kde-format
 msgid "Failed to read TIFF directory"
-msgstr "TIFF-kansion lukeminen epäonnistui"
+msgstr ""
 
 #: scanimage.cpp:199
 #, kde-format
 msgid "Failed to read TIFF image"
-msgstr "TIFF-kuvan lukeminen epäonnistui"
+msgstr ""
 
 #: scanimage.cpp:229
 #, kde-format
 msgid "TIFF not supported"
-msgstr "TIFFiä ei tueta"
+msgstr ""
 
 #: scanparams.cpp:141
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
-msgstr "<title>Kuvanlukuasetukset</title>"
+msgstr ""
 
 #: scanparams.cpp:161
 #, kde-format
 msgid "Pre&view"
-msgstr "&Esikatsele"
+msgstr "&عاين"
 
 #: scanparams.cpp:162
 #, kde-format
 msgid "Start a preview scan and show the preview image"
-msgstr "Aloita esikatseluluku ja näytä esikatselukuva"
+msgstr ""
 
 #: scanparams.cpp:167
 #, kde-format
 msgid "Star&t Scan"
-msgstr "&Aloita kuvanluku"
+msgstr "ابدأ ال&مسح"
 
 #: scanparams.cpp:168
 #, kde-format
 msgid "Start a scan and save the scanned image"
-msgstr "Aloita kuvanluku ja tallenna luettu kuva"
+msgstr ""
 
 #: scanparams.cpp:200
 #, kde-format
 msgid "Stop"
-msgstr "Pysäytä"
+msgstr "أوقف"
 
 #: scanparams.cpp:204
 #, kde-format
 msgid "Scanning"
-msgstr "Luetaan kuvaa"
+msgstr "يكتشف"
 
 #: scanparams.cpp:247
 #, kde-format
 msgid "&Basic"
-msgstr "&Perusasetukset"
+msgstr "أ&ساسي"
 
 #: scanparams.cpp:248
 #, kde-format
 msgid "Other"
-msgstr "Muut"
+msgstr "أخرى"
 
 #: scanparams.cpp:249
 #, kde-format
 msgid "Advanced"
-msgstr "Lisäasetukset"
+msgstr "متقدّم"
 
 #: scanparams.cpp:275
 #, kde-format
 msgid "SANE Debug (from PNM image)"
-msgstr "SANE-virheenpaikannus (PNM-kuvasta)"
+msgstr "تصحيح أخطاء SANE (من صورة PNM)"
 
 #: scanparams.cpp:276
 #, kde-kuit-format
@@ -624,14 +611,14 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
-"Toimii samalla tavalla kuin todellinen kuvanlukija toimii (lukualue, kuvan "
-"käsittely jne.), mutta lukee annetusta kuvatiedostosta. Ks. lisätietoa: "
-"<link url=\"man:sane-pnm(5)\">sane-pnm(5)</link>."
+"تعمل بنفس الطريقة التي يعمل بها الماسح الضوئي الحقيقي (بما في ذلك منطقة "
+"المسح ومعالجة الصور وما إلى ذلك)، ولكن القراءة من ملف الصورة المحدد. راجع "
+"<link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> لمزيد من المعلومات."
 
 #: scanparams.cpp:278
 #, kde-format
 msgid "Virtual Scanner (any image format)"
-msgstr "Virtuaalikuvanluku (mikä tahansa kuvamuoto)"
+msgstr ""
 
 #: scanparams.cpp:279
 #, kde-kuit-format
@@ -640,48 +627,46 @@ msgid ""
 "Do not perform any scanning or processing, but simply read the specified "
 "image file. This is for testing the image saving, etc."
 msgstr ""
-"Älä lue kuvaa laitteelta tai käsittele sitä vaan lue vain annettu "
-"kuvatiedosto. Sopii esim. kuvantallennuksen testaamiseen."
 
 #: scanparams.cpp:296
 #, kde-format
 msgid "Reading mode:"
-msgstr "Lukutila:"
+msgstr "وضع القراءة:"
 
 #: scanparams.cpp:414
 #, kde-format
 msgid "Default (from scan settings)"
-msgstr "Oletus (kuvanlukuasetuksista)"
+msgstr "مبدئي (من إعدادات المسح)"
 
 #: scanparams.cpp:415
 #, kde-format
 msgid "Black/white bitmap"
-msgstr "Mustavalkoinen bittikartta"
+msgstr "صورة نقطية بالأبيض والأسود"
 
 #: scanparams.cpp:416
 #, kde-format
 msgid "Grey scale"
-msgstr "Harmaasävy"
+msgstr "تدرج الرمادي"
 
 #: scanparams.cpp:417
 #, kde-format
 msgid "Low colour"
-msgstr "Vähän värejä"
+msgstr "لون منخفض"
 
 #: scanparams.cpp:418
 #, kde-format
 msgid "High colour"
-msgstr "Paljon värejä"
+msgstr "لون عالي"
 
 #: scanparams.cpp:428
 #, kde-format
 msgid "Force image format:"
-msgstr "Pakota kuvatiedostomuoto:"
+msgstr ""
 
 #: scanparams.cpp:481
 #, kde-format
 msgid "Edit Gamma Table..."
-msgstr "Muokkaa gammataulukkoa…"
+msgstr ""
 
 #: scanparams.cpp:553
 #, kde-kuit-format
@@ -690,8 +675,6 @@ msgid ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 msgstr ""
-"<title>Kuvanlukijoita ei havaittu</title><nl/><nl/>Valitse laite, jotta "
-"kuvia voisi lukea."
 
 #: scanparams.cpp:573
 #, kde-kuit-format
@@ -706,29 +689,21 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
-"<title>Kuvanlukijaa ei löytynyt tai sitä ei pystytä käyttämään</title><nl/"
-"><nl/>SANE (Scanner Access Now Easy) ei saa yhteyttä kuvanlukulaitteeseen. "
-"Tämä voi olla SANEn asennuksen ongelma tai sitä ei ole määritetty tukemaan "
-"kuvanlukijallesi.<nl/><nl/>Tarkista, että SANE on asennettu ja määritetty "
-"järjestelmään oikein ja että kuvanlukulaitteen nimi ja asetukset ovat "
-"kunnossa.<nl/><nl/>Lisätietoa SANEn asennuksesta ja määrityksestä löytää "
-"SANE-projektin kotisivulta (<link url=\"http://www.sane-project.org/\">www."
-"sane-project.org</link>)."
 
 #: scanparams.cpp:675
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
-msgstr "1 bitin syvyistä kuvanlukua ei voida tehdä värillisenä"
+msgstr ""
 
 #: scanparams.cpp:678
 #, kde-format
 msgid "16-bit depth scans are not supported"
-msgstr "16 bittiä syviä kuvanlukuja ei tueta"
+msgstr ""
 
 #: scanparams.cpp:688
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
-msgstr "Testaus tai virtuaalikuvanluku vaatii tiedoston"
+msgstr ""
 
 #: scanparams.cpp:694
 #, kde-kuit-format
@@ -737,8 +712,6 @@ msgid ""
 "The testing or virtual file <filename>%1</filename><nl/>was not found or is "
 "not readable."
 msgstr ""
-"Testausta tai virtuaalitiedostoa <filename>%1</filename> ei löytynyt tai "
-"tiedostoa ei voida lukea."
 
 #: scanparams.cpp:704
 #, kde-kuit-format
@@ -747,29 +720,27 @@ msgid ""
 "SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
 "%1</icode>."
 msgstr ""
-"SANE-virheenpaikannus voi lukea vain PNM-tiedostoja.<nl/>Annettu tiedosto on "
-"tyyppiä <icode>%1</icode>."
 
 #: scanparams.cpp:721
 #, kde-kuit-format
 msgid "Scan in progress"
-msgstr "Kuvanluku käynnissä"
+msgstr "يمسح"
 
 #: scanparams.cpp:722
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
-msgstr "Kuvanluku käynnissä<nl/><nl/>%1"
+msgstr "يمسح<nl/><nl/>%1"
 
 #: scanparams.cpp:742
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
-msgstr "Ei voida esikatsella virtuaalikuvanlukutilassa"
+msgstr ""
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:12
 #, kde-format
 msgid "Query network for available scanners"
-msgstr "Kysele verkosta saatavilla olevia laitteita"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:13
@@ -779,17 +750,12 @@ msgid ""
 ">Note that this does not mean a query over the entire network, but only "
 "those hosts configured for SANE.</div>"
 msgstr ""
-"<div>Valitse tämä, jos haluat etsiä verkosta saatavilla olevia laitteita.<br/"
-"><br/>Huomaa, ettei tämä tarkoita kyselyä koko verkosta vaan ainoastaan "
-"koneita, jotka ovat määrittäneet SANEn.</div>"
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
-"Käytä järjestelmän välityspalvelinasetuksia verkkokuvanlukijoihin "
-"yhdistämiseksi"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -799,29 +765,24 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
-"<div>Valitse tämä, jos haluat käyttää järjestelmän välityspalvelinasetuksia "
-"verkkokuvanlukijoihin yhdistettäessä.<br/><br/>Huomaa, että jotkin SANE-"
-"taustajärjestelmät (esim. ”escl”) eivät ehkä toimi oikein välityspalvelimen "
-"kautta.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
 #, kde-format
 msgid "Show the scanner selection dialog"
-msgstr "Näytä laitteenvalintaikkuna"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:29
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
-"<div>Valitse, jos haluat nähdä laitteenvalintaikkunan käynnistettäessä.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
 #: scansettings.kcfg:61
 #, kde-format
 msgid "Threshold:"
-msgstr "Raja-arvo:"
+msgstr "العتبة:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
 #: scansettings.kcfg:62
@@ -831,15 +792,12 @@ msgid ""
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
 msgstr ""
-"<div>Automaattitunnistuskynnys. Kaikki tätä vaaleammat (mustalla taustalla) "
-"tai tummemmat (valkoisella taustalla) kuvapisteet katsotaan osaksi kuvaa.</"
-"div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
-msgstr "Pölyn koko (kuvapisteinä):"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:70
@@ -848,14 +806,12 @@ msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
 "ignored</div>"
 msgstr ""
-"<div>Aseta pölyn koko: tätä pienemmät tummat tai vaaleat alueet jätetään "
-"huomiotta</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:77
 #, kde-format
 msgid "Add/subtract margin (mm):"
-msgstr "Lisää/poista reunus (mm):"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:78
@@ -863,13 +819,12 @@ msgstr "Lisää/poista reunus (mm):"
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
 msgstr ""
-"<div>Aseta havaittuun alueeseen lisättävä tai siitä poistettava reunus</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:85
 #, kde-format
 msgid "Scanner background:"
-msgstr "Kuvanluvun tausta:"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:86
@@ -878,177 +833,38 @@ msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
-"<div>Valitse, tuottaako tyhjän lasin lukeminen mustan vai valkoisen kuvan</"
-"div>"
 
 #: scansizeselector.cpp:119
 #, kde-format
 msgid "Set the size of the scanned area"
-msgstr "Aseta luetun alueen koko"
+msgstr ""
 
 #: scansizeselector.cpp:124
 #, kde-format
 msgid "Full size"
-msgstr "Täysi koko"
+msgstr "كامل القياس"
 
 #: scansizeselector.cpp:125
 #, kde-format
 msgid "(No selection)"
-msgstr "(Ei valintaa)"
+msgstr "(لا تحديد)"
 
 #: scansizeselector.cpp:143
 #, kde-format
 msgid "Portrait"
-msgstr "Pysty"
+msgstr "بالطّول"
 
 #: scansizeselector.cpp:148
 #, kde-format
 msgid "Landscape"
-msgstr "Vaaka"
+msgstr "بالعرض"
 
 #: scansizeselector.cpp:159
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
-msgstr "Aseta luetun alueen esiasetetun koon suunta"
+msgstr ""
 
 #: scansizeselector.cpp:262
 #, kde-format
 msgid "Selection"
-msgstr "Valinta"
-
-#~ msgid "All Image Files (%1)"
-#~ msgstr "Kaikki kuvatiedostot (%1)"
-
-#~ msgid "All Files (*)"
-#~ msgstr "Kaikki tiedostot (*)"
-
-#~ msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
-#~ msgstr "*.pnm *.pbm *.pgm *.ppm|PNM-kuvatiedostot"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "If your scanner has not been automatically detected, you can specify it "
-#~ "here. The <interface>Scanner device name</interface> should be a backend "
-#~ "name (with optional parameters) that is understood by SANE, see <link url="
-#~ "\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
-#~ "link> for more information on available backends. The <interface>Type</"
-#~ "interface> and <interface>Description</interface> can be used to identify "
-#~ "the scanner later.<nl/><nl/>For the information that needs to be entered "
-#~ "here, try to locate the device using the <link url=\"man:/sane-find-"
-#~ "scanner\">sane-find-scanner(1)</link> command. For a USB or networked HP "
-#~ "scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
-#~ "try using the <command>hp-probe</command> command to locate it, for "
-#~ "example <icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-"
-#~ "b&nbsp;net</icode>. If the scanner is found, then enter the device name "
-#~ "displayed by these commands; note that if using HPLIP then <icode>hp:</"
-#~ "icode> needs to be replaced by <icode>hpaio:</icode>.<nl/><nl/>If these "
-#~ "commands fail to locate your scanner, then it may not be supported by "
-#~ "SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
-#~ "project.org/sane-supported-devices.html\">list of supported devices</"
-#~ "link>."
-#~ msgstr ""
-#~ "Ellei kuvanlukijaa tunnisteta automaattisesti, sen voi määrittää tässä. "
-#~ "<interface>Kuvanlukulaitteen nimen</interface> tulisi olla SANEn "
-#~ "ymmärtämä taustaosanimi (valinnaisin parametrein). Katso lisätietoa "
-#~ "saatavilla olevista taustaosista: <link url=\"man:/sane\">sane(7)</link> "
-#~ "tai <link url=\"man:/sane-dll\">sane-dll(5)</link>. <interface>Tyyppiä</"
-#~ "interface> ja <interface>Kuvausta</interface> voi käyttää tunnistamaan "
-#~ "laite myöhemmin.<nl/><nl/>Saadaksesi selville, mitä tähän tulee syöttää, "
-#~ "yritä löytää laite käyttämällä <link url=\"man:/sane-find-scanner\">sane-"
-#~ "find-scanner(1)</link>-komentoa. <link url=\"http://hplip.sourceforge.net/"
-#~ "\">HPLIPiä</link> käyttävien USB- tai verkkokuvanlukijoiden "
-#~ "paikantamiseksi voit kokeilla <command>hp-probe</command>-komentoa, esim. "
-#~ "<icode>hp-probe&nbsp;-b&nbsp;usb</icode> tai <icode>hp-probe&nbsp;-b&nbsp;"
-#~ "net</icode>. Jos kuvanlukija löytyy, syötä komentojen näyttämä laitenimi. "
-#~ "Huomaa, että HPLIPin antama <icode>hp:</icode> tulee korvata muotoon "
-#~ "<icode>hpaio:</icode>.<nl/><nl/>Elleivät nämä komennot löydä "
-#~ "kuvanlukijaa, SANE ei ehkä tue sitä. Tarkista SANEn ohjeista <link url="
-#~ "\"http://www.sane-project.org/sane-supported-devices.html\">tuettujen "
-#~ "laitteiden luettelo</link>."
-
-#~ msgid "ADF Scanning"
-#~ msgstr "ADF-kuvanluku"
-
-#~ msgid "<qt><b>Mass Scanning</b>"
-#~ msgstr "<qt><b>Eräkuvanluku</b>"
-
-#~ msgid "Scan Parameters"
-#~ msgstr "Kuvanlukuparametrit"
-
-#~ msgid "Scanning <B>%s</B> at <B>%d</B> dpi"
-#~ msgstr "Luetaan kuvaa <B>%s</B> tarkkuudella <B>%d</B> dpi"
-
-#~ msgid "Saving scans in folder <B>%s</B>"
-#~ msgstr "Tallennetaan luetut kuvat kansioon <B>%s</B>"
-
-#~ msgid "Scan Progress"
-#~ msgstr "Kuvanluvun edistyminen"
-
-#~ msgid "Scanning page %1"
-#~ msgstr "Luetaan sivua %1"
-
-#~ msgid "&Scanning"
-#~ msgstr "&Kuvanluku"
-
-#~ msgid "&Options"
-#~ msgstr "&Valinnat"
-
-#~ msgid "Startup Options"
-#~ msgstr "Käynnistysvalinnat"
-
-#~ msgid ""
-#~ "Note: changing these options will affect the scan plugin on next start."
-#~ msgstr ""
-#~ "Huomaa: näiden asetusten muuttaminen vaikuttaa kuvanlukuliitännäiseen "
-#~ "seuraavassa käynnistyksessä."
-
-#~ msgid "&Ask for the scan device on plugin startup"
-#~ msgstr "&Kysy kuvanlukulaitetta liitännäistä käynnistettäessä"
-
-#~ msgid ""
-#~ "You can uncheck this if you do not want to be asked which scanner to use "
-#~ "on startup."
-#~ msgstr ""
-#~ "Voit poistaa valinnan, ellet haluat sinulta kysyttävän kuvanlukulaitetta "
-#~ "käynnistettäessä."
-
-#~ msgid "&Query the network for scan devices"
-#~ msgstr "K&ysele verkosta kuvanlukulaitteita"
-
-#~ msgid ""
-#~ "Check this if you want to query for configured network scan stations."
-#~ msgstr ""
-#~ "Valitse tämä, jos haluat kysellä verkosta määritettyjä kuvanlukuasemia."
-
-#~ msgid "Custom Gamma Tables"
-#~ msgstr "Mukautetut gammataulukot"
-
-#~ msgid ""
-#~ "<b>Source selection</b><br />Note that you may see more sources than "
-#~ "actually exist"
-#~ msgstr ""
-#~ "<b>Lähteen valinta</b><br/>Huomaa, että voit nähdä useampia lähteitä kuin "
-#~ "on todellisuudessa olemassa"
-
-#~ msgid "Advanced ADF Options"
-#~ msgstr "ADF-lisäasetukset"
-
-#~ msgid "Scan until ADF reports out of paper"
-#~ msgstr "Lue kunnes ADF ilmoittaa paperin olevan lopussa"
-
-#~ msgid "Scan only one sheet of ADF per click"
-#~ msgstr "Lue vain yksi ADF-arkki joka napsautuksella"
-
-#~ msgctxt "@info"
-#~ msgid "Scan in progress<nl/><nl/><filename>%1</filename>"
-#~ msgstr "Kuvanluku käynnissä<nl/><nl/><filename>%1</filename>"
-
-#~ msgctxt "@info"
-#~ msgid "<emphasis strong=\"1\">Auto Select</emphasis>"
-#~ msgstr "<emphasis strong=\"1\">Valitse automaattisesti</emphasis>"
-
-#~ msgid "<b>Preview</b>"
-#~ msgstr "<b>Esikatselu</b>"
-
-#~ msgid "%1 x %2 mm"
-#~ msgstr "%1 x %2 mm"
+msgstr "التحديد"

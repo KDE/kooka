@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kooka package.
 #
-# giovanni <g.sora@tiscali.it>, 2023.
+# SPDX-FileCopyrightText: 2023, 2024, 2025 giovanni <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2023-04-06 12:20+0200\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2025-02-14 17:29+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -30,7 +30,7 @@ msgstr "g.sora@tiscali.it"
 #: ../plugins/destination/abstractdestination.cpp:86
 #, kde-format
 msgid "Remember this format"
-msgstr ""
+msgstr "Memora iste formato"
 
 #: ../plugins/destination/abstractdestination.cpp:120
 #, kde-kuit-format
@@ -50,7 +50,7 @@ msgstr "Altere..."
 #: ../plugins/destination/application/destinationapplication.cpp:94
 #, kde-format
 msgid "Sending to application"
-msgstr ""
+msgstr "Inviante a application"
 
 #: ../plugins/destination/application/destinationapplication.cpp:96
 #, kde-kuit-format
@@ -71,12 +71,12 @@ msgstr "Formato de image:"
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:61
 #, kde-format
 msgid "Copying image to clipboard"
-msgstr ""
+msgstr "Copiante imagine a tabuliero de systema"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:69
 #, kde-kuit-format
 msgid "<filename>%1</filename>"
-msgstr ""
+msgstr "<filename>%1</filename>"
 
 #: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, kde-format
@@ -102,29 +102,31 @@ msgstr "Non pote imprimer"
 #: ../plugins/destination/print/destinationprint.cpp:106
 #, kde-format
 msgid "Print immediately with same settings"
-msgstr ""
+msgstr "Imprime immediatemente  con le mesme preferentias"
 
 #: ../plugins/destination/print/destinationprint.cpp:116
 #, kde-format
 msgid "Printing image"
-msgstr ""
+msgstr "Imprimente imagine"
 
 #: ../plugins/destination/save/destinationsave.cpp:125
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
+"Nonpote salveguardar imagine a <filename>%1</filename><nl/><message>%2</"
+"message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:127
 #: ../plugins/destination/save/destinationsave.cpp:230
 #, kde-format
 msgid "Cannot Save Image"
-msgstr ""
+msgstr "Non pote salveguardar imagine"
 
 #: ../plugins/destination/save/destinationsave.cpp:154
 #, kde-format
 msgid "Saving image"
-msgstr ""
+msgstr "Salveguardante imagine"
 
 #: ../plugins/destination/save/destinationsave.cpp:155
 #, kde-kuit-format
@@ -134,7 +136,7 @@ msgstr "Salveguardante a <filename>%1</filename>"
 #: ../plugins/destination/save/destinationsave.cpp:172 formatdialog.cpp:280
 #, kde-format
 msgid "Save Scan"
-msgstr ""
+msgstr "Salveguarda scansion"
 
 #: ../plugins/destination/save/destinationsave.cpp:228
 #, kde-kuit-format
@@ -152,7 +154,7 @@ msgstr "Comparti a:"
 #: ../plugins/destination/share/destinationshare.cpp:151
 #, kde-kuit-format
 msgid "<application>%1</application>"
-msgstr ""
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -163,7 +165,7 @@ msgstr ""
 #: ../plugins/destination/share/destinationshare.cpp:218
 #, kde-format
 msgid "Scan Shared"
-msgstr ""
+msgstr "Scansion compartite"
 
 #: ../plugins/destination/share/destinationshare.cpp:227
 #, kde-kuit-format
@@ -179,7 +181,7 @@ msgstr "Recognition de Character Optic"
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
 msgid "Start OCR"
-msgstr ""
+msgstr "Starta OCR"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
@@ -189,7 +191,7 @@ msgstr ""
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
 #, kde-format
 msgid "Stop OCR"
-msgstr ""
+msgstr "Stoppa OCR"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
 #, kde-format
@@ -215,7 +217,7 @@ msgstr "Executabile:"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename>"
-msgstr ""
+msgstr "<filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
 #, kde-format
@@ -241,7 +243,7 @@ msgstr "Nulle vista preliminar disponibile"
 #: ../plugins/ocr/abstractocrdialogue.cpp:242
 #, kde-format
 msgid "No information available"
-msgstr ""
+msgstr "Nulle information disponibile"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:245
 #, kde-format
@@ -251,17 +253,17 @@ msgstr "Fonte"
 #: ../plugins/ocr/abstractocrdialogue.cpp:246
 #, kde-format
 msgid "Source Image Information"
-msgstr ""
+msgstr "Information de Imagine Fonte"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:265
 #, kde-format
 msgid "OCR Engine"
-msgstr ""
+msgstr "Motor de OCR"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:266
 #, kde-format
 msgid "OCR Engine Information"
-msgstr ""
+msgstr "Information de motor de OCR"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:283
 #, kde-format
@@ -308,7 +310,7 @@ msgstr ""
 #: ../plugins/ocr/abstractocrdialogue.cpp:343
 #, kde-format
 msgid "Retain temporary files"
-msgstr ""
+msgstr "Retene files temporanee"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:346
 #, kde-format
@@ -380,7 +382,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
-msgstr ""
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:264
 #, kde-format
@@ -459,12 +461,12 @@ msgstr ""
 #: ../plugins/ocr/executablepathdialogue.cpp:45
 #, kde-format
 msgid "Executable Path"
-msgstr ""
+msgstr "Percurso de Executabile"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:52
 #, kde-format
 msgid "Executable path:"
-msgstr ""
+msgstr "Percurso de Executabile:"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
@@ -567,7 +569,7 @@ msgstr "Pais"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
 #, kde-format
 msgid "OCR Modifier"
-msgstr ""
+msgstr "Modificator de OCR"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
@@ -1262,7 +1264,7 @@ msgstr "%1 x %2 mm"
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: imgprintdialog.cpp:414
 #, kde-format
@@ -1320,7 +1322,7 @@ msgstr "Permission negate"
 #: imgsaver.cpp:370
 #, kde-format
 msgid "Bad file name"
-msgstr ""
+msgstr "Mal nomine de file"
 
 #: imgsaver.cpp:372
 #, kde-format
@@ -1355,7 +1357,7 @@ msgstr "Salvamento fallite"
 #: imgsaver.cpp:384
 #, kde-format
 msgid "Bad parameter"
-msgstr ""
+msgstr "Mal parametro"
 
 #: imgsaver.cpp:386
 #, kde-format
@@ -1379,7 +1381,7 @@ msgstr ""
 #: imgsaver.cpp:418
 #, kde-format
 msgid "Add Extension"
-msgstr ""
+msgstr "Adde extension"
 
 #: imgsaver.cpp:419
 #, kde-format
@@ -1415,7 +1417,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
-msgstr ""
+msgstr "%1 <filename>%3</filename><nl/>%2"
 
 #: kooka.cpp:106
 #, kde-format
@@ -1495,7 +1497,7 @@ msgstr "Salveguarda imagine..."
 #: kooka.cpp:243
 #, kde-format
 msgid "Import Image..."
-msgstr ""
+msgstr "Importa Imagine..."
 
 #: kooka.cpp:248 kooka.cpp:537
 #, kde-format
@@ -1535,7 +1537,7 @@ msgstr "Vista preliminar"
 #: kooka.cpp:292
 #, kde-format
 msgid "Start Scan"
-msgstr ""
+msgstr "Initia Scansion"
 
 #: kooka.cpp:297
 #, kde-format
@@ -1560,7 +1562,7 @@ msgstr ""
 #: kooka.cpp:318
 #, kde-format
 msgid "OCR File..."
-msgstr ""
+msgstr "File de OCR"
 
 #: kooka.cpp:322
 #, kde-format
@@ -1640,7 +1642,7 @@ msgstr ""
 #: kookapref.cpp:61 kookaview.cpp:292
 #, kde-format
 msgid "OCR"
-msgstr ""
+msgstr "OCR"
 
 #: kookascanparams.cpp:68
 #, kde-kuit-format
@@ -2065,7 +2067,7 @@ msgstr ""
 #: kookaview.cpp:728
 #, kde-format
 msgid "OCR File"
-msgstr ""
+msgstr "File de OCR"
 
 #: kookaview.cpp:738
 #, kde-kuit-format
@@ -2157,12 +2159,12 @@ msgstr ""
 msgid "Loading %1..."
 msgstr "Cargante %1..."
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr ""
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2175,7 +2177,7 @@ msgid ""
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2191,87 +2193,87 @@ msgid ""
 "commercial Qt development licence.\n"
 msgstr ""
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
-msgstr ""
+msgstr "(C) 2000-2018, le disveloppatores de Kooka e contributores"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr ""
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "Mantenitor Currente, porto KDE4/KF6"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
-msgstr ""
+msgstr "Porto initial de Kf5"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
-msgstr ""
+msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Disveloppator"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
-msgstr ""
+msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr ""
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
-msgstr ""
+msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
-msgstr ""
+msgstr "Application de kscan original"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
-msgstr ""
+msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr ""
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr ""
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr ""
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "dispositivo"
@@ -2314,7 +2316,7 @@ msgstr ""
 #: ocrresedit.cpp:160
 #, kde-format
 msgid "Text File (*.txt)"
-msgstr ""
+msgstr "File de texto (*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2326,7 +2328,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<nl/>%1"
-msgstr ""
+msgstr "<nl/>%1"
 
 #: ocrresedit.cpp:170
 #, kde-format
@@ -2368,12 +2370,12 @@ msgstr "Non monstrate."
 #: prefspages.cpp:250
 #, kde-format
 msgid "At top"
-msgstr ""
+msgstr "Al culmine"
 
 #: prefspages.cpp:251
 #, kde-format
 msgid "At bottom"
-msgstr ""
+msgstr "Al basso"
 
 #: prefspages.cpp:266
 #, kde-format
@@ -2388,7 +2390,7 @@ msgstr "Necun"
 #: prefspages.cpp:392
 #, kde-format
 msgid "OCR Engine:"
-msgstr ""
+msgstr "Motor de OCR:"
 
 #: prefspages.cpp:398
 #, kde-format
@@ -2425,7 +2427,7 @@ msgstr "Formato"
 #: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
-msgstr ""
+msgstr "Galeria de Kooka"
 
 #: scangallery.cpp:374
 #, kde-format
@@ -2436,7 +2438,7 @@ msgstr "vacue"
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
-msgstr[0] ""
+msgstr[0] "un image"
 msgstr[1] "%1 images"
 
 #: scangallery.cpp:379
@@ -2457,8 +2459,8 @@ msgstr[1] "%1 files, "
 #, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
-msgstr[0] ""
-msgstr[1] "%1 (%2 imagines)"
+msgstr[0] "un image, "
+msgstr[1] "%1 images, "
 
 #: scangallery.cpp:390
 #, kde-format

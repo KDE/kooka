@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-10-06 09:08+0200\n"
+"PO-Revision-Date: 2024-10-12 19:18+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
@@ -67,7 +67,7 @@ msgstr "Eskaner gailua:"
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Erabiltzaileak zehaztutakoa"
 
 #: adddevicedialog.cpp:82
 #, kde-format
@@ -93,6 +93,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Eskaner gailua</interface> SANEk ulertzen duen, bizkarraldeko "
+"baten izena (aukerako parametroekin) izan beharko litzateke. Begiratu <link "
+"url=\"man:/sane\">sane(7)</link> edo <link url=\"man:/sane-dll\">sane&#8209;"
+"dll(5)</link> bizkarraldeko erabilgarrien eta gailu-izenen formatuaren "
+"gaineko informazio gehiago lortzeko."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -105,6 +110,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Hemen sartu behar den informazioa aurkitzeko, saia zaitez gailua aurkitzen, "
+"SCSI, USB edo ataka paraleloko eskanerretarako <link url=\"man:/sane-find-"
+"scanner\">sane&#8209;find&#8209;scanner(1)</link> komandoarekin edo sareko "
+"eskanerretarako <link url=\"man:/scanimage\">scanimage(1)</link> komandoa "
+"<icode>&#8209;L</icode> aukerarekin erabiliz. Eskanerra aurkitzen bada, "
+"ondoren sartu komando horiek azaldutako izena."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -117,6 +128,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"<link url=\"http://hplip.sourceforge.net/\">HPLIP</link> erabiltzen duen HP "
+"USB edo sareko eskaner baterako, saia zaitez hura aurkitzeko "
+"<command>hp&#8209;probe</command> komandoa erabiltzen, adibidez "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> edo <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;net</icode>. Kontuan izan HPLIP bidez eskanerra "
+"aurkituz gero, hark azaltzen duen eskanerraren <icode>hp:</icode> gailu-"
+"izena SANErako <icode>hpaio:</icode> bidez ordezkatu behar dela."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -126,6 +144,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Agindu horiek zure eskanerra aurkitzen ez badute, baliteke SANEren "
+"euskarririk ez izatea. Ikuskatu SANE dokumentazioa <link url=\"http://www."
+"sane-project.org/sane-supported-devices.html\">euskarria duten gailuen "
+"zerrenda bat</link> lortzeko."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -137,25 +159,25 @@ msgstr "<subtitle>Hautapen automatikoa</subtitle>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the grayscale value of the selected threshold"
-msgstr ""
+msgstr "Hau da hautatutako atalasearen gris-eskalaren balioa"
 
 #: autoselectbar.cpp:90
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform the auto-detection again"
-msgstr ""
+msgstr "Berriro egin antzemate automatikoa"
 
 #: autoselectbar.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Advanced settings for auto-detection"
-msgstr ""
+msgstr "Antzemate automatikoaren ezarpen aurreratuak"
 
 #: autoselectdialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr ""
+msgstr "Hautapen automatikoaren ezarpenak"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -379,9 +401,9 @@ msgid "Needs reload"
 msgstr "Birzamatu beharra dago"
 
 #: kscandevice.cpp:1534
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cancelled"
-msgstr "Bertan behera utzita"
+msgstr "Bertan behera utzia"
 
 #: kscandevice.cpp:1535
 #, kde-format
@@ -389,9 +411,9 @@ msgid "Not active"
 msgstr "Ez aktibo"
 
 #: kscandevice.cpp:1536
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not supported"
-msgstr "Ez dago onartuta"
+msgstr "Ez da onartzen"
 
 #: kscandevice.cpp:1537
 #, kde-format
@@ -453,12 +475,17 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
+"Aurreikuspegiko irudien antzematea aurreikuspegiko irudiaren hondoko "
+"planoaren kolorearen araberakoa da (dokumenturik zamatu gabe eskaneatzearen "
+"ondorioa). \n"
+"Mesedez, aukeratu aurreikuspegi irudiaren hondoko planoaren kolorea beltza "
+"edo zuria den."
 
 #: previewer.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
-msgstr ""
+msgstr "Hondoko planoaren antzemate automatikoa"
 
 #: previewer.cpp:342
 #, kde-format
@@ -480,7 +507,7 @@ msgstr "Gailu ezezaguna '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr "SANE - Scanner Access Now Easy (Eskanerrerako Sarbidea Orain Erraz)"
+msgstr "SANE - Scanner Access Now Easy (Eskanerrerako sarbidea, orain erraza)"
 
 #: scanglobal.cpp:137
 #, kde-format
@@ -602,6 +629,10 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
+"Benetako eskaner batek egiten duen era berean jarduten du (eskaneatzeko "
+"azalera, irudia prozesatzea etab. barne), baina zehatutako irudi-"
+"fitxategitik irakurrita. Begiratu <link url=\"man:sane-pnm(5)\">sane-pnm(5)</"
+"link> informazio gehiago lortzeko."
 
 #: scanparams.cpp:278
 #, kde-format
@@ -681,6 +712,16 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
+"<title>Ez da eskanerrik aurkitu, edo ezin da hartara sartu</title><nl/><nl/"
+">Eskaner gailura sartzeko, SANE (Scanner Access Now Easy / Eskanerrerako "
+"sarbidea, orain erraza) liburutegia erabiltzeko arazo bat egon da. Izan "
+"daiteke SANEren zure instalazioarekin arazo bat egotea, edo izan daiteke "
+"zure eskanerraren euskarriarekin konfiguratu ez izatea.<nl/><nl/>Egiaztatu "
+"SANE zure sisteman ondo instalatuta eta konfiguratuta dagoela, baita eskaner "
+"gailuaren izena eta ezarpenak zuzenak direla ere.<nl/><nl/>Begiratu SANE "
+"proiektuaren atariko orria (<link url=\"http://www.sane-project.org\">www."
+"sane-project.org</link>), SANE instalatzeko eta ezartzeko informazio gehiago "
+"lortzeko."
 
 #: scanparams.cpp:675
 #, kde-format
@@ -704,6 +745,8 @@ msgid ""
 "The testing or virtual file <filename>%1</filename><nl/>was not found or is "
 "not readable."
 msgstr ""
+"Probako edo alegiazko fitxategia <filename>%1</filename><nl/>ez da aurkitu, "
+"edo ezin da irakurri."
 
 #: scanparams.cpp:704
 #, kde-kuit-format
@@ -712,27 +755,29 @@ msgid ""
 "SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
 "%1</icode>."
 msgstr ""
+"SANE Araztuk PNM fitxategiak bakarrik irakur ditzake.<nl/>Zehartutako "
+"fitxategi-motakoa <icode>%1</icode> da."
 
 #: scanparams.cpp:721
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgid "Scan in progress"
-msgstr "Eskaneatzen ari da."
+msgstr "Eskaneatzen ari da"
 
 #: scanparams.cpp:722
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
-msgstr "Eskaneatzen ari da."
+msgstr "Eskaneatzen ari da<nl/><nl/>%1"
 
 #: scanparams.cpp:742
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
-msgstr ""
+msgstr "Ezin da aurreikusi Alegiazko eskaner moduan"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:12
 #, kde-format
 msgid "Query network for available scanners"
-msgstr ""
+msgstr "Itaundu sarea eskaner erabilgarrien bila"
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:13
@@ -742,12 +787,15 @@ msgid ""
 ">Note that this does not mean a query over the entire network, but only "
 "those hosts configured for SANE.</div>"
 msgstr ""
+"<div>Markatu hori, eskaner erabilgarriak bilatzeko sareko itaun bat nahi "
+"baduzu.<br/><br/>Kontuan hartu ez dela sare osoaren gaineko itaun batizango, "
+"SANErako konfiguratutako ostalarietarako bakarrik baizik.</div>"
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
-msgstr ""
+msgstr "Erabili sistema-ordezkariaren ezarpenak sareko eskanerrak atzitzeko"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -757,22 +805,28 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Markatu hau sareko eskanerrak atzitzeko sistemaren ordezkariaren "
+"ezarpen estandarrak erabiltzeko.<br/><br/>Kontuan izan SANEren bizkarraldeko "
+"batzuek ('escl' adibidez) ordezkari baten bidez behar bezala ez ibiltzea "
+"gerta litekeela.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
 #, kde-format
 msgid "Show the scanner selection dialog"
-msgstr ""
+msgstr "Erakutsi eskanerra hautatzeko elkarrizketa-koadroa"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:29
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
+"<div>Hori markatu, abioan eskanerra hautatzeko elkarrizketa-koadroa "
+"erakusteko.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
 #: scansettings.kcfg:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Threshold:"
 msgstr "Atalasea:"
 
@@ -784,12 +838,15 @@ msgid ""
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
 msgstr ""
+"<div>Antzemate automatikorako atalasea. Hori baino argiagoak (hondoko plano "
+"beltz batean) edo ilunagoak (hondoko plano zuri batean) diren pixel guztiak "
+"irudiaren zati direla jotzen da.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
-msgstr ""
+msgstr "Hautsaren neurria (pixel):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:70
@@ -798,12 +855,14 @@ msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
 "ignored</div>"
 msgstr ""
+"<div>Ezarri hautsaren neurria; hori baino txikiagoak diren azalera argi edo "
+"ilunak ezikusi egingo dira</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:77
 #, kde-format
 msgid "Add/subtract margin (mm):"
-msgstr ""
+msgstr "Gehitu/kendu marjina (mm):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:78
@@ -811,12 +870,13 @@ msgstr ""
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
 msgstr ""
+"<div>Ezarri antzemandako azalerari gehitu edo kendu beharreko marjina</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:85
 #, kde-format
 msgid "Scanner background:"
-msgstr ""
+msgstr "Eskanerraren hondoko planoa:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:86
@@ -825,38 +885,41 @@ msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
+"<div>Aukeratu eskanerraren beira hutsik eskaneatzean, emaitza gisa irudi "
+"beltz bat edo zuri bat ematen duen</div>"
 
 #: scansizeselector.cpp:119
 #, kde-format
 msgid "Set the size of the scanned area"
-msgstr ""
+msgstr "Ezarri eskaneatutako azaleraren neurria"
 
 #: scansizeselector.cpp:124
 #, kde-format
 msgid "Full size"
-msgstr ""
+msgstr "Neurri osoa"
 
 #: scansizeselector.cpp:125
 #, kde-format
 msgid "(No selection)"
-msgstr ""
+msgstr "(Hautapenik ez)"
 
 #: scansizeselector.cpp:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Portrait"
-msgstr "Bertikala"
+msgstr "Erretratua (bertikala)"
 
 #: scansizeselector.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Landscape"
-msgstr "Horizontala"
+msgstr "Paisaia (horizontala)"
 
 #: scansizeselector.cpp:159
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr ""
+"Ezarri eskaneatutako azaleraren aurrezarpen neurri baterako orientazioa"
 
 #: scansizeselector.cpp:262
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selection"
 msgstr "Hautapena"

@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the kooka package.
 #
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-05-03 02:12+0900\n"
+"PO-Revision-Date: 2025-01-02 17:37+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -29,16 +29,14 @@ msgid "Your emails"
 msgstr "pan93412@gmail.com, mail@kisaragi-hiu.com"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|所有圖片檔案"
+msgstr "所有圖片檔案"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|所有檔案"
+msgstr "所有檔案"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -109,6 +107,11 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"要找到需要在這裡輸入的資訊的話，請試著用 <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> 指令（適合 SCSI、USB 或並列埠掃描"
+"器）或是 <link url=\"man:/scanimage\">scanimage(1)</link> 指令（加上 "
+"<icode>&#8209;L</icode> 選項，適合網路掃描器）尋找該裝置。如果有找到該掃描器"
+"的話，請將指令所顯示的裝置名稱輸入於此。"
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -121,6 +124,11 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"對於使用 <link url=\"http://hplip.sourceforge.net/\">HPLIP</link> 的 HP 的 "
+"USB 或網路掃描器，請嘗試使用 <command>hp&#8209;probe</command> 指令來尋找它，"
+"像是 <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> 或 <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;net</icode>。請注意，HPLIP 如果有找到掃描器，它顯示"
+"的裝置名稱中的 <icode>hp:</icode> 需要幫 SANE 替換成 <icode>hpaio:</icode>。"
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -252,7 +260,7 @@ msgstr "未知"
 #: imagecanvas.cpp:888
 #, kde-format
 msgid "%1x%2 pix, %3 bpp"
-msgstr ""
+msgstr "%1x%2 像素，%3 bpp"
 
 #: imgscaledialog.cpp:51
 #, kde-format
@@ -312,38 +320,38 @@ msgstr "(未知)"
 #: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
-msgstr ""
+msgstr "將此設定值重設為其標準值 %1"
 
 #: kscancontrols.cpp:419
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "PNM 圖片檔 (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
-msgstr ""
+msgstr "未偵測到掃描器"
 
 #: kscandevice.cpp:1380
 #, kde-format
 msgid "Default startup configuration"
-msgstr ""
+msgstr "預設啟動配置"
 
 #: kscandevice.cpp:1480
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
-msgstr ""
+msgstr "掃描器<nl/><icode>%1</icode><nl/>需要認證。"
 
 #: kscandevice.cpp:1481
 #, kde-format
 msgid "Scanner Authentication"
-msgstr ""
+msgstr "掃描器認證"
 
 #: kscandevice.cpp:1525
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "確定"
 
 #: kscandevice.cpp:1526
 #, kde-format
@@ -444,13 +452,13 @@ msgstr "沒有描述"
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
-msgstr ""
+msgstr "%1x%2mm，%3x%4 像素"
 
 #: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
-msgstr ""
+msgstr "%1x%2mm"
 
 #: previewer.cpp:340
 #, kde-format
@@ -460,6 +468,10 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
+"預覽的圖片自動偵測需要知道預覽圖片的背景色（也就是未放入文件時掃描的結"
+"果）。\n"
+"\n"
+"請選擇預覽圖片的背景是黑色還是白色的。"
 
 #: previewer.cpp:341
 #, kde-format
@@ -608,6 +620,8 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
+"模擬實際的掃描器（包含掃描區域、影像處理等等），但是是從指定圖片檔讀取資料。"
+"更多資訊請見 <link url=\"man:sane-pnm(5)\">sane-pnm(5)</link>。"
 
 #: scanparams.cpp:278
 #, kde-format
@@ -646,12 +660,12 @@ msgstr "灰階"
 #: scanparams.cpp:417
 #, kde-format
 msgid "Low colour"
-msgstr ""
+msgstr "低彩"
 
 #: scanparams.cpp:418
 #, kde-format
 msgid "High colour"
-msgstr ""
+msgstr "高彩"
 
 #: scanparams.cpp:428
 #, kde-format

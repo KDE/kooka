@@ -87,7 +87,7 @@ static QList<FilterEntry> filterList(ImageFilter::FilterMode mode, ImageFilter::
 
     if (options & ImageFilter::AllFiles)		// want an "All Files" entry
     {
-        list.prepend(FilterEntry(QStringList("*"), i18n("All Files")));
+        list.append(FilterEntry(QStringList("*"), i18n("All Files")));
     }
 
     return (list);

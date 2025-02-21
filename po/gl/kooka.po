@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-05-17 21:19+0200\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2024-12-15 23:39+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -31,7 +31,7 @@ msgstr "Gonzalo H. Castilla, Marce Villarino, Adrián Chaves (Gallaecio)"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "ttxzgl@yahoo.es, mvillarino@users.sourceforge.net, adrian@chaves.io"
+msgstr "ttxzgl@yahoo.es, mvillarino@users.sourceforge.net, adrian@chaves.gal"
 
 #: ../plugins/destination/abstractdestination.cpp:86
 #, kde-format
@@ -774,7 +774,7 @@ msgid ""
 msgstr ""
 "<b>Imaxe de mapa de bits</b> é un formato usado amplamente para imaxes en MS "
 "Windows. É axeitado para cor, escala de grises e imaxes de arte de liñas. "
-"<p>Hai moito software compatíbel con este formato pero non se recomenda. "
+"<p>Hai moitos programas compatíbeis con este formato pero non se recomendan. "
 "Mellor use un formato aberto."
 
 #: formatdialog.cpp:88
@@ -851,8 +851,8 @@ msgid ""
 msgstr ""
 "<b>PNG</b> é un formato comprimido sen perda deseñado para ser portátil e "
 "extensíbel. É axeitado para calquera tipo de imaxe de cor ou escala de "
-"grises, indexadas ou en cor real. <p>É un formato aberto e hai moito "
-"software compatíbel con el."
+"grises, indexadas ou en cor real. <p>É un formato aberto e hai moitos "
+"programas compatíbeis con el."
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -865,7 +865,7 @@ msgstr ""
 "<b>JPEG</b> é un formato comprimido axeitado para imaxes en cor real ou "
 "escala de grises. É un formato con perda, así que non se recomenda para "
 "arquivar ou para cargar e gardar repetidamente. <p>Isto é un formato aberto "
-"e hai moito software compatíbel con el."
+"e hai moitos programas compatíbeis con el."
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -875,8 +875,9 @@ msgid ""
 "suitable for true color or grayscale images."
 msgstr ""
 "<b>JPEG 2000</b> estaba pensado para ser unha actualización do formato JPEG, "
-"coa opción para comprimir sen perda, pero de momento non hai moito software "
-"compatíbel con el. É axeitado para imaxes de cor real ou escala de grises."
+"coa opción para comprimir sen perda, pero de momento non hai moitos "
+"programas compatíbeis con el. É axeitado para imaxes de cor real ou escala "
+"de grises."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -977,7 +978,7 @@ msgid ""
 msgstr ""
 "<b>WebP</b> pretende ser un estándar aberto para imaxes de cor verdadeira "
 "con transparencia opcional. Admíteno moitos navegadores web modernos e "
-"software de imaxe.<p>Admítense varios métodos de compresións, con e sen "
+"programas de imaxe.<p>Admítense varios métodos de compresións, con e sen "
 "perda. A compresión con perda non se recomenda para arquivar ou se se vai "
 "cargar e gardar en repetidas ocasións."
 
@@ -2369,12 +2370,12 @@ msgstr "Descargouse a imaxe"
 msgid "Loading %1..."
 msgstr "Cargando %1…"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "Dixitalización, galería de imaxes e OCR"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2396,7 +2397,7 @@ msgstr ""
 "ocrad.html\">OCRAD</a> ou a biblioteca privativa <a href=\"http://www."
 "rerecognition.com/\">KADMOS</a>."
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2424,87 +2425,87 @@ msgstr ""
 "licenza Qt GPL, así que se quere facelo necesitará unha licenza\n"
 "comercial de desenvolvemento de Qt.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "© 2000-2018 Os desenvolvedores e colaboradores de Kooka"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "Mantedor actual, adaptación a KDE 4."
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "Mantedor actual, adaptación a KDE 4 e KF 6."
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "Porte inicial a KF5"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Desenvolvedor."
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "Gráficos, páxina web."
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "Aplicación «kscan» orixinal."
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "Ferramenta para fotocopias"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Modo galería; non conectar co escáner"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "O identificador do dispositivo para SANE (por exemplo: umax:/dev/sg0)."
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "dispositivo"
@@ -2581,7 +2582,7 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
-"Use este botón para volver activar todas as mensaxes e preguntas\n"
+"Use este botón para reactivar todas as mensaxes e preguntas\n"
 "que agochou usando a opción «Non preguntar máis»."
 
 #: prefspages.cpp:85
@@ -2991,6 +2992,9 @@ msgstr "Moi pequena"
 msgid "Tiny"
 msgstr "Pequerrecha"
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "Mantedor actual, adaptación a KDE 4."
+
 #~ msgid "Before the scan starts"
 #~ msgstr "Antes da dixitalización."
 
@@ -3020,11 +3024,6 @@ msgstr "Pequerrecha"
 #~| msgid "Kooka Gallery"
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Galería de Kooka"
-
-#, fuzzy
-#~| msgid "Current maintainer, KDE4 port"
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Mantedor actual, adaptación a KDE 4."
 
 #, fuzzy
 #~| msgid "Save..."

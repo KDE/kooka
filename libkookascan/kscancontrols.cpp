@@ -280,7 +280,10 @@ KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
     mCheckbox = new QCheckBox(text, this);
     mLayout->addWidget(mCheckbox);
 
-    connect(mCheckbox, &QCheckBox::stateChanged, this, QOverload<int>::of(&KScanCheckbox::settingChanged));
+    connect(mCheckbox, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state)
+    {
+        emit settingChanged(static_cast<int>(state));
+    });
 
     setFocusProxy(mCheckbox);
     setFocusPolicy(Qt::StrongFocus);

@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-05-17 07:12+0200\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2024-10-14 07:29+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2351,12 +2351,12 @@ msgstr "Odloži sliko"
 msgid "Loading %1..."
 msgstr "Nalaganje %1..."
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "Skeniranje, galerija slik in OCR"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2377,7 +2377,7 @@ msgstr ""
 "\"http://www.gnu.org/software/ocrad/ocrad.html\">programi OCRAD</a> ali "
 "komercialni <a href=\"http://www.rerecognition.com/\">Knjižnica KADMOS</a>."
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2404,87 +2404,87 @@ msgstr ""
 "licence Qt GPL, tako da če bi želeli to storiti, morate pridobiti\n"
 "komercialno licenca za razvoj Qt.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "(C) 2000-2018, razvijalci in sodelavci Kooka"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "Trenutni vzdrževalec za KDE4"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "Trenutni vzdrževalec, prenos KDE4/KF6"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Jonathan Marten"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "Začetna predelava za KF5"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Razvijalec"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "Grafika, splet"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "Izvirni program kscan"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "Možnost fotokopiranja"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Način galerije - ne priklopite optičnega bralnika"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "Specifikacija združljive naprave s SANE (npr. 'umax:/dev/sg0')"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "naprava"
@@ -2978,6 +2978,9 @@ msgstr "Zelo majhna"
 msgid "Tiny"
 msgstr "Drobcena"
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "Trenutni vzdrževalec za KDE4"
+
 #~ msgid "Before the scan starts"
 #~ msgstr "Pred zagonom skeniranja"
 
@@ -3009,9 +3012,6 @@ msgstr "Drobcena"
 
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Pomočnik Kooka KIPI"
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Trenutni vzdrževalec za izvedbo KDE4/KF5"
 
 #~ msgid "List all of the available KIPI plugin actions"
 #~ msgstr "Naštej vsa razpoložljiva dejanja vtičnikov KIPI"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-09-27 07:57+0300\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2024-11-10 07:49+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -367,51 +367,53 @@ msgstr "לא ניתן להפעיל את זיהוי התווים האופטי."
 #: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
 msgid "Check the OCR engine selection and settings."
-msgstr ""
+msgstr "נא לבדוק את הבחירה וההגדרות של מנוע זיהוי התווים האופטי."
 
 #: ../plugins/ocr/abstractocrengine.cpp:122
 #, kde-format
 msgid "OCR Setup Error"
-msgstr ""
+msgstr "שגיאת הגדרת זיהוי תווים אופטי"
 
 #: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
-msgstr ""
+msgstr "הגדרת זיהוי תווים אופטי…"
 
 #: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
 msgid "The OCR process was stopped"
-msgstr ""
+msgstr "תהליך זיהוי התווים האופטי נעצר"
 
 #: ../plugins/ocr/abstractocrengine.cpp:250
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
 msgstr ""
+"הקבצים הזמניים הבאים של זיהוי התווים האופטי נשמרים לצורכי ניתוח תקלות:<nl/"
+"><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:256
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
-msgstr ""
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:264
 #, kde-format
 msgid "OCR Temporary Files"
-msgstr ""
+msgstr "קבצים זמניים של זיהוי תווים אופטי"
 
 #: ../plugins/ocr/abstractocrengine.cpp:435
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
-msgstr ""
+msgstr "לא ניתן ליצור את הקובץ הזמני <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:481
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
-msgstr ""
+msgstr "לא ניתן לשמור תמונה לקובץ הזמני <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:509
 #, kde-kuit-format
@@ -420,31 +422,32 @@ msgid ""
 "The executable <command>%1</command> could not be found on <envar>PATH</"
 "envar>."
 msgstr ""
+"לא ניתן למצוא את קובץ ההפעלה <command>%1</command> ב־<envar>PATH</envar>."
 
 #: ../plugins/ocr/abstractocrengine.cpp:519
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
-msgstr ""
+msgstr "קובץ ההפעלה <filename>%1</filename> לא קיים או שאינו שמיש."
 
 #: ../plugins/ocr/abstractocrengine.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
-msgstr ""
+msgstr "הפקודה <command>%1</command> קרסה עם מצב היציאה <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:596
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
-msgstr ""
+msgstr "הפקודה <command>%1</command> הסתיימה עם המצב <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:600
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
-msgstr ""
+msgstr "הרצת תהליך זיהוי התווים האופטי נכשלה."
 
 #: ../plugins/ocr/abstractocrengine.cpp:601
 #, kde-kuit-format
@@ -453,22 +456,24 @@ msgid ""
 "More information may be available in its <link url=\"%1\">standard error</"
 "link> log file."
 msgstr ""
+"כנראה יש מידע נוסף בקובץ היומן של <link url=\"%1\">השגיאות התקניות</link> "
+"(stderr)."
 
 #: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
 msgid "OCR Command Failed"
-msgstr ""
+msgstr "פקודת זיהוי תווים אופטי נכשלה"
 
 #: ../plugins/ocr/abstractocrengine.cpp:611
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
-msgstr ""
+msgstr "עיבוד תוצאות זיהוי התווים האופטי נכשל."
 
 #: ../plugins/ocr/abstractocrengine.cpp:612
 #, kde-format
 msgid "OCR Processing Failed"
-msgstr ""
+msgstr "עיבוד זיהוי התווים האופטי נכשל"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:45
 #, kde-format
@@ -541,6 +546,10 @@ msgid ""
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
+"לא ניתן למצוא את קובצי הסיווג ל־KADMOS.\n"
+"זיהוי תווים אופטי עם KADMOS לא יהיה אפשרי.\n"
+"\n"
+"יש לשנות את מנוע זיהוי התווים האופטי בחלונית ההעדפות."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -581,7 +590,7 @@ msgstr "מדינה"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
 #, kde-format
 msgid "OCR Modifier"
-msgstr ""
+msgstr "משתני זיהוי תווים אופטי"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
@@ -596,12 +605,12 @@ msgstr "הפעלת התאמת קנה מידה אוטומטית"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
 #, kde-format
 msgid "Classifier file %1 does not exist"
-msgstr ""
+msgstr "קובץ המסווג %1 לא קיים"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
 #, kde-format
 msgid "Classifier file %1 is not readable"
-msgstr ""
+msgstr "קובץ המסווג %1 אינו קריא"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
 #, kde-kuit-format
@@ -612,11 +621,15 @@ msgid ""
 "www.rerecognition.com\">www.rerecognition.com</link> for more information on "
 "Kadmos.</para>"
 msgstr ""
+"<para><emphasis>Kadmos</emphasis> היא ספריית זיהוי תווים אופטי/חכם שנוצרה על "
+"ידי reRecognition&nbsp;AG.</para><para>%1</para><para>באתר <link url="
+"\"http://www.rerecognition.com\">www.rerecognition.com</link> יש פרטים "
+"נוספים על Kadmos.</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
 msgid "This version of Kooka is configured to use the Kadmos engine."
-msgstr ""
+msgstr "הגרסה הזאת של Kooka מוגדרת להשתמש במנוע Kadmos."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
 #, kde-format
@@ -625,6 +638,8 @@ msgid ""
 "need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
 "option."
 msgstr ""
+"הגרסה הזאת של Kooka לא מוגדרת להשתמש במנוע Kadmos. יש להתקין את ספריות "
+"Kadmos ואז לבנות את Kooka מחדש עם האפשרות ‚‎--with-kadmos’."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
 #, kde-format
@@ -632,6 +647,8 @@ msgid ""
 "The classifier file necessary for OCR cannot be loaded: %1;\n"
 "OCR with the KADMOS engine is not possible."
 msgstr ""
+"לא ניתן לטעון את קובץ המסווג שנחוץ לזיהוי תווים אופטי: %1;\n"
+"זיהוי תווים אופטי עם מנוע KADMOS אינו אפשרי."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
@@ -645,6 +662,9 @@ msgid ""
 "%1\n"
 "Please check the configuration."
 msgstr ""
+"לא ניתן להפעיל את מערכת זיהוי התווים האופטיתKADMOS:\n"
+"%1\n"
+"נא לבדוק שההגדרות נכונות."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
@@ -654,7 +674,7 @@ msgstr "כשל ב־KADMOS"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
 msgid "The OCRAD executable is not configured or is not available."
-msgstr ""
+msgstr "קובץ ההפעלה של ORCAD לא מוגדר או שאינו זמין."
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
@@ -740,6 +760,9 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>תמונת מפת סיביות</b> הוא סוג קובץ נפוץ מאוד לתמונות תחת MS Windows. הוא "
+"מתאים לתמונות בצבע, בגווני אפור וקווים אומנותיים.<p>הסוג הזה נתמך היטב בשלל "
+"מערכות שונות אך אינו מומלץ, עדיף להשתמש בתקן פתוח במקום."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -747,6 +770,8 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>מפת סיביות ניידת</b>, כמו זה שמשתמש בה Netpbm, הוא סוג לא דחוס לתמונות "
+"אומנות קווים (מפת סיביות). יש תמיכה בסיבית לעומק פיקסל."
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -754,6 +779,8 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>מפת אפורים ניידת</b>, כמו זה שמשתמש בה Netpbm, הוא סוג לא דחוס לתמונות "
+"בגווני אפור. יש תמיכה ב־8 סיביות לעומק פיקסל."
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -761,6 +788,8 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>מפת פיקסלים ניידת</b>, כמו זה שמשתמש בה Netpbm, הוא סוג לא דחוס לתמונות "
+"בצבע מלא. יש תמיכה ב־24 סיביות RGB לפיקסל."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -770,6 +799,9 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> הוא תסדיר דחוס ללא אובדן נתונים שבדרך כלל נתמך על ידי יישומי "
+"דימות למחשב, למרות שהוא די ישן ולא מתוחכם. הוא מתאים לתמונות צבעוניות "
+"ובגווני אפור.<p>התסדיר הזה לא מומלץ, עדיף להשתמש בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -778,6 +810,8 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>מפת סיביות X</b> בדרך כלל בשימוש עם מערכת החלונות X לאחסון מפות סיביות של "
+"סמני עכבר וסמלים.<p>אלא אם כן זה הייעוד, כדאי להשתמש בתסדיר יותר כללי במקום."
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -786,6 +820,9 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>מפת פיקסלים X</b> בדרך כלל בשימוש עם מערכת החלונות X לאחסון סמלים "
+"צבעוניים ותמונות אחרות.<p>אלא אם כן זה הייעוד, כדאי להשתמש בתסדיר יותר כללי "
+"במקום."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -807,6 +844,9 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
+"<b>JPEG</b> הוא תסדיר דחוס שמתאים לתמונות בצבע אמיתי או בגווני אפור. התסדיר "
+"הזה גורע מהאיכות ולכן אינו מומלץ לשמירה בארכיון או לטעינה ושמירה מחזוריים."
+"<p>זה תסדיר פתוח עם תמיכה נרחבת."
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -815,6 +855,9 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
+"<b>JPEG 2000</b> נועד להיות עדכון של צורת הקובץ JPEG, עם אפשרות לדחיסה ללא "
+"אובדן נתונים, אך עד כה לא נתמך באופן נרחב. מתאים לתמונות בצבע אמיתי או "
+"בגווני אפור."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -823,6 +866,8 @@ msgid ""
 "description language.  Use this format for importing into other "
 "applications, or to use with (e.g.) TeX."
 msgstr ""
+"<b>PostScript מכומס</b> הוא נגזרת של PostScript&trade; שפת תיאור עמודים. יש "
+"להשתמש בתסדיר הזה כדי לייבא ליישומים אחרים, או כדי להשתמש ב־TeX (טך, למשל)."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -831,6 +876,9 @@ msgid ""
 "and is used extensively by animation and video applications.<p>This format "
 "is not recommended, use an open format instead."
 msgstr ""
+"<b>Truevision Targa</b> יכול לאחסן תמונות צבע מלאות עם ערוץ שקיפות, משמש "
+"באופן נרחב להנפשות ויישומי וידאו.<p>התסדיר הזה לא מומלץ, עדיף להשתמש בתסדיר "
+"פתוח במקום."
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -840,6 +888,9 @@ msgid ""
 "colors and optional transparency.<p>For legal reasons this format is not "
 "recommended, use an open format instead."
 msgstr ""
+"<b>תסדיר תחלופה גרפית</b> הוא תסדיר נפוץ אך סבוך פטנטים שבדרך כלל משמש "
+"לגרפיקה באנטרנט.  הוא משמש בדחיסה ללא אובדן נתונים עם עד 256 צבעים ושקיפות "
+"כרשות.<p>מטעמים משפטיים התסדיר הזה לא מומלץ, עדיף להשתמש בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:207
 #, kde-format
@@ -850,6 +901,10 @@ msgid ""
 "variations, there may sometimes be compatibility problems. Unless required "
 "for use with other applications, use an open format instead."
 msgstr ""
+"<b>תסדיר קובץ תמונה מתויגת</b> הוא תסדיר גמיש וניתן להרחבה שנתמך באופן נרחב "
+"על ידי תוכנות הפקה וצילום. הוא תומך בתמונות עם צבע אמיתי ומסודר במפתח עם "
+"שקיפות.<p>כיוון שיש הרבה הגוונים, נוצרות לפעמים בעיות תאימות. אם אין צורך "
+"נקודתי להשתמש בזה עם יישומים אחרים, עדיף להשתמש בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -859,6 +914,10 @@ msgid ""
 "types of images.<p>Images produced by a scanner will not be animated, so "
 "unless specifically required for use with other applications use PNG instead."
 msgstr ""
+"<b>גרפיקת רשת רבת תמונות</b> היא נגזרת של תקן PNG ומיועדת לתמונות מונפשות.  "
+"זה תקן פתוח שמתאים לכל סוגי התמונות.<p>תמונות שנוצרות על ידי סורק לא "
+"תונפשנה, לכן אלא אם כן יש דרישה מפורשת להשתמש בזה מצד תוכנות אחרות עדיף "
+"להשתמש ב־PNG במקום."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -867,6 +926,9 @@ msgid ""
 "bit true color images with optional lossless compression.<p>Unless "
 "specifically required, use an open format instead."
 msgstr ""
+"זה תסדיר הבית של <b>Silicon Graphics</b> שתומך בתמונות צבע אמיתי ב־24 סיביות "
+"עם דחיסה ללא אובדן איכות כרשות.<p>אלא אם כן נחוץ באופן מפורש, עדיף להשתמש "
+"בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:241
 #, kde-format
@@ -875,6 +937,9 @@ msgid ""
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
+"<b>מפת סיביות אלחוטית</b> היא תסדיר מפת סיביות מונוכרומטי שמותאם למכשירים "
+"ניידים תואמי WAP.  תומך במפות סיביות שחור לבן בלבד.<p>אל אם כן נחוץ באופן "
+"נקודתי, עדיף להשתמש בתסדיר יותר כללי."
 
 #: formatdialog.cpp:251
 #, kde-format
@@ -885,11 +950,15 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> מיועד להיות תקן פתוח לתמונות בצבע מלא עם שקיפות כרשות. נתמך "
+"באופן נרחב על ידי דפדפנים ותוכנות גרפיקה עדכניים. <p>יש תמיכה במגוון שיטות "
+"כיווץ, עם ובלי אובדן נתונים. כיווץ עם אובדן נתונים לא מומלץ לשמירה בארכיון "
+"או לטעינה ושמירה מספר רב של פעמים."
 
 #: formatdialog.cpp:280
 #, kde-format
 msgid "Save Assistant"
-msgstr ""
+msgstr "מסייע שמירה"
 
 #: formatdialog.cpp:306
 #, kde-kuit-format
@@ -898,6 +967,8 @@ msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
+"נא לבחור את סוג הקובץ לשמירת התמונה הסרוקה.<nl/>זה <emphasis strong=\"1\">"
+"%1</emphasis>."
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -954,6 +1025,8 @@ msgid ""
 "new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
 "a new gallery at the new location?"
 msgstr ""
+"נמצאה גלריית Kooka ישנה ב־<filename>%1</filename>.<nl/>המקום המועדף החדש הוא "
+"מעתה <filename>%2</filename>.<nl/><nl/>ליצור גלריה חדשה במקום החדש?"
 
 #: galleryroot.cpp:168
 #, kde-format
@@ -981,6 +1054,10 @@ msgid ""
 "gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
 "may do so by simply copying or moving the files."
 msgstr ""
+"Kooka ישתמש בגלריה החדשה, <link url=\"file:%1\"><filename>%1</filename></"
+"link>.<nl/><nl/>כדי להוסיף את התמונות מהגלריה הישנה שלך <link url=\"file:"
+"%2\"><filename>%2</filename></link>,<nl/>אפשר לעשות זאת פשוט על ידי העתקת או "
+"העברת הקבצים."
 
 #: galleryroot.cpp:187
 #, kde-format
@@ -1047,6 +1124,7 @@ msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
 msgstr ""
+"<div>להדפיס באותו הגודל כפי שמופיע על המסך, נקבע על ידי רזולוציית המסך.</div>"
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1074,6 +1152,8 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
+"<div>הדפסה בגודל שנקבע על ידי רזולוציית הסריקה. הרזולוציה נשמרת עם התמונה "
+"ונעשה בה שימוש אם ניתן, אם לא, ניתן למלא אותה כאן.</div>"
 
 #: imgprintdialog.cpp:119
 #, kde-format
@@ -1093,6 +1173,8 @@ msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
 msgstr ""
+"<div>זאת רזולוציית הסריקה כפי שנשמרה עם התמונה. אפשר לשנות אותה במידת הצורך."
+"</div>"
 
 #: imgprintdialog.cpp:132
 #, kde-format
@@ -1106,7 +1188,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
-msgstr ""
+msgstr "<div>להדפיס לפי קנה מידה בגודל שצוין. התמונה ממורכזת על הדף.</div>"
 
 #: imgprintdialog.cpp:137
 #, kde-format
@@ -1124,7 +1206,7 @@ msgstr " מ״מ"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>רוחב הדפסת התמונה.</div>"
 
 #: imgprintdialog.cpp:151
 #, kde-format
@@ -1136,13 +1218,13 @@ msgstr "גובה תמונה:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>גובה הדפסת התמונה.</div>"
 
 #: imgprintdialog.cpp:166
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
-msgstr ""
+msgstr "התאמה לעמוד"
 
 #: imgprintdialog.cpp:167
 #, kde-format
@@ -1151,18 +1233,19 @@ msgid ""
 "<div>Print using as much of the available space on the paper as possible. "
 "The aspect ratio can be maintained.</div>"
 msgstr ""
+"<div>להדפיס על כמה שיותר שטח על הנייר. אפשר לשמור על יחס גובה רוחב.</div>"
 
 #: imgprintdialog.cpp:178
 #, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
-msgstr ""
+msgstr "אפשרויות אחרות"
 
 #: imgprintdialog.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
-msgstr ""
+msgstr "שמירה על יחס"
 
 #: imgprintdialog.cpp:183
 #, kde-format
@@ -1171,12 +1254,14 @@ msgid ""
 "<div>Adjust the height or width to maintain the original aspect ratio of the "
 "printed image.</div>"
 msgstr ""
+"<div>התאמת הגובה או הרוחב כדי לשמר את יחס התצוגה המקורי של התמונה המודפסת.</"
+"div>"
 
 #: imgprintdialog.cpp:189
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr ""
+msgstr "רזולוציה נמוכה (הדפסת טיוטה מהירה)"
 
 #: imgprintdialog.cpp:190
 #, kde-format
@@ -1185,30 +1270,32 @@ msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
 msgstr ""
+"<div>להדפיס ברזולוציה הכי נמוכה שאפשר. יכול להיות שזה לא יעבוד כמצופה בכל "
+"המדפסות.</div>"
 
 #: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
-msgstr ""
+msgstr "סימני חיתוך:"
 
 #: imgprintdialog.cpp:200
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: imgprintdialog.cpp:201
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
-msgstr ""
+msgstr "לריבוי עמודים"
 
 #: imgprintdialog.cpp:202
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "תמיד"
 
 #: imgprintdialog.cpp:203
 #, kde-format
@@ -1217,53 +1304,55 @@ msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
 msgstr ""
+"<div>נא לבחור האם יודפסו סימני חיתוך/צירוף. הסימנים יקטינו את שטח ההדפסה "
+"הזמין.</div>"
 
 #: imgprintdialog.cpp:214
 #, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
-msgstr ""
+msgstr "פריסת הדפסה"
 
 #: imgprintdialog.cpp:219
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
-msgstr ""
+msgstr "גודל תמונה:"
 
 #: imgprintdialog.cpp:222
 #, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr ""
+msgstr "%1 × %2 פיקסלים"
 
 #: imgprintdialog.cpp:227
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
-msgstr ""
+msgstr "אזור ההדפסה הזמין:"
 
 #: imgprintdialog.cpp:234
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr ""
+msgstr "אזור הדפסת התמונה:"
 
 #: imgprintdialog.cpp:241
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
-msgstr ""
+msgstr "עמודים נדרשים:"
 
 #: imgprintdialog.cpp:304
 #, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
-msgstr ""
+msgstr "%1 נק׳ לאינץ׳"
 
 #: imgprintdialog.cpp:321
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
-msgstr ""
+msgstr "יש לציין את רזולוציית הסריקה כדי לשנות אליה את קנה המידה."
 
 #: imgprintdialog.cpp:326
 #, kde-format
@@ -1271,41 +1360,42 @@ msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
 "specified dimensions is zero."
 msgstr ""
+"יש לציין גודל תקף לקנה מידה מותאם אישית. אחד או יותר מהממדים שצוינה הוא אפס."
 
 #: imgprintdialog.cpp:404 imgprintdialog.cpp:408
 #, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
-msgstr ""
+msgstr "%1 × %2 מ״מ"
 
 #: imgprintdialog.cpp:412
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: imgprintdialog.cpp:414
 #, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
-msgstr ""
+msgstr "%1 (%2 × %3)"
 
 #: imgsaver.cpp:66
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
-msgstr ""
+msgstr "לא ניתן לגשת לתיקייה <filename>%2</filename><nl/>.<nl/>%1"
 
 #: imgsaver.cpp:77
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
-msgstr ""
+msgstr "לא ניתן ליצור את התיקייה <filename>%2</filename><nl/>.<nl/>%1"
 
 #: imgsaver.cpp:328
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
-msgstr ""
+msgstr "תמונה עם צבעים מסודרים במפתח (עד 8 סיביות עומק)"
 
 #: imgsaver.cpp:332
 #, kde-format
@@ -1350,7 +1440,7 @@ msgstr "לא נשאר מקום בהתקן"
 #: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
-msgstr ""
+msgstr "לא ניתן לכתוב מילה מסוג ‚%1’"
 
 #: imgsaver.cpp:376
 #, kde-format
@@ -1390,6 +1480,8 @@ msgid ""
 "one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
 "filename>"
 msgstr ""
+"לשם הקובץ שסיפקת אין סיומת.<nl/>האם להוסיף את הסיומת המקורית?<nl/><nl/>זה "
+"יוביל לשם הקובץ החדש <filename>%1</filename>"
 
 #: imgsaver.cpp:417
 #, kde-format
@@ -1495,7 +1587,7 @@ msgstr "הטיה עם כיוון השעון"
 #: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
-msgstr ""
+msgstr "סיבוב ב־180 מעלות"
 
 #: kooka.cpp:225
 #, kde-format
@@ -1570,7 +1662,7 @@ msgstr "בחירה אוטומטית"
 #: kooka.cpp:310
 #, kde-format
 msgid "OCR Image..."
-msgstr ""
+msgstr "תמונת זיהוי תווים אופטי…"
 
 #: kooka.cpp:314
 #, kde-format
@@ -1585,12 +1677,12 @@ msgstr "קובץ זיהוי תווים אופטי…"
 #: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
-msgstr ""
+msgstr "שמירת טקסט התוצאה של זיהוי התווים האופטי…"
 
 #: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
-msgstr ""
+msgstr "בדיקת איות בתוצאות זיהוי התווים האופטי…"
 
 #: kooka.cpp:524
 #, kde-format
@@ -1671,6 +1763,10 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
+"<title>מצב גלריה - לא נבחר סורק</title><nl/><nl/>במצב הזה אפשר לעיין, לשנות "
+"ולהפעיל זיהוי תווים אופטי על תמונות שכבר בגלריה.<nl/><nl/><link url="
+"\"a:1\">יש לבחור התקן סריקה</link> כדי לסרוק, או <link url=\"a:2\">להוסיף "
+"התקן</link> אם לא זוהה סורק אוטומטית."
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -1703,6 +1799,8 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי ש־Kooka תטען את התמונה האחרונה שנבחרה למציג עם העלייה."
+"<br/><br/>אם התמונות שלך גדולות, הן עשויות להאט את העלייה של Kooka.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -1717,6 +1815,8 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי תמיד להשתמש במסייע השמירה, אפילו אם יש תסדיר ברירת "
+"מחדל לסוג התמונה.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1730,13 +1830,13 @@ msgstr "לבקש שם קובץ בעת השמירה"
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
-msgstr ""
+msgstr "<div>יש לסמן את זה כדי תמיד למלא שם קובץ בעת סריקה תמונה.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
 #, kde-format
 msgid "Only show recommended formats for this image type"
-msgstr ""
+msgstr "להציג רק תסדירים מומלצים לסוג התמונה הזה"
 
 #. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:78
@@ -1745,12 +1845,14 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי שיופיעו סוגי הקבצים המומלצים לסוג הסריקה בלבד. ביטול "
+"הסימון יציג את כל הסוגים הנתמכים.</div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:91
 #, kde-format
 msgid "Always use this save format for this image type"
-msgstr ""
+msgstr "תמיד להשתמש בסוג השמירה הזאת לסוג הקובץ הזה"
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:92
@@ -1759,12 +1861,14 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי לזכור את סוג הקובץ הנבחר לסוג התמונה שנסרקה ולא לשאול "
+"שוב.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:125
 #, kde-format
 msgid "Allow click-to-rename"
-msgstr ""
+msgstr "לאפשר לחיצה לשינוי שם"
 
 #. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:126
@@ -1773,12 +1877,14 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי לאפשר לשנות שמות של פריטי גלריה בלחיצה עליהם (אחרת, "
+"יש להשתמש באפשרות „שינוי שם” בתפריט).</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:131
 #, kde-format
 msgid "Show recent folders:"
-msgstr ""
+msgstr "הצגת תיקיות אחרונות:"
 
 #. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:132
@@ -1787,18 +1893,20 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
+"<div>נא לבחור האם והיכן תופיע רשימת תיקיות הגלריה האחרונות שניגשו אליהן.</"
+"div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
 #, kde-format
 msgid "Use a custom background image"
-msgstr ""
+msgstr "להשתמש בתמונת רקע מותאמת אישית"
 
 #. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:153
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>הגדרת תמונת רקע משלך לתצוגת התמונות הממוזערות.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
@@ -1810,7 +1918,7 @@ msgstr "תמונה:"
 #: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>תמונת הרקע לשימוש לתצוגת התמונות הממוזערות.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:165
@@ -1823,6 +1931,8 @@ msgstr "גודל תצוגה מקדימה:"
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
 msgstr ""
+"<div>נא לבחור את גודל ברירת המחדל לתצוגה מקדימה לתצוגת התמונות הממוזערות.</"
+"div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
@@ -1838,6 +1948,8 @@ msgid ""
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
+"<div>צבירים (Clusters) מתחת לגודל הזה נחשבים לרעש ונפסחים. 0 משמעולא לזהות "
+"צבירי אבק, ‎-1 משמעו לזהות אותם אוטומטית. ברירת המחדל היא 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
@@ -1852,6 +1964,8 @@ msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
+"<div>ערך הסף שמתחתיו פיקסלים אפורים נחשבים לשחורים. 0 משמעו לזהות את רמת "
+"האפור אוטומטית. ברירת המחדל היא 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
@@ -1866,6 +1980,8 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
+"<div>המרווח המזערי בפיקסלים שנחשב רווח בין אותיות. ברירת המחדל היא 0, כלומר "
+"לזהות את הריווח אוטומטית.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -1880,6 +1996,8 @@ msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
+"<div>סף ודאות הקבלה, תווים שהוודאות שלהם נמוכה מהסף נחשבים לבלתי ידועים. "
+"ברירת המחדל 95.</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:238
@@ -2012,7 +2130,7 @@ msgstr "תצוגת סריקה מקדימה"
 #: kookaview.cpp:277
 #, kde-format
 msgid "OCR results will appear here"
-msgstr ""
+msgstr "תוצאות זיהוי התווים האופטי יופיעו כאן"
 
 #: kookaview.cpp:286
 #, kde-format
@@ -2034,6 +2152,10 @@ msgid ""
 "icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
 "reported error: <message>%1</message>"
 msgstr ""
+"התגלתה בעיה בפתיחת התקן הסריקה.<nl/><nl/>נא לבדוק שהסוקר מחובר ופועל, "
+"ושהתמיכה ב־SANE מוגדרת עבורו בצורה נכונה.<nl/><nl/>מתבצע ניסיון להשתמש בהתקן "
+"סריקה: <icode>%3</icode><nl/>libkookascan דיווחה על שגיאה: <message>%2</"
+"message><nl/>SANE דיווח על שגיאה: <message>%1</message>"
 
 #: kookaview.cpp:521
 #, kde-format
@@ -2051,6 +2173,11 @@ msgid ""
 "to use. Use the <interface>Add Scan Device</interface> option to enter the "
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
+"אין התקני סריקה זמינים.<nl/><nl/>אם הסורק שלך הוא מסוג שמזוהה אוטומטית על "
+"ידי SANE, כדאי לבדוק שהוא מחובר, דולק ומוגדר כראוי.<nl/><nl/>אם לא ניתן "
+"לזהות את הסורק אוטומטית בעזרת SANE (כולל כמה סורקים מחוברי רשת), יש לציין "
+"באיזה התקן להשתמש. יש להשתמש באפשרות <interface>הוספת התקן סריקה</interface> "
+"כדי למלא את שם המנגנון והמשתנים, או לעיין בחלונית למידע נוסף."
 
 #: kookaview.cpp:587
 #, kde-format
@@ -2117,12 +2244,12 @@ msgstr "אין טקסט תוצאות זיהוי תווים אופטי לבדיק
 #: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
-msgstr ""
+msgstr "בדיקת איות לזיהוי תווים אופטי אינה אפשרית"
 
 #: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
-msgstr ""
+msgstr "בדיקת איות לזיהוי תווים אופטי"
 
 #: kookaview.cpp:789
 #, kde-format
@@ -2130,16 +2257,18 @@ msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
+"לא מוגדר מנגנון זיהוי תווים אופטי.\n"
+"נא לבחור ולהגדיר אחד כזה כדי לבצע זיהוי תווים אופטי."
 
 #: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
-msgstr ""
+msgstr "לא מוגדר זיהוי תווים אופטי"
 
 #: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr ""
+msgstr "לא ניתן לטעון את תוסף זיהוי התווים האופטי ‚%1’"
 
 #: kookaview.cpp:908
 #, kde-kuit-format
@@ -2151,6 +2280,10 @@ msgid ""
 ">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
 "<message>%1</message>"
 msgstr ""
+"אירעה תקלה במהלך תצוגה מקדימה או סריקה.<nl/>נא לשים לב שהסורק עדיין פעיל "
+"ומחובר, <nl/>ושמושא הסריקה נטען במידת הצורך.<nl/><nl/>תוך ניסיון להשתמש "
+"בהתקני הסריקה: <icode>%3</icode><nl/>libkookascan דיווח על שגיאה: <message>"
+"%2</message><nl/>SANE דיווח על שגיאה: <message>%1</message>"
 
 #: kookaview.cpp:958
 #, kde-format
@@ -2165,24 +2298,24 @@ msgstr "לא ניתן להתמיר, התמונה היא לקריאה בלבד"
 #: kookaview.cpp:1020
 #, kde-format
 msgid "Loaded image %1"
-msgstr ""
+msgstr "נטענה התמונה %1"
 
 #: kookaview.cpp:1021
 #, kde-format
 msgid "Unloaded image"
-msgstr ""
+msgstr "התמונה נפרקה"
 
 #: kookaview.cpp:1038
 #, kde-format
 msgid "Loading %1..."
-msgstr ""
+msgstr "%1 בטעינה…"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
-msgstr ""
+msgstr "סריקה, גלריית תמונות וזיהוי תווים אופטי"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2194,8 +2327,16 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"Kooka מספקת גישה לחומרת סריקה באמצעות ספריית <a href=\"http://www.sane-"
+"project.org/\">SANE</a>.\n"
+"\n"
+"Kooka מאפשרת לך לסרוק, לשמור ולהציג בכל תסדיר תמונה שנתמך ע״י KDE והיא יכולה "
+"גם לזהות תווים אופטית בעזרת תוכניות הקוד הפתוח <a href=\"http://jocr."
+"sourceforge.net/\">GOCR</a> או <a href=\"http://www.gnu.org/software/ocrad/"
+"ocrad.html\">OCRAD</a> או הספרייה המסחרית <a href=\"http://www.rerecognition."
+"com/\">KADMOS</a>."
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2210,116 +2351,126 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
+"התוכנה הזאת כפופה לתנאי גרסה 2 של GPL כפי שפורסמה על ידי מוסד\n"
+"התוכנה החופשית.\n"
+"\n"
+"כחריגה מיוחדת, ניתנה רשות לקשר את התוכנית הזאת לכל גרסה שהיא של מנוע\n"
+"KADMOS לזיהוי תווים אופטי/חכם מבית reRecognition GmbH\n"
+"(http://www.rerecognition.com), ולהפיץ את קובץ ההפעלה שמתקבל\n"
+"מבלי לכלול את קוד המקור של KADMOS כחלק מהפצת הקוד.\n"
+"\n"
+"נא לשים לב שקישור כנגד KADMOS אסור בכפוף לתנאי רישיון ה־GPL של Qt,\n"
+"לכן אם בחרת לעשות משהו כזה, חייב להיות לך רישיון פיתוח מסחרי של Qt.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
-msgstr ""
+msgstr "(C) 2000-2018, מפתחי ומתנדבי Kooka"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
-msgstr ""
+msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "ג׳ונתן מרטן"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "מתחזק נוכחי, הסבה ל־KDE4"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "מתחזק נוכחי, הסבה ל־KDE4/KF6"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "מונטל לורנט"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "הסבה ראשונית ל־KF5"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "קלאס פרייטאג"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "מפתח"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "מאט קולטון"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "גרפיקה, אתר"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "איוון שבדונוב"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "יישום kscan המקורי"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
-msgstr ""
+msgstr "אלכס קמפשל"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
-msgstr ""
+msgstr "אמצעי מכונת צילום"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "מצב גלריה - לא להתחבר לסורק"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr ""
+msgstr "מפרט התקן ה־SANE (למשל: ‚umax:/dev/sg0’)"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
-msgstr ""
+msgstr "התקן"
 
 #: newscanpresetdialog.cpp:53
 #, kde-format
 msgid "Edit Scan Preset"
-msgstr ""
+msgstr "עריכת ערכת סריקה"
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
 msgid "Change the name and/or description of the scan preset."
-msgstr ""
+msgstr "החלפת השם ו/או התיאור של ערכת הסריקה."
 
 #: newscanpresetdialog.cpp:58
 #, kde-format
 msgid "Save Scan Preset"
-msgstr ""
+msgstr "שמירת ערכת סריקה"
 
 #: newscanpresetdialog.cpp:59
 #, kde-format
 msgid "Enter a name and description for the new scan preset."
-msgstr ""
+msgstr "נא למלא שם ותיאור לערכת הסריקה החדשה."
 
 #: newscanpresetdialog.cpp:66
 #, kde-format
 msgid "Preset name:"
-msgstr ""
+msgstr "שם הערכה:"
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
@@ -2329,7 +2480,7 @@ msgstr "תיאור:"
 #: ocrresedit.cpp:159
 #, kde-format
 msgid "Save OCR Result Text"
-msgstr ""
+msgstr "שמירת טקסט התוצאה של זיהוי התווים האופטי"
 
 #: ocrresedit.cpp:160
 #, kde-format
@@ -2341,6 +2492,7 @@ msgstr "קובץ (‎*.txt)"
 msgctxt "@info"
 msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
 msgstr ""
+"לא ניתן לשמור את קובץ תוצאות זיהוי התווים האופטי<nl/><filename>%1</filename>"
 
 #: ocrresedit.cpp:168
 #, kde-kuit-format
@@ -2364,16 +2516,18 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
+"יש להשתמש בכפתור הזה כדי להפעיל מחדש את כל ההודעות והשאלות שהוסתרו באמצעות "
+"השימוש ב„לא לשאול אותי שוב”."
 
 #: prefspages.cpp:85
 #, kde-format
 msgid "Enable Messages/Questions"
-msgstr ""
+msgstr "הפעלת הודעות/שאלות"
 
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "יש להפעיל את %1 מחדש כדי שהשינויים האלו יכנסו לתוקף."
 
 #: prefspages.cpp:235
 #, kde-format
@@ -2510,6 +2664,9 @@ msgid ""
 "yet possible. Converting 'on the fly' is planned for a future release.\n"
 "Kooka corrects the extension."
 msgstr ""
+"הזנת סיומת קובץ שונה מזו הקיימת. דבר זה טרם אפשרי. אפשרות ההמרה בזמן אמת "
+"מתוכננת לגרסה עתידית.\n"
+"Kooka יתקן את הסיומת."
 
 #: scangallery.cpp:602
 #, kde-format
@@ -2519,7 +2676,7 @@ msgstr "המרה בזמן אמת"
 #: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
-msgstr ""
+msgstr "סוג התמונה לא נתמך"
 
 #: scangallery.cpp:750
 #, kde-format
@@ -2540,7 +2697,7 @@ msgstr "שגיאת טעינת תמונה"
 #: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
-msgstr ""
+msgstr "נכנס/"
 
 #: scangallery.cpp:886
 #, kde-kuit-format
@@ -2576,6 +2733,8 @@ msgid ""
 "Do you really want to permanently delete the folder<nl/><filename>%1</"
 "filename><nl/>and all of its contents? It cannot be restored."
 msgstr ""
+"למחוק לצמיתות את התיקייה <nl/><filename>%1</filename><nl/>ואת כל התוכן שלה? "
+"אי אפשר לשחזר."
 
 #: scangallery.cpp:1115
 #, kde-kuit-format
@@ -2584,6 +2743,7 @@ msgid ""
 "Do you really want to permanently delete the image<nl/><filename>%1</"
 "filename>?<nl/>It cannot be restored."
 msgstr ""
+"למחוק לצמיתות את התמונה <nl/><filename>%1</filename>?<nl/>אי אפשר לשחזר אותה."
 
 #: scangallery.cpp:1122
 #, kde-format
@@ -2630,7 +2790,7 @@ msgstr "ערכות סריקה מוכנות"
 #: scanpresetsdialog.cpp:76
 #, kde-format
 msgid "Saved scan preset sets:"
-msgstr ""
+msgstr "ערכות סריקה שמורות:"
 
 #: scanpresetsdialog.cpp:80
 #, kde-format
@@ -2640,7 +2800,7 @@ msgstr "בחירה"
 #: scanpresetsdialog.cpp:82
 #, kde-format
 msgid "Load the selected scan preset set to use as scanner settings"
-msgstr ""
+msgstr "טעינת ערכת הסריקה הנבחרה לשימוש עבור הגדרות הסורק"
 
 #: scanpresetsdialog.cpp:86
 #, kde-format
@@ -2650,12 +2810,12 @@ msgstr "שמירה…"
 #: scanpresetsdialog.cpp:88
 #, kde-format
 msgid "Save the current scanner settings as a new scan preset set"
-msgstr ""
+msgstr "שמירת הגדרות הסוקר הנוכחית כערכת סריקה חדשה"
 
 #: scanpresetsdialog.cpp:94
 #, kde-format
 msgid "Delete the selected scan preset set"
-msgstr ""
+msgstr "מחיקת ערכת הסריקה"
 
 #: scanpresetsdialog.cpp:98
 #, kde-format
@@ -2670,24 +2830,24 @@ msgstr "החלפת השם או התיאור של ערכת הסריקה הנבח�
 #: scanpresetsdialog.cpp:146
 #, kde-format
 msgid "No preset set selected."
-msgstr ""
+msgstr "לא נבחרה ערכה."
 
 #: scanpresetsdialog.cpp:212
 #, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
-msgstr ""
+msgstr "%1, %2 נק׳ לאינץ׳"
 
 #: scanpresetsdialog.cpp:289
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
-msgstr ""
+msgstr "למחוק את הערכה <resource>%1</resource>?"
 
 #: scanpresetsdialog.cpp:290
 #, kde-format
 msgid "Delete Scan Preset Set"
-msgstr ""
+msgstr "מחיקת ערכת סריקה"
 
 #: statusbarmanager.cpp:52
 #, kde-format
@@ -2714,6 +2874,8 @@ msgid ""
 "<qt>This is the uncompressed size of the scanned image. It tries to warn you "
 "if you try to produce too big an image by changing its background color."
 msgstr ""
+"<qt>זה הגודל הלא דחוס של התמונה שנסרקה. זאת אזהרה למקרה של ניסיון לייצר "
+"תמונה גדולה מדי על ידי שינוי צבע הרקע."
 
 #: statusbarmanager.cpp:108
 #, kde-format

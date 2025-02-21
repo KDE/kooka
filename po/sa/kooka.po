@@ -1,0 +1,2923 @@
+# Sanskrit translations for kooka package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kooka package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2024-12-25 19:45+0530\n"
+"Last-Translator: kali <shreekantkalwar@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>2);\n"
+"X-Generator: Lokalize 24.08.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "श्रीकान्त् कलवार्"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "skkalwar999@gmail.com"
+
+#: ../plugins/destination/abstractdestination.cpp:86
+#, kde-format
+msgid "Remember this format"
+msgstr "एतत् प्रारूपं स्मर्यताम्"
+
+#: ../plugins/destination/abstractdestination.cpp:120
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
+"%2</message>"
+msgstr ""
+"अस्थायीप्रतिबिम्बसञ्चिकां रक्षितुं न शक्यते<nl/><filename>%1</filename><nl/><message>"
+"%2</message>"
+
+#: ../plugins/destination/abstractdestination.cpp:160
+#: ../plugins/destination/application/destinationapplication.cpp:190
+#: kookaview.cpp:1182
+#, kde-format
+msgid "Other..."
+msgstr "इतर..."
+
+#: ../plugins/destination/application/destinationapplication.cpp:94
+#, kde-format
+msgid "Sending to application"
+msgstr "आवेदनं प्रति प्रेषयन्"
+
+#: ../plugins/destination/application/destinationapplication.cpp:96
+#, kde-kuit-format
+msgid "Sending to <application>%1</application>"
+msgstr "<application>%1</application> इत्यत्र प्रेषयति"
+
+#: ../plugins/destination/application/destinationapplication.cpp:192
+#, kde-format
+msgid "Application:"
+msgstr "अनुप्रयोगः:"
+
+#: ../plugins/destination/application/destinationapplication.cpp:198
+#: ../plugins/destination/share/destinationshare.cpp:137
+#, kde-format
+msgid "Image format:"
+msgstr "चित्रस्वरूपम् :"
+
+#: ../plugins/destination/clipboard/destinationclipboard.cpp:61
+#, kde-format
+msgid "Copying image to clipboard"
+msgstr "क्लिप्बोर्ड् मध्ये चित्रस्य प्रतिलिपिः"
+
+#: ../plugins/destination/gallery/destinationgallery.cpp:69
+#, kde-kuit-format
+msgid "<filename>%1</filename>"
+msgstr "<सञ्चिकानाम>%1</सञ्चिकानाम>"
+
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Image"
+msgstr "चित्रं मुद्रयन्तु"
+
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Invalid print options were specified:\n"
+"\n"
+"%1"
+msgstr ""
+"अमान्यमुद्रणविकल्पाः निर्दिष्टाः आसन्:\n"
+"\n"
+"%1"
+
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Print"
+msgstr "मुद्रणं कर्तुं न शक्यते"
+
+#: ../plugins/destination/print/destinationprint.cpp:106
+#, kde-format
+msgid "Print immediately with same settings"
+msgstr "तत्क्षणमेव समानसेटिंग्स् सह मुद्रयन्तु"
+
+#: ../plugins/destination/print/destinationprint.cpp:116
+#, kde-format
+msgid "Printing image"
+msgstr "चित्रं मुद्रयति"
+
+#: ../plugins/destination/save/destinationsave.cpp:125
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgstr ""
+"चित्रं <filename>%1</filename><nl/><message>%2</message> इत्यत्र रक्षितुं न शक्यते"
+
+#: ../plugins/destination/save/destinationsave.cpp:127
+#: ../plugins/destination/save/destinationsave.cpp:230
+#, kde-format
+msgid "Cannot Save Image"
+msgstr "चित्रं रक्षितुं न शक्यते"
+
+#: ../plugins/destination/save/destinationsave.cpp:154
+#, kde-format
+msgid "Saving image"
+msgstr "चित्रं रक्षति"
+
+#: ../plugins/destination/save/destinationsave.cpp:155
+#, kde-kuit-format
+msgid "Saving to <filename>%1</filename>"
+msgstr "<filename>%1</filename> इत्यत्र रक्षितम्"
+
+#: ../plugins/destination/save/destinationsave.cpp:172 formatdialog.cpp:280
+#, kde-format
+msgid "Save Scan"
+msgstr "Scan रक्षतु"
+
+#: ../plugins/destination/save/destinationsave.cpp:228
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
+"resource> is not supported."
+msgstr ""
+"<filename>%2</filename><nl/>प्रतिबिम्बस्वरूपं <resource>%1</resource> इत्यत्र रक्षितुं "
+"न शक्यते ।"
+
+#: ../plugins/destination/share/destinationshare.cpp:143
+#, kde-format
+msgid "Share to:"
+msgstr "Share to:"
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<अनुप्रयोग>%1</अनुप्रयोग>"
+
+#: ../plugins/destination/share/destinationshare.cpp:217
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scan was shared to<nl/><link>%1</link>"
+msgstr "स्कैन् साझां कृतम् आसीत्<nl/><link> %1</link>"
+
+#: ../plugins/destination/share/destinationshare.cpp:218
+#, kde-format
+msgid "Scan Shared"
+msgstr "Scan Shared इति"
+
+#: ../plugins/destination/share/destinationshare.cpp:227
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+msgstr "स्कैन् कृतं चित्रं<nl/><nl/><message>%1</message> साझां कर्तुं न शक्यते"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
+#, kde-format
+msgid "Optical Character Recognition"
+msgstr "प्रकाशिक चरित्र पहचान"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start OCR"
+msgstr "ओसीआर आरभत"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start the Optical Character Recognition process"
+msgstr "Optical Character Recognition प्रक्रियां आरभत"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop OCR"
+msgstr "ओसीआर स्थगयतु"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop the Optical Character Recognition process"
+msgstr "Optical Character Recognition प्रक्रियां स्थगयन्तु"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:146
+#, kde-format
+msgid "Setup"
+msgstr "स्थापयति"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:149
+#, kde-format
+msgid "Optical Character Recognition using %1"
+msgstr "%1 इत्यस्य उपयोगेन ऑप्टिकल वर्णपरिचयः"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:192
+#, kde-format
+msgid "Executable:"
+msgstr "निष्पादनीयः :"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename>%1</filename>"
+msgstr "<सञ्चिकानाम>%1</सञ्चिकानाम>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-format
+msgid "Not found"
+msgstr "न लभ्यते"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:198
+#, kde-format
+msgid "Version:"
+msgstr "संस्करण:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:201
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:201
+#, kde-format
+msgid "Unknown"
+msgstr "अज्ञात"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:233
+#, kde-format
+msgid "No preview available"
+msgstr "पूर्वावलोकनं उपलब्धं नास्ति"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:242
+#, kde-format
+msgid "No information available"
+msgstr "सूचना उपलब्धा नास्ति"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:245
+#, kde-format
+msgid "Source"
+msgstr "स्रोतः"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:246
+#, kde-format
+msgid "Source Image Information"
+msgstr "स्रोतः चित्रसूचना"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:265
+#, kde-format
+msgid "OCR Engine"
+msgstr "ओसीआर इञ्जिन"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:266
+#, kde-format
+msgid "OCR Engine Information"
+msgstr "ओसीआर इञ्जिन सूचना"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:283
+#, kde-format
+msgid "Highlight misspelled words"
+msgstr "दुर्वर्तनीशब्दान् प्रकाशयन्तु"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:289
+#, kde-format
+msgid "Use the system spell configuration"
+msgstr "सिस्टम् स्पेल् विन्यासस्य उपयोगं कुर्वन्तु"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:291
+#, kde-format
+msgid "Use custom spell configuration"
+msgstr "कस्टम् वर्तनीविन्यासस्य उपयोगं कुर्वन्तु"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:293
+#, kde-format
+msgid "Custom Spell Configuration..."
+msgstr "कस्टम वर्तनी विन्यास..."
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:303
+#, kde-format
+msgid "Start interactive spell check"
+msgstr "अन्तरक्रियाशीलं वर्तनीपरीक्षां आरभत"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:309
+#, kde-format
+msgid ""
+"Custom spell settings above do not affect this spelling check, use the "
+"language setting in the dialog to change the dictionary language."
+msgstr ""
+"उपरि कस्टम् वर्तनीसेटिंग्स् एतत् वर्तनीपरीक्षां न प्रभावितयन्ति, शब्दकोशभाषां परिवर्तयितुं "
+"संवादे भाषासेटिंग् उपयुज्यताम् ।"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:332
+#, kde-format
+msgid "Spell Check"
+msgstr "वर्तनीपरीक्षा"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:333
+#, kde-format
+msgid "OCR Result Spell Checking"
+msgstr "OCR परिणाम वर्तनी जाँच"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:343
+#, kde-format
+msgid "Retain temporary files"
+msgstr "अस्थायी सञ्चिकाः धारयन्तु"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:346
+#, kde-format
+msgid "Verbose message output"
+msgstr "वाक्पटुसन्देशनिर्गमः"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:351
+#, kde-format
+msgid "Debugging"
+msgstr "त्रुटिनिवारणम्"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:352
+#, kde-format
+msgid "OCR Debugging"
+msgstr "OCR त्रुटिनिवारणम्"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:408
+#, kde-format
+msgid "No image"
+msgstr "न बिम्बम्"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Image: %1"
+msgstr "चित्रम् : %1"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Selection: %1"
+msgstr "चयनम् : %1"
+
+#: ../plugins/ocr/abstractocrengine.cpp:107
+#, kde-format
+msgid "OCR is already in progress"
+msgstr "ओसीआर पूर्वमेव प्रचलति"
+
+#: ../plugins/ocr/abstractocrengine.cpp:119
+#, kde-format
+msgid "OCR could not be started."
+msgstr "ओसीआर आरभ्यतुं न शक्यते स्म ।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:120
+#, kde-format
+msgid "Check the OCR engine selection and settings."
+msgstr "OCR इञ्जिनस्य चयनं सेटिंग्स् च पश्यन्तु।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:122
+#, kde-format
+msgid "OCR Setup Error"
+msgstr "OCR सेटअप त्रुटि"
+
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
+#, kde-format
+msgid "Configure OCR..."
+msgstr "OCR विन्यस्तं कुर्वन्तु..."
+
+#: ../plugins/ocr/abstractocrengine.cpp:181
+#, kde-format
+msgid "The OCR process was stopped"
+msgstr "ओसीआर प्रक्रिया स्थगितवती"
+
+#: ../plugins/ocr/abstractocrengine.cpp:250
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
+msgstr "त्रुटिनिवारणाय निम्नलिखित OCR अस्थायी सञ्चिकाः अवशिष्टाः सन्ति:<nl/><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:256
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:264
+#, kde-format
+msgid "OCR Temporary Files"
+msgstr "ओसीआर अस्थायी सञ्चिकाः"
+
+#: ../plugins/ocr/abstractocrengine.cpp:435
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot create temporary file <filename>%1</filename>"
+msgstr "अस्थायी सञ्चिका <filename>%1</filename> निर्मातुं न शक्यते"
+
+#: ../plugins/ocr/abstractocrengine.cpp:481
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to temporary file <filename>%1</filename>"
+msgstr "अस्थायीसञ्चिकायां <filename>%1</filename> प्रतिबिम्बं रक्षितुं न शक्यते"
+
+#: ../plugins/ocr/abstractocrengine.cpp:509
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The executable <command>%1</command> could not be found on <envar>PATH</"
+"envar>."
+msgstr "<envar>PATH</envar> इत्यत्र कार्यान्वयनीयं <command>%1</command> न लब्धम् ।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:519
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The executable <filename>%1</filename> does not exist or is not usable."
+msgstr "कार्यान्वयनीयं <filename>%1</filename> नास्ति अथवा उपयोगयोग्यं नास्ति ।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:591
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Command <command>%1</command> crashed with exit status <numid>%2</numid>"
+msgstr ""
+"<command>%1</command> आदेशः निर्गमनस्थित्या <numid>%2</numid> इत्यनेन सह दुर्घटनाम् "
+"अभवत्"
+
+#: ../plugins/ocr/abstractocrengine.cpp:596
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
+msgstr "<command>%1</command> आदेशः <numid>%2</numid> इति स्थितिं कृत्वा निर्गतवान्"
+
+#: ../plugins/ocr/abstractocrengine.cpp:600
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Running the OCR process failed."
+msgstr "OCR प्रक्रियां चालयितुं विफलम् अभवत् ।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:601
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"More information may be available in its <link url=\"%1\">standard error</"
+"link> log file."
+msgstr "अधिकानि सूचनानि तस्य...<link url=\"%1\"> मानकदोषः</link> log सञ्चिका ।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:604
+#, kde-format
+msgid "OCR Command Failed"
+msgstr "OCR आदेशः विफलः अभवत्"
+
+#: ../plugins/ocr/abstractocrengine.cpp:611
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Processing the OCR results failed."
+msgstr "ओसीआर परिणामानां संसाधनं विफलम् अभवत् ।"
+
+#: ../plugins/ocr/abstractocrengine.cpp:612
+#, kde-format
+msgid "OCR Processing Failed"
+msgstr "OCR प्रसंस्करणं विफलम्"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:45
+#, kde-format
+msgid "Executable Path"
+msgstr "कार्यान्वयनीय मार्ग"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:52
+#, kde-format
+msgid "Executable path:"
+msgstr "निष्पादनीयः मार्गः :"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:56
+#, kde-format
+msgid "Enter or select the path..."
+msgstr "मार्गं प्रविशतु वा चयनं कुर्वन्तु..."
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:99
+#, kde-format
+msgid "Automatic"
+msgstr "स्वतः"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
+#, kde-format
+msgid "The GOCR executable is not configured or is not available."
+msgstr "GOCR कार्यान्वयनीयं विन्यस्तं वा उपलब्धं वा नास्ति ।"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
+#, kde-format
+msgid "Error"
+msgstr "त्रुटि"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
+msgstr "GOCR परिणामसञ्चिका <filename>%1</filename><nl/>%2 पठितुं न शक्यते"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
+#, kde-format
+msgid "Name or path of the GOCR executable:"
+msgstr "GOCR कार्यान्वयनीयस्य नाम वा मार्गः वा :"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
+#, kde-format
+msgid "Czech Republic, Slovakia"
+msgstr "चेक गणराज्य, स्लोवाकिया"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
+#, kde-format
+msgid "Great Britain, USA"
+msgstr "ग्रेट् ब्रिटेन, अमेरिका"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
+#, kde-format
+msgid "European Countries"
+msgstr "यूरोपीयदेशाः"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
+#, kde-format
+msgid ""
+"The classifier files for KADMOS could not be found.\n"
+"OCR with KADMOS will not be possible.\n"
+"\n"
+"Change the OCR engine in the preferences dialog."
+msgstr ""
+"KADMOS कृते वर्गीकरणसञ्चिकाः न प्राप्ताः ।\n"
+"KADMOS इत्यनेन सह OCR सम्भवं न भविष्यति।\n"
+"\n"
+"प्राधान्यसंवादे OCR इञ्जिनं परिवर्तयन्तु ।"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
+#, kde-format
+msgid "Installation Error"
+msgstr "संस्थापनदोषः"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
+#, kde-format
+msgid "Please classify the font type and language of the text on the image:"
+msgstr "कृपया चित्रे पाठस्य फ़ॉन्ट् प्रकारं भाषां च वर्गीकृत्य स्थापयन्तु:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
+#, kde-format
+msgid "Font Type Selection"
+msgstr "फ़ॉन्ट प्रकार चयन"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
+#, kde-format
+msgid "Machine print"
+msgstr "यन्त्रमुद्रणम्"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:236
+#, kde-format
+msgid "Hand writing"
+msgstr "हस्तलेखनम्"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:237
+#, kde-format
+msgid "Norm font"
+msgstr "नॉर्म फॉन्ट्"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:239
+#, kde-format
+msgid "Country"
+msgstr "देशः"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
+#, kde-format
+msgid "OCR Modifier"
+msgstr "ओसीआर संशोधक"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
+#, kde-format
+msgid "Enable automatic noise reduction"
+msgstr "स्वचालितं कोलाहलनिवृत्तिं सक्षमं कुर्वन्तु"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
+#, kde-format
+msgid "Enable automatic scaling"
+msgstr "स्वचालितं स्केलिंग् सक्षमं कुर्वन्तु"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
+#, kde-format
+msgid "Classifier file %1 does not exist"
+msgstr "वर्गीकरणसञ्चिका %1 नास्ति"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
+#, kde-format
+msgid "Classifier file %1 is not readable"
+msgstr "वर्गीकरणसञ्चिका %1 पठनीया नास्ति"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
+#, kde-kuit-format
+msgctxt "@info %1 is one of the two following messages"
+msgid ""
+"<para><emphasis>Kadmos</emphasis> is a commercial OCR/ICR library produced "
+"by reRecognition&nbsp;AG.</para><para>%1</para><para>See <link url=\"http://"
+"www.rerecognition.com\">www.rerecognition.com</link> for more information on "
+"Kadmos.</para>"
+msgstr ""
+"<para><emphasis>कदमोस्</emphasis> reRecognition AG द्वारा निर्मितं व्यावसायिकं OCR/"
+"ICR पुस्तकालयम् अस्ति ।</para><para> %1</para><para> पश्यतु<link url=\"http://www."
+"rerecognition.com\"> www.recognition.com इति वृत्तान्तः</link> कद्मोस् विषये "
+"अधिकाधिकं ज्ञातुं।</para>"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
+#, kde-format
+msgid "This version of Kooka is configured to use the Kadmos engine."
+msgstr "Kooka इत्यस्य एतत् संस्करणं Kadmos इञ्जिनस्य उपयोगाय विन्यस्तम् अस्ति ।"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
+#, kde-format
+msgid ""
+"This version of Kooka is not configured for Kadmos.  The Kadmos libraries "
+"need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
+"option."
+msgstr ""
+"Kooka इत्यस्य एतत् संस्करणं Kadmos कृते विन्यस्तं नास्ति ।  Kadmos पुस्तकालयानाम् स्थापना "
+"आवश्यकी अस्ति, तथा च Kooka इत्यस्य पुनर्निर्माणं '--with-kadmos' विकल्पेन करणीयम् ।"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
+#, kde-format
+msgid ""
+"The classifier file necessary for OCR cannot be loaded: %1;\n"
+"OCR with the KADMOS engine is not possible."
+msgstr ""
+"OCR कृते आवश्यकी वर्गीकरणसञ्चिका लोड् कर्तुं न शक्यते: %1;\n"
+"KADMOS इञ्जिनेण सह OCR सम्भवं नास्ति।"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
+#, kde-format
+msgid "KADMOS Installation Problem"
+msgstr "KADMOS संस्थापनसमस्या"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
+#, kde-format
+msgid ""
+"The KADMOS OCR system could not be started:\n"
+"%1\n"
+"Please check the configuration."
+msgstr ""
+"KADMOS OCR प्रणाली आरभ्यतुं न शक्यते स्म:\n"
+"%1\n"
+"कृपया विन्यासं पश्यन्तु।"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
+#, kde-format
+msgid "KADMOS Failure"
+msgstr "KADMOS असफलता"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
+#, kde-format
+msgid "The OCRAD executable is not configured or is not available."
+msgstr "OCRAD कार्यान्वयनीयं विन्यस्तं वा उपलब्धं वा नास्ति ।"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
+#, kde-format
+msgid "No Layout Detection"
+msgstr "कोऽपि लेआउट् डिटेक्शन् नास्ति"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
+#, kde-format
+msgid "Layout Detection"
+msgstr "लेआउट डिटेक्शन"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
+#, kde-format
+msgid "Column Detection"
+msgstr "स्तम्भपरिचयः"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
+#, kde-format
+msgid "Full Layout Detection"
+msgstr "पूर्ण लेआउट डिटेक्शन"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:161
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#, kde-format
+msgid "(default)"
+msgstr "(मूलभूतम्‌)"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> does not exist"
+msgstr "<filename>%1</filename> सञ्चिका नास्ति"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> unreadable"
+msgstr "सञ्चिका <filename>%1</filename> अपठनीयम्"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot open file <filename>%1</filename>"
+msgstr "<filename>%1</filename> सञ्चिकां उद्घाटयितुं न शक्यते"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
+#, kde-format
+msgid "Name or path of the OCRAD executable:"
+msgstr "OCRAD कार्यान्वयनीयस्य नाम वा मार्गः वा:"
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#, kde-format
+msgid "The Tesseract executable is not configured or is not available."
+msgstr "Tesseract कार्यान्वयनीयं विन्यस्तं वा उपलब्धं वा नास्ति ।"
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#, kde-format
+msgid "Select a file if required..."
+msgstr "आवश्यकता चेत् सञ्चिकां चिनोतु..."
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
+#, kde-format
+msgid "HOCR parsing error, %1"
+msgstr "HOCR विश्लेषणदोषः, %1"
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
+#, kde-format
+msgid "Name or path of the Tesseract executable:"
+msgstr "Tesseract कार्यान्वयनीयस्य नाम वा मार्गः वा:"
+
+#: formatdialog.cpp:77
+#, kde-format
+msgid ""
+"<b>Bitmap Picture</b> is a widely used format for images under MS Windows. "
+"It is suitable for color, grayscale and line art images.<p>This format is "
+"widely supported but is not recommended, use an open format instead."
+msgstr ""
+"<b>Bitmap Picture</b> इति MS Windows इत्यस्य अन्तर्गतं चित्राणां कृते बहुधा प्रयुक्तं "
+"प्रारूपम् अस्ति । वर्णस्य, ग्रेस्केलस्य, रेखाकलाप्रतिमानां च कृते उपयुक्तम् अस्ति ।<p> एतत् प्रारूपं "
+"बहुधा समर्थितं किन्तु न अनुशंसितं, तस्य स्थाने मुक्तस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:88
+#, kde-format
+msgid ""
+"<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
+"line art (bitmap) images. Only 1 bit per pixel depth is supported."
+msgstr ""
+"<b>Portable Bitmap</b> , यथा Netpbm द्वारा उपयुज्यते, रेखाकला (bitmap) चित्राणां कृते "
+"असंपीडितं प्रारूपम् अस्ति । प्रतिपिक्सेलगहनतां केवलं १ बिट् समर्थितम् अस्ति ।"
+
+#: formatdialog.cpp:97
+#, kde-format
+msgid ""
+"<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
+"grayscale images. Only 8 bit per pixel depth is supported."
+msgstr ""
+"<b>Portable Greymap</b> , यथा Netpbm द्वारा उपयुज्यते, ग्रेस्केल इमेज् कृते असंपीडितं "
+"प्रारूपम् अस्ति । प्रतिपिक्सेलगहनतां केवलं ८ बिट् समर्थितम् अस्ति ।"
+
+#: formatdialog.cpp:106
+#, kde-format
+msgid ""
+"<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
+"full color images. Only 24 bit per pixel RGB is supported."
+msgstr ""
+"<b>Portable Pixmap</b> , यथा Netpbm द्वारा उपयुज्यते, पूर्णरङ्गप्रतिमानां कृते असंपीडितं "
+"प्रारूपम् अस्ति । केवलं २४ बिट् प्रति पिक्सेल RGB समर्थितम् अस्ति ।"
+
+#: formatdialog.cpp:115
+#, kde-format
+msgid ""
+"<b>PCX</b> is a lossless compressed format which is often supported by PC "
+"imaging applications, although it is rather old and unsophisticated.  It is "
+"suitable for color and grayscale images.<p>This format is not recommended, "
+"use an open format instead."
+msgstr ""
+"<b>PCX</b> एकं हानिरहितं संपीडितं प्रारूपं यत् प्रायः PC इमेजिंग अनुप्रयोगैः समर्थितं भवति, "
+"यद्यपि इदं किञ्चित् पुरातनं अपरिष्कृतं च अस्ति । वर्णस्य, ग्रेस्केलस्य च चित्राणां कृते उपयुक्तम् "
+"अस्ति ।<p> एतत् प्रारूपं न अनुशंसितम्, तस्य स्थाने मुक्तस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:126
+#, kde-format
+msgid ""
+"<b>X Bitmap</b> is often used by the X Window System to store cursor and "
+"icon bitmaps.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"<b>X Bitmap इत्यस्य</b> उपयोगः प्रायः X Window System इत्यनेन कर्सरस्य, चिह्नस्य च "
+"बिटमैप्स् संग्रहणार्थं भवति ।<p> यावत् अस्य प्रयोजनस्य आवश्यकता नास्ति तावत् तस्य स्थाने "
+"सामान्यप्रयोजनस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:135
+#, kde-format
+msgid ""
+"<b>X Pixmap</b> is often used by the X Window System for color icons and "
+"other images.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"<b>X Pixmap इत्यस्य</b> उपयोगः प्रायः X Window System इत्यनेन वर्णचिह्नानां अन्येषां च "
+"चित्राणां कृते भवति ।<p> यावत् अस्य प्रयोजनस्य आवश्यकता नास्ति तावत् तस्य स्थाने "
+"सामान्यप्रयोजनस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:144
+#, kde-format
+msgid ""
+"<b>Portable Network Graphics</b> is a lossless compressed format designed to "
+"be portable and extensible. It is suitable for any type of color or "
+"grayscale images, indexed or true color.<p>PNG is an open format which is "
+"widely supported."
+msgstr ""
+"<b>पोर्टेबल नेटवर्कग्राफिक्स्</b> इति हानिरहितं संपीडितं प्रारूपं यत् पोर्टेबलं विस्तारयोग्यं च "
+"भवितुं डिजाइनं कृतम् अस्ति । इदं कस्यापि प्रकारस्य वर्णस्य अथवा ग्रेस्केलस्य चित्रस्य, "
+"अनुक्रमितस्य अथवा सत्यस्य वर्णस्य कृते उपयुक्तम् अस्ति ।<p> PNG एकं मुक्तं प्रारूपं यत् व्यापकरूपेण "
+"समर्थितम् अस्ति ।"
+
+#: formatdialog.cpp:155
+#, kde-format
+msgid ""
+"<b>JPEG</b> is a compressed format suitable for true color or grayscale "
+"images. It is a lossy format, so it is not recommended for archiving or for "
+"repeated loading and saving.<p>This is an open format which is widely "
+"supported."
+msgstr ""
+"<b>JPEG</b> इति सच्चिदानन्दवर्णस्य अथवा ग्रेस्केलस्य चित्राणां कृते उपयुक्तं संपीडितं प्रारूपम् "
+"अस्ति । इदं हानियुक्तं प्रारूपम् अस्ति, अतः संग्रहणार्थं वा पुनः पुनः लोड् कर्तुं रक्षणार्थं वा न "
+"अनुशंसितम् ।<p> एतत् एकं मुक्तं प्रारूपं यत् व्यापकरूपेण समर्थितम् अस्ति ।"
+
+#: formatdialog.cpp:166
+#, kde-format
+msgid ""
+"<b>JPEG 2000</b> was intended as an update to the JPEG format, with the "
+"option of lossless compression, but so far is not widely supported. It is "
+"suitable for true color or grayscale images."
+msgstr ""
+"<b>JPEG 2000 इत्यस्य</b> अभिप्रायः JPEG प्रारूपस्य अद्यतनरूपेण आसीत्, यत्र "
+"हानिरहितसंपीडनस्य विकल्पः आसीत्, परन्तु अद्यावधि व्यापकरूपेण समर्थितः नास्ति । सत्यवर्णस्य "
+"अथवा ग्रेस्केलप्रतिमानां कृते उपयुक्तम् अस्ति ।"
+
+#: formatdialog.cpp:176
+#, kde-format
+msgid ""
+"<b>Encapsulated PostScript</b> is derived from the PostScript&trade; page "
+"description language.  Use this format for importing into other "
+"applications, or to use with (e.g.) TeX."
+msgstr ""
+"<b>Encapsulated PostScript</b> PostScriptTM पृष्ठविवरणभाषायाः व्युत्पन्नम् अस्ति । "
+"अन्येषु अनुप्रयोगेषु आयातार्थं, अथवा (उदा.) TeX इत्यनेन सह उपयोगाय एतत् प्रारूपं उपयुज्यताम् ।"
+
+#: formatdialog.cpp:186
+#, kde-format
+msgid ""
+"<b>Truevision Targa</b> can store full color images with an alpha channel, "
+"and is used extensively by animation and video applications.<p>This format "
+"is not recommended, use an open format instead."
+msgstr ""
+"<b>Truevision Targa</b> आल्फा-चैनेल्-सहितं पूर्ण-रङ्ग-चित्रं संग्रहीतुं शक्नोति, एनिमेशन-"
+"वीडियो-अनुप्रयोगैः च बहुधा उपयुज्यते ।<p> एतत् प्रारूपं न अनुशंसितम्, तस्य स्थाने मुक्तस्वरूपस्य "
+"उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:196
+#, kde-format
+msgid ""
+"<b>Graphics Interchange Format</b> is a popular but patent-encumbered format "
+"often used for web graphics.  It uses lossless compression with up to 256 "
+"colors and optional transparency.<p>For legal reasons this format is not "
+"recommended, use an open format instead."
+msgstr ""
+"<b>ग्राफिक्स् आदानप्रदानस्वरूपं</b> लोकप्रियं किन्तु पेटन्ट-भारितं प्रारूपं यत् प्रायः "
+"जालचित्रस्य कृते उपयुज्यते । अस्मिन् २५६ वर्णपर्यन्तं, वैकल्पिकपारदर्शितायाः च सह "
+"हानिरहितसंपीडनस्य उपयोगः भवति ।<p> कानूनीकारणात् एतत् प्रारूपं न अनुशंसितं, तस्य स्थाने "
+"मुक्तस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:207
+#, kde-format
+msgid ""
+"<b>Tagged Image File Format</b> is a versatile and extensible file format "
+"widely supported by imaging and publishing applications. It supports indexed "
+"and true color images with alpha transparency.<p>Because there are many "
+"variations, there may sometimes be compatibility problems. Unless required "
+"for use with other applications, use an open format instead."
+msgstr ""
+"<b>Tagged Image File Format</b> इति बहुमुखी विस्तारयोग्यं च सञ्चिकास्वरूपं यत् इमेजिंग्-"
+"प्रकाशन-अनुप्रयोगैः व्यापकरूपेण समर्थितम् अस्ति । एतत् अल्फा पारदर्शितायाः सह अनुक्रमितानि "
+"सत्यानि च वर्णचित्रं समर्थयति ।<p> यतः अनेके विविधताः सन्ति, कदाचित् संगततायाः समस्याः "
+"अपि भवितुम् अर्हन्ति । अन्यैः अनुप्रयोगैः सह उपयोगाय यावत् आवश्यकं नास्ति, तावत् तस्य स्थाने "
+"मुक्तस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:219
+#, kde-format
+msgid ""
+"<b>Multiple-image Network Graphics</b> is derived from the PNG standard and "
+"is intended for animated images.  It is an open format suitable for all "
+"types of images.<p>Images produced by a scanner will not be animated, so "
+"unless specifically required for use with other applications use PNG instead."
+msgstr ""
+"<b>बहु-प्रतिबिम्बयुक्तं संजाल-चित्रणं</b> PNG-मानकात् प्राप्तम् अस्ति तथा च एनिमेटेड्-"
+"प्रतिमानां कृते अभिप्रेतम् अस्ति । सर्वप्रकारस्य चित्राणां कृते उपयुक्तं मुक्तस्वरूपम् अस्ति ।<p> "
+"स्कैनरेण निर्मिताः चित्राणि एनिमेटेड् न भविष्यन्ति, अतः अन्यैः अनुप्रयोगैः सह उपयोगाय "
+"विशेषतया आवश्यकं यावत् तस्य स्थाने PNG इत्यस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:231
+#, kde-format
+msgid ""
+"This is the <b>Silicon Graphics</b> native image file format, supporting 24 "
+"bit true color images with optional lossless compression.<p>Unless "
+"specifically required, use an open format instead."
+msgstr ""
+"इदं <b>Silicon Graphics</b> मूलभूतप्रतिबिम्बसञ्चिकास्वरूपम् अस्ति, यत् "
+"वैकल्पिकहानिरहितसंपीडनेन सह २४ बिट् सत्या वर्णप्रतिमानां समर्थनं करोति ।<p> यावत् "
+"विशेषरूपेण आवश्यकं नास्ति, तावत् तस्य स्थाने मुक्तस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:241
+#, kde-format
+msgid ""
+"<b>Wireless Bitmap</b> is a monochrome bitmap format optimised for WAP "
+"mobile devices.  It supports black and white bitmaps only.<p>Unless "
+"specifically required, use an general purpose format instead."
+msgstr ""
+"<b>वायरलेस् बिटमैप्</b> इति WAP चलयन्त्राणां कृते अनुकूलितं एकवर्णीयं बिटमैप् प्रारूपम् अस्ति । "
+"एतत् केवलं कृष्णशुक्लबिटमैप्स् समर्थयति ।<p> यावत् विशेषरूपेण आवश्यकं नास्ति, तावत् तस्य स्थाने "
+"सामान्यप्रयोजनस्वरूपस्य उपयोगं कुर्वन्तु ।"
+
+#: formatdialog.cpp:251
+#, kde-format
+msgid ""
+"<b>WebP</b> is intended to be an open standard for true colour images with "
+"optional transparency.  It is widely supported by modern web browsers and "
+"graphics software.<p>Various compression methods, both lossy and lossless, "
+"are supported. Lossy compression is not recommended for archiving or for "
+"repeated loading and saving."
+msgstr ""
+"<b>WebP</b> इत्यस्य उद्देश्यं वैकल्पिकपारदर्शितायाः सच्चिदानन्दचित्रेषु मुक्तमानकम् अस्ति । "
+"आधुनिकजालपुटैः, ग्राफिक्स् सॉफ्टवेयरैः च अस्य व्यापकरूपेण समर्थनं कृतम् अस्ति ।<p> हानियुक्ताः "
+"हानिरहिताः च विविधाः संपीडनविधयः समर्थिताः सन्ति । संग्रहणार्थं वा पुनः पुनः लोड् कर्तुं "
+"रक्षणार्थं वा हानियुक्तं संपीडनं न अनुशंसितम् ।"
+
+#: formatdialog.cpp:280
+#, kde-format
+msgid "Save Assistant"
+msgstr "सहायकं रक्षतु"
+
+#: formatdialog.cpp:306
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Select a format to save the scanned image.<nl/>This is a <emphasis strong="
+"\"1\">%1</emphasis>."
+msgstr ""
+"स्कैन् कृतं चित्रं रक्षितुं प्रारूपं चिनोतु ।<nl/>इदं <emphasis strong=\"1\">%1</emphasis> "
+"अस्ति ।"
+
+#: formatdialog.cpp:316
+#, kde-format
+msgid "File format:"
+msgstr "सञ्चिकास्वरूपम् :"
+
+#: formatdialog.cpp:338
+#, kde-format
+msgid "Image sub-format:"
+msgstr "चित्रस्य उपस्वरूपः :"
+
+#: formatdialog.cpp:384
+#, kde-format
+msgid "File name:"
+msgstr "सञ्चिकानाम :"
+
+#: formatdialog.cpp:398
+#, kde-format
+msgid "Select Format..."
+msgstr "Format इति चयनं कुर्वन्तु..."
+
+#: formatdialog.cpp:436
+#, kde-format
+msgid "No format selected."
+msgstr "न प्रारूपं चयनितम्।"
+
+#: formatdialog.cpp:470
+#, kde-format
+msgid "No information is available for this format."
+msgstr "अस्य प्रारूपस्य कृते कोऽपि सूचना उपलब्धा नास्ति ।"
+
+#: galleryroot.cpp:101
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Unable to create the directory <filename>%1</filename><nl/>for the Kooka "
+"gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
+">will be used.<nl/><nl/>Check the document directory setting and permissions."
+msgstr ""
+"Kooka-दर्पणस्य कृते <filename>%1</filename><nl/>निर्देशिकां निर्मातुं असमर्थम् - %3..<nl/"
+"><nl/>भवतः दस्तावेजनिर्देशिका <filename>%2</filename><nl/>उपयोगः भविष्यति।<nl/"
+"><nl/>दस्तावेजनिर्देशिकासेटिंग् अनुमतिः च पश्यन्तु।"
+
+#: galleryroot.cpp:112
+#, kde-format
+msgid "Error creating gallery"
+msgstr "गैलरी निर्मातुं त्रुटिः"
+
+#: galleryroot.cpp:164
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"An old Kooka gallery was found at <filename>%1</filename>.<nl/>The preferred "
+"new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
+"a new gallery at the new location?"
+msgstr ""
+"<filename>%1</filename> इत्यत्र पुरातनं Kooka-सङ्ग्रहालयं प्राप्तम् ।<nl/>अधुना प्राधान्यं "
+"नूतनं स्थानं <filename>%2</filename> अस्ति ।<nl/><nl/>किं भवान् निर्मातुम् इच्छति "
+"नूतनस्थाने नूतनं चित्रशालां?"
+
+#: galleryroot.cpp:168
+#, kde-format
+msgid "Create New Gallery"
+msgstr "New Gallery रचयन्तु"
+
+#: galleryroot.cpp:169
+#, kde-format
+msgctxt "@action:button"
+msgid "Create New"
+msgstr "New रचयतु"
+
+#: galleryroot.cpp:170
+#, kde-format
+msgctxt "@action:button"
+msgid "Continue With Old"
+msgstr "पुरातनेन सह निरन्तरं कुर्वन्तु"
+
+#: galleryroot.cpp:183 galleryroot.cpp:197
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>If you wish to add the images from your old "
+"gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
+"may do so by simply copying or moving the files."
+msgstr ""
+"कूका नूतनस्य चित्रशालायाः उपयोगं करिष्यति,<link url=\"file:%1\"><filename> %1</"
+"filename></link> .<nl/><nl/> यदि भवान् स्वस्य पुरातनस्य चित्रशालातः चित्राणि "
+"योजयितुम् इच्छति<link url=\"file:%2\"><filename> %2</filename></link> , ९.<nl/> "
+"ततः भवन्तः केवलं सञ्चिकानां प्रतिलिपिं कृत्वा वा स्थानान्तरयित्वा वा तत् कर्तुं शक्नुवन्ति ।"
+
+#: galleryroot.cpp:187
+#, kde-format
+msgid "New Gallery Created"
+msgstr "नवीन गैलरी निर्मित"
+
+#: galleryroot.cpp:201
+#, kde-format
+msgid "Old Gallery Exists"
+msgstr "पुरातनं दीर्घा विद्यते"
+
+#: imagetransform.cpp:59
+#, kde-format
+msgid "Rotate image +90 degrees"
+msgstr "चित्रं +90 डिग्री परिभ्रमन्तु"
+
+#: imagetransform.cpp:66
+#, kde-format
+msgid "Rotate image 180 degrees"
+msgstr "चित्रं १८० डिग्री परिभ्रमन्तु"
+
+#: imagetransform.cpp:71
+#, kde-format
+msgid "Rotate image -90 degrees"
+msgstr "चित्रं -90 डिग्री परिभ्रमन्तु"
+
+#: imagetransform.cpp:77
+#, kde-format
+msgid "Mirror image horizontally"
+msgstr "दर्पणप्रतिबिम्बं क्षैतिजरूपेण"
+
+#: imagetransform.cpp:82
+#, kde-format
+msgid "Mirror image vertically"
+msgstr "दर्पणप्रतिबिम्बं लम्बवत्"
+
+#: imagetransform.cpp:94
+#, kde-format
+msgid "Error updating image %1"
+msgstr "%1 प्रतिबिम्बस्य अद्यतनीकरणे त्रुटिः"
+
+#: imgprintdialog.cpp:65
+#, kde-format
+msgctxt "@title:tab"
+msgid "Image"
+msgstr "छवि"
+
+#: imgprintdialog.cpp:85
+#, kde-format
+msgctxt "@title:group"
+msgid "Scaling"
+msgstr "स्केलिंग्"
+
+#: imgprintdialog.cpp:100
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as on screen"
+msgstr "पर्दायां यथा भवति तथा आकारः"
+
+#: imgprintdialog.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at the same size as seen on screen, determined by the screen "
+"resolution.</div>"
+msgstr ""
+"<div>पटले दृश्यमानस्य समाने आकारे मुद्रणं कुर्वन्तु, यत् पटलस्य संकल्पेन निर्धारितम् अस्ति ।</div>"
+
+#: imgprintdialog.cpp:105
+#, kde-format
+msgid "Screen resolution:"
+msgstr "स्क्रीन रिजोल्यूशन :"
+
+#: imgprintdialog.cpp:110
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the current screen resolution. It cannot be changed here.</div>"
+msgstr "<div>एतत् वर्तमानं पटलसंकल्पम् अस्ति । अत्र परिवर्तनं कर्तुं न शक्यते।</div>"
+
+#: imgprintdialog.cpp:114
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as scanned"
+msgstr "यथा स्कैन् कृतं तथा आकारः"
+
+#: imgprintdialog.cpp:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at a size determined by the scan resolution. The resolution is "
+"saved with the image and used if available; if it is not, it can be entered "
+"here.</div>"
+msgstr ""
+"<div>स्कैन-संकल्पेन निर्धारित-आकारेन मुद्रयन्तु । संकल्पः प्रतिबिम्बेन सह रक्षितः भवति, उपलब्धे "
+"सति च उपयुज्यते; यदि न भवति तर्हि अत्र प्रविष्टुं शक्यते।</div>"
+
+#: imgprintdialog.cpp:119
+#, kde-format
+msgid "Scan resolution:"
+msgstr "स्कैन रिजोल्यूशन :"
+
+#: imgprintdialog.cpp:124
+#, kde-format
+msgctxt "@item:intext abbreviation for 'dots per inch'"
+msgid " dpi"
+msgstr " dpi"
+
+#: imgprintdialog.cpp:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the scan resolution as saved with the image. It can be changed "
+"if necessary.</div>"
+msgstr ""
+"<div>इदं चित्रेण सह रक्षितं यथा स्कैन् रिजोल्यूशनम् अस्ति । आवश्यकतानुसारं परिवर्तनं कर्तुं शक्यते।"
+"</div>"
+
+#: imgprintdialog.cpp:132
+#, kde-format
+msgctxt "@option:radio"
+msgid "Custom size"
+msgstr "कस्टम आकार"
+
+#: imgprintdialog.cpp:133
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print scaled to the specified size. The image is centered on the paper."
+"</div>"
+msgstr ""
+"<div>निर्दिष्टाकारं प्रति मुद्रणं स्केल कृतम् । बिम्बं कागदस्य उपरि केन्द्रीकृतम् अस्ति ।</div>"
+
+#: imgprintdialog.cpp:137
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image width:"
+msgstr "चित्रस्य विस्तारः :"
+
+#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#, kde-format
+msgctxt "@item:intext abbreviation for 'millimetres'"
+msgid " mm"
+msgstr " मि.मी"
+
+#: imgprintdialog.cpp:143
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The width at which the image will be printed.</div>"
+msgstr "<div>यस्मिन् विस्तारे चित्रं मुद्रितं भविष्यति।</div>"
+
+#: imgprintdialog.cpp:151
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image height:"
+msgstr "चित्रस्य ऊर्ध्वता :"
+
+#: imgprintdialog.cpp:157
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The height at which the image will be printed.</div>"
+msgstr "<div>यस्मिन् ऊर्ध्वतायां चित्रं मुद्रितं भविष्यति।</div>"
+
+#: imgprintdialog.cpp:166
+#, kde-format
+msgctxt "@option:radio"
+msgid "Fit to page"
+msgstr "पृष्ठे फिट्"
+
+#: imgprintdialog.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print using as much of the available space on the paper as possible. "
+"The aspect ratio can be maintained.</div>"
+msgstr ""
+"<div>कागदपत्रे यथासम्भवं उपलब्धं स्थानं उपयुज्य मुद्रयन्तु। आस्पेक्ट् रेश्यो इत्यस्य निर्वाहः कर्तुं "
+"शक्यते ।</div>"
+
+#: imgprintdialog.cpp:178
+#, kde-format
+msgctxt "@title:group"
+msgid "Other Options"
+msgstr "अन्ये विकल्पाः"
+
+#: imgprintdialog.cpp:182
+#, kde-format
+msgctxt "@option:check"
+msgid "Maintain aspect ratio"
+msgstr "आस्पेक्ट रेश्यो निर्वाहयन्तु"
+
+#: imgprintdialog.cpp:183
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Adjust the height or width to maintain the original aspect ratio of the "
+"printed image.</div>"
+msgstr ""
+"<div>मुद्रितस्य चित्रस्य मूलपक्षानुपातं निर्वाहयितुम् ऊर्ध्वतां विस्तारं वा समायोजयन्तु ।</div>"
+
+#: imgprintdialog.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "Low resolution (fast draft print)"
+msgstr "न्यूनसंकल्पः (द्रुत मसौदामुद्रणम्)"
+
+#: imgprintdialog.cpp:190
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at as low a resolution as possible. This may not work as intended "
+"on all printers.</div>"
+msgstr ""
+"<div>यथासम्भवं न्यूनसंकल्पेन मुद्रयन्तु। एतत् सर्वेषु मुद्रकेषु यथा अभिप्रेतं कार्यं न कर्तुं शक्नोति ।</"
+"div>"
+
+#: imgprintdialog.cpp:196
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Cut marks:"
+msgstr "कटचिह्नम् :"
+
+#: imgprintdialog.cpp:200
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "None"
+msgstr "न कश्चित्"
+
+#: imgprintdialog.cpp:201
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "For multiple pages"
+msgstr "बहुपृष्ठानां कृते"
+
+#: imgprintdialog.cpp:202
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr "सर्वदा"
+
+#: imgprintdialog.cpp:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Select whether cut/join marks are printed. The marks will reduce the "
+"available printable area.</div>"
+msgstr ""
+"<div>कट/जोइन् चिह्नानि मुद्रितानि सन्ति वा इति चिनोतु। चिह्नानि उपलब्धं मुद्रणयोग्यं क्षेत्रं "
+"न्यूनीकरिष्यन्ति।</div>"
+
+#: imgprintdialog.cpp:214
+#, kde-format
+msgctxt "@title:group"
+msgid "Print Layout"
+msgstr "मुद्रणविन्यासः"
+
+#: imgprintdialog.cpp:219
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image size:"
+msgstr "चित्रस्य आकारः :"
+
+#: imgprintdialog.cpp:222
+#, kde-format
+msgctxt "@info:status width,height pixels"
+msgid "%1 x %2 pix"
+msgstr "%1 x %2 पिक्स"
+
+#: imgprintdialog.cpp:227
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Available print area:"
+msgstr "उपलब्धः मुद्रणक्षेत्रम् :"
+
+#: imgprintdialog.cpp:234
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image print area:"
+msgstr "चित्रमुद्रणक्षेत्रम् :"
+
+#: imgprintdialog.cpp:241
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Pages required:"
+msgstr "आवश्यकाः पृष्ठाः :"
+
+#: imgprintdialog.cpp:304
+#, kde-format
+msgctxt "@info:status"
+msgid "%1 dpi"
+msgstr "%1 द्पि"
+
+#: imgprintdialog.cpp:321
+#, kde-format
+msgid "The scan resolution must be specified for scaling to it."
+msgstr "तस्य स्केलिंग् कृते स्कैन् रिजोल्यूशनं निर्दिष्टं भवितुमर्हति ।"
+
+#: imgprintdialog.cpp:326
+#, kde-format
+msgid ""
+"A valid size must be specified for custom scaling. One or both of the "
+"specified dimensions is zero."
+msgstr ""
+"कस्टम् स्केलिंग् कृते वैधः आकारः निर्दिष्टः भवितुमर्हति । निर्दिष्टेषु परिमाणेषु एकः वा उभयः वा "
+"शून्यः भवति ।"
+
+#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#, kde-format
+msgctxt "@info:status width,height millimetres"
+msgid "%1 x %2 mm"
+msgstr "%1 x %2 मि.मी"
+
+#: imgprintdialog.cpp:412
+#, kde-format
+msgctxt "@info:status total"
+msgid "%1"
+msgstr "%1"
+
+#: imgprintdialog.cpp:414
+#, kde-format
+msgctxt "@info:status total(rows,cols)"
+msgid "%1 (%2 x %3)"
+msgstr "%1 (%2 x %3)"
+
+#: imgsaver.cpp:66
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
+msgstr "<filename>%2</filename><nl/>निर्देशिका अभिगन्तुं न शक्तवती।<nl/>%1"
+
+#: imgsaver.cpp:77
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
+msgstr "<filename>%2</filename><nl/>निर्देशिका निर्मातुं न शक्यते स्म।<nl/>%1"
+
+#: imgsaver.cpp:328
+#, kde-format
+msgid "indexed color image (up to 8 bit depth)"
+msgstr "अनुक्रमितवर्णप्रतिबिम्बं (८ बिट् गभीरतापर्यन्तं)"
+
+#: imgsaver.cpp:332
+#, kde-format
+msgid "gray scale image (up to 8 bit depth)"
+msgstr "ग्रे स्केल इमेज (८ बिट् गभीरता पर्यन्तम्)"
+
+#: imgsaver.cpp:336
+#, kde-format
+msgid "lineart image (black and white, 1 bit depth)"
+msgstr "lineart इमेज (कृष्णः श्वेतश्च, १ बिट् गभीरता)"
+
+#: imgsaver.cpp:340
+#, kde-format
+msgid "high/true color image (more than 8 bit depth)"
+msgstr "उच्च/सत्यवर्णप्रतिबिम्बं (८ बिट् गभीरतायाः अधिकं)"
+
+#: imgsaver.cpp:344
+#, kde-format
+msgid "unknown image type %1"
+msgstr "अज्ञातः चित्रप्रकारः %1"
+
+#: imgsaver.cpp:366
+#, kde-format
+msgid "Save OK"
+msgstr "ठीकम् रक्षतु"
+
+#: imgsaver.cpp:368
+#, kde-format
+msgid "Permission denied"
+msgstr "अनुमतिः अङ्गीकृता"
+
+#: imgsaver.cpp:370
+#, kde-format
+msgid "Bad file name"
+msgstr "दुष्टं सञ्चिकानाम"
+
+#: imgsaver.cpp:372
+#, kde-format
+msgid "No space left on device"
+msgstr "यन्त्रे स्थानं न अवशिष्टम्"
+
+#: imgsaver.cpp:374
+#, kde-format
+msgid "Cannot write image format '%1'"
+msgstr "'%1' प्रतिबिम्बस्वरूपं लिखितुं न शक्यते ।"
+
+#: imgsaver.cpp:376
+#, kde-format
+msgid "Cannot write using protocol '%1'"
+msgstr "'%1' इति प्रोटोकॉलस्य उपयोगेन लिखितुं न शक्यते ।"
+
+#: imgsaver.cpp:378
+#, kde-format
+msgid "User cancelled saving"
+msgstr "उपयोक्ता रक्षणं रद्दं कृतवान्"
+
+#: imgsaver.cpp:380
+#, kde-format
+msgid "Cannot create directory"
+msgstr "निर्देशिकां निर्मातुं न शक्यते"
+
+#: imgsaver.cpp:382
+#, kde-format
+msgid "Save failed"
+msgstr "रक्षणं विफलम् अभवत्"
+
+#: imgsaver.cpp:384
+#, kde-format
+msgid "Bad parameter"
+msgstr "दुष्टः पैरामीटर्"
+
+#: imgsaver.cpp:386
+#, kde-format
+msgid "Unknown status %1"
+msgstr "अज्ञात स्थिति %1"
+
+#: imgsaver.cpp:414
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The file name you supplied has no file extension.<nl/>Should the original "
+"one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
+"filename>"
+msgstr ""
+"भवता प्रदत्तस्य सञ्चिकानामस्य सञ्चिकाविस्तारः नास्ति ।<nl/>किं मूलं योजयितव्यम्?<nl/><nl/"
+">एतेन नूतनं सञ्चिकानाम <filename>%1</filename> भविष्यति"
+
+#: imgsaver.cpp:417
+#, kde-format
+msgid "Extension Missing"
+msgstr "विस्तारः अनुपलब्धः"
+
+#: imgsaver.cpp:418
+#, kde-format
+msgid "Add Extension"
+msgstr "विस्तारं योजयतु"
+
+#: imgsaver.cpp:419
+#, kde-format
+msgid "Do Not Add"
+msgstr "न योजयतु"
+
+#: imgsaver.cpp:448
+#, kde-format
+msgid "Target already exists"
+msgstr "लक्ष्यं पूर्वमेव विद्यते"
+
+#: imgsaver.cpp:461
+#, kde-format
+msgid "Unable to copy the file"
+msgstr "सञ्चिकायाः प्रतिलिपिं कर्तुं असमर्थः"
+
+#: imgsaver.cpp:462
+#, kde-format
+msgid "Unable to rename the file"
+msgstr "सञ्चिकायाः नाम परिवर्तनं कर्तुं असमर्थः"
+
+#: imgsaver.cpp:463
+#, kde-format
+msgid "Error copying file"
+msgstr "सञ्चिकायाः प्रतिलिपिकरणे त्रुटिः"
+
+#: imgsaver.cpp:464
+#, kde-format
+msgid "Error renaming file"
+msgstr "सञ्चिकायाः नामकरणं त्रुटिः"
+
+#: imgsaver.cpp:465
+#, kde-kuit-format
+msgctxt "@info"
+msgid "%1 <filename>%3</filename><nl/>%2"
+msgstr "%1 <filename>%3</filename><nl/>%2"
+
+#: kooka.cpp:106
+#, kde-format
+msgid "KDE Scanning"
+msgstr "केडीई स्कैनिङ्ग"
+
+#: kooka.cpp:140
+#, kde-format
+msgid "Scale to Width"
+msgstr "स्केल टु विड्थ"
+
+#: kooka.cpp:151
+#, kde-format
+msgid "Scale to Height"
+msgstr "स्केल टु हाइट"
+
+#: kooka.cpp:160
+#, kde-format
+msgid "Original Size"
+msgstr "मूल आकार"
+
+#: kooka.cpp:166
+#, kde-format
+msgid "Set Zoom..."
+msgstr "सेट् ज़ूम..."
+
+#: kooka.cpp:172
+#, kde-format
+msgid "Keep Zoom Setting"
+msgstr "Zoom Setting इति स्थापयन्तु"
+
+#: kooka.cpp:180
+#, kde-format
+msgid "New Image From Selection"
+msgstr "चयनात् नवीनं चित्रम्"
+
+#: kooka.cpp:185
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "दर्पणं लम्बवत्"
+
+#: kooka.cpp:192
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "दर्पणं क्षैतिजरूपेण"
+
+#: kooka.cpp:202
+#, kde-format
+msgid "Rotate Counter-Clockwise"
+msgstr "घड़ीयाः विपरीतदिशा परिभ्रमन्तु"
+
+#: kooka.cpp:209
+#, kde-format
+msgid "Rotate Clockwise"
+msgstr "घड़ीयाः दिशि घुमाव"
+
+#: kooka.cpp:216
+#, kde-format
+msgid "Rotate 180 Degrees"
+msgstr "१८० डिग्री घुमाव"
+
+#: kooka.cpp:225
+#, kde-format
+msgid "New Folder..."
+msgstr "नवीनं पुटम्..."
+
+#: kooka.cpp:230
+#, kde-format
+msgid "Open With"
+msgstr "Open With इति"
+
+#: kooka.cpp:236
+#, kde-format
+msgid "Save Image..."
+msgstr "चित्रं रक्षतु..."
+
+#: kooka.cpp:243
+#, kde-format
+msgid "Import Image..."
+msgstr "इमेज आयात करें..."
+
+#: kooka.cpp:248 kooka.cpp:537
+#, kde-format
+msgid "Delete Image"
+msgstr "चित्रं विलोपयन्तु"
+
+#: kooka.cpp:255 kooka.cpp:538
+#, kde-format
+msgid "Rename Image"
+msgstr "प्रतिबिम्बस्य नाम परिवर्तनं कुर्वन्तु"
+
+#: kooka.cpp:261 kooka.cpp:536
+#, kde-format
+msgid "Unload Image"
+msgstr "चित्रं अनलोड् कुर्वन्तु"
+
+#: kooka.cpp:268
+#, kde-format
+msgid "Properties..."
+msgstr "गुणाः..."
+
+#: kooka.cpp:277
+#, kde-format
+msgid "Select Scan Device..."
+msgstr "Scan Device इति चयनं कुर्वन्तु..."
+
+#: kooka.cpp:281 kookaview.cpp:551
+#, kde-format
+msgid "Add Scan Device..."
+msgstr "स्कैन उपकरणं योजयन्तु..."
+
+#: kooka.cpp:287
+#, kde-format
+msgid "Preview"
+msgstr "पूर्वावलोकनम्"
+
+#: kooka.cpp:292
+#, kde-format
+msgid "Start Scan"
+msgstr "स्कैन् आरभत"
+
+#: kooka.cpp:297
+#, kde-format
+msgid "Scan Presets..."
+msgstr "स्कैन पूर्वनिर्धारित..."
+
+#: kooka.cpp:302
+#, kde-format
+msgid "Auto Select"
+msgstr "स्वतः चयनं कुर्वन्तु"
+
+#: kooka.cpp:310
+#, kde-format
+msgid "OCR Image..."
+msgstr "ओसीआर इमेज..."
+
+#: kooka.cpp:314
+#, kde-format
+msgid "OCR Selection..."
+msgstr "ओसीआर चयन..."
+
+#: kooka.cpp:318
+#, kde-format
+msgid "OCR File..."
+msgstr "ओसीआर सञ्चिका..."
+
+#: kooka.cpp:322
+#, kde-format
+msgid "Save OCR Result Text..."
+msgstr "OCR परिणाम पाठं रक्षतु..."
+
+#: kooka.cpp:327
+#, kde-format
+msgid "Spell Check OCR Result..."
+msgstr "वर्तनी जाँच OCR परिणाम..."
+
+#: kooka.cpp:524
+#, kde-format
+msgid "Unload Folder"
+msgstr "Unload Folder इति"
+
+#: kooka.cpp:525
+#, kde-format
+msgid "Delete Folder"
+msgstr "पुटं विलोपयन्तु"
+
+#: kooka.cpp:526
+#, kde-format
+msgid "Rename Folder"
+msgstr "Folder इत्यस्य नामकरणं कुर्वन्तु"
+
+#: kookagallery.cpp:56
+#, kde-format
+msgid "Folder:"
+msgstr "पुटम् :"
+
+#: kookapref.cpp:55
+#, kde-format
+msgid "Preferences"
+msgstr "प्राधान्यानि"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General"
+msgstr "सामान्य"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General Options"
+msgstr "सामान्यविकल्पाः"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup"
+msgstr "स्टार्टअप"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup Options"
+msgstr "स्टार्टअप विकल्पाः"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving"
+msgstr "इमेज सेविंग्"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving Options"
+msgstr "चित्ररक्षणविकल्पाः"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Gallery & Thumbnails"
+msgstr "गैलरी एवं लघुचित्र"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Image Gallery and Thumbnail View"
+msgstr "चित्रसङ्ग्रहालयः लघुचित्रदृश्यं च"
+
+#: kookapref.cpp:61 kookaview.cpp:292
+#, kde-format
+msgid "OCR"
+msgstr "ओसीआर"
+
+#: kookascanparams.cpp:68
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>Gallery Mode - No scanner selected</title><nl/><nl/>In this mode you "
+"can browse, manipulate and OCR images already in the gallery.<nl/><nl/><link "
+"url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
+"\"a:2\">add a device</link> if a scanner is not automatically detected."
+msgstr ""
+"<title>गैलरी मोड - कोऽपि स्कैनरः चयनितः नास्ति</title><nl/><nl/> अस्मिन् मोड् मध्ये "
+"भवान् पूर्वमेव गैलरी मध्ये स्थितानि चित्राणि ब्राउज् कर्तुं, परिवर्तनं कर्तुं, OCR कर्तुं च शक्नोति "
+"।<nl/><nl/><link url=\"a:1\"> स्कैनरयन्त्रं चिनोतु</link> स्कैनिङ्गं कर्तुं, अथवा<link "
+"url=\"a:2\"> एकं यन्त्रं योजयन्तु</link> यदि स्कैनरः स्वयमेव न ज्ञायते।"
+
+#: kookascanparams.cpp:114
+#, kde-format
+msgid "Scan &destination:"
+msgstr "स्कैन् &गन्तव्यस्थानम् :"
+
+#: kookascanparams.cpp:150
+#, kde-kuit-format
+msgctxt "@info"
+msgid "No destination selected"
+msgstr "न गन्तव्यं चयनितम्"
+
+#: kookascanparams.cpp:160
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load plugin '%1'"
+msgstr "प्लगिन् '%1' लोड् कर्तुं असमर्थः।"
+
+#. i18n: ectx: label, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:50
+#, kde-format
+msgid "Load the last selected image into the viewer"
+msgstr "अन्तिमं चयनितं चित्रं दर्शके लोड् कुर्वन्तु"
+
+#. i18n: ectx: tooltip, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:51
+#, kde-format
+msgid ""
+"<div>Check this if you want Kooka to load the last selected image into the "
+"viewer on startup.<br/><br/>If your images are large, that might slow down "
+"Kooka's startup.</div>"
+msgstr ""
+"<div>यदि भवान् इच्छति यत् Kooka प्रारम्भे अन्तिमचयनितप्रतिबिम्बं दर्शके लोड् करोतु तर्हि "
+"एतत् परीक्ष्यताम् ।<br/><br/> यदि भवतः चित्राणि विशालानि सन्ति तर्हि तत् कूकायाः आरम्भं "
+"मन्दं कर्तुं शक्नोति ।</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:65
+#, kde-format
+msgid "Always use the Save Assistant"
+msgstr "सदैव Save Assistant इत्यस्य उपयोगं कुर्वन्तु"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:66
+#, kde-format
+msgid ""
+"<div>Check this if you want to always use the image save assistant, even if "
+"there is a default format for the image type.</div>"
+msgstr ""
+"<div>यदि भवान् सर्वदा चित्ररक्षणसहायकस्य उपयोगं कर्तुम् इच्छति तर्हि एतत् परीक्ष्यताम्, "
+"यद्यपि चित्रप्रकारस्य पूर्वनिर्धारितं प्रारूपं अस्ति ।</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:71
+#, kde-format
+msgid "Ask for file name when saving"
+msgstr "रक्षणकाले सञ्चिकानाम पृच्छन्तु"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:72
+#, kde-format
+msgid ""
+"<div>Check this if you want to always enter a file name when scanning an "
+"image.</div>"
+msgstr ""
+"<div>यदि भवान् चित्रस्य स्कैनिङ्गं कुर्वन् सर्वदा सञ्चिकानाम प्रविष्टुम् इच्छति तर्हि एतत् "
+"परीक्ष्यताम् ।</div>"
+
+#. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:77
+#, kde-format
+msgid "Only show recommended formats for this image type"
+msgstr "केवलं अस्य चित्रप्रकारस्य अनुशंसितस्वरूपाणि दर्शयन्तु"
+
+#. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Check this to only show recommended file formats for the scan type. "
+"Uncheck it to show all compatible formats.</div>"
+msgstr ""
+"<div>केवलं स्कैनप्रकारस्य अनुशंसितसञ्चिकास्वरूपाणि दर्शयितुं एतत् परीक्ष्यताम् । सर्वाणि "
+"संगतस्वरूपाणि दर्शयितुं तत् अनचेक् कुर्वन्तु ।</div>"
+
+#. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:91
+#, kde-format
+msgid "Always use this save format for this image type"
+msgstr "अस्य चित्रप्रकारस्य कृते सर्वदा एतत् रक्षणस्वरूपं उपयुज्यताम्"
+
+#. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:92
+#, kde-format
+msgid ""
+"<div>Check this to remember the selected file format for the scanned image "
+"type and not ask for it again.</div>"
+msgstr ""
+"<div>स्कैन् कृतस्य चित्रप्रकारस्य चयनितसञ्चिकास्वरूपं स्मर्तुं पुनः न याचयितुम् एतत् पश्यन्तु ।</"
+"div>"
+
+#. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:125
+#, kde-format
+msgid "Allow click-to-rename"
+msgstr "क्लिक्-टू-रेनाम अनुमन्यताम्"
+
+#. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:126
+#, kde-format
+msgid ""
+"<div>Check this if you want to be able to rename gallery items by clicking "
+"on them (otherwise, use the \"Rename\" menu option).</div>"
+msgstr ""
+"<div>यदि भवान् गैलरी-वस्तूनाम् उपरि क्लिक् कृत्वा पुनर्नामकरणं कर्तुं शक्नोति तर्हि एतत् पश्यन्तु "
+"(अन्यथा, &quot;Rename&quot; मेन्यू विकल्पस्य उपयोगं कुर्वन्तु) ।</div>"
+
+#. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:131
+#, kde-format
+msgid "Show recent folders:"
+msgstr "अद्यतनपुटं दर्शयतु:"
+
+#. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:132
+#, kde-format
+msgid ""
+"<div>Select whether and where a list of recently accessed gallery folders "
+"will be shown.</div>"
+msgstr ""
+"<div>सद्यः एव अभिगतानां गैलरी-पुटस्य सूची दर्शिता भविष्यति वा कुत्र च इति चिनोतु ।</div>"
+
+#. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:152
+#, kde-format
+msgid "Use a custom background image"
+msgstr "इष्टपृष्ठभूमिप्रतिबिम्बस्य उपयोगं कुर्वन्तु"
+
+#. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:153
+#, kde-format
+msgid "<div>Set a custom background image for the thumbnail view.</div>"
+msgstr "<div>लघुचित्रदृश्यस्य कृते इष्टपृष्ठभूमिप्रतिबिम्बं सेट् कुर्वन्तु ।</div>"
+
+#. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:158
+#, kde-format
+msgid "Image:"
+msgstr "छवि:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:159
+#, kde-format
+msgid "<div>The background image to use for the thumbnail view.</div>"
+msgstr "<div>लघुचित्रदृश्यस्य कृते उपयोक्तुं पृष्ठभूमिप्रतिबिम्बम् ।</div>"
+
+#. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:165
+#, kde-format
+msgid "Preview size:"
+msgstr "पूर्वावलोकनस्य आकारः :"
+
+#. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:166
+#, kde-format
+msgid "<div>Select the default preview size for the thumbnail view.</div>"
+msgstr "<div>लघुचित्रदृश्यस्य कृते पूर्वनिर्धारितपूर्वावलोकनस्य आकारं चिनोतु ।</div>"
+
+#. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:205
+#, kde-format
+msgid "Dust size:"
+msgstr "धूलस्य आकारः :"
+
+#. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:206
+#, kde-format
+msgid ""
+"<div>Clusters smaller than this size will be considered to be noise, and "
+"ignored.  0 means to not detect dust clusters, -1 means to automatically "
+"detect them. The default is 10.</div>"
+msgstr ""
+"<div>एतस्मात् परिमाणात् लघुतराः समूहाः कोलाहलः इति गण्यन्ते, उपेक्षिताः च । ० इत्यस्य "
+"अर्थः अस्ति यत् धूलिसमूहान् न ज्ञातुं, -१ इत्यस्य अर्थः स्वयमेव तान् ज्ञातुं शक्यते । "
+"पूर्वनिर्धारितं १० अस्ति ।</div>"
+
+#. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:211
+#, kde-format
+msgid "Gray level:"
+msgstr "ग्रे स्तरः :"
+
+#. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:212
+#, kde-format
+msgid ""
+"<div>The threshold value below which gray pixels are considered to be black. "
+"0 means to automatically detect the gray level.  The default is 160.</div>"
+msgstr ""
+"<div>यस्य दहलीजमूल्यं यस्य अधः ग्रेपिक्सेलाः कृष्णवर्णाः इति मन्यन्ते । 0 इत्यस्य अर्थः स्वयमेव "
+"ग्रे स्तरं ज्ञातुं शक्यते । पूर्वनिर्धारितं १६० अस्ति ।</div>"
+
+#. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:217
+#, kde-format
+msgid "Space width:"
+msgstr "अन्तरिक्षविस्तारः :"
+
+#. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:218
+#, kde-format
+msgid ""
+"<div>The minimum gap in pixels considered to be word spacing. The default is "
+"0 which means to automatically detect spacing.</div>"
+msgstr ""
+"<div>शब्दान्तरं मन्यते पिक्सेलमध्ये न्यूनतमं अन्तरम् । पूर्वनिर्धारितं 0 अस्ति यस्य अर्थः अस्ति यत् "
+"स्वयमेव अन्तरालस्य अन्वेषणं करणीयम् ।</div>"
+
+#. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:223
+#, kde-format
+msgid "Certainty:"
+msgstr "निश्चयः :"
+
+#. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:224
+#, kde-format
+msgid ""
+"<div>The acceptance certainty threshold for recognition, characters with a "
+"lower certainty are considered to be unknown. The default is 95.</div>"
+msgstr ""
+"<div>अभिज्ञानार्थं स्वीकारनिश्चयस्य सीमा, न्यूननिश्चययुक्ताः पात्राः अज्ञाताः इति मन्यन्ते । "
+"पूर्वनिर्धारितं ९५ अस्ति ।</div>"
+
+#. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
+#: kookasettings.kcfg:238
+#, kde-format
+msgid "Layout analysis mode:"
+msgstr "विन्यासविश्लेषणविधिः :"
+
+#. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
+#: kookasettings.kcfg:251
+#, kde-format
+msgid "Character set:"
+msgstr "वर्णसमूहः :"
+
+#. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
+#: kookasettings.kcfg:255
+#, kde-format
+msgid "Filter:"
+msgstr "फ़िल्टर :"
+
+#. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
+#: kookasettings.kcfg:259
+#, kde-format
+msgid "Transform:"
+msgstr "परिवर्तनम् :"
+
+#. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
+#: kookasettings.kcfg:263
+#, kde-format
+msgid "Invert input"
+msgstr "निवेशं विपर्यययतु"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
+#: kookasettings.kcfg:268
+#, kde-format
+msgid "Set threshold"
+msgstr "दहलीजं सेट् कुर्वन्तु"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
+#: kookasettings.kcfg:274
+#, kde-format
+msgid "Threshold"
+msgstr "देहली"
+
+#. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
+#: kookasettings.kcfg:296
+#, kde-format
+msgid "Language:"
+msgstr "भाषा:"
+
+#. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
+#: kookasettings.kcfg:300
+#, kde-format
+msgid "User word list:"
+msgstr "उपयोक्तृशब्दसूची :"
+
+#. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
+#: kookasettings.kcfg:304
+#, kde-format
+msgid "User patterns:"
+msgstr "उपयोक्तृप्रतिमानाः :"
+
+#. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
+#: kookasettings.kcfg:308
+#, kde-format
+msgid "Engine mode:"
+msgstr "इञ्जिनविधिः :"
+
+#. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
+#: kookasettings.kcfg:312
+#, kde-format
+msgid "Segmentation mode:"
+msgstr "विभाजनविधिः :"
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&संचिका"
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "S&can"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&छवि"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "&सेटिंग्स"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "चित्रदर्शकसाधनपट्टिका"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "स्कैनिङ्ग टूलबार"
+
+#: kookaview.cpp:207
+#, kde-format
+msgid "Image View"
+msgstr "चित्रदृश्यम्"
+
+#: kookaview.cpp:246
+#, kde-format
+msgid "User specified"
+msgstr "उपयोक्ता निर्दिष्टः"
+
+#: kookaview.cpp:247
+#, kde-format
+msgid "on command line"
+msgstr "आदेशपङ्क्तौ"
+
+#: kookaview.cpp:267
+#, kde-format
+msgid "Scan Preview"
+msgstr "स्कैन पूर्वावलोकन"
+
+#: kookaview.cpp:277
+#, kde-format
+msgid "OCR results will appear here"
+msgstr "अत्र OCR परिणामाः दृश्यन्ते"
+
+#: kookaview.cpp:286
+#, kde-format
+msgid "Scan"
+msgstr "स्कैन् कुर्वन्तु"
+
+#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
+#, kde-format
+msgid "Gallery"
+msgstr "गैलरी"
+
+#: kookaview.cpp:466
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem opening the scanner device.<nl/><nl/>Check that the "
+"scanner is connected and switched on, and that SANE support for it is "
+"correctly configured.<nl/><nl/>Trying to use scanner device: <icode>%3</"
+"icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
+"reported error: <message>%1</message>"
+msgstr ""
+"स्कैनरयन्त्रं उद्घाटयितुं समस्या आसीत्।<nl/><nl/>स्कैनरः संयोजितः अस्ति, चालू च अस्ति, तस्य "
+"SANE समर्थनं सम्यक् विन्यस्तं वा इति परीक्ष्यताम्।<nl/><nl/>स्कैनरयन्त्रस्य उपयोगं कर्तुं "
+"प्रयत्नः : <icode>%3</icode><nl/>libkookascan इत्यनेन त्रुटिः निवेदिता: <message>"
+"%2</message><nl/>SANE इत्यनेन निवेदितम् error: <message>%1</message> इति"
+
+#: kookaview.cpp:521
+#, kde-format
+msgid "Add Scan Device"
+msgstr "Scan Device योजयन्तु"
+
+#: kookaview.cpp:541
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"No scanner devices are available.<nl/><nl/>If your scanner is a type that "
+"can be auto-detected by SANE, check that it is connected, switched on and "
+"configured correctly.<nl/><nl/>If the scanner cannot be auto-detected by "
+"SANE (this includes some network scanners), you need to specify the device "
+"to use. Use the <interface>Add Scan Device</interface> option to enter the "
+"backend name and parameters, or see that dialog for more information."
+msgstr ""
+"कोऽपि स्कैनर-यन्त्रः उपलब्धः नास्ति।<nl/><nl/>यदि भवतः स्कैनरः एकः प्रकारः अस्ति यः "
+"SANE द्वारा स्वयमेव ज्ञातुं शक्यते, तर्हि सः सम्यक् संयोजितः, चालू, विन्यस्तः च इति पश्यन्तु।"
+"<nl/><nl/>यदि स्कैनरः SANE द्वारा स्वयमेव ज्ञातुं न शक्यते (अस्मिन् केचन संजालस्कैनरः अपि "
+"सन्ति), भवद्भिः उपयोगाय यन्त्रं निर्दिष्टव्यम् । पृष्ठभागस्य नाम, पैरामीटर् च प्रविष्टुं "
+"<interface>Add Scan Device</interface> विकल्पस्य उपयोगं कुर्वन्तु, अथवा अधिकसूचनार्थं "
+"तत् संवादं पश्यन्तु ।"
+
+#: kookaview.cpp:587
+#, kde-format
+msgid "No scanner connected"
+msgstr "न स्कैनरः संयोजितः"
+
+#: kookaview.cpp:646
+#, kde-format
+msgid "No selection"
+msgstr "चयनं नास्ति"
+
+#: kookaview.cpp:650
+#, kde-format
+msgid "Gallery folder %1"
+msgstr "गैलरी समुच्चय %1"
+
+#: kookaview.cpp:650
+#, kde-format
+msgid "Gallery image %1"
+msgstr "गैलरी चित्र %1"
+
+#: kookaview.cpp:715
+#, kde-format
+msgid "Starting OCR on selection"
+msgstr "चयनसमये OCR आरभ्यते"
+
+#: kookaview.cpp:721
+#, kde-format
+msgid "Starting OCR on the image"
+msgstr "चित्रे OCR आरभ्यते"
+
+#: kookaview.cpp:728
+#, kde-format
+msgid "OCR File"
+msgstr "ओसीआर सञ्चिका"
+
+#: kookaview.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
+msgstr "OCR:<nl/>%2 कृते <filename>%1</filename> लोड् कर्तुं न शक्यते"
+
+#: kookaview.cpp:740
+#, kde-format
+msgid "Cannot Read OCR File"
+msgstr "OCR सञ्चिकां पठितुं न शक्यते"
+
+#: kookaview.cpp:744
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Starting OCR on file <filename>%1</filename>"
+msgstr "<filename>%1</filename> सञ्चिकायां OCR आरभ्यते"
+
+#: kookaview.cpp:760
+#, kde-format
+msgid "OCR finished"
+msgstr "ओसीआर समाप्तम्"
+
+#: kookaview.cpp:767
+#, kde-format
+msgid "There is no OCR result text to spell check."
+msgstr "वर्तनीपरीक्षायै OCR परिणामपाठः नास्ति ।"
+
+#: kookaview.cpp:768
+#, kde-format
+msgid "OCR Spell Check not possible"
+msgstr "OCR Spell Check सम्भवं नास्ति"
+
+#: kookaview.cpp:773
+#, kde-format
+msgid "OCR Spell Check"
+msgstr "ओसीआर वर्तनी जाँच"
+
+#: kookaview.cpp:789
+#, kde-format
+msgid ""
+"No OCR engine is configured.\n"
+"Please select and configure one in order to perform OCR."
+msgstr ""
+"कोऽपि OCR इञ्जिनः विन्यस्तः नास्ति ।\n"
+"कृपया OCR कर्तुं एकं चित्वा विन्यस्यताम् ।"
+
+#: kookaview.cpp:791
+#, kde-format
+msgid "OCR Not Configured"
+msgstr "OCR विन्यस्तं नास्ति"
+
+#: kookaview.cpp:800
+#, kde-format
+msgid "Cannot load OCR plugin '%1'"
+msgstr "OCR प्लगिन् '%1' लोड् कर्तुं न शक्यते।"
+
+#: kookaview.cpp:908
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem during preview or scanning.<nl/>Check that the scanner "
+"is still connected and switched on, <nl/>and that media is loaded if "
+"required.<nl/><nl/>Trying to use scanner device: <icode>%3</icode><nl/"
+">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
+"<message>%1</message>"
+msgstr ""
+"पूर्वावलोकनस्य अथवा स्कैनिङ्गस्य समये समस्या आसीत्।<nl/>स्कैनरः अद्यापि सम्बद्धः अस्ति तथा च "
+"चालू अस्ति, <nl/>आवश्यकता चेत् माध्यमं लोड् अस्ति वा इति परीक्ष्यताम्।<nl/><nl/>स्कैनर् "
+"उपकरणस्य उपयोगं कर्तुं प्रयत्नः: <icode>%3</icode><nl/>libkookascan इत्यनेन त्रुटिः "
+"सूचिता: <message>%2</message><nl/>SANE इत्यनेन त्रुटिः निवेदिता: <message>%1</"
+"message> इति"
+
+#: kookaview.cpp:958
+#, kde-format
+msgid "Create new image from selection"
+msgstr "चयनात् नूतनं चित्रं रचयन्तु"
+
+#: kookaview.cpp:967
+#, kde-format
+msgid "Cannot transform, image is read-only"
+msgstr "परिवर्तनं कर्तुं न शक्नोति, प्रतिबिम्बं केवलं पठनीयम् अस्ति"
+
+#: kookaview.cpp:1020
+#, kde-format
+msgid "Loaded image %1"
+msgstr "%1 प्रतिबिम्बं लोडितम्"
+
+#: kookaview.cpp:1021
+#, kde-format
+msgid "Unloaded image"
+msgstr "अवरोहितं चित्रम्"
+
+#: kookaview.cpp:1038
+#, kde-format
+msgid "Loading %1..."
+msgstr "%1 लोड् भवति..."
+
+#: main.cpp:45
+#, kde-format
+msgid "Scanning, image gallery and OCR"
+msgstr "स्कैनिङ्ग, इमेज गैलरी तथा ओसीआर"
+
+#: main.cpp:48
+#, kde-format
+msgid ""
+"Kooka provides access to scanner hardware using the <a href=\"http://www."
+"sane-project.org/\">SANE</a> library.\n"
+"\n"
+"Kooka allows you to scan, save and view in any image format that KDE "
+"supports, and can perform Optical Character Recognition using the open "
+"source <a href=\"http://jocr.sourceforge.net/\">GOCR</a> or <a href=\"http://"
+"www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
+"commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
+msgstr ""
+"कूका <a href=\"http://www.sane-project.org/\">SANE</a> पुस्तकालयस्य उपयोगेन स्कैनर-"
+"हार्डवेयर्-पर्यन्तं प्रवेशं प्रदाति । Kooka भवन्तं कस्मिन् अपि चित्रस्वरूपे स्कैन् कर्तुं, रक्षितुं, "
+"द्रष्टुं च अनुमतिं ददाति यत् KDE समर्थयति, तथा च मुक्तस्रोतस्य <a href=\"http://jocr."
+"sourceforge.net/\">GOCR</a> अथवा <a href=\"http://www.gnu.org/software/ocrad/"
+"ocrad.html\">OCRAD</a> कार्यक्रमस्य, अथवा वाणिज्यिक <a href=\"http://www."
+"rerecognition.com/\">KADMOS</a> पुस्तकालयस्य उपयोगेन ऑप्टिकल चरित्रपरिचयं कर्तुं शक्नोति"
+
+#: main.cpp:58
+#, kde-format
+msgid ""
+"This program is distributed under the terms of the GPL v2 as published\n"
+"by the Free Software Foundation.\n"
+"\n"
+"As a special exception, permission is given to link this program\n"
+"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH\n"
+"(http://www.rerecognition.com), and distribute the resulting executable\n"
+"without including the source code for KADMOS in the source distribution.\n"
+"\n"
+"Note that linking against KADMOS is not permitted under the terms of\n"
+"the Qt GPL licence, so if you wish to do this then you must have a\n"
+"commercial Qt development licence.\n"
+msgstr ""
+"एषः कार्यक्रमः प्रकाशितस्य GPL v2 इत्यस्य शर्तानाम् अन्तर्गतं वितरितः अस्ति\n"
+"मुक्तसॉफ्टवेयर फाउण्डेशन द्वारा।\n"
+"\n"
+"विशेष अपवादरूपेण अस्य कार्यक्रमस्य लिङ्क् कर्तुं अनुमतिः दत्ता अस्ति\n"
+"recognition GmbH इत्यस्य KADMOS OCR/ICR इञ्जिनस्य कस्यापि संस्करणस्य सह\n"
+"(http://www.rerecognition.com), तथा परिणामितं कार्यान्वयनीयं वितरन्तु\n"
+"स्रोतवितरणे KADMOS इत्यस्य स्रोतसङ्केतं विना ।\n"
+"\n"
+"ध्यानं कुर्वन्तु यत् KADMOS विरुद्धं लिङ्क् करणस्य अनुमतिः नास्ति\n"
+"the Qt GPL licence, अतः यदि भवान् एतत् कर्तुम् इच्छति तर्हि भवतां कृते a\n"
+"वाणिज्यिक Qt विकास अनुज्ञापत्र।\n"
+
+#: main.cpp:71
+#, kde-format
+msgid "(C) 2000-2018, the Kooka developers and contributors"
+msgstr "(C) 2000-2018, कूका विकासकाः योगदातारः च"
+
+#: main.cpp:82
+#, kde-format
+msgid "Kooka"
+msgstr "पचति"
+
+#: main.cpp:94
+#, kde-format
+msgid "Jonathan Marten"
+msgstr "जोनाथन् मार्टेन्"
+
+#: main.cpp:94
+#, kde-format
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "वर्तमान परिपालकः, KDE4/KF6 पोर्ट्"
+
+#: main.cpp:95
+#, kde-format
+msgid "Montel Laurent"
+msgstr "मोंटेल् लॉरेण्ट्"
+
+#: main.cpp:95
+#, kde-format
+msgid "Initial KF5 port"
+msgstr "प्रारम्भिक KF5 पोर्ट"
+
+#: main.cpp:96
+#, kde-format
+msgid "Klaas Freitag"
+msgstr "काच फ्रेटाग"
+
+#: main.cpp:96
+#, kde-format
+msgid "Developer"
+msgstr "विकासकः"
+
+#: main.cpp:97
+#, kde-format
+msgid "Mat Colton"
+msgstr "मैट कोल्टन"
+
+#: main.cpp:97
+#, kde-format
+msgid "Graphics, web"
+msgstr "ग्राफिक्स, जाल"
+
+#: main.cpp:98
+#, kde-format
+msgid "Ivan Shvedunov"
+msgstr "इवान श्वेडुनोव"
+
+#: main.cpp:98
+#, kde-format
+msgid "Original kscan application"
+msgstr "मूल kscan अनुप्रयोग"
+
+#: main.cpp:99
+#, kde-format
+msgid "Alex Kempshall"
+msgstr "एलेक्स केम्पशाल्"
+
+#: main.cpp:99
+#, kde-format
+msgid "Photocopy facility"
+msgstr "छायाप्रतिलिपि सुविधा"
+
+#: main.cpp:115
+#, kde-format
+msgid "Gallery mode - do not connect to scanner"
+msgstr "गैलरी मोड - स्कैनर सह न संयोजयन्तु"
+
+#: main.cpp:118
+#, kde-format
+msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
+msgstr "SANE उपकरणविनिर्देशः (उदा. 'umax:/dev/sg0')"
+
+#: main.cpp:118
+#, kde-format
+msgid "device"
+msgstr "उपकरणम्‌"
+
+#: newscanpresetdialog.cpp:53
+#, kde-format
+msgid "Edit Scan Preset"
+msgstr "सम्पादयतु स्कैन पूर्वनिर्धारितम्"
+
+#: newscanpresetdialog.cpp:54
+#, kde-format
+msgid "Change the name and/or description of the scan preset."
+msgstr "स्कैन् पूर्वनिर्धारितस्य नाम वा/वा विवरणं परिवर्तयन्तु ।"
+
+#: newscanpresetdialog.cpp:58
+#, kde-format
+msgid "Save Scan Preset"
+msgstr "स्कैन पूर्वनिर्धारितं रक्षतु"
+
+#: newscanpresetdialog.cpp:59
+#, kde-format
+msgid "Enter a name and description for the new scan preset."
+msgstr "नूतनस्य स्कैन् पूर्वनिर्धारितस्य नाम विवरणं च प्रविशन्तु ।"
+
+#: newscanpresetdialog.cpp:66
+#, kde-format
+msgid "Preset name:"
+msgstr "पूर्वनिर्धारित नाम :"
+
+#: newscanpresetdialog.cpp:73
+#, kde-format
+msgid "Description:"
+msgstr "वर्णनम्‌:"
+
+#: ocrresedit.cpp:159
+#, kde-format
+msgid "Save OCR Result Text"
+msgstr "OCR परिणाम पाठं रक्षन्तु"
+
+#: ocrresedit.cpp:160
+#, kde-format
+msgid "Text File (*.txt)"
+msgstr "पाठसञ्चिका (*.txt)"
+
+#: ocrresedit.cpp:166
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
+msgstr "OCR परिणामसञ्चिकां रक्षितुं असमर्थः<nl/><filename>%1</filename>"
+
+#: ocrresedit.cpp:168
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<nl/>%1"
+msgstr "<nl/>%1"
+
+#: ocrresedit.cpp:170
+#, kde-format
+msgid "Error saving OCR results"
+msgstr "OCR परिणामान् रक्षितुं त्रुटिः"
+
+#: prefspages.cpp:78
+#, kde-format
+msgid "Hidden Messages"
+msgstr "गुप्तसन्देशाः"
+
+#: prefspages.cpp:82
+#, kde-format
+msgid ""
+"Use this button to reenable all messages and questions which\n"
+"have been hidden by using \"Don't ask me again\"."
+msgstr ""
+"सर्वान् सन्देशान् प्रश्नान् च पुनः सक्षमं कर्तुं एतस्य बटनस्य उपयोगं कुर्वन्तु ये...\n"
+"\"पुनः मा पृच्छतु\" इति उपयोगेन गोपिताः सन्ति ।"
+
+#: prefspages.cpp:85
+#, kde-format
+msgid "Enable Messages/Questions"
+msgstr "सन्देशाः/प्रश्नाः सक्षमाः कुर्वन्तु"
+
+#: prefspages.cpp:152
+#, kde-format
+msgid "%1 must be restarted for these settings to take effect."
+msgstr "एतानि सेटिङ्ग्स् प्रभावितुं %1 पुनः आरभणीयम् ।"
+
+#: prefspages.cpp:235
+#, kde-format
+msgid "Image Gallery"
+msgstr "चित्रसङ्ग्रहालयः"
+
+#: prefspages.cpp:249
+#, kde-format
+msgid "Not shown"
+msgstr "न दर्शितम्"
+
+#: prefspages.cpp:250
+#, kde-format
+msgid "At top"
+msgstr "उपरि"
+
+#: prefspages.cpp:251
+#, kde-format
+msgid "At bottom"
+msgstr "अधः"
+
+#: prefspages.cpp:266
+#, kde-format
+msgid "Thumbnail View"
+msgstr "लघुचित्र दृश्य"
+
+#: prefspages.cpp:380
+#, kde-format
+msgid "None"
+msgstr "न कश्चित्"
+
+#: prefspages.cpp:392
+#, kde-format
+msgid "OCR Engine:"
+msgstr "ओसीआर इञ्जिन :"
+
+#: prefspages.cpp:398
+#, kde-format
+msgid "OCR Engine Settings..."
+msgstr "OCR इञ्जिन सेटिंग्स्..."
+
+#: prefspages.cpp:444
+#, kde-format
+msgid ""
+"No OCR engine is selected. Select and configure one to be able to perform "
+"OCR."
+msgstr "कोऽपि OCR इञ्जिनः चयनितः नास्ति। OCR कर्तुं शक्नुवन् एकं चित्वा विन्यस्यताम् ।"
+
+#: prefspages.cpp:452
+#, kde-format
+msgid "Unknown engine '%1'."
+msgstr "अज्ञात इञ्जिन '%1'।"
+
+#: scangallery.cpp:97
+#, kde-format
+msgid "Name"
+msgstr "नामः"
+
+#: scangallery.cpp:98
+#, kde-format
+msgid "Size"
+msgstr "आकृति"
+
+#: scangallery.cpp:99
+#, kde-format
+msgid "Format"
+msgstr "प्रारूप"
+
+#: scangallery.cpp:170
+#, kde-format
+msgid "Kooka Gallery"
+msgstr "कूका गैलरी"
+
+#: scangallery.cpp:374
+#, kde-format
+msgid "empty"
+msgstr "रिक्तम्‌"
+
+#: scangallery.cpp:377
+#, kde-format
+msgid "one image"
+msgid_plural "%1 images"
+msgstr[0] "एकं बिम्बम्"
+msgstr[1] "%1 चित्राणि"
+
+#: scangallery.cpp:379
+#, kde-format
+msgid "one file"
+msgid_plural "%1 files"
+msgstr[0] "एकं सञ्चिका"
+msgstr[1] "%1 सञ्चिकाः"
+
+#: scangallery.cpp:385
+#, kde-format
+msgid "one file, "
+msgid_plural "%1 files, "
+msgstr[0] "एकं सञ्चिका, . "
+msgstr[1] "%1 सञ्चिकाः, . "
+
+#: scangallery.cpp:387
+#, kde-format
+msgid "one image, "
+msgid_plural "%1 images, "
+msgstr[0] "एकं बिम्बं, "
+msgstr[1] "%1 चित्राणि, . "
+
+#: scangallery.cpp:390
+#, kde-format
+msgid "1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "१ पुटे"
+msgstr[1] "%1 पुटम्"
+
+#: scangallery.cpp:445
+#, kde-format
+msgid " %1 x %2"
+msgstr " %1 x %2"
+
+#: scangallery.cpp:600
+#, kde-format
+msgid ""
+"You entered a file extension that differs from the existing one. That is not "
+"yet possible. Converting 'on the fly' is planned for a future release.\n"
+"Kooka corrects the extension."
+msgstr ""
+"भवता विद्यमानात् भिन्नं सञ्चिकाविस्तारं प्रविष्टम् । तत् अद्यापि न सम्भवति। 'मक्षिकायां' "
+"परिवर्तनं भविष्ये विमोचनार्थं योजना अस्ति ।\n"
+"कूका विस्तारं सम्यक् करोति।"
+
+#: scangallery.cpp:602
+#, kde-format
+msgid "On the Fly Conversion"
+msgstr "मक्षिकारूपान्तरणम्"
+
+#: scangallery.cpp:698
+#, kde-format
+msgid "Not a supported image format"
+msgstr "समर्थितं चित्रस्वरूपं न"
+
+#: scangallery.cpp:750
+#, kde-format
+msgid "Sub-image %1"
+msgstr "उपप्रतिमा %1"
+
+#: scangallery.cpp:776
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load the image <filename>%2</filename><nl/>%1"
+msgstr "<filename>%2</filename><nl/>%1 प्रतिबिम्बं लोड् कर्तुं असमर्थम्"
+
+#: scangallery.cpp:778
+#, kde-format
+msgid "Image Load Error"
+msgstr "चित्रभारदोषः"
+
+#: scangallery.cpp:840
+#, kde-format
+msgid "Incoming/"
+msgstr "आगच्छन्ति/ ."
+
+#: scangallery.cpp:886
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
+msgstr "चित्रं रक्षितुं न शक्यते<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:889
+#, kde-format
+msgid "Image Save Error"
+msgstr "चित्र रक्षण त्रुटि"
+
+#: scangallery.cpp:967
+#, kde-format
+msgid "All Files (*)"
+msgstr "सर्वाणि सञ्चिकाः (*) ."
+
+#: scangallery.cpp:970
+#, kde-format
+msgctxt "@title:window"
+msgid "Export Image"
+msgstr "चित्रं निर्यातयन्तु"
+
+#: scangallery.cpp:995
+#, kde-format
+msgid "Import Image File to Gallery"
+msgstr "चित्रसञ्चिकां गैलरी मध्ये आयातयन्तु"
+
+#: scangallery.cpp:1110
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the folder<nl/><filename>%1</"
+"filename><nl/>and all of its contents? It cannot be restored."
+msgstr ""
+"किं भवान् वास्तवमेव पुटं<nl/><filename>%1</filename><nl/>तस्य सर्वाणि सामग्रीनि च "
+"स्थायिरूपेण विलोपयितुम् इच्छति? न पुनः स्थापयितुं शक्यते ।"
+
+#: scangallery.cpp:1115
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the image<nl/><filename>%1</"
+"filename>?<nl/>It cannot be restored."
+msgstr ""
+"किं भवान् वास्तवमेव चित्रं स्थायिरूपेण विलोपयितुम् इच्छति<nl/><filename>%1</filename>?"
+"<nl/>इदं पुनः स्थापयितुं न शक्यते ।"
+
+#: scangallery.cpp:1122
+#, kde-format
+msgid "Delete Gallery Item"
+msgstr "गैलरी मदं विलोपयन्तु"
+
+#: scangallery.cpp:1135
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
+msgstr "चित्रं वा पुटं वा<nl/><filename>%2</filename><nl/>%1 लोपयितुं न शक्तवान्"
+
+#: scangallery.cpp:1138
+#, kde-format
+msgid "File Delete Error"
+msgstr "सञ्चिका विलोपनदोषः"
+
+#: scangallery.cpp:1170
+#, kde-format
+msgid "New Folder"
+msgstr "नवीनं पुटम्"
+
+#: scangallery.cpp:1171
+#, kde-format
+msgid "Name for the new folder:"
+msgstr "नूतनपुटस्य नाम :"
+
+#: scangallery.cpp:1194
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
+msgstr "<nl/><filename>%2</filename><nl/>%1 इति पुटं निर्मातुं न शक्तम्"
+
+#: scangallery.cpp:1196
+#, kde-format
+msgid "Folder Create Error"
+msgstr "समुच्चय रचयतु त्रुटिः"
+
+#: scanpresetsdialog.cpp:63
+#, kde-format
+msgid "Scan Presets"
+msgstr "स्कैन पूर्वनिर्धारित"
+
+#: scanpresetsdialog.cpp:76
+#, kde-format
+msgid "Saved scan preset sets:"
+msgstr "रक्षिताः स्कैन् पूर्वनिर्धारितसमूहाः:"
+
+#: scanpresetsdialog.cpp:80
+#, kde-format
+msgid "Select"
+msgstr "विचि"
+
+#: scanpresetsdialog.cpp:82
+#, kde-format
+msgid "Load the selected scan preset set to use as scanner settings"
+msgstr "स्कैनर सेटिंग्स् रूपेण उपयोक्तुं चयनितं स्कैन् पूर्वनिर्धारितं सेट् लोड् कुर्वन्तु"
+
+#: scanpresetsdialog.cpp:86
+#, kde-format
+msgid "Save..."
+msgstr "रक्ष्..."
+
+#: scanpresetsdialog.cpp:88
+#, kde-format
+msgid "Save the current scanner settings as a new scan preset set"
+msgstr "वर्तमान स्कैनर सेटिंग्स् नूतनस्कैन् पूर्वनिर्धारितसेट् रूपेण रक्षन्तु"
+
+#: scanpresetsdialog.cpp:94
+#, kde-format
+msgid "Delete the selected scan preset set"
+msgstr "चयनितं स्कैन् पूर्वनिर्धारितं सेट् विलोपयन्तु"
+
+#: scanpresetsdialog.cpp:98
+#, kde-format
+msgid "Edit..."
+msgstr "सम्पादन..."
+
+#: scanpresetsdialog.cpp:100
+#, kde-format
+msgid "Change the name or description of the selected scan preset set"
+msgstr "चयनितस्य स्कैन् पूर्वनिर्धारितस्य सेट् इत्यस्य नाम वा वर्णनं वा परिवर्तयन्तु"
+
+#: scanpresetsdialog.cpp:146
+#, kde-format
+msgid "No preset set selected."
+msgstr "पूर्वनिर्धारितं सेट् न चयनितम्।"
+
+#: scanpresetsdialog.cpp:212
+#, kde-format
+msgctxt "New set name, %1=scan mode, %2=resolution"
+msgid "%1, %2 dpi"
+msgstr "%1, %2 dpi"
+
+#: scanpresetsdialog.cpp:289
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Do you really want to delete the set <resource>%1</resource>?"
+msgstr "किं भवान् वास्तवमेव <resource>%1</resource> इति सेट् विलोपयितुम् इच्छति?"
+
+#: scanpresetsdialog.cpp:290
+#, kde-format
+msgid "Delete Scan Preset Set"
+msgstr "स्कैन पूर्वनिर्धारित सेट् विलोपयन्तु"
+
+#: statusbarmanager.cpp:52
+#, kde-format
+msgctxt "@info:status"
+msgid "Ready"
+msgstr "आत्त"
+
+#: statusbarmanager.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the image being viewed in the gallery"
+msgstr "चित्रशालायां दृश्यमानस्य चित्रस्य आकारः"
+
+#: statusbarmanager.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the selected area that will be scanned"
+msgstr "चयनितक्षेत्रस्य आकारः यः स्कैन् भविष्यति"
+
+#: statusbarmanager.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>This is the uncompressed size of the scanned image. It tries to warn you "
+"if you try to produce too big an image by changing its background color."
+msgstr ""
+"<qt>स्कैन् कृतस्य चित्रस्य असंपीडितः आकारः एषः अस्ति । यदि भवान् तस्य पृष्ठभूमिवर्णं परिवर्त्य "
+"अतिबृहत् चित्रं उत्पादयितुं प्रयतते तर्हि एतत् भवन्तं चेतयितुं प्रयतते ।"
+
+#: statusbarmanager.cpp:108
+#, kde-format
+msgctxt "@info:status"
+msgid "Image: %1"
+msgstr "चित्रम् : %1"
+
+#: statusbarmanager.cpp:112
+#, kde-format
+msgctxt "@info:status"
+msgid "Scan: %1"
+msgstr "स्कैन् : %1"
+
+#: thumbview.cpp:98
+#, kde-format
+msgid "Thumbnails"
+msgstr "लघुचित्रम्"
+
+#: thumbview.cpp:109
+#, kde-format
+msgid "Preview Size"
+msgstr "पूर्वावलोकन आकार"
+
+#: thumbview.cpp:340
+#, kde-format
+msgid "Very Large"
+msgstr "अतीव विशालः"
+
+#: thumbview.cpp:341
+#, kde-format
+msgid "Large"
+msgstr "बृहत्‌"
+
+#: thumbview.cpp:342
+#, kde-format
+msgid "Medium"
+msgstr "मध्यम"
+
+#: thumbview.cpp:343
+#, kde-format
+msgid "Small"
+msgstr "लघु"
+
+#: thumbview.cpp:344
+#, kde-format
+msgid "Very Small"
+msgstr "अतीव लघु"
+
+#: thumbview.cpp:345
+#, kde-format
+msgid "Tiny"
+msgstr "तुच्छ"

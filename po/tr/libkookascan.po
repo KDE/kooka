@@ -4,13 +4,13 @@
 # Translators:
 # Volkan, 2013.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-05-17 13:41+0300\n"
+"PO-Revision-Date: 2025-01-11 17:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -298,7 +298,7 @@ msgstr "%​&100"
 #: imgscaledialog.cpp:105
 #, kde-format
 msgid "150 &%"
-msgstr "%​1&50"
+msgstr "%​150"
 
 #: imgscaledialog.cpp:112
 #, kde-format
@@ -503,7 +503,7 @@ msgstr "Siyah"
 #: scandevices.cpp:204
 #, kde-format
 msgid "Unknown device '%1'"
-msgstr "Bilinmeyen aygıt ‘%1’"
+msgstr "Bilinmeyen aygıt “%1”"
 
 #: scanglobal.cpp:136
 #, kde-format
@@ -533,7 +533,7 @@ msgstr "libpaper"
 #: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
-msgstr "Kağıt boyutu yapılandırma kitaplığı"
+msgstr "Kâğıt boyutu yapılandırma kitaplığı"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -804,7 +804,7 @@ msgid ""
 msgstr ""
 "<div>Ağ tarayıcılarına erişmek için sistem vekil ayarlarını kullanmak "
 "istiyorsanız bunu işaretleyin.<br/><br/>Kimi SANE arka uçlarının (örneğin, "
-"‘escl’) vekil üzerinden düzgün çalışmayabileceğini unutmayın.</div>"
+"“escl”) vekil üzerinden düzgün çalışmayabileceğini unutmayın.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28

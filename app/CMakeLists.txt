@@ -15,7 +15,7 @@
 ########### dependencies ###############
 
 find_package(Qt${Q} ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO IconThemes XmlGui)
+find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO IconThemes XmlGui Crash)
 
 ############### Packages used by KDE ###############
 
@@ -116,6 +116,7 @@ target_link_libraries(kooka
   kookaocr
   KF${Q}::KIOCore KF${Q}::KIOFileWidgets KF${Q}::KIOWidgets
   KF${Q}::XmlGui
+  KF${Q}::Crash
   KF${Q}::TextWidgets
 )
 

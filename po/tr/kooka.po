@@ -8,13 +8,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
 # Zerrin Cakmakkaya <zerrin@uludag.org.tr>, 2005.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-09-24 10:39+0300\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2025-01-11 17:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1107,7 +1107,7 @@ msgstr "Görseli 180 derece döndür"
 #: imagetransform.cpp:71
 #, kde-format
 msgid "Rotate image -90 degrees"
-msgstr "Görseli -90 derece döndür"
+msgstr "Görseli −90 derece döndür"
 
 #: imagetransform.cpp:77
 #, kde-format
@@ -1214,7 +1214,7 @@ msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
 msgstr ""
-"<div>Belirtilen boyutta ölçeklendirilmiş yazdır. Görsel kağıt üzerine "
+"<div>Belirtilen boyutta ölçeklendirilmiş yazdır. Görsel kâğıt üzerine "
 "ortalanmıştır.</div>"
 
 #: imgprintdialog.cpp:137
@@ -1985,7 +1985,7 @@ msgid ""
 "detect them. The default is 10.</div>"
 msgstr ""
 "<div>Bu boyuttan küçük olan kümeler gürültü olarak kabul edilir ve dikkate "
-"alınmaz. 0, toz bulutlarını dikkate alma anlamına gelir. -1, kendiliğinden "
+"alınmaz. 0, toz bulutlarını dikkate alma anlamına gelir. −1, kendiliğinden "
 "algılar. Öntanımlı değer 10’dur.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
@@ -2352,12 +2352,12 @@ msgstr "Boşaltılmış görsel"
 msgid "Loading %1..."
 msgstr "%1 yükleniyor…"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "Tarama, görsel galerisi ve OCR"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2379,7 +2379,7 @@ msgstr ""
 "kaydetme ve görüntüleme olanağı sunar; ayrıca Optik Karakter Tanıma işlevini "
 "de gerçekleştirebilir."
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2407,87 +2407,87 @@ msgstr ""
 "izin verilmediğini unutmayın; dolayısıyla bunu yapmak istiyorsanız\n"
 "ticari bir Qt geliştirme lisansına sahip olmanız gerekir.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "© 2000–2018, the Kooka geliştiricileri ve katkıcıları"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "Geçerli bakımcı, KDE4 geçişi"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "Şu anki bakımcı, KDE4/KF6 geçişi"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "KF5 geçişi"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klass Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Geliştirici"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "Grafikler, web"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "Özgün kscan uygulaması"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "Fotokopi özelliği"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Galeri kipi — Tarayıcı ile bağlantı kurmayın"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "SANE aygıt belirtimleri (örn. “umax:/dev/sg0”)"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "aygıt"
@@ -2968,6 +2968,9 @@ msgstr "Çok Küçük"
 msgid "Tiny"
 msgstr "Minik"
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "Geçerli bakımcı, KDE4 geçişi"
+
 #~ msgid "Before the scan starts"
 #~ msgstr "Tarama başlamadan önce"
 
@@ -2999,9 +3002,6 @@ msgstr "Minik"
 
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Kooka KIPI Yardımcısı"
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Projeyi sürdüren, KDE4/KF5 geçişi"
 
 #~ msgid "List all of the available KIPI plugin actions"
 #~ msgstr "Tüm kullanılabilir KIPI eklenti eylemlerini listele"

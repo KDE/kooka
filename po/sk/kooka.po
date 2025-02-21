@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2014-03-02 19:54+0100\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -2204,12 +2204,12 @@ msgstr "Odnačítaný obrázok"
 msgid "Loading %1..."
 msgstr "Načítava sa %1..."
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr ""
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2222,7 +2222,7 @@ msgid ""
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2238,88 +2238,89 @@ msgid ""
 "commercial Qt development licence.\n"
 msgstr ""
 
-#: main.cpp:70
+#: main.cpp:71
 #, fuzzy, kde-format
 #| msgid "(C) 2000-2010, the Kooka developers and contributors"
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "(C) 2000-2010, Vývojári a prispievatelia Kooka"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
-#, kde-format
-msgid "Current maintainer, KDE4 port"
+#: main.cpp:94
+#, fuzzy, kde-format
+#| msgid "Current maintainer, KDE4 port"
+msgid "Current maintainer, KDE4/KF6 port"
 msgstr "Aktuálny správca, KDE4 port"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr ""
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr ""
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Vývojár"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "Grafika, web"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, fuzzy, kde-format
 msgid "Original kscan application"
 msgstr "Povoliť tipy aplikácií"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "Schopnosť fotokopírky"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr ""
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr ""
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr ""
@@ -2799,6 +2800,9 @@ msgstr "Veľmi malé"
 msgid "Tiny"
 msgstr "Drobné"
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "Aktuálny správca, KDE4 port"
+
 #, fuzzy
 #~ msgid "Before the scan starts"
 #~ msgstr "Alarm: %1 %2 pred začiatkom udalosti"
@@ -2816,11 +2820,6 @@ msgstr "Drobné"
 #~| msgid "Kooka Gallery"
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Galéria Kooka"
-
-#, fuzzy
-#~| msgid "Current maintainer, KDE4 port"
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Aktuálny správca, KDE4 port"
 
 #, fuzzy
 #~| msgid "Save..."

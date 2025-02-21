@@ -2,20 +2,20 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2009.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
-# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-05-03 03:06+0900\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"PO-Revision-Date: 2025-01-02 18:45+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 24.12.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -301,6 +301,8 @@ msgid ""
 "Custom spell settings above do not affect this spelling check, use the "
 "language setting in the dialog to change the dictionary language."
 msgstr ""
+"上面的自訂拼字檢查設定不會影響這次拼字檢查。字典語言如要變更請使用對話框中的"
+"語言設定值。"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:332
 #, kde-format
@@ -488,7 +490,7 @@ msgstr "自動"
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
 #, kde-format
 msgid "The GOCR executable is not configured or is not available."
-msgstr ""
+msgstr "GOCR 執行檔未配置或無法使用。"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
@@ -501,24 +503,24 @@ msgstr "錯誤"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
-msgstr ""
+msgstr "無法讀取 GOCR 結果檔案 <filename>%1</filename><nl/>%2"
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
-msgstr ""
+msgstr "GOCR 執行檔的名稱或路徑："
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
 #, kde-format
 msgid "Czech Republic, Slovakia"
-msgstr ""
+msgstr "捷克共和國、斯洛伐克"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
 #, kde-format
 msgid "Great Britain, USA"
-msgstr ""
+msgstr "英國、美國"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
 #, kde-format
@@ -534,6 +536,10 @@ msgid ""
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
+"找不到 KADMOS 的分類檔。\n"
+"將無法使用 KADMOS 進行 OCR 文字辨識。\n"
+"\n"
+"請在設定對話框中改用別的 OCR 引擎。"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -544,7 +550,7 @@ msgstr "安裝錯誤"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
 #, kde-format
 msgid "Please classify the font type and language of the text on the image:"
-msgstr ""
+msgstr "請指定圖片當中文字的字體類型和語言："
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
 #, kde-format
@@ -554,17 +560,17 @@ msgstr "字型類型選擇"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
 #, kde-format
 msgid "Machine print"
-msgstr ""
+msgstr "機器印刷"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:236
 #, kde-format
 msgid "Hand writing"
-msgstr ""
+msgstr "手寫"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:237
 #, kde-format
 msgid "Norm font"
-msgstr ""
+msgstr "標準字型"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:239
 #, kde-format
@@ -574,7 +580,7 @@ msgstr "國家"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
 #, kde-format
 msgid "OCR Modifier"
-msgstr ""
+msgstr "OCR 修飾子"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
@@ -605,11 +611,14 @@ msgid ""
 "www.rerecognition.com\">www.rerecognition.com</link> for more information on "
 "Kadmos.</para>"
 msgstr ""
+"<para><emphasis>Kadmos</emphasis> 是 reRecognition&nbsp;AG 所做的商用 OCR/"
+"ICR 函式庫。</para><para>%1</para><para>關於 Kadmos 的更多資訊請見 <link url="
+"\"http://www.rerecognition.com\">www.rerecognition.com</link>。</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
 msgid "This version of Kooka is configured to use the Kadmos engine."
-msgstr ""
+msgstr "這個版本的 Kooka 已為 Kadmos 引擎進行配置。"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
 #, kde-format
@@ -618,6 +627,8 @@ msgid ""
 "need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
 "option."
 msgstr ""
+"這個版本的 Kooka 沒有為 Kadmos 引擎進行配置。要使用 Kadmos 需要安裝 Kadmos 函"
+"式庫之後重新編譯 Kooka 並確保加上 '--with-kadmos' 選項。"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
 #, kde-format
@@ -625,11 +636,13 @@ msgid ""
 "The classifier file necessary for OCR cannot be loaded: %1;\n"
 "OCR with the KADMOS engine is not possible."
 msgstr ""
+"OCR 所需的分類檔無法載入：%1；\n"
+"無法使用 KADMOS 引擎進行 OCR 文字辨識。"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
 msgid "KADMOS Installation Problem"
-msgstr ""
+msgstr "KADMOS 安裝問題"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
 #, kde-format
@@ -638,16 +651,19 @@ msgid ""
 "%1\n"
 "Please check the configuration."
 msgstr ""
+"無法啟動 KADMOS OCR 系統：\n"
+"%1\n"
+"請檢查設定。"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
 msgid "KADMOS Failure"
-msgstr ""
+msgstr "KADMOS 失敗"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
 msgid "The OCRAD executable is not configured or is not available."
-msgstr ""
+msgstr "OCRAD 執行檔未配置或無法使用。"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
@@ -660,10 +676,9 @@ msgid "Layout Detection"
 msgstr "版面偵測"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Font Type Selection"
+#, kde-format
 msgid "Column Detection"
-msgstr "字型型態選擇"
+msgstr "欄位偵測"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
 #, kde-format
@@ -678,55 +693,54 @@ msgstr "完整版面偵測"
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
 #, kde-format
 msgid "(default)"
-msgstr ""
+msgstr "(預設)"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
-msgstr ""
+msgstr "檔案 <filename>%1</filename> 不存在。"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
-msgstr ""
+msgstr "檔案 <filename>%1</filename> 無法讀取"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
-msgstr ""
+msgstr "無法開啟檔案 <filename>%1</filename>"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
-msgstr ""
+msgstr "OCRAD 執行檔的名稱或路徑："
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
-msgstr ""
+msgstr "Tesseract 執行檔未配置或無法使用。"
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Select a file if required..."
-msgstr "選擇掃描設備"
+msgstr "選擇需要的檔案…"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, kde-format
 msgid "HOCR parsing error, %1"
-msgstr ""
+msgstr "HOCR 剖析錯誤，%1"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
-msgstr ""
+msgstr "Tesseract 執行檔的名稱或路徑："
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -884,14 +898,14 @@ msgid "Save Assistant"
 msgstr "儲存助手"
 
 #: formatdialog.cpp:306
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "<B>Save Assistant</B><P>Select an image format to save the scanned image."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
-msgstr "<B>儲存助手</B><P>選擇要儲存的影像格式。"
+msgstr ""
+"選擇圖片掃描後要儲存的格式。<nl/>這是一個<emphasis strong=\"1\">%1</"
+"emphasis>。"
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -935,7 +949,7 @@ msgstr ""
 #: galleryroot.cpp:112
 #, kde-format
 msgid "Error creating gallery"
-msgstr ""
+msgstr "建立相簿發生錯誤"
 
 #: galleryroot.cpp:164
 #, kde-kuit-format
@@ -947,23 +961,21 @@ msgid ""
 msgstr ""
 
 #: galleryroot.cpp:168
-#, fuzzy, kde-format
-#| msgid "Show Gallery"
+#, kde-format
 msgid "Create New Gallery"
-msgstr "顯示相簿"
+msgstr "建立新的相簿"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Show Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "顯示相簿"
+msgstr "建立新的"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "用舊的繼續"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
@@ -974,16 +986,19 @@ msgid ""
 "gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
 "may do so by simply copying or moving the files."
 msgstr ""
+"Kooka 會使用新的相簿：<link url=\"file:%1\"><filename>%1</filename></link>。"
+"<nl/><nl/>如果您希望將舊相簿 <link url=\"file:%2\"><filename>%2</filename></"
+"link> 當中的圖片加入新相簿，<nl/>您可以直接複製或移動檔案。"
 
 #: galleryroot.cpp:187
 #, kde-format
 msgid "New Gallery Created"
-msgstr ""
+msgstr "已建立新的相簿"
 
 #: galleryroot.cpp:201
 #, kde-format
 msgid "Old Gallery Exists"
-msgstr ""
+msgstr "舊相簿存在"
 
 #: imagetransform.cpp:59
 #, kde-format
@@ -1028,11 +1043,10 @@ msgid "Scaling"
 msgstr "縮放"
 
 #: imgprintdialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Scale to same size as on screen"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
-msgstr "將大小調整到跟螢幕一樣"
+msgstr "螢幕上的同樣尺寸"
 
 #: imgprintdialog.cpp:101
 #, kde-format
@@ -1040,7 +1054,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
-msgstr ""
+msgstr "<div>用跟螢幕上看到同樣的尺寸進行列印。尺寸以螢幕解析度判斷。</div>"
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1052,13 +1066,13 @@ msgstr "螢幕解析度："
 msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
-msgstr ""
+msgstr "<div>這是目前的螢幕解析度，無法在此變更。</div>"
 
 #: imgprintdialog.cpp:114
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
-msgstr ""
+msgstr "與掃描時相同尺寸"
 
 #: imgprintdialog.cpp:115
 #, kde-format
@@ -1068,12 +1082,13 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
+"<div>以掃描解析度所判斷出的尺寸列印。該解析度通常儲存在圖片中，可用時會使用"
+"它；若圖片中沒有解析度資訊，可以在此輸入。</div>"
 
 #: imgprintdialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Scan resolution (dpi) "
+#, kde-format
 msgid "Scan resolution:"
-msgstr "掃描解析度（dpi）"
+msgstr "掃描解析度："
 
 #: imgprintdialog.cpp:124
 #, kde-format
@@ -1087,7 +1102,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
-msgstr ""
+msgstr "<div>這是圖片中儲存的掃描解析度。需要的話可以變更它。</div>"
 
 #: imgprintdialog.cpp:132
 #, kde-format
@@ -1096,21 +1111,18 @@ msgid "Custom size"
 msgstr "自訂大小"
 
 #: imgprintdialog.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the print size yourself in the dialog below. The image is centered on "
-#| "the paper."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
-msgstr "在底下的對話框自行指定列印大小。影像會置於紙張中央。"
+msgstr "<div>以指定尺寸列印。圖片會在紙張上置中。</div>"
 
 #: imgprintdialog.cpp:137
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
-msgstr "影像寬度："
+msgstr "圖片寬度："
 
 #: imgprintdialog.cpp:142 imgprintdialog.cpp:156
 #, kde-format
@@ -1122,25 +1134,25 @@ msgstr " mm"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>圖片列印出來的寬度。</div>"
 
 #: imgprintdialog.cpp:151
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
-msgstr "影像高度："
+msgstr "圖片高度："
 
 #: imgprintdialog.cpp:157
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>圖片列印出來的高度。</div>"
 
 #: imgprintdialog.cpp:166
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
-msgstr ""
+msgstr "符合頁面"
 
 #: imgprintdialog.cpp:167
 #, kde-format
@@ -1149,6 +1161,7 @@ msgid ""
 "<div>Print using as much of the available space on the paper as possible. "
 "The aspect ratio can be maintained.</div>"
 msgstr ""
+"<div>列印尺寸儘量填滿紙張上可用的空間。可以選擇是否維持長寬比例。</div>"
 
 #: imgprintdialog.cpp:178
 #, kde-format
@@ -1160,7 +1173,7 @@ msgstr "其他選項"
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
-msgstr "保持長寬比例"
+msgstr "維持長寬比例"
 
 #: imgprintdialog.cpp:183
 #, kde-format
@@ -1168,14 +1181,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>Adjust the height or width to maintain the original aspect ratio of the "
 "printed image.</div>"
-msgstr ""
+msgstr "<div>調整高度或寬度來維持圖片列印出的長寬比例與原本的相同。</div>"
 
 #: imgprintdialog.cpp:189
-#, fuzzy, kde-format
-#| msgid "Generate low resolution PostScript (fast draft print)"
+#, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr "產生低解析度的 PostScript（快速草稿列印）"
+msgstr "低解析度（快速草稿列印）"
 
 #: imgprintdialog.cpp:190
 #, kde-format
@@ -1183,31 +1195,31 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
-msgstr ""
+msgstr "<div>用最低的解析度列印。這可能無法在所有印表機上依預期運作。</div>"
 
 #: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
-msgstr ""
+msgstr "裁剪標記："
 
 #: imgprintdialog.cpp:200
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #: imgprintdialog.cpp:201
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
-msgstr ""
+msgstr "多個頁面"
 
 #: imgprintdialog.cpp:202
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "總是"
 
 #: imgprintdialog.cpp:203
 #, kde-format
@@ -1215,7 +1227,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
-msgstr ""
+msgstr "<div>選擇是否要列印裁剪/接合標記。這些標記會降低可用的列印區域。</div>"
 
 #: imgprintdialog.cpp:214
 #, kde-format
@@ -1230,145 +1242,119 @@ msgid "Image size:"
 msgstr "圖片大小："
 
 #: imgprintdialog.cpp:222
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr "%1 x %2"
+msgstr "%1 x %2 像素"
 
 #: imgprintdialog.cpp:227
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
-msgstr ""
+msgstr "可用列印區域："
 
 #: imgprintdialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "Image Print Size"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr "影像列印大小"
+msgstr "圖片列印區域："
 
 #: imgprintdialog.cpp:241
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
-msgstr ""
+msgstr "需要頁數："
 
 #: imgprintdialog.cpp:304
-#, fuzzy, kde-format
-#| msgid " dpi"
+#, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
-msgstr " dpi"
+msgstr "%1 dpi"
 
 #: imgprintdialog.cpp:321
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
-msgstr ""
+msgstr "需要指定掃描解析度來配合它的縮放。"
 
 #: imgprintdialog.cpp:326
 #, kde-format
 msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
 "specified dimensions is zero."
-msgstr ""
+msgstr "自訂縮放需要指定有效大小，但指定的尺寸之一是 0。"
 
 #: imgprintdialog.cpp:404 imgprintdialog.cpp:408
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
-msgstr "%1 x %2"
+msgstr "%1 x %2 mm"
 
 #: imgprintdialog.cpp:412
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: imgprintdialog.cpp:414
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
-msgstr "%1 x %2"
+msgstr "%1 (%2 x %3)"
 
 #: imgsaver.cpp:66
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The directory\n"
-#| "%1\n"
-#| " is not writeable;\n"
-#| "please check the permissions."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
-msgstr ""
-"無法寫入資料夾 %1。\n"
-"請檢查權限。"
+msgstr "無法存取目錄 <filename>%2</filename>。<nl/>%1"
 
 #: imgsaver.cpp:77
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The directory\n"
-#| "%1\n"
-#| " is not writeable;\n"
-#| "please check the permissions."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
-msgstr ""
-"無法寫入資料夾 %1。\n"
-"請檢查權限。"
+msgstr "無法建立目錄 <filename>%2</filename>。<nl/>%1"
 
 #: imgsaver.cpp:328
-#, fuzzy, kde-format
-#| msgid "palleted color image (16 or 24 bit depth)"
+#, kde-format
 msgid "indexed color image (up to 8 bit depth)"
-msgstr "彩色影像（16 或 24 位元深度）"
+msgstr "索引色圖片（最高 8 位元深度）"
 
 #: imgsaver.cpp:332
-#, fuzzy, kde-format
-#| msgid "palleted gray scale image (16 bit depth)"
+#, kde-format
 msgid "gray scale image (up to 8 bit depth)"
-msgstr "灰階影像（16 位元深度）"
+msgstr "灰階圖片（最高 8 位元深度）"
 
 #: imgsaver.cpp:336
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
-msgstr "黑白影像（1 位元深度）"
+msgstr "線稿圖片（黑白，1 位元深度）"
 
 #: imgsaver.cpp:340
-#, fuzzy, kde-format
-#| msgid "palleted color image (16 or 24 bit depth)"
+#, kde-format
 msgid "high/true color image (more than 8 bit depth)"
-msgstr "彩色影像（16 或 24 位元深度）"
+msgstr "高彩/真彩影像（大於 8 位元深度）"
 
 #: imgsaver.cpp:344
-#, fuzzy, kde-format
-#| msgid "Unknown image type"
+#, kde-format
 msgid "unknown image type %1"
-msgstr "未知的影像型態"
+msgstr "未知的圖片類型 %1"
 
 #: imgsaver.cpp:366
 #, kde-format
 msgid "Save OK"
-msgstr ""
+msgstr "儲存確認"
 
 #: imgsaver.cpp:368
-#, fuzzy, kde-format
-#| msgid "Permission denied on file %1."
+#, kde-format
 msgid "Permission denied"
-msgstr "檔案 %1 權限不足。"
+msgstr "權限不足"
 
 #: imgsaver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgid "Bad file name"
-msgstr "檔名"
+msgstr "不正確的檔案名稱"
 
 #: imgsaver.cpp:372
-#, fuzzy, kde-format
-#| msgid " no space on device "
+#, kde-format
 msgid "No space left on device"
 msgstr "儲存裝置空間不足"
 
@@ -1378,10 +1364,9 @@ msgid "Cannot write image format '%1'"
 msgstr "無法寫入圖片格式「%1」"
 
 #: imgsaver.cpp:376
-#, fuzzy, kde-format
-#| msgid " can not write file using that protocol "
+#, kde-format
 msgid "Cannot write using protocol '%1'"
-msgstr "無法使用該協定寫入檔案"
+msgstr "無法使用協定「%1」寫入"
 
 #: imgsaver.cpp:378
 #, kde-format
@@ -1391,7 +1376,7 @@ msgstr "使用者取消儲存"
 #: imgsaver.cpp:380
 #, kde-format
 msgid "Cannot create directory"
-msgstr ""
+msgstr "無法建立目錄"
 
 #: imgsaver.cpp:382
 #, kde-format
@@ -1409,18 +1394,15 @@ msgid "Unknown status %1"
 msgstr "未知的狀態 %1"
 
 #: imgsaver.cpp:414
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The filename you supplied has no file extension.\n"
-#| "Should the correct one be added automatically? "
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "The file name you supplied has no file extension.<nl/>Should the original "
 "one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
 "filename>"
 msgstr ""
-"您指定的檔名沒有副檔名。\n"
-"要自動加上嗎？"
+"您提供的檔案名稱沒有副檔名。<nl/>是否要加上原本的副檔名？<nl/><nl/>加上的話新"
+"的檔案名稱會是 <filename>%1</filename>"
 
 #: imgsaver.cpp:417
 #, kde-format
@@ -1430,60 +1412,58 @@ msgstr "找不到副檔名"
 #: imgsaver.cpp:418
 #, kde-format
 msgid "Add Extension"
-msgstr "請幫我加上"
+msgstr "加上副檔名"
 
 #: imgsaver.cpp:419
 #, kde-format
 msgid "Do Not Add"
-msgstr "請不要雞婆"
+msgstr "不要加上"
 
 #: imgsaver.cpp:448
 #, kde-format
 msgid "Target already exists"
-msgstr ""
+msgstr "目標已存在"
 
 #: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to copy the file"
-msgstr ""
+msgstr "無法複製檔案"
 
 #: imgsaver.cpp:462
 #, kde-format
 msgid "Unable to rename the file"
-msgstr ""
+msgstr "無法重新命名檔案"
 
 #: imgsaver.cpp:463
 #, kde-format
 msgid "Error copying file"
-msgstr ""
+msgstr "複製檔案時發生錯誤"
 
 #: imgsaver.cpp:464
 #, kde-format
 msgid "Error renaming file"
-msgstr ""
+msgstr "重新命名檔案時發生錯誤"
 
 #: imgsaver.cpp:465
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
-msgstr ""
+msgstr "%1 <filename>%3</filename><nl/>%2"
 
 #: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
-msgstr "KDE 掃描中"
+msgstr "KDE 掃描"
 
 #: kooka.cpp:140
-#, fuzzy, kde-format
-#| msgid "Scale to W&idth"
+#, kde-format
 msgid "Scale to Width"
-msgstr "調整到寬度(&I)"
+msgstr "調整到寬度"
 
 #: kooka.cpp:151
-#, fuzzy, kde-format
-#| msgid "Scale to &Height"
+#, kde-format
 msgid "Scale to Height"
-msgstr "調整到高度(&H)"
+msgstr "調整到高度"
 
 #: kooka.cpp:160
 #, kde-format
@@ -1501,10 +1481,9 @@ msgid "Keep Zoom Setting"
 msgstr "保留縮放設定"
 
 #: kooka.cpp:180
-#, fuzzy, kde-format
-#| msgid "Create From Selectio&n"
+#, kde-format
 msgid "New Image From Selection"
-msgstr "從選擇中建立(&N)"
+msgstr "從選取建立圖片"
 
 #: kooka.cpp:185
 #, kde-format
@@ -1654,7 +1633,7 @@ msgstr "喜好設定"
 #: kookapref.cpp:57
 #, kde-format
 msgid "General"
-msgstr ""
+msgstr "一般"
 
 #: kookapref.cpp:57
 #, kde-format
@@ -1705,6 +1684,10 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
+"<title>相簿模式 - 未選擇掃描器</title><nl/><nl/>在這個模式中您可以對相簿中的"
+"圖片進行瀏覽、文字辨識與其他操作。<nl/><nl/><link url=\"a:1\">選擇掃描器裝置"
+"</link>來進行掃描，或是如果沒有自動偵測到掃描器的話<link url=\"a:2\">新增裝置"
+"</link>。"
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -1725,25 +1708,20 @@ msgstr "無法載入外掛程式「%1」"
 
 #. i18n: ectx: label, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:50
-#, fuzzy, kde-format
-#| msgid "Load the last image into the viewer on startup"
+#, kde-format
 msgid "Load the last selected image into the viewer"
-msgstr "啟動時載入上次檢視的影像"
+msgstr "載入上次選擇的圖片"
 
 #. i18n: ectx: tooltip, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:51
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this if you want Kooka to load the last selected image into the "
-#| "viewer on startup.\n"
-#| "If your images are large, that might slow down Kooka's start."
+#, kde-format
 msgid ""
 "<div>Check this if you want Kooka to load the last selected image into the "
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
-"勾選此選項的話，Kooka 啟動時會載入上次檢視的最後一張影像。\n"
-"如果影像很大，在啟動時可能會很慢。"
+"<div>如果希望 Kooka 啟動時在檢視器載入上次選擇的圖片的話，請勾選此選項。<br/"
+"><br/>如果圖片較大，這可能會造成 Kooka 啟動需要更多時間。</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -1762,26 +1740,23 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving file"
+#, kde-format
 msgid "Ask for file name when saving"
-msgstr "儲存檔案時詢問檔名"
+msgstr "儲存時詢問檔名"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this if you want to enter a filename when an image has been scanned."
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
-msgstr "勾選此選項的話，每次儲存掃描的影像時都會要求您輸入檔名。"
+msgstr "<div>如果您希望總是在掃描圖片後輸入檔名，請勾選此選項。</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
 #, kde-format
 msgid "Only show recommended formats for this image type"
-msgstr ""
+msgstr "只顯示此圖片類型的建議格式"
 
 #. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:78
@@ -1790,12 +1765,14 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
+"<div>勾選來只顯示該掃描類型建議使用的檔案格式。取消勾選來顯示所有相容的格式。"
+"</div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:91
 #, kde-format
 msgid "Always use this save format for this image type"
-msgstr ""
+msgstr "總是為此圖片類型使用此儲存格式"
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:92
@@ -1803,7 +1780,7 @@ msgstr ""
 msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
-msgstr ""
+msgstr "<div>勾選來為掃描的圖片類型記住所選的檔案類型，以後則不詢問。</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:125
@@ -1818,6 +1795,8 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
+"<div>勾選來允許在相簿點擊項目來重新命名它們（未勾選時則可使用選單中的「重新命"
+"名」選項）。</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:131
@@ -1831,7 +1810,7 @@ msgstr "顯示最近資料夾："
 msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
-msgstr ""
+msgstr "<div>選擇是否要顯示最近存取的相簿資料夾，以及要顯示在哪裡。</div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
@@ -1843,7 +1822,7 @@ msgstr "使用自訂背景圖片"
 #: kookasettings.kcfg:153
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>設定縮圖檢視的自訂背景圖片。</div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
@@ -1855,7 +1834,7 @@ msgstr "圖片："
 #: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>縮圖檢視要使用的背景圖片。</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:165
@@ -1867,83 +1846,60 @@ msgstr "預覽大小："
 #: kookasettings.kcfg:166
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>選擇縮圖檢視的預設預覽尺寸。</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
-#, fuzzy, kde-format
-#| msgid "&Dust size"
+#, kde-format
 msgid "Dust size:"
-msgstr "雜質大小(&D)"
+msgstr "灰塵大小："
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "Clusters smaller than this value\n"
-#| "will be considered to be dust and \n"
-#| "removed from the image.\n"
-#| "\n"
-#| "Default is 10"
+#, kde-format
 msgid ""
 "<div>Clusters smaller than this size will be considered to be noise, and "
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
-"小於此值的叢集會被認為是雜質而從影像中移除。\n"
-"\n"
-"預設為 10"
+"<div>小於此值的叢集會被認為是雜質而忽略。0 代表不偵測灰塵叢集，-1 代表自動偵"
+"測。預設值是 10。</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
-#, fuzzy, kde-format
-#| msgid "&Gray level"
+#, kde-format
 msgid "Gray level:"
-msgstr "灰階(&G)"
+msgstr "灰色閥值："
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:212
-#, fuzzy, kde-format
-#| msgid ""
-#| "The numeric value gray pixels are \n"
-#| "considered to be black.\n"
-#| "\n"
-#| "Default is 160"
+#, kde-format
 msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
-"灰色像素被認為是黑色的數值。\n"
-"\n"
-"預設為 160"
+"<div>低於此閥值的灰色像素會視為黑色。0 代表自動偵測灰色閥值。預設值是 160。</"
+"div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
-#, fuzzy, kde-format
-#| msgid "&Space width"
+#, kde-format
 msgid "Space width:"
-msgstr "字間寬度(&S)"
+msgstr "字間寬度："
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "Spacing between characters.\n"
-#| "\n"
-#| "Default is 0 what means autodetection"
+#, kde-format
 msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
-"文字間的空白寬度。\n"
-"\n"
-"預設為 0，表示自動偵測"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
 #, kde-format
 msgid "Certainty:"
-msgstr ""
+msgstr "信心："
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:224
@@ -2031,7 +1987,7 @@ msgstr "引擎模式："
 #: kookasettings.kcfg:312
 #, kde-format
 msgid "Segmentation mode:"
-msgstr ""
+msgstr "分頁模式："
 
 #. i18n: ectx: Menu (file)
 #: kookaui.rc:5
@@ -2082,7 +2038,7 @@ msgstr "使用者指定"
 #: kookaview.cpp:247
 #, kde-format
 msgid "on command line"
-msgstr ""
+msgstr "在指令列上"
 
 #: kookaview.cpp:267
 #, kde-format
@@ -2245,10 +2201,9 @@ msgid "Create new image from selection"
 msgstr "從選取的區域建立新影像"
 
 #: kookaview.cpp:967
-#, fuzzy, kde-format
-#| msgid "Cannot save image, it is write protected."
+#, kde-format
 msgid "Cannot transform, image is read-only"
-msgstr "無法儲存影像，因為有寫入保護。"
+msgstr "無法轉換，圖片是唯獨的"
 
 #: kookaview.cpp:1020
 #, kde-format
@@ -2265,12 +2220,12 @@ msgstr "已取消載入圖片"
 msgid "Loading %1..."
 msgstr "載入 %1 中..."
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "掃描、圖片相簿與光學文字辨識"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2283,7 +2238,7 @@ msgid ""
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2299,87 +2254,87 @@ msgid ""
 "commercial Qt development licence.\n"
 msgstr ""
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "(C) 2000-2018，Kooka 開發者與貢獻者"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "目前維護者，KDE 4 移植"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "目前維護者，KDE 4/KF6 移植"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "初始的 KF5 移植"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "開發者"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "圖形，網頁"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "原本的 kscan 應用程式"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
-msgstr ""
+msgstr "影印工具"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "相簿模式 - 不要連線到掃描器"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "SANE 裝置定義（如：'umax:/dev/sg0'）"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "裝置"
