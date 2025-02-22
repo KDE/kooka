@@ -62,6 +62,7 @@ extern "C" {
 
 #define BUSY_RETRIES		2
 #define BUSY_DELAY		500
+#define MULTI_DELAY		2000
 
 
 // Debugging options
@@ -859,15 +860,24 @@ KScanDevice::Status KScanDevice::acquireScan()
         else mCurrScanResolutionY = mCurrScanResolutionX;
     }
 
+    // This timer enforces a minimum delay time between multiple scans.  With
+    // a mechanical ADF or waiting for the user the interval is likely to be
+    // longer than MULTI_DELAY anyway, but this allows time for the scanner to
+    // hopefully be ready for the next page.
+    QTimer minDelayTimer;
+    minDelayTimer.setSingleShot(true);
+    minDelayTimer.setInterval(MULTI_DELAY);
+
     // Main loop of the individual or batch scan.
     int scanCount = 0;
     if (mScanningAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
     const MultiScanOptions::Flags f = mMultiScanOptions.flags();
     if (f & MultiScanOptions::MultiScan) qCDebug(LIBKOOKASCAN_LOG) << "Multi scan options" << qPrintable(mMultiScanOptions.toString());
 
+    KScanDevice::Status stat = KScanDevice::Ok;
     while (true)
     {
-        KScanDevice::Status stat = acquireData(false);
+        stat = acquireData(false);
 
         // If the ADF is empty the first time through the loop, then it
         // is an error which the user should see.  For subsequent scans,
@@ -882,15 +892,27 @@ KScanDevice::Status KScanDevice::acquireScan()
         // ADF state as above.  This may in turn adjust the final state.
         // Then, if any error has happened, exit the loop now.
         stat = scanFinished(stat);
-        if (stat!=KScanDevice::Ok) return (stat);
+        if (stat!=KScanDevice::Ok) break;
 
         // If doing a single scan, whether from the ADF or flatbed,
         // then exit the loop now.
-        if (!(f & MultiScanOptions::MultiScan)) return (stat);
+        if (!(f & MultiScanOptions::MultiScan)) break;
 
         // Count up the scans to indicate that this is now not the
         // first time through the ADF loop.
         ++scanCount;
+
+        // For the "test" device, enforce the minimum delay regardless of the
+        // multiple scan options.  Otherwise everything happens too quickly
+        // to observe.
+        //
+        // For any other device, enforce the delay is the ADF is not in use.
+        // Even if the user goes to the next page very quickly, this gives
+        // the scan carriage time to return to be ready for the next scan.
+        if (!mScanningAdf || scannerBackendName()=="test") minDelayTimer.start();
+
+        // Set the LED to indicate a user requested wait or or minimum delay.
+        emit sigScanPauseStart();
 
         // If doing a manual or delayed wait, then ask or indicate to
         // the user respectively.
@@ -899,10 +921,8 @@ KScanDevice::Status KScanDevice::acquireScan()
         // able to wait or delay the first page of the scan.
         if (f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))
         {
-            emit sigScanPauseStart();
             ContinueScanDialog dlg(((f & MultiScanOptions::DelayWait) ? mMultiScanOptions.delay() : 0), nullptr);
             int res = dlg.exec();
-            emit sigScanPauseEnd();
 
             // scanFinished() above will not have called sane_cancel() if the
             // scan status was KScanDevice::Ok, because we may be intending
@@ -918,24 +938,25 @@ KScanDevice::Status KScanDevice::acquireScan()
             if (res==QDialogButtonBox::Cancel)
             {
                 qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch after" << scanCount << "scans";
-                return (KScanDevice::Cancelled);
+                stat = KScanDevice::Cancelled;
+                break;
             }
             if (res==QDialogButtonBox::Close)
             {
                 qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch after" << scanCount << "scans";
-                return (KScanDevice::Ok);
+                break;
             }
         }
 
-        // If not doing an ADF scan, then do not try to loop.  If we do, then
-        // the second attempt to scan may fail with a SANE_STATUS_DEVICE_BUSY
-        // as the scan carriage returns to its rest position.  This does not
-        // affect the scan that has just been completed, but the error will be
-        // reported to the user.
-        //if (!mScanningAdf) return (stat);
-        //
-        // TODO: could happen for flatbed multi scan, may need a minimum delay here
+        // In addition to the time that the user may have taken above, enforce
+        // the minimum delay time.  If the delay is not needed then the timer
+        // will never have been started.  If it is needed but the user took longer
+        // then the timer will already have run out by now.
+        while (minDelayTimer.isActive()) QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
+
+    emit sigScanPauseEnd();
+    return (stat);
 }
 
 
