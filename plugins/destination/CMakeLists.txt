@@ -72,3 +72,7 @@ add_subdirectory(save)
 if (KF${Q}Purpose_FOUND)
   add_subdirectory(share)
 endif (KF${Q}Purpose_FOUND)
+
+if (BUILD_TOOLS)
+  add_subdirectory(null)
+endif (BUILD_TOOLS)

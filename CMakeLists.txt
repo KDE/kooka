@@ -55,6 +55,7 @@ include(KDEClangFormat)
 
 # Options
 option(INSTALL_BINARIES "Install the binaries and libraries, turn off for development in place" ON)
+option(BUILD_TOOLS "Build the testing tools and null destination plugin" OFF)
 
 # Required Qt components to build this package
 find_package(Qt${Q} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
@@ -141,7 +142,9 @@ add_subdirectory(app)
 add_subdirectory(plugins)
 add_subdirectory(doc)
 
-add_subdirectory(tools EXCLUDE_FROM_ALL)
+if (BUILD_TOOLS)
+  add_subdirectory(tools)
+endif (BUILD_TOOLS)
 
 ############### VCS revision number in vcsversion.h ###############
 
