@@ -67,10 +67,13 @@ QByteArray MultiScanOptions::source() const
 }
 
 
+// Expecting the 'flags' parameter here to only contain either or both
+// of RotateOdd and RotateEven.
 void MultiScanOptions::setRotation(MultiScanOptions::Flags flags, MultiScanOptions::Rotation rotate)
 {
     if (flags & MultiScanOptions::RotateOdd) mRotateOdd = rotate;
     if (flags & MultiScanOptions::RotateEven) mRotateEven = rotate;
+    setFlags(flags, (rotate!=MultiScanOptions::RotateNone));
 }
 
 

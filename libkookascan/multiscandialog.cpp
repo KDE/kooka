@@ -48,6 +48,20 @@
 #include "kscanoption.h"
 
 
+static QComboBox *createRotationCombo(QWidget *pnt)
+{
+    QComboBox *cb = new QComboBox(pnt);
+    cb->setSizePolicy(QSizePolicy::MinimumExpanding, cb->sizePolicy().verticalPolicy());
+
+    cb->addItem(QIcon::fromTheme("rotate-none"), i18nc("@item:inlistbox no rotation", "None"), MultiScanOptions::RotateNone);
+    cb->addItem(QIcon::fromTheme("rotate-cw"), i18nc("@item:inlistbox rotation 90 degrees", "90\302\260"), MultiScanOptions::Rotate90);
+    cb->addItem(QIcon::fromTheme("rotate-180"), i18nc("@item:inlistbox rotation 180 degrees", "180\302\260"), MultiScanOptions::Rotate180);
+    cb->addItem(QIcon::fromTheme("rotate-acw"), i18nc("@item:inlistbox rotation 270 degrees", "270\302\260"), MultiScanOptions::Rotate270);
+
+    return (cb);
+}
+
+
 MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     : DialogBase(pnt)
 {
@@ -64,12 +78,13 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->setContentsMargins(0, 0, 0, 0);
     int row = 0;
 
+    const Qt::Alignment labelAlign = static_cast<Qt::Alignment> (style()->styleHint(QStyle::SH_FormLayoutLabelAlignment, nullptr, this));
+
     // Row 0: Scan source, if the option is available
     const KScanOption *so = dev->getOption(SANE_NAME_SCAN_SOURCE, false);
     if (so!=nullptr && so->isValid())
     {
         QLabel *lab = new QLabel(i18n("Scan source:"), w);
-        const Qt::Alignment labelAlign = static_cast<Qt::Alignment> (style()->styleHint(QStyle::SH_FormLayoutLabelAlignment, nullptr, this));
         gl->addWidget(lab, row, 0, 1, 2, labelAlign);
 
         // It is not possible to simply "adopt" the existing combo box
@@ -175,7 +190,6 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mBatchMultipleCheck, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
 
-
     // Row 11: Automatically Generate Filename check box
     mGenerateFilenameCheck = new QCheckBox(i18n("Automatically generate file names"), w);
     mGenerateFilenameCheck->setToolTip(i18nc("@info:tooltip",
@@ -191,6 +205,34 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
                                               "incremented with the same number of digits as entered.  Any existing numbered file "
                                               "will be skipped and not overwritten."));
     gl->addWidget(mGenerateFilenameCheck, row, 0, 1, -1, Qt::AlignLeft);
+    ++row;
+
+    // Row 12: Spacing
+    gl->setRowMinimumHeight(row, 2*DialogBase::verticalSpacing());
+    ++row;
+
+    // Row 13: Rotation group
+    grp = new QGroupBox(i18n("Rotation"), w);
+    grp->setFlat(true);
+    gl->addWidget(grp, row, 0, 1, -1);
+    ++row;
+
+    // Row 14: Odd pages rotation combo box and label
+    QLabel *lab = new QLabel(i18n("Odd pages:"), w);
+    gl->addWidget(lab, row, 0, 1, 2, labelAlign);
+
+    mRotateOddCombo = createRotationCombo(w);
+    mRotateOddCombo->setToolTip(i18nc("@info:tooltip", "Select the rotation for odd scan pages. The first page is page 1."));
+    gl->addWidget(mRotateOddCombo, row, 2, 1, -1);
+    ++row;
+
+    // Row 15: Even pages rotation combo box and label
+    lab = new QLabel(i18n("Even pages:"), w);
+    gl->addWidget(lab, row, 0, 1, 2, labelAlign);
+
+    mRotateEvenCombo = createRotationCombo(w);
+    mRotateEvenCombo->setToolTip(i18nc("@info:tooltip", "Select the rotation for even scan pages."));
+    gl->addWidget(mRotateEvenCombo, row, 2, 1, -1);
     ++row;
 
     gl->setColumnStretch(3, 1);
@@ -223,6 +265,11 @@ void MultiScanDialog::setOptions(const MultiScanOptions &opts)
 
     mGenerateFilenameCheck->setChecked(f & MultiScanOptions::AutoGenerate);
 
+    int idx = mRotateOddCombo->findData(mOptions.rotation(MultiScanOptions::RotateOdd));
+    if (idx!=-1) mRotateOddCombo->setCurrentIndex(idx);
+    idx = mRotateEvenCombo->findData(mOptions.rotation(MultiScanOptions::RotateEven));
+    if (idx!=-1) mRotateEvenCombo->setCurrentIndex(idx);
+
     slotGuiChange();
 }
 
@@ -244,6 +291,11 @@ const MultiScanOptions &MultiScanDialog::options()
     mOptions.setFlags(MultiScanOptions::BatchMultiple, mBatchMultipleCheck->isChecked());
     mOptions.setFlags(MultiScanOptions::AutoGenerate, mGenerateFilenameCheck->isChecked());
 
+    auto r = mRotateOddCombo->currentData().value<MultiScanOptions::Rotation>();
+    mOptions.setRotation(MultiScanOptions::RotateOdd, r);
+    r = mRotateEvenCombo->currentData().value<MultiScanOptions::Rotation>();
+    mOptions.setRotation(MultiScanOptions::RotateEven, r);
+
     mOptions.setDelay(mDelayTimeSpinbox->value());
 
     return (mOptions);
@@ -261,6 +313,8 @@ void MultiScanDialog::slotGuiChange()
     mMultiDelayScanRadio->setEnabled(multi);
     mBatchMultipleCheck->setEnabled(multi);
     mGenerateFilenameCheck->setEnabled(multi);
+    mRotateOddCombo->setEnabled(multi);
+    mRotateEvenCombo->setEnabled(multi);
 
     if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
 

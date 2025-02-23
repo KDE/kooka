@@ -77,6 +77,9 @@ private:
     QCheckBox *mBatchMultipleCheck;
     QCheckBox *mGenerateFilenameCheck;
 
+    QComboBox *mRotateOddCombo;
+    QComboBox *mRotateEvenCombo;
+
     MultiScanOptions mOptions;
     MultiScanOptions::Capabilities mCapabilities;
 };

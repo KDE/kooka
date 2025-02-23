@@ -26,6 +26,7 @@ set(kooka_PICS
   scanadd.png
   scanselect.png
   thumbviewtile.png
+  rotate-none.png
   rotate-acw.png
   rotate-cw.png
   rotate-180.png
