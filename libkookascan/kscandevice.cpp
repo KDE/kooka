@@ -888,19 +888,19 @@ KScanDevice::Status KScanDevice::acquireScan()
             stat = KScanDevice::AdfEmpty;
         }
 
+        // Count up the scans to indicate that this is now not the
+        // first time through the ADF loop.
+        ++scanCount;
+
         // Signal the scan status to the application, adjusted for the
         // ADF state as above.  This may in turn adjust the final state.
         // Then, if any error has happened, exit the loop now.
-        stat = scanFinished(stat);
+        stat = scanFinished(stat, scanCount);
         if (stat!=KScanDevice::Ok) break;
 
         // If doing a single scan, whether from the ADF or flatbed,
         // then exit the loop now.
         if (!(f & MultiScanOptions::MultiScan)) break;
-
-        // Count up the scans to indicate that this is now not the
-        // first time through the ADF loop.
-        ++scanCount;
 
         // For the "test" device, enforce the minimum delay regardless of the
         // multiple scan options.  Otherwise everything happens too quickly
@@ -989,6 +989,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
     mScanImage->setYResolution(DPM_TO_DPI(img.dotsPerMeterY()));
     // Set the original image file name as the scanner name
     mScanImage->setScannerName(QFile::encodeName(filename));
+
     emit sigNewImage(mScanImage);
     return (KScanDevice::Ok);
 }
@@ -1548,7 +1549,7 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
 }
 
 
-KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat)
+KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat, int scanCount)
 {
     qCDebug(LIBKOOKASCAN_LOG) << "status" << stat;
 
@@ -1571,6 +1572,21 @@ KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat)
     // application that it is ready.
     if (stat==KScanDevice::Ok && !mScanImage.isNull())
     {
+        if (scanCount!=-1)				// may need to rotate
+        {
+            const MultiScanOptions::Rotation r = mMultiScanOptions.rotation(((scanCount & 1)==0) ?
+                                                                            MultiScanOptions::RotateEven :
+                                                                            MultiScanOptions::RotateOdd);
+            qCDebug(LIBKOOKASCAN_LOG) << "rotation for count" << scanCount << "=" << r;
+            if (r!=MultiScanOptions::RotateNone)
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "original image size" << mScanImage->size();
+                mScanImage->transform(r);
+                qCDebug(LIBKOOKASCAN_LOG) << "new image size" << mScanImage->size();
+            }
+        }
+
+        // TODO: should these two take account of rotation?
 	mScanImage->setXResolution(mCurrScanResolutionX);
 	mScanImage->setYResolution(mCurrScanResolutionY);
 	mScanImage->setScannerName(mScannerName);
@@ -1651,15 +1667,16 @@ static void writeFlag(KConfigGroup &grp, const KConfigSkeletonItem *item, MultiS
 
     const MultiScanOptions::Flags f = mMultiScanOptions.flags();
     writeFlag(grp, ScanSettings::self()->multiScanItem(), (f & MultiScanOptions::MultiScan));
-    writeFlag(grp, ScanSettings::self()->multiRotateOddItem(), (f & MultiScanOptions::RotateOdd));
-    writeFlag(grp, ScanSettings::self()->multiRotateEvenItem(), (f & MultiScanOptions::RotateEven));
-    // RotateBoth can be derived from the above two
     // AdfAvailable does not need to be saved
     writeFlag(grp, ScanSettings::self()->multiManualWaitItem(), (f & MultiScanOptions::ManualWait));
     writeFlag(grp, ScanSettings::self()->multiDelayWaitItem(), (f & MultiScanOptions::DelayWait));
     writeFlag(grp, ScanSettings::self()->multiBatchMultipleItem(), (f & MultiScanOptions::BatchMultiple));
     writeFlag(grp, ScanSettings::self()->multiAutoGenerateItem(), (f & MultiScanOptions::AutoGenerate));
     // Source does not need to be saved, the SANE parameter mirrors it
+
+    grp.writeEntry(ScanSettings::self()->multiRotationOddItem()->key(), static_cast<int>(mMultiScanOptions.rotation(MultiScanOptions::RotateOdd)));
+    grp.writeEntry(ScanSettings::self()->multiRotationEvenItem()->key(), static_cast<int>(mMultiScanOptions.rotation(MultiScanOptions::RotateEven)));
+    // RotateBoth can be derived from the above two
 
     const KConfigSkeletonItem *item = ScanSettings::self()->multiScanDelayItem();
     grp.writeEntry(item->key(), mMultiScanOptions.delay());
@@ -1685,11 +1702,14 @@ bool KScanDevice::loadStartupConfig()
 
     const KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
 
-    mMultiScanOptions.setFlags(MultiScanOptions::MultiScan, readFlag(grp, ScanSettings::self()->multiScanItem()));
-    mMultiScanOptions.setFlags(MultiScanOptions::RotateOdd, readFlag(grp, ScanSettings::self()->multiRotateOddItem()));
-    mMultiScanOptions.setFlags(MultiScanOptions::RotateEven, readFlag(grp, ScanSettings::self()->multiRotateEvenItem()));
-    // RotateBoth can be derived from the above two
+    const auto d = static_cast<int>(MultiScanOptions::RotateNone);
+    auto r = static_cast<MultiScanOptions::Rotation>(grp.readEntry(ScanSettings::self()->multiRotationOddItem()->key(), d));
+    mMultiScanOptions.setRotation(MultiScanOptions::RotateOdd, r);
+    r = static_cast<MultiScanOptions::Rotation>(grp.readEntry(ScanSettings::self()->multiRotationEvenItem()->key(), d));
+    mMultiScanOptions.setRotation(MultiScanOptions::RotateEven, r);
+    // RotateBoth can be derived from the above
     // AdfAvailable does not need to be loaded
+    mMultiScanOptions.setFlags(MultiScanOptions::MultiScan, readFlag(grp, ScanSettings::self()->multiScanItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::ManualWait, readFlag(grp, ScanSettings::self()->multiManualWaitItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::DelayWait, readFlag(grp, ScanSettings::self()->multiDelayWaitItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::BatchMultiple, readFlag(grp, ScanSettings::self()->multiBatchMultipleItem()));

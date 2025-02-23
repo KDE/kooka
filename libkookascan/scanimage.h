@@ -36,6 +36,8 @@
 #include <qurl.h>
 #include <qsharedpointer.h>
 
+#include "multiscanoptions.h"
+
 #include "kookascan_export.h"
 
 
@@ -214,6 +216,13 @@ public:
      * @return the image type.
      **/
     ScanImage::ImageType imageType() const;
+
+    /**
+     * Apply a transformation to the image.
+     *
+     * @p rotateBy The rotation required
+     **/
+    void transform(MultiScanOptions::Rotation rotateBy);
 
 private:
     void init();

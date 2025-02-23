@@ -656,7 +656,7 @@ private:
 
     KScanDevice::Status acquireData(bool isPreview);
     KScanDevice::Status startAcquire(ScanImage::ImageType fmt);
-    KScanDevice::Status scanFinished(KScanDevice::Status status);
+    KScanDevice::Status scanFinished(KScanDevice::Status status, int scanCount = -1);
     void updateAdfState(const KScanOption *so = nullptr);
 
     /**
