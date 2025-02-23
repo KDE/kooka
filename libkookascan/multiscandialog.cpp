@@ -53,10 +53,10 @@ static QComboBox *createRotationCombo(QWidget *pnt)
     QComboBox *cb = new QComboBox(pnt);
     cb->setSizePolicy(QSizePolicy::MinimumExpanding, cb->sizePolicy().verticalPolicy());
 
-    cb->addItem(QIcon::fromTheme("rotate-none"), i18nc("@item:inlistbox no rotation", "None"), MultiScanOptions::RotateNone);
-    cb->addItem(QIcon::fromTheme("rotate-cw"), i18nc("@item:inlistbox rotation 90 degrees", "90\302\260"), MultiScanOptions::Rotate90);
-    cb->addItem(QIcon::fromTheme("rotate-180"), i18nc("@item:inlistbox rotation 180 degrees", "180\302\260"), MultiScanOptions::Rotate180);
-    cb->addItem(QIcon::fromTheme("rotate-acw"), i18nc("@item:inlistbox rotation 270 degrees", "270\302\260"), MultiScanOptions::Rotate270);
+    cb->addItem(QIcon::fromTheme("page-rotation-none"), i18nc("@item:inlistbox no rotation", "None"), MultiScanOptions::RotateNone);
+    cb->addItem(QIcon::fromTheme("page-rotation-90"), i18nc("@item:inlistbox rotation 90 degrees", "90\302\260"), MultiScanOptions::Rotate90);
+    cb->addItem(QIcon::fromTheme("page-rotation-180"), i18nc("@item:inlistbox rotation 180 degrees", "180\302\260"), MultiScanOptions::Rotate180);
+    cb->addItem(QIcon::fromTheme("page-rotation-270"), i18nc("@item:inlistbox rotation 270 degrees", "270\302\260"), MultiScanOptions::Rotate270);
 
     return (cb);
 }

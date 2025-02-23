@@ -19,6 +19,10 @@ set(libkookascan_PICS
   palette-gray.png
   palette-halftone.png
   palette-lineart.png
+  page-rotation-none.png
+  page-rotation-90.png
+  page-rotation-180.png
+  page-rotation-270.png
 )
 
 install(FILES ${libkookascan_PICS} DESTINATION ${KDE_INSTALL_DATADIR}/libkookascan/pics)
