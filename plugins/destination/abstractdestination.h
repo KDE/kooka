@@ -146,6 +146,8 @@ public:
      * Destinations that override this must call the base implementation,
      * which notes the multiple scan options for the batch.
      *
+     * @param opts The multiple scan options to be used
+     *
      * @see @c multiScanOptions()
      **/
     virtual void batchStart(const MultiScanOptions *opts)	{ mMultiOptions = opts; }
@@ -231,7 +233,7 @@ protected:
      * @note The relevant MIME type is stored in the @c data(Qt::UserRole)
      * of the combo box items, with a null string for "Other".
      **/
-    QComboBox *createFormatCombo(const QStringList &mimeTypes, const QString &configuredType);
+    QComboBox *createFormatCombo(const QStringList &mimeTypes, const QString &configuredType, bool includeOther = true);
 
     /**
      * Delete a file in the background, after a time delay.
