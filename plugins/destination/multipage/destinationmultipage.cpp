@@ -38,6 +38,8 @@
 #include <qtemporaryfile.h>
 #include <qcoreapplication.h>
 #include <qdir.h>
+#include <qpagesetupdialog.h>
+#include <qgroupbox.h>
 
 #include <kmessagebox.h>
 #include <kpluginfactory.h>
@@ -58,6 +60,9 @@ DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &arg
 {
     mSaveFile = nullptr;
     mPdfPrinter = nullptr;
+
+    mReferencePrinter = new QPrinter;
+    // TODO: load settings into that
 }
 
 
@@ -65,8 +70,8 @@ DestinationMultipage::~DestinationMultipage()
 {
     if (mSaveFile!=nullptr) delete mSaveFile;
     if (mPdfPrinter!=nullptr) delete mPdfPrinter;
+    delete mReferencePrinter;
 }
-
 
 
 void DestinationMultipage::batchStart(const MultiScanOptions *opts)
@@ -136,8 +141,9 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
         // combinations are no rotation, either or both rotated 180, or
         // both rotated either 90 or 270.
         mPdfPrinter = new KookaPrint();
-        mPdfPrinter->setPdfMode(mSaveFile->fileName());
+        mPdfPrinter->setPageLayout(mReferencePrinter->pageLayout());
         mPdfPrinter->setBaseImage(img.data());
+        mPdfPrinter->setPdfMode(mSaveFile->fileName());	// must be after setPageLayout()
         mPdfPrinter->startPrint();
     }
 
@@ -158,6 +164,7 @@ void DestinationMultipage::batchEnd(bool ok)
     }
 
     delete mPdfPrinter; mPdfPrinter = nullptr;
+//    mSaveFile->setAutoRemove(true);			// don't need temp any longer
     delete mSaveFile; mSaveFile = nullptr;
 }
 
@@ -195,7 +202,7 @@ KLocalizedString DestinationMultipage::scanDestinationString()
 
 void DestinationMultipage::saveSettings() const
 {
-    // TODO: may be needed
+    // TODO: from mReferencePrinter
 }
 
 
@@ -207,7 +214,42 @@ MultiScanOptions::Capabilities DestinationMultipage::capabilities() const
 
 void DestinationMultipage::slotPageSetup()
 {
-    // TODO: QPageSetupDialog
+    qDebug() << "orig rect" << mReferencePrinter->pageRect(QPrinter::Millimeter);
+
+    // TODO: we only really want half of the options in this dialogue,
+    // it is not possible to set it to the currently configured paper
+    // size, and there may be a need for other PDF generation options
+    // such as "fit to page".  Implement our own dialogue (with paper
+    // sizes from libpaper) instead?
+
+    QPageSetupDialog d(mReferencePrinter, parentWidget());
+
+    // Unfortunately the QPageSetupDialog does not take account of
+    // the QPrinter's configured page size, but always selects the
+    // default platform page size - in Unix taken from CUPS - when
+    // the dialogue is opened.  See QPageSetupWidget::initPageSizes()
+    // in qtbase/src/printsupport/dialogs/qpagesetupdialog_unix.cpp
+    //
+    // TODO: may be able to work around by finding the combo box
+    // and examining its item data, which is a QVariant containg a
+    // QPageSize.
+
+    // The dialogue "Page Layout" settings are not applicable here.
+    // Setting the group box to disabled would be easier and give a
+    // better visual effect, but QPageSetupDialog reenables that
+    // group box whenever the paper size is changed.  So find and
+    // disable the two combo boxes within it.
+    QGroupBox *layoutGroup = d.findChild<QGroupBox *>("pagesPerSheetButtonGroup");
+    if (layoutGroup!=nullptr)
+    {
+        QList<QComboBox *> combos = layoutGroup->findChildren<QComboBox *>();
+        for (QComboBox *combo : std::as_const(combos)) combo->setEnabled(false);
+    }
+
+    if (!d.exec()) return;
+
+    QPrinter *printer = d.printer();
+    qDebug() << "new rect" << printer->pageRect(QPrinter::Millimeter);
 }
 
 

@@ -125,7 +125,7 @@ void KookaPrint::recalculatePrintParameters()
     qCDebug(KOOKA_LOG) << "  resolution =" << resolution();
     qCDebug(KOOKA_LOG) << "options:";
     qCDebug(KOOKA_LOG) << "  scale mode =" << m_scaleOption;
-    qCDebug(KOOKA_LOG) << "  print size (mm) =" << m_printSize;
+    qCDebug(KOOKA_LOG) << "  custom size (mm) =" << m_printSize;
     qCDebug(KOOKA_LOG) << "  scan resolution =" << m_scanResolution;
     qCDebug(KOOKA_LOG) << "  screen resolution =" << m_screenResolution;
     qCDebug(KOOKA_LOG) << "  cuts option =" << m_cutsOption;
@@ -613,6 +613,9 @@ void KookaPrint::setPdfMode(const QString &outputFile)
     setOutputFileName(outputFile);
     setOutputFormat(QPrinter::PdfFormat);
 
+    // TODO: margins from page setup may be wanted
+    setFullPage(true);
+
     // Set print options that were either taken from the Kooka settings
     // or defaults applied in the constructor, to those which are more
     // appropriate for PDF output.
@@ -622,6 +625,7 @@ void KookaPrint::setPdfMode(const QString &outputFile)
     m_lowResDraft = false;
     m_cutsOption = KookaPrint::CutMarksNone;
     m_copyMode = true;
+    // TODO: can be eliminated by checking fullPage() which is only set above
     m_singlePageMode = true;
 
     setCreator(QGuiApplication::applicationDisplayName());

@@ -39,6 +39,7 @@
 class QComboBox;
 class QPushButton;
 class QTemporaryFile;
+class QPrinter;
 class KookaPrint;
 
 
@@ -69,6 +70,7 @@ private:
 
     QTemporaryFile *mSaveFile;
     KookaPrint *mPdfPrinter;
+    QPrinter *mReferencePrinter;
 
     QComboBox *mFormatCombo;
     QPushButton *mPageSetupButton;
