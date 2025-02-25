@@ -112,6 +112,7 @@ public:
     QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
     void setPdfMode(const QString &outputFile);
+    int totalPages() const				{ return (m_totalPages); }
 
 protected:
     void drawMarkerAroundPoint(QPainter *painter, const QPoint &p);

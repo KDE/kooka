@@ -195,8 +195,14 @@ void DestinationMultipage::createGUI(ScanParamsPage *page)
 
 KLocalizedString DestinationMultipage::scanDestinationString()
 {
-    // TODO: destination file name and page count
-    return (ki18n("Multipage Image"));
+    // The mPdfPrinter will not be available until the scan of the
+    // first page has finished.
+    const int p = (mPdfPrinter==nullptr) ? 1 : mPdfPrinter->totalPages()+1;
+
+    // KookaPrint::pageCount() starts at 0 and is updated after the
+    // image has been received and printed.  Therefore adding 1 here
+    // for the user-visible count.
+    return (kxi18n("Saving page %1 to <filename>%2</filename>").subs(QString::number(p)).subs(mSaveUrl.toDisplayString()));
 }
 
 
