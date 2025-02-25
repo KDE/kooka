@@ -85,6 +85,7 @@ KookaPrint::KookaPrint()
     m_scanResolution = -1;				// taken from image
     m_copyMode = false;					// normal print mode
     m_totalPages = 0;					// nothing printed yet
+    m_singlePageMode = false;				// allow multiple pages
 }
 
 
@@ -131,6 +132,7 @@ void KookaPrint::recalculatePrintParameters()
     qCDebug(KOOKA_LOG) << "  maintain aspect?" << m_maintainAspect;
     qCDebug(KOOKA_LOG) << "  low res draft?" << m_lowResDraft;
     qCDebug(KOOKA_LOG) << "  copy mode?" << m_copyMode;
+    qCDebug(KOOKA_LOG) << "  single page mode?" << m_singlePageMode;
 
     // Calculate the available page size, in real world units
     const bool pdfCopy = m_copyMode && outputFormat()==QPrinter::PdfFormat;
@@ -262,6 +264,16 @@ void KookaPrint::recalculatePrintParameters()
     fpart = modf(mPrintHeightMm/mPageHeightAdjustedMm, &ipart);
     //qCDebug(KOOKA_LOG) << "for rows ipart" << ipart << "fpart" << fpart;
     mPrintRows = qRound(ipart)+(fpart>0 ? 1 : 0);
+
+    // If the output mode is multipage PDF, then only output one page per
+    // image regardless of the size calculations above.  Larger images will
+    // print the top left page with the remainder clipped by the painter.
+    if (pdfCopy && m_singlePageMode)
+    {
+        if (qMax(mPrintRows, mPrintColumns)>1) qCDebug(KOOKA_LOG) << "original cols" << mPrintColumns << "rows" << mPrintRows;
+        mPrintRows = 1;
+        mPrintColumns = 1;
+    }
 
     int totalPages = mPrintColumns*mPrintRows;
     qCDebug(KOOKA_LOG) << "print cols" << mPrintColumns << "rows" << mPrintRows << "pages" << totalPages;
@@ -590,4 +602,27 @@ void KookaPrint::setCopyMode(bool on)
     qCDebug(KOOKA_LOG) << on;
     m_copyMode = on;
     if (on) m_cutsOption = KookaPrint::CutMarksNone;
+}
+
+
+void KookaPrint::setPdfMode(const QString &outputFile)
+{
+    qCDebug(KOOKA_LOG) << outputFile;
+
+    // Set the output file name, and specify the PDF output format.
+    setOutputFileName(outputFile);
+    setOutputFormat(QPrinter::PdfFormat);
+
+    // Set print options that were either taken from the Kooka settings
+    // or defaults applied in the constructor, to those which are more
+    // appropriate for PDF output.
+    m_cutsOption = KookaPrint::CutMarksNone;
+    m_scaleOption = KookaPrint::ScaleScan;
+    m_maintainAspect = true;
+    m_lowResDraft = false;
+    m_cutsOption = KookaPrint::CutMarksNone;
+    m_copyMode = true;
+    m_singlePageMode = true;
+
+    setCreator(QGuiApplication::applicationDisplayName());
 }
