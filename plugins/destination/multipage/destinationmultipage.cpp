@@ -45,6 +45,9 @@
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
 
+#include <kio/filecopyjob.h>
+#include <kio/jobuidelegatefactory.h>
+
 #include "scanparamspage.h"
 #include "recentsaver.h"
 #include "kookaprint.h"
@@ -154,17 +157,28 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
 
 void DestinationMultipage::batchEnd(bool ok)
 {
-    mPdfPrinter->endPrint();
-
-    if (ok)
+    // Need to check all pointers here because, if the scan failed to
+    // start or was cancelled by the user in batchStart(), either or
+    // both of mSaveFile and mPdfPrinter could be NULL.
+    if (mPdfPrinter!=nullptr)
     {
-        // TODO: set file modes according to umask
-        // TODO: move temp file to destination
-        // TODO: allow remote files
+        mPdfPrinter->endPrint();
+        delete mPdfPrinter; mPdfPrinter = nullptr;	// flush the final print data
+
+        if (ok && mSaveFile!=nullptr)
+        {
+            // For simplicity, use KIO to move the temporary file to the destination
+            // regardless of whether it is local or remote.  Whether the destination
+            // already exists will have been checked and confirmed by the QFileDialog
+            // back at the start of the scan job, so set the Overwrite flag to ensure
+            // that it does get overwritten without confirmation.
+            KIO::FileCopyJob *job = KIO::file_move(QUrl::fromLocalFile(mSaveFile->fileName()), mSaveUrl, -1, KIO::Overwrite);
+            job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+            job->exec();
+        }
     }
 
-    delete mPdfPrinter; mPdfPrinter = nullptr;
-//    mSaveFile->setAutoRemove(true);			// don't need temp any longer
+    if (mSaveFile!=nullptr) mSaveFile->setAutoRemove(true);
     delete mSaveFile; mSaveFile = nullptr;
 }
 
