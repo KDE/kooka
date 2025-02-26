@@ -380,6 +380,10 @@
       <default>image/png</default>
     </entry>
 
+    <entry name="DestinationMultipageMime" key="MultipageMime" type="String">
+      <default>application/pdf</default>
+    </entry>
+
     <entry name="DestinationExportDest" key="ExportDest" type="String">
     </entry>
 

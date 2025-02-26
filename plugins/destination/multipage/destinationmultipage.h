@@ -67,6 +67,7 @@ protected slots:
 
 private:
     QUrl mSaveUrl;
+    QString mSaveMime;
 
     QTemporaryFile *mSaveFile;
     KookaPrint *mPdfPrinter;

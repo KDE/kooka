@@ -51,6 +51,7 @@
 #include "scanparamspage.h"
 #include "recentsaver.h"
 #include "kookaprint.h"
+#include "kookasettings.h"
 #include "destination_logging.h"
 
 
@@ -119,7 +120,8 @@ void DestinationMultipage::batchStart(const MultiScanOptions *opts)
     }
 
     mSaveFile->close();					// only want the file name
-    qCDebug(DESTINATION_LOG) << "save to temp" << mSaveFile->fileName();
+    mSaveMime = mimeType.name();
+    qCDebug(DESTINATION_LOG) << "save" << mSaveMime << "to temp" << mSaveFile->fileName();
 }
 
 
@@ -190,10 +192,7 @@ void DestinationMultipage::createGUI(ScanParamsPage *page)
     mimeTypes << "application/pdf";
     // TODO: also TIFF
     //mimeTypes << "application/pdf" << "image/tiff";
-    mFormatCombo = createFormatCombo(mimeTypes,
-                                     // TODO: save setting
-                                     "", //, KookaSettings::destinationMultipageMime()
-                                     false);
+    mFormatCombo = createFormatCombo(mimeTypes, KookaSettings::destinationMultipageMime(), false);
     connect(mFormatCombo, &QComboBox::currentIndexChanged, this, &DestinationMultipage::slotFormatChanged);
     page->addRow(i18n("Output format:"), mFormatCombo);
 
@@ -222,7 +221,8 @@ KLocalizedString DestinationMultipage::scanDestinationString()
 
 void DestinationMultipage::saveSettings() const
 {
-    // TODO: from mReferencePrinter
+    if (!mSaveMime.isEmpty()) KookaSettings::setDestinationMultipageMime(mSaveMime);
+    // TODO: page settings from mReferencePrinter
 }
 
 
