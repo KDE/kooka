@@ -96,6 +96,7 @@ set(kookascan_SRCS
   multiscanoptions.cpp
   multiscandialog.cpp
   continuescandialog.cpp
+  papersizes.cpp
 )
 kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 ecm_qt_declare_logging_category(kookascan_SRCS
