@@ -313,7 +313,8 @@ void MultiScanDialog::slotGuiChange()
     mMultiDelayScanRadio->setEnabled(multi);
     mBatchMultipleCheck->setEnabled(multi);
     mGenerateFilenameCheck->setEnabled(multi);
-    mRotateOddCombo->setEnabled(multi);
+    // Not disabling mRotateOddCombo, as even with a single scan the
+    // first page can be rotated.
     mRotateEvenCombo->setEnabled(multi);
 
     if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
