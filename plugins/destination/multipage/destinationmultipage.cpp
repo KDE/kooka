@@ -272,6 +272,114 @@ QSizeF MultipageOptionsDialog::pageSize() const
 
 //////////////////////////////////////////////////////////////////////////
 //									//
+//  AbstractMultipageWriter						//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+class AbstractMultipageWriter
+{
+public:
+    AbstractMultipageWriter();
+    virtual ~AbstractMultipageWriter() = default;
+
+    int totalPages() const				{ return (mTotalPages); }
+    void outputImage(const QImage *img)			{ ++mTotalPages; printImage(img); }
+
+    virtual void setPageSize(const QPageSize &pageSize) = 0;
+    virtual void setBaseImage(const QImage *img) = 0;
+    virtual void setOutputFile(const QString &fileName) = 0;
+    virtual void startPrint() = 0;
+    virtual void endPrint() = 0;
+
+protected:
+    virtual void printImage(const QImage *img) = 0;
+
+private:
+    int mTotalPages;
+};
+
+
+AbstractMultipageWriter::AbstractMultipageWriter()
+{
+    mTotalPages = 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  MultipagePdfWriter							//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+class MultipagePdfWriter : public AbstractMultipageWriter
+{
+public:
+    MultipagePdfWriter();
+    ~MultipagePdfWriter();
+
+    void setPageSize(const QPageSize &pageSize) override;
+    void setBaseImage(const QImage *img) override;
+    void setOutputFile(const QString &fileName) override;
+    void startPrint() override;
+    void endPrint() override;
+
+protected:
+    void printImage(const QImage *img) override;
+
+private:
+    KookaPrint *mPdfPrinter;
+};
+
+
+MultipagePdfWriter::MultipagePdfWriter()
+    : AbstractMultipageWriter()
+{
+    qCDebug(DESTINATION_LOG);
+    mPdfPrinter = new KookaPrint();
+}
+
+
+MultipagePdfWriter::~MultipagePdfWriter()
+{
+    delete mPdfPrinter;
+}
+
+
+void MultipagePdfWriter::setPageSize(const QPageSize &pageSize)
+{
+    mPdfPrinter->setPageSize(pageSize);
+}
+
+
+void MultipagePdfWriter::setBaseImage(const QImage *img)
+{
+    mPdfPrinter->setBaseImage(img);
+}
+
+void MultipagePdfWriter::setOutputFile(const QString &fileName)
+{
+    mPdfPrinter->setPdfMode(fileName);
+}
+
+
+void MultipagePdfWriter::startPrint()
+{
+    mPdfPrinter->startPrint();
+}
+
+
+void MultipagePdfWriter::printImage(const QImage *img)
+{
+    mPdfPrinter->printImage(img);
+}
+
+
+void MultipagePdfWriter::endPrint()
+{
+    mPdfPrinter->endPrint();
+}
+
+//////////////////////////////////////////////////////////////////////////
+//									//
 //  DestinationMultipage						//
 //									//
 //////////////////////////////////////////////////////////////////////////
@@ -280,7 +388,7 @@ DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &arg
     : AbstractDestination(pnt, "DestinationMultipage")
 {
     mSaveFile = nullptr;
-    mPdfPrinter = nullptr;
+    mWriter = nullptr;
 
     mPageSize = QSizeF(KookaSettings::destinationMultipageSizeWidth(), KookaSettings::destinationMultipageSizeHeight());
 }
@@ -289,7 +397,7 @@ DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &arg
 DestinationMultipage::~DestinationMultipage()
 {
     if (mSaveFile!=nullptr) delete mSaveFile;
-    if (mPdfPrinter!=nullptr) delete mPdfPrinter;
+    if (mWriter!=nullptr) delete mWriter;
 }
 
 
@@ -350,29 +458,42 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
 
-    if (mPdfPrinter==nullptr)
+    if (mWriter==nullptr)
     {
-        // Create the PDF writer.  Delayed until now so that the image
-        // size and resolution, which are assumed not to change during a
-        // scan batch, are available from the first scanned image.
-        //
-        // Even if rotation is in use, this uses the size of the first
-        // image as the reference.  Therefore the only sensible rotation
-        // combinations are no rotation, either or both rotated 180, or
-        // both rotated either 90 or 270.
-        mPdfPrinter = new KookaPrint();
+        // Create the appropriate writer for the selected format.
+        // Delayed until now so that the image size and resolution,
+        // which are assumed not to change during a scan batch, are
+        // available from the first scanned image.
+        if (mSaveMime=="application/pdf")
+        {
+            mWriter = new MultipagePdfWriter();
+        }
+        else if (mSaveMime=="image/tiff")
+        {
+            // TODO
+        }
+        else
+        {
+            qCWarning(DESTINATION_LOG) << "Unknown MIME type" << mSaveMime;
+            return (false);
+        }
 
         // Because the list of paper sizes supported by QPageSize and those
         // provided by libpaper do not correspond in any way, the PDF page
         // size is always set as a custom size.
         const QPageSize pageSize(mPageSize, QPageSize::Millimeter, QString(), QPageSize::ExactMatch);
-        mPdfPrinter->setPageSize(pageSize);
-        mPdfPrinter->setBaseImage(img.data());
-        mPdfPrinter->setPdfMode(mSaveFile->fileName());	// must be after setPageLayout()
-        mPdfPrinter->startPrint();
+        mWriter->setPageSize(pageSize);
+        mWriter->setOutputFile(mSaveFile->fileName());	// must be after setPageLayout()
+
+        // Even if rotation is in use, this uses the size of the first
+        // image as the reference.  Therefore the only sensible rotation
+        // combinations are no rotation, either or both rotated 180, or
+        // both rotated either 90 or 270.
+        mWriter->setBaseImage(img.data());
+        mWriter->startPrint();
     }
 
-    mPdfPrinter->printImage(img.data());
+    mWriter->outputImage(img.data());
     return (true);
 }
 
@@ -381,23 +502,23 @@ void DestinationMultipage::batchEnd(bool ok)
 {
     // Need to check all pointers here because, if the scan failed to
     // start or was cancelled by the user in batchStart(), either or
-    // both of mSaveFile and mPdfPrinter could be NULL.
-    if (mPdfPrinter!=nullptr)
+    // both of mSaveFile and mWriter could be NULL.
+    if (mWriter!=nullptr)
     {
-        mPdfPrinter->endPrint();
-        delete mPdfPrinter; mPdfPrinter = nullptr;	// flush the final print data
+        mWriter->endPrint();
+        delete mWriter; mWriter = nullptr;	// flush the final print data
+    }
 
-        if (ok && mSaveFile!=nullptr)
-        {
-            // For simplicity, use KIO to move the temporary file to the destination
-            // regardless of whether it is local or remote.  Whether the destination
-            // already exists will have been checked and confirmed by the QFileDialog
-            // back at the start of the scan job, so set the Overwrite flag to ensure
-            // that it does get overwritten without confirmation.
-            KIO::FileCopyJob *job = KIO::file_move(QUrl::fromLocalFile(mSaveFile->fileName()), mSaveUrl, -1, KIO::Overwrite);
-            job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
-            job->exec();
-        }
+    if (ok && mSaveFile!=nullptr)
+    {
+        // For simplicity, use KIO to move the temporary file to the destination
+        // regardless of whether it is local or remote.  Whether the destination
+        // already exists will have been checked and confirmed by the QFileDialog
+        // back at the start of the scan job, so set the Overwrite flag to ensure
+        // that it does get overwritten without confirmation.
+        KIO::FileCopyJob *job = KIO::file_move(QUrl::fromLocalFile(mSaveFile->fileName()), mSaveUrl, -1, KIO::Overwrite);
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+        job->exec();
     }
 
     if (mSaveFile!=nullptr) mSaveFile->setAutoRemove(true);
@@ -410,8 +531,7 @@ void DestinationMultipage::createGUI(ScanParamsPage *page)
     // The MIME types that can be selected for the output format.
     QStringList mimeTypes;
     mimeTypes << "application/pdf";
-    // TODO: also TIFF
-    //mimeTypes << "application/pdf" << "image/tiff";
+    //mimeTypes << "image/tiff";
     mFormatCombo = createFormatCombo(mimeTypes, KookaSettings::destinationMultipageMime(), false);
     connect(mFormatCombo, &QComboBox::currentIndexChanged, this, &DestinationMultipage::slotFormatChanged);
     page->addRow(i18n("Output format:"), mFormatCombo);
@@ -428,9 +548,9 @@ void DestinationMultipage::createGUI(ScanParamsPage *page)
 
 KLocalizedString DestinationMultipage::scanDestinationString()
 {
-    // The mPdfPrinter will not have been created until the scan of the
+    // The mWriter will not have been created until the scan of the
     // first page has finished.
-    const int p = (mPdfPrinter==nullptr) ? 1 : mPdfPrinter->totalPages()+1;
+    const int p = (mWriter==nullptr) ? 1 : mWriter->totalPages()+1;
 
     // KookaPrint::pageCount() starts at 0 and is updated after the
     // image has been received and printed.  Therefore adding 1 here

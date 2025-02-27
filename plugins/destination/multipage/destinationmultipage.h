@@ -40,10 +40,11 @@
 class QComboBox;
 class QPushButton;
 class QTemporaryFile;
-class KookaPrint;
 
 class QDoubleSpinBox;
 class QRadioButton;
+
+class AbstractMultipageWriter;
 
 //////////////////////////////////////////////////////////////////////////
 //  MultipageOptionsDialog						//
@@ -102,7 +103,7 @@ private:
     QString mSaveMime;
 
     QTemporaryFile *mSaveFile;
-    KookaPrint *mPdfPrinter;
+    AbstractMultipageWriter *mWriter;
 
     QSizeF mPageSize;
 
