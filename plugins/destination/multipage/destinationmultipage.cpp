@@ -73,7 +73,7 @@ K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multip
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-MultipageOptionsDialog::MultipageOptionsDialog(const QSize &pageSize, QWidget *pnt)
+MultipageOptionsDialog::MultipageOptionsDialog(const QSizeF &pageSize, QWidget *pnt)
     : DialogBase(pnt)
 {
     setObjectName("MultipageOptionsDialog");
@@ -98,18 +98,18 @@ MultipageOptionsDialog::MultipageOptionsDialog(const QSize &pageSize, QWidget *p
     const PaperSize *sizes = PaperSizes::self()->papers();
     for (int i = 0; sizes[i].name!=nullptr; ++i)
     {
-        const int &sw = sizes[i].width;
-        const int &sh = sizes[i].height;
-        mPageSizeCombo->addItem(sizes[i].name, QSize(sw, sh));
+        const double sw = sizes[i].width;
+        const double sh = sizes[i].height;
+        mPageSizeCombo->addItem(sizes[i].name, QSizeF(sw, sh));
         if (!pageSize.isValid()) continue;
 
-        if (sw==pageSize.width() && sh==pageSize.height())
+        if (qFuzzyCompare(sw, pageSize.width()) && qFuzzyCompare(sh, pageSize.height()))
         {						// portrait orientation matches
             sizeIndex = i;
             orient = Qt::Vertical;
             qDebug() << "found portrait size" << sizes[i].name;
         }
-        else if (sh==pageSize.width() && sw==pageSize.height())
+        else if (qFuzzyCompare(sh, pageSize.width()) && qFuzzyCompare(sw, pageSize.height()))
         {						// landscape orientation matches
             sizeIndex = i;
             orient = Qt::Horizontal;
@@ -254,23 +254,19 @@ void MultipageOptionsDialog::slotValueChanged()
 }
 
 
-QSize MultipageOptionsDialog::pageSize() const
+QSizeF MultipageOptionsDialog::pageSize() const
 {
-    QSize res;
-    const QSize pageSize = mPageSizeCombo->currentData().value<QSize>();
+    const QSizeF pageSize = mPageSizeCombo->currentData().value<QSizeF>();
     const Qt::Orientation orient = (mLandscapeRadio->isChecked() ? Qt::Horizontal : Qt::Vertical);
     qDebug() << "selected size" << pageSize << "orient" << orient;
 
     if (pageSize.isValid())				// preset paper size
     {
-        if (orient==Qt::Vertical) return (QSize(pageSize.width(), pageSize.height()));
-        else return (QSize(pageSize.height(), pageSize.width()));
+        return (orient==Qt::Vertical ? pageSize : pageSize.transposed());
     }
     else						// custom paper size,
     {							// directly from spin boxes
-        // TODO: they can be double, so return a QSizeF and
-        // use qFuzzyCompare when testing equality in constructor
-        return (QSize(qRound(mCustomWidthSpinbox->value()), qRound(mCustomHeightSpinbox->value())));
+        return (QSizeF(mCustomWidthSpinbox->value(), mCustomHeightSpinbox->value()));
     }
 }
 
@@ -286,7 +282,7 @@ DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &arg
     mSaveFile = nullptr;
     mPdfPrinter = nullptr;
 
-    mPageSize = KookaSettings::destinationMultipageSize();
+    mPageSize = QSizeF(KookaSettings::destinationMultipageSizeWidth(), KookaSettings::destinationMultipageSizeHeight());
 }
 
 
@@ -369,7 +365,7 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
         // Because the list of paper sizes supported by QPageSize and those
         // provided by libpaper do not correspond in any way, the PDF page
         // size is always set as a custom size.
-        const QPageSize pageSize(mPageSize.toSizeF(), QPageSize::Millimeter, QString(), QPageSize::ExactMatch);
+        const QPageSize pageSize(mPageSize, QPageSize::Millimeter, QString(), QPageSize::ExactMatch);
         mPdfPrinter->setPageSize(pageSize);
         mPdfPrinter->setBaseImage(img.data());
         mPdfPrinter->setPdfMode(mSaveFile->fileName());	// must be after setPageLayout()
@@ -446,7 +442,8 @@ KLocalizedString DestinationMultipage::scanDestinationString()
 void DestinationMultipage::saveSettings() const
 {
     if (!mSaveMime.isEmpty()) KookaSettings::setDestinationMultipageMime(mSaveMime);
-    KookaSettings::setDestinationMultipageSize(mPageSize);
+    KookaSettings::setDestinationMultipageSizeWidth(mPageSize.width());
+    KookaSettings::setDestinationMultipageSizeHeight(mPageSize.height());
 }
 
 

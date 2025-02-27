@@ -54,10 +54,10 @@ class MultipageOptionsDialog : public DialogBase
     Q_OBJECT
 
 public:
-    explicit MultipageOptionsDialog(const QSize &pageSize, QWidget *pnt = nullptr);
+    explicit MultipageOptionsDialog(const QSizeF &pageSize, QWidget *pnt = nullptr);
     virtual ~MultipageOptionsDialog() = default;
 
-    QSize pageSize() const;
+    QSizeF pageSize() const;
 
 protected slots:
     void slotSettingChanged();
@@ -104,7 +104,7 @@ private:
     QTemporaryFile *mSaveFile;
     KookaPrint *mPdfPrinter;
 
-    QSize mPageSize;
+    QSizeF mPageSize;
 
     QComboBox *mFormatCombo;
     QPushButton *mPageSetupButton;
