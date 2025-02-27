@@ -286,8 +286,7 @@ DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &arg
     mSaveFile = nullptr;
     mPdfPrinter = nullptr;
 
-    // TODO: load from settings
-    mPageSize = QSize(210, 297);
+    mPageSize = KookaSettings::destinationMultipageSize();
 }
 
 
@@ -447,7 +446,7 @@ KLocalizedString DestinationMultipage::scanDestinationString()
 void DestinationMultipage::saveSettings() const
 {
     if (!mSaveMime.isEmpty()) KookaSettings::setDestinationMultipageMime(mSaveMime);
-    // TODO: save page size
+    KookaSettings::setDestinationMultipageSize(mPageSize);
 }
 
 

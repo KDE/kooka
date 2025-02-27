@@ -384,6 +384,10 @@
       <default>application/pdf</default>
     </entry>
 
+    <entry name="DestinationMultipageSize" key="MultipageSize" type="Size">
+      <default>QSize(210, 297)</default>
+    </entry>
+
     <entry name="DestinationExportDest" key="ExportDest" type="String">
     </entry>
 
