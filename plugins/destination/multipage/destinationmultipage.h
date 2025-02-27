@@ -35,13 +35,45 @@
 
 #include <qurl.h>
 
+#include <dialogbase.h>
 
 class QComboBox;
 class QPushButton;
 class QTemporaryFile;
-class QPrinter;
 class KookaPrint;
 
+class QDoubleSpinBox;
+class QRadioButton;
+
+//////////////////////////////////////////////////////////////////////////
+//  MultipageOptionsDialog						//
+//////////////////////////////////////////////////////////////////////////
+
+class MultipageOptionsDialog : public DialogBase
+{
+    Q_OBJECT
+
+public:
+    explicit MultipageOptionsDialog(const QSize &pageSize, QWidget *pnt = nullptr);
+    virtual ~MultipageOptionsDialog() = default;
+
+    QSize pageSize() const;
+
+protected slots:
+    void slotSettingChanged();
+    void slotValueChanged();
+
+private:
+    QComboBox *mPageSizeCombo;
+    QDoubleSpinBox *mCustomWidthSpinbox;
+    QDoubleSpinBox *mCustomHeightSpinbox;
+    QRadioButton *mPortraitRadio;
+    QRadioButton *mLandscapeRadio;
+};
+
+//////////////////////////////////////////////////////////////////////////
+//  DestinationMultipage						//
+//////////////////////////////////////////////////////////////////////////
 
 class DestinationMultipage : public AbstractDestination
 {
@@ -71,7 +103,8 @@ private:
 
     QTemporaryFile *mSaveFile;
     KookaPrint *mPdfPrinter;
-    QPrinter *mReferencePrinter;
+
+    QSize mPageSize;
 
     QComboBox *mFormatCombo;
     QPushButton *mPageSetupButton;

@@ -38,8 +38,14 @@
 #include <qtemporaryfile.h>
 #include <qcoreapplication.h>
 #include <qdir.h>
-#include <qpagesetupdialog.h>
 #include <qgroupbox.h>
+
+#include <qformlayout.h>
+#include <qboxlayout.h>
+#include <qspinbox.h>
+#include <qlabel.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include <kmessagebox.h>
 #include <kpluginfactory.h>
@@ -52,12 +58,227 @@
 #include "recentsaver.h"
 #include "kookaprint.h"
 #include "kookasettings.h"
+#include "papersizes.h"
 #include "destination_logging.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
 
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  MultipageOptionsDialog - A dialogue to replace QPageSetupDialog	//
+//  containing only the options that are needed and allowing for the	//
+//  possibility of more that may be needed later.			//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+MultipageOptionsDialog::MultipageOptionsDialog(const QSize &pageSize, QWidget *pnt)
+    : DialogBase(pnt)
+{
+    setObjectName("MultipageOptionsDialog");
+
+    qCDebug(DESTINATION_LOG) << "page size" << pageSize;
+
+    setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    setWindowTitle(i18n("PDF Page Setup"));
+    setModal(true);
+
+    QWidget *w = new QWidget(this);
+    setMainWidget(w);
+    QFormLayout *fl = new QFormLayout(w);
+
+    // Row 0: Page size combo box
+    mPageSizeCombo = new QComboBox(w);
+    mPageSizeCombo->setSizePolicy(QSizePolicy::MinimumExpanding, mPageSizeCombo->sizePolicy().verticalPolicy());
+
+    int sizeIndex = -1;
+    Qt::Orientation orient;
+
+    const PaperSize *sizes = PaperSizes::self()->papers();
+    for (int i = 0; sizes[i].name!=nullptr; ++i)
+    {
+        const int &sw = sizes[i].width;
+        const int &sh = sizes[i].height;
+        mPageSizeCombo->addItem(sizes[i].name, QSize(sw, sh));
+        if (!pageSize.isValid()) continue;
+
+        if (sw==pageSize.width() && sh==pageSize.height())
+        {						// portrait orientation matches
+            sizeIndex = i;
+            orient = Qt::Vertical;
+            qDebug() << "found portrait size" << sizes[i].name;
+        }
+        else if (sh==pageSize.width() && sw==pageSize.height())
+        {						// landscape orientation matches
+            sizeIndex = i;
+            orient = Qt::Horizontal;
+            qDebug() << "found landscape size" << sizes[i].name;
+        }
+    }
+    mPageSizeCombo->addItem(i18n("Custom..."));
+
+    fl->addRow(i18n("Page size:"), mPageSizeCombo);
+
+    // Row 1: Page size display and custom entry
+    QHBoxLayout *hb = new QHBoxLayout;
+    hb->setContentsMargins(0, 0, 0, 0);
+
+    mCustomWidthSpinbox = new QDoubleSpinBox(w);
+    mCustomWidthSpinbox->setDecimals(1);
+    mCustomWidthSpinbox->setRange(1.0, 2000.0);
+    mCustomWidthSpinbox->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+    mCustomWidthSpinbox->setSuffix(i18nc("unit suffix for millimetres", " mm"));
+    mCustomWidthSpinbox->setEnabled(false);
+    hb->addWidget(mCustomWidthSpinbox);
+
+    QLabel *l = new QLabel(i18nc("centered 'x' separator for height/width", "\303\227"), w);
+    hb->addWidget(l);
+
+    mCustomHeightSpinbox = new QDoubleSpinBox(w);
+    mCustomHeightSpinbox->setDecimals(1);
+    mCustomHeightSpinbox->setRange(1.0, 2000.0);
+    mCustomHeightSpinbox->setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+    mCustomHeightSpinbox->setSuffix(i18nc("unit suffix for millimetres", " mm"));
+    mCustomHeightSpinbox->setEnabled(false);
+    hb->addWidget(mCustomHeightSpinbox);
+
+    hb->addStretch();
+    fl->addRow("", hb);
+
+    // Row 2: Spacing
+    fl->setItem(fl->rowCount(), QFormLayout::SpanningRole, DialogBase::verticalSpacerItem());
+
+    // Row 3: Portrait/Landscape radio buttons
+    QButtonGroup *bg = new QButtonGroup(w);
+
+    hb = new QHBoxLayout;
+    hb->setContentsMargins(0, 0, 0, 0);
+
+    mPortraitRadio = new QRadioButton(i18nc("@option:radio paper orientation", "Portrait"), w);
+    bg->addButton(mPortraitRadio);
+    hb->addWidget(mPortraitRadio);
+
+    mLandscapeRadio = new QRadioButton(i18nc("@option:radio paper orientation", "Landscape"), w);
+    bg->addButton(mLandscapeRadio);
+    hb->addWidget(mLandscapeRadio);
+
+    hb->addStretch();
+    fl->addRow(i18n("Orientation:"), hb);
+
+    // Set initial GUI values from the provided page size, if a match
+    // was found above.
+    if (sizeIndex!=-1)					// a preset size matched
+    {
+        mPageSizeCombo->setCurrentIndex(sizeIndex);
+        mPortraitRadio->setChecked(orient==Qt::Vertical);
+        mLandscapeRadio->setChecked(orient==Qt::Horizontal);
+    }
+    else if (pageSize.isValid())			// provided but not known
+    {
+        mPageSizeCombo->setCurrentIndex(mPageSizeCombo->count()-1);
+        mCustomWidthSpinbox->setValue(pageSize.width());
+        mCustomHeightSpinbox->setValue(pageSize.height());
+    }
+    else mPageSizeCombo->setCurrentIndex(0);		// default first in list
+
+    slotValueChanged();
+    slotSettingChanged();
+
+    // Connect all signals now, after the settings have been adjusted
+    connect(mPageSizeCombo, &QComboBox::currentIndexChanged, this, &MultipageOptionsDialog::slotSettingChanged);
+    connect(bg, &QButtonGroup::buttonClicked, this, &MultipageOptionsDialog::slotSettingChanged);
+    connect(mCustomWidthSpinbox, &QDoubleSpinBox::valueChanged, this, &MultipageOptionsDialog::slotValueChanged);
+    connect(mCustomHeightSpinbox, &QDoubleSpinBox::valueChanged, this, &MultipageOptionsDialog::slotValueChanged);
+}
+
+
+void MultipageOptionsDialog::slotSettingChanged()
+{
+    const QSize pageSize = mPageSizeCombo->currentData().value<QSize>();
+    const Qt::Orientation orient = (mLandscapeRadio->isChecked() ? Qt::Horizontal : Qt::Vertical);
+    qDebug() << "selected size" << pageSize << "orient" << orient;
+
+    QSignalBlocker block1(mCustomWidthSpinbox);		// don't want a signal from setValue()
+    QSignalBlocker block2(mCustomHeightSpinbox);
+
+    if (pageSize.isValid())				// preset paper size
+    {
+        if (orient==Qt::Vertical)			// portrait orientation
+        {
+            mCustomWidthSpinbox->setValue(pageSize.width());
+            mCustomHeightSpinbox->setValue(pageSize.height());
+        }
+        else						// landscape orientation
+        {
+            mCustomWidthSpinbox->setValue(pageSize.height());
+            mCustomHeightSpinbox->setValue(pageSize.width());
+        }
+
+        mCustomWidthSpinbox->setEnabled(false);
+        mCustomHeightSpinbox->setEnabled(false);
+    }
+    else						// custom paper size
+    {
+        const double vw = mCustomWidthSpinbox->value();
+        const double vh = mCustomHeightSpinbox->value();
+
+        if (orient==Qt::Vertical)			// portrait orientation
+        {
+            mCustomWidthSpinbox->setValue(qMin(vw, vh));
+            mCustomHeightSpinbox->setValue(qMax(vw, vh));
+        }
+        else						// landscape orientation
+        {
+            mCustomWidthSpinbox->setValue(qMax(vw, vh));
+            mCustomHeightSpinbox->setValue(qMin(vw, vh));
+        }
+
+        mCustomWidthSpinbox->setEnabled(true);
+        mCustomHeightSpinbox->setEnabled(true);
+    }
+}
+
+
+void MultipageOptionsDialog::slotValueChanged()
+{
+    if (!mCustomWidthSpinbox->isEnabled())		// not setting a custom size
+    {							// and not needing initialsation
+        if (mPortraitRadio->isChecked() || mLandscapeRadio->isChecked()) return;
+    }
+
+    const double vw = mCustomWidthSpinbox->value();
+    const double vh = mCustomHeightSpinbox->value();
+    if (vw>vh) mLandscapeRadio->setChecked(true);	// set to landscape orientation
+    else mPortraitRadio->setChecked(true);		// set to portrait orientation
+}
+
+
+QSize MultipageOptionsDialog::pageSize() const
+{
+    QSize res;
+    const QSize pageSize = mPageSizeCombo->currentData().value<QSize>();
+    const Qt::Orientation orient = (mLandscapeRadio->isChecked() ? Qt::Horizontal : Qt::Vertical);
+    qDebug() << "selected size" << pageSize << "orient" << orient;
+
+    if (pageSize.isValid())				// preset paper size
+    {
+        if (orient==Qt::Vertical) return (QSize(pageSize.width(), pageSize.height()));
+        else return (QSize(pageSize.height(), pageSize.width()));
+    }
+    else						// custom paper size,
+    {							// directly from spin boxes
+        // TODO: they can be double, so return a QSizeF and
+        // use qFuzzyCompare when testing equality in constructor
+        return (QSize(qRound(mCustomWidthSpinbox->value()), qRound(mCustomHeightSpinbox->value())));
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  DestinationMultipage						//
+//									//
+//////////////////////////////////////////////////////////////////////////
 
 DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &args)
     : AbstractDestination(pnt, "DestinationMultipage")
@@ -65,8 +286,8 @@ DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &arg
     mSaveFile = nullptr;
     mPdfPrinter = nullptr;
 
-    mReferencePrinter = new QPrinter;
-    // TODO: load settings into that
+    // TODO: load from settings
+    mPageSize = QSize(210, 297);
 }
 
 
@@ -74,7 +295,6 @@ DestinationMultipage::~DestinationMultipage()
 {
     if (mSaveFile!=nullptr) delete mSaveFile;
     if (mPdfPrinter!=nullptr) delete mPdfPrinter;
-    delete mReferencePrinter;
 }
 
 
@@ -146,7 +366,12 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
         // combinations are no rotation, either or both rotated 180, or
         // both rotated either 90 or 270.
         mPdfPrinter = new KookaPrint();
-        mPdfPrinter->setPageLayout(mReferencePrinter->pageLayout());
+
+        // Because the list of paper sizes supported by QPageSize and those
+        // provided by libpaper do not correspond in any way, the PDF page
+        // size is always set as a custom size.
+        const QPageSize pageSize(mPageSize.toSizeF(), QPageSize::Millimeter, QString(), QPageSize::ExactMatch);
+        mPdfPrinter->setPageSize(pageSize);
         mPdfPrinter->setBaseImage(img.data());
         mPdfPrinter->setPdfMode(mSaveFile->fileName());	// must be after setPageLayout()
         mPdfPrinter->startPrint();
@@ -208,7 +433,7 @@ void DestinationMultipage::createGUI(ScanParamsPage *page)
 
 KLocalizedString DestinationMultipage::scanDestinationString()
 {
-    // The mPdfPrinter will not be available until the scan of the
+    // The mPdfPrinter will not have been created until the scan of the
     // first page has finished.
     const int p = (mPdfPrinter==nullptr) ? 1 : mPdfPrinter->totalPages()+1;
 
@@ -222,7 +447,7 @@ KLocalizedString DestinationMultipage::scanDestinationString()
 void DestinationMultipage::saveSettings() const
 {
     if (!mSaveMime.isEmpty()) KookaSettings::setDestinationMultipageMime(mSaveMime);
-    // TODO: page settings from mReferencePrinter
+    // TODO: save page size
 }
 
 
@@ -234,42 +459,11 @@ MultiScanOptions::Capabilities DestinationMultipage::capabilities() const
 
 void DestinationMultipage::slotPageSetup()
 {
-    qDebug() << "orig rect" << mReferencePrinter->pageRect(QPrinter::Millimeter);
-
-    // TODO: we only really want half of the options in this dialogue,
-    // it is not possible to set it to the currently configured paper
-    // size, and there may be a need for other PDF generation options
-    // such as "fit to page".  Implement our own dialogue (with paper
-    // sizes from libpaper) instead?
-
-    QPageSetupDialog d(mReferencePrinter, parentWidget());
-
-    // Unfortunately the QPageSetupDialog does not take account of
-    // the QPrinter's configured page size, but always selects the
-    // default platform page size - in Unix taken from CUPS - when
-    // the dialogue is opened.  See QPageSetupWidget::initPageSizes()
-    // in qtbase/src/printsupport/dialogs/qpagesetupdialog_unix.cpp
-    //
-    // TODO: may be able to work around by finding the combo box
-    // and examining its item data, which is a QVariant containg a
-    // QPageSize.
-
-    // The dialogue "Page Layout" settings are not applicable here.
-    // Setting the group box to disabled would be easier and give a
-    // better visual effect, but QPageSetupDialog reenables that
-    // group box whenever the paper size is changed.  So find and
-    // disable the two combo boxes within it.
-    QGroupBox *layoutGroup = d.findChild<QGroupBox *>("pagesPerSheetButtonGroup");
-    if (layoutGroup!=nullptr)
-    {
-        QList<QComboBox *> combos = layoutGroup->findChildren<QComboBox *>();
-        for (QComboBox *combo : std::as_const(combos)) combo->setEnabled(false);
-    }
-
+    MultipageOptionsDialog d(mPageSize, parentWidget());
     if (!d.exec()) return;
 
-    QPrinter *printer = d.printer();
-    qDebug() << "new rect" << printer->pageRect(QPrinter::Millimeter);
+    mPageSize = d.pageSize();
+    qDebug() << "new size" << mPageSize;
 }
 
 
