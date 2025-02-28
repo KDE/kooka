@@ -61,6 +61,15 @@
 #include "papersizes.h"
 #include "destination_logging.h"
 
+#ifdef HAVE_TIFF
+extern "C"
+{
+#include <tiffio.h>
+#include <tiff.h>
+}
+#include <qfile.h>
+#endif
+
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
@@ -107,13 +116,13 @@ MultipageOptionsDialog::MultipageOptionsDialog(const QSizeF &pageSize, QWidget *
         {						// portrait orientation matches
             sizeIndex = i;
             orient = Qt::Vertical;
-            qDebug() << "found portrait size" << sizes[i].name;
+            qCDebug(DESTINATION_LOG) << "found portrait size" << sizes[i].name;
         }
         else if (qFuzzyCompare(sh, pageSize.width()) && qFuzzyCompare(sw, pageSize.height()))
         {						// landscape orientation matches
             sizeIndex = i;
             orient = Qt::Horizontal;
-            qDebug() << "found landscape size" << sizes[i].name;
+            qCDebug(DESTINATION_LOG) << "found landscape size" << sizes[i].name;
         }
     }
     mPageSizeCombo->addItem(i18n("Custom..."));
@@ -197,7 +206,7 @@ void MultipageOptionsDialog::slotSettingChanged()
 {
     const QSize pageSize = mPageSizeCombo->currentData().value<QSize>();
     const Qt::Orientation orient = (mLandscapeRadio->isChecked() ? Qt::Horizontal : Qt::Vertical);
-    qDebug() << "selected size" << pageSize << "orient" << orient;
+    qCDebug(DESTINATION_LOG) << "selected size" << pageSize << "orient" << orient;
 
     QSignalBlocker block1(mCustomWidthSpinbox);		// don't want a signal from setValue()
     QSignalBlocker block2(mCustomHeightSpinbox);
@@ -258,7 +267,7 @@ QSizeF MultipageOptionsDialog::pageSize() const
 {
     const QSizeF pageSize = mPageSizeCombo->currentData().value<QSizeF>();
     const Qt::Orientation orient = (mLandscapeRadio->isChecked() ? Qt::Horizontal : Qt::Vertical);
-    qDebug() << "selected size" << pageSize << "orient" << orient;
+    qCDebug(DESTINATION_LOG) << "selected size" << pageSize << "orient" << orient;
 
     if (pageSize.isValid())				// preset paper size
     {
@@ -288,7 +297,7 @@ public:
     virtual void setPageSize(const QPageSize &pageSize) = 0;
     virtual void setBaseImage(const QImage *img) = 0;
     virtual void setOutputFile(const QString &fileName) = 0;
-    virtual void startPrint() = 0;
+    virtual bool startPrint() = 0;
     virtual void endPrint() = 0;
 
 protected:
@@ -319,7 +328,7 @@ public:
     void setPageSize(const QPageSize &pageSize) override;
     void setBaseImage(const QImage *img) override;
     void setOutputFile(const QString &fileName) override;
-    void startPrint() override;
+    bool startPrint() override;
     void endPrint() override;
 
 protected:
@@ -361,9 +370,10 @@ void MultipagePdfWriter::setOutputFile(const QString &fileName)
 }
 
 
-void MultipagePdfWriter::startPrint()
+bool MultipagePdfWriter::startPrint()
 {
     mPdfPrinter->startPrint();
+    return (true);
 }
 
 
@@ -377,6 +387,164 @@ void MultipagePdfWriter::endPrint()
 {
     mPdfPrinter->endPrint();
 }
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  MultipageTiffWriter							//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+#ifdef HAVE_TIFF
+
+class MultipageTiffWriter : public AbstractMultipageWriter
+{
+public:
+    MultipageTiffWriter();
+    ~MultipageTiffWriter();
+
+    void setPageSize(const QPageSize &pageSize) override;
+    void setBaseImage(const QImage *img) override;
+    void setOutputFile(const QString &fileName) override;
+    bool startPrint() override;
+    void endPrint() override;
+
+protected:
+    void printImage(const QImage *img) override;
+
+private:
+    QSize mBaseSize;
+    int mBaseResX;
+    int mBaseResY;
+
+    QByteArray mFileName;
+    TIFF *mTiff;
+};
+
+
+// TODO: TIFF error handling and report, see qtiffhandler.cpp
+
+MultipageTiffWriter::MultipageTiffWriter()
+    : AbstractMultipageWriter()
+{
+    qCDebug(DESTINATION_LOG);
+    mTiff = nullptr;
+}
+
+
+MultipageTiffWriter::~MultipageTiffWriter()
+{
+    if (mTiff!=nullptr) TIFFClose(mTiff);
+    mTiff = nullptr;
+}
+
+
+void MultipageTiffWriter::setPageSize(const QPageSize &pageSize)
+{
+    // Ignored, size taken from each scanned image
+}
+
+
+void MultipageTiffWriter::setBaseImage(const QImage *img)
+{
+    // TODO: copied from KookaPrint, move to base class
+
+    if (img==nullptr)					// unset the reference image
+    {
+        mBaseSize = QSize();
+        return;
+    }
+
+    mBaseSize = img->size();
+    mBaseResX = DPM_TO_DPI(img->dotsPerMeterX());
+    mBaseResY = DPM_TO_DPI(img->dotsPerMeterY());
+    qCDebug(DESTINATION_LOG) << "size (pix)" << mBaseSize << "dpi X" << mBaseResX << "dpi Y" << mBaseResY;
+}
+
+
+void MultipageTiffWriter::setOutputFile(const QString &fileName)
+{
+    mFileName = QFile::encodeName(fileName);
+}
+
+
+bool MultipageTiffWriter::startPrint()
+{
+    if (mBaseSize.isNull()) return (false);		// no reference image
+
+    mTiff = TIFFOpen(mFileName.constData(), "w");
+    if (mTiff==nullptr)
+    {
+        KMessageBox::error(nullptr,
+                           xi18nc("@info", "Cannot write TIFF file <filename>%1</filename><nl/><message>%2</message>",
+                                  mFileName,
+                                  i18n("(see stderr for the error message")),
+                           i18n("Cannot Write TIFF File"));
+        return (false);
+    }
+
+    return (true);
+}
+
+
+void MultipageTiffWriter::printImage(const QImage *img)
+{
+    qCDebug(DESTINATION_LOG) << "format" << img->format();
+
+    // see /usr/include/tiff.h for value definitions
+    TIFFSetField(mTiff, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
+    TIFFSetField(mTiff, TIFFTAG_XRESOLUTION, float(mBaseResX));
+    TIFFSetField(mTiff, TIFFTAG_YRESOLUTION, float(mBaseResY));
+    TIFFSetField(mTiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+
+    // TODO: option for compression type
+
+    // TODO: set these 3 from image type provided by scanStarting()
+    TIFFSetField(mTiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+    // from https://bitmiracle.github.io/libtiff.net/help/articles/KB/grayscale-color.html
+    TIFFSetField(mTiff, TIFFTAG_SAMPLESPERPIXEL, 3);
+    TIFFSetField(mTiff, TIFFTAG_BITSPERSAMPLE, 8);
+
+    const int h = img->height();
+    const int w = img->width();
+    TIFFSetField(mTiff, TIFFTAG_IMAGEWIDTH, w);
+    TIFFSetField(mTiff, TIFFTAG_IMAGELENGTH, h);
+
+    // The TIFF file is always written as 24-bit RGB in accordance with the
+    // tags set above, therefore the scanned image data must be converted
+    // to RGB888 format (if it is not so already) before writing it.
+    //
+    // The RGB888 format comes from the "!image.hasAlphaChannel()" case
+    // in src/plugins/imageformats/tiff/qtiffhandler.cpp from the
+    // QtImageFormats source.  A scanned image will never have an alpha
+    // chennel.
+    QImage convertedImg(*img);				// shallow copy at this stage
+    if (convertedImg.format()!=QImage::Format_RGB888)
+    {
+        convertedImg.convertTo(QImage::Format_RGB888, Qt::ColorOnly|Qt::NoOpaqueDetection);
+        qCDebug(DESTINATION_LOG) << "converting from" << img->format() << "->" << convertedImg.format();
+    }
+
+    // This is just a guess, since we are writing single scan lines
+    TIFFSetField(mTiff, TIFFTAG_ROWSPERSTRIP, 1);
+    // Write out each scan line of image data in turn
+    for (int i = 0; i<h; ++i)
+    {
+        const uchar *l = convertedImg.scanLine(i);
+        TIFFWriteScanline(mTiff, const_cast<uchar *>(l), i);
+    }
+
+    // loop from first example in https://libtiff.gitlab.io/libtiff/multi_page.html
+    TIFFWriteDirectory(mTiff);
+}
+
+
+void MultipageTiffWriter::endPrint()
+{
+    TIFFClose(mTiff);
+    mTiff = nullptr;
+}
+
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -468,10 +636,12 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
         {
             mWriter = new MultipagePdfWriter();
         }
+#ifdef HAVE_TIFF
         else if (mSaveMime=="image/tiff")
         {
-            // TODO
+            mWriter = new MultipageTiffWriter();
         }
+#endif
         else
         {
             qCWarning(DESTINATION_LOG) << "Unknown MIME type" << mSaveMime;
@@ -483,14 +653,17 @@ bool DestinationMultipage::imageScanned(ScanImage::Ptr img)
         // size is always set as a custom size.
         const QPageSize pageSize(mPageSize, QPageSize::Millimeter, QString(), QPageSize::ExactMatch);
         mWriter->setPageSize(pageSize);
-        mWriter->setOutputFile(mSaveFile->fileName());	// must be after setPageLayout()
+        // This must happen after a setPageLayout() or setPageSize()
+        // for a QPrinter.
+        mWriter->setOutputFile(mSaveFile->fileName());
 
         // Even if rotation is in use, this uses the size of the first
         // image as the reference.  Therefore the only sensible rotation
         // combinations are no rotation, either or both rotated 180, or
         // both rotated either 90 or 270.
         mWriter->setBaseImage(img.data());
-        mWriter->startPrint();
+        bool ok = mWriter->startPrint();
+        if (!ok) return (false);
     }
 
     mWriter->outputImage(img.data());
@@ -531,7 +704,9 @@ void DestinationMultipage::createGUI(ScanParamsPage *page)
     // The MIME types that can be selected for the output format.
     QStringList mimeTypes;
     mimeTypes << "application/pdf";
-    //mimeTypes << "image/tiff";
+#ifdef HAVE_TIFF
+    mimeTypes << "image/tiff";
+#endif
     mFormatCombo = createFormatCombo(mimeTypes, KookaSettings::destinationMultipageMime(), false);
     connect(mFormatCombo, &QComboBox::currentIndexChanged, this, &DestinationMultipage::slotFormatChanged);
     page->addRow(i18n("Output format:"), mFormatCombo);
@@ -579,7 +754,7 @@ void DestinationMultipage::slotPageSetup()
     if (!d.exec()) return;
 
     mPageSize = d.pageSize();
-    qDebug() << "new size" << mPageSize;
+    qCDebug(DESTINATION_LOG) << "new size" << mPageSize;
 }
 
 

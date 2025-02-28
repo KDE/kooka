@@ -291,6 +291,10 @@ void KookaPrint::startPrint()
     qCDebug(KOOKA_LOG) << "starting";
     recalculatePrintParameters();			// ensure up to date
 
+
+    // TODO: not in PDF output mode (m_singlePageMode), rename that option
+    // setPdfMode -> setPdfFileMode?
+
     // Always save the selected printer, even if not in copy mode.
     QString name = printerName();
     if (name.isEmpty()) name = "PDF";
