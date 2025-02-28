@@ -470,12 +470,6 @@ QUrl DestinationSave::getSaveLocation(ScanImage::ImageType type, bool allFilters
             if (!FormatDialog::isCompatible(mimeType, type, recOnly)) continue;
             filters.append(mimeType.name());		// yes, add to filter list
         }
-
-        // To allow the user to save to a format for which there may not
-        // be a filter entry, the "All files" type is added.  If this filter is
-        // selected when the dialogue completes, the applicable MIME type is
-        // deduced from the full save URL.
-        filters << "application/octet-stream";
     }
     dlg.setMimeTypeFilters(filters);
 
