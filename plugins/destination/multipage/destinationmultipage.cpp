@@ -408,6 +408,8 @@ public:
     bool startPrint() override;
     void endPrint() override;
 
+    void setError(const QString &msg)			{ mErrorString = msg; }
+
 protected:
     void printImage(const QImage *img) override;
 
@@ -418,10 +420,9 @@ private:
 
     QByteArray mFileName;
     TIFF *mTiff;
+    QString mErrorString;
 };
 
-
-// TODO: TIFF error handling and report, see qtiffhandler.cpp
 
 MultipageTiffWriter::MultipageTiffWriter()
     : AbstractMultipageWriter()
@@ -446,24 +447,49 @@ void MultipageTiffWriter::setPageSize(const QPageSize &pageSize)
 
 void MultipageTiffWriter::setBaseImage(const QImage *img)
 {
-    // TODO: copied from KookaPrint, move to base class
-
-    if (img==nullptr)					// unset the reference image
+    if (img==nullptr) mBaseSize = QSize();		// unset the reference image
+    else
     {
-        mBaseSize = QSize();
-        return;
+        mBaseSize = img->size();
+        mBaseResX = DPM_TO_DPI(img->dotsPerMeterX());
+        mBaseResY = DPM_TO_DPI(img->dotsPerMeterY());
+        qCDebug(DESTINATION_LOG) << "size (pix)" << mBaseSize << "dpi X" << mBaseResX << "dpi Y" << mBaseResY;
     }
-
-    mBaseSize = img->size();
-    mBaseResX = DPM_TO_DPI(img->dotsPerMeterX());
-    mBaseResY = DPM_TO_DPI(img->dotsPerMeterY());
-    qCDebug(DESTINATION_LOG) << "size (pix)" << mBaseSize << "dpi X" << mBaseResX << "dpi Y" << mBaseResY;
 }
 
 
 void MultipageTiffWriter::setOutputFile(const QString &fileName)
 {
     mFileName = QFile::encodeName(fileName);
+    mErrorString.clear();
+}
+
+
+static int tiffErrorHandler(TIFF *tiff, void *userData, const char *mod, const char *fmt, va_list ap)
+{
+    MultipageTiffWriter *that = static_cast<MultipageTiffWriter *>(userData);
+
+    QString msg;
+    if (mod!=nullptr) msg = QString("[%1] ").arg(mod);
+    msg += QString::vasprintf(fmt, ap);
+
+    qCWarning(DESTINATION_LOG) << "TIFF error," << msg;
+    that->setError(msg);
+    return (1);
+}
+
+
+static int tiffWarningHandler(TIFF *tiff, void *userData, const char *mod, const char *fmt, va_list ap)
+{
+    MultipageTiffWriter *that = static_cast<MultipageTiffWriter *>(userData);
+
+    QString msg;
+    if (mod!=nullptr) msg = QString("[%1] ").arg(mod);
+    msg += QString::vasprintf(fmt, ap);
+
+    qCWarning(DESTINATION_LOG) << "TIFF warning," << msg;
+    that->setError(msg);
+    return (1);
 }
 
 
@@ -471,14 +497,22 @@ bool MultipageTiffWriter::startPrint()
 {
     if (mBaseSize.isNull()) return (false);		// no reference image
 
+#if TIFFLIB_VERSION>=20221213
+    TIFFOpenOptions *opts = TIFFOpenOptionsAlloc();
+    TIFFOpenOptionsSetErrorHandlerExtR(opts, &tiffErrorHandler, this);
+    TIFFOpenOptionsSetWarningHandlerExtR(opts, &tiffWarningHandler, this);
+    mTiff = TIFFOpenExt(mFileName.constData(), "w", opts);
+    TIFFOpenOptionsFree(opts);
+#else
+    qCDebug(DESTINATION_LOG) << "TIFF library very old, no message handling";
     mTiff = TIFFOpen(mFileName.constData(), "w");
+    setError(i18n("(see stderr for the error message)"));
+#endif
+
     if (mTiff==nullptr)
     {
-        KMessageBox::error(nullptr,
-                           xi18nc("@info", "Cannot write TIFF file <filename>%1</filename><nl/><message>%2</message>",
-                                  mFileName,
-                                  i18n("(see stderr for the error message")),
-                           i18n("Cannot Write TIFF File"));
+        KMessageBox::error(nullptr, xi18nc("@info", "Cannot create the TIFF file <filename>%1</filename><nl/><message>%2</message>",
+                                           mFileName, mErrorString), i18n("Cannot create TIFF"));
         return (false);
     }
 
@@ -541,6 +575,17 @@ void MultipageTiffWriter::printImage(const QImage *img)
 void MultipageTiffWriter::endPrint()
 {
     TIFFClose(mTiff);
+#if TIFFLIB_VERSION>=20221213
+    if (!mErrorString.isEmpty())
+    {
+        // An error or warning was reported by one of the TIFF library calls.
+        // Should not happen, because the write is to a temporary file and
+        // being able to create it was checked in startPrint() above.
+        KMessageBox::error(nullptr, xi18nc("@info", "Possible error writing the TIFF file <filename>%1</filename><nl/><message>%2</message>",
+                                           mFileName, mErrorString), i18n("Error writing TIFF"));
+    }
+#endif
+
     mTiff = nullptr;
 }
 
