@@ -29,17 +29,6 @@ else (LIBPAPER_LIB AND LIBPAPER_HDR)
   message(STATUS "libpaper library not found, using built-in list of paper sizes")
 endif (LIBPAPER_LIB AND LIBPAPER_HDR)
 
-############### Support for multi-page TIFF images ###############
-
-include(FindTIFF)
-if (TIFF_FOUND)
-  message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
-  message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
-  set(HAVE_TIFF true)
-else (TIFF_FOUND)
-  message(STATUS "TIFF library not found, no multi-page image support")
-endif (TIFF_FOUND)
-
 ########### subdirectories ###############
 
 add_subdirectory(pics)
@@ -57,10 +46,6 @@ if (HAVE_LIBPAPER)
   get_filename_component(LIBPAPER_INCLUDES ${LIBPAPER_HDR} PATH)
   include_directories(${LIBPAPER_INCLUDES})
 endif (HAVE_LIBPAPER)
-if (HAVE_TIFF)
-  add_definitions(-DHAVE_TIFF)
-  include_directories(${TIFF_INCLUDE_DIR})
-endif (HAVE_TIFF)
 
 ########### I18N ###############
 

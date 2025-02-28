@@ -114,6 +114,19 @@ else (SANE_FOUND)
   message(SEND_ERROR "libkookascan needs SANE (http://www.sane-project.org) - install package or specify location of sane-config(1) with SANECONFIG_BIN")
 endif (SANE_FOUND)
 
+############### Support for multi-page TIFF images ###############
+
+include(FindTIFF)
+if (TIFF_FOUND)
+  message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
+  message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
+  set(HAVE_TIFF true)
+  add_definitions(-DHAVE_TIFF)
+  include_directories(${TIFF_INCLUDE_DIR})
+else (TIFF_FOUND)
+  message(STATUS "TIFF library not found, no multi-page image support")
+endif (TIFF_FOUND)
+
 ############### Common build flags ###############
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
