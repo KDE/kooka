@@ -649,7 +649,7 @@ void KScanDevice::showOptions()
 // Deduce the scanned image type from the SANE parameters.
 // The logic is very similar to ScanImage::imageType(),
 // except that the image type cannot be LowColour.
-static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
+static ScanImage::ImageType getScanFormat(const SANE_Parameters *p)
 {
     if (p==nullptr) return (ScanImage::None);
 
@@ -676,19 +676,27 @@ static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
 }
 
 
-//  Create a new image to receive the scan or preview
-KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
+// Get the QImage format to be used for a scan image type.
+static QImage::Format getImageFormat(ScanImage::ImageType stype)
 {
-    QImage::Format fmt;
-    ScanImage::ImageType itype = getImageFormat(p);	// what format should this be?
-    switch (itype)					// choose QImage option for that
+    switch (stype)					// choose QImage option for that
     {
 default:
-case ScanImage::None:		return (KScanDevice::ParamError);
-case ScanImage::BlackWhite:	fmt = QImage::Format_Mono;		break;
-case ScanImage::Greyscale:	fmt = QImage::Format_Indexed8;		break;
-case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
+case ScanImage::None:		return (QImage::Format_Invalid);
+case ScanImage::BlackWhite:	return (QImage::Format_Mono);
+case ScanImage::Greyscale:
+case ScanImage::LowColour:	return (QImage::Format_Indexed8);
+case ScanImage::HighColour:	return (QImage::Format_RGB32);
     }
+}
+
+
+//  Create a new image to receive the scan or preview.
+KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
+{
+    const ScanImage::ImageType itype = getScanFormat(p);
+    const QImage::Format fmt = getImageFormat(itype);
+    if (fmt==QImage::Format_Invalid) return (KScanDevice::ParamError);
 
     // mScanImage is the master allocated image for the result of the scan.
     // Once the QSharedPointer has been reset() to point to the image, it
@@ -1067,7 +1075,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 
             if (mSaneParameters.lines>=1 && mSaneParameters.pixels_per_line>0)
             {						// check for a plausible image
-                fmt = getImageFormat(&mSaneParameters);	// find format it will have
+                fmt = getScanFormat(&mSaneParameters);	// find format it will have
                 if (fmt==ScanImage::None)		// scan format not recognised?
                 {
                     stat = KScanDevice::ParamError;	// no point starting scan
@@ -1583,6 +1591,17 @@ KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat, int scan
                 qCDebug(LIBKOOKASCAN_LOG) << "original image size" << mScanImage->size();
                 mScanImage->transform(r);
                 qCDebug(LIBKOOKASCAN_LOG) << "new image size" << mScanImage->size();
+            }
+        }
+
+        if (mTestFormat!=ScanImage::None)		// force an image format
+        {
+            const QImage::Format newFmt = getImageFormat(mTestFormat);
+            if (newFmt!=QImage::Format_Invalid && newFmt!=mScanImage->format())
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "force converting from format" << mScanImage->format() << "->" << newFmt;
+                mScanImage->convertTo(newFmt, Qt::NoOpaqueDetection);
+                mScanImage->setImageType(mTestFormat);
             }
         }
 
