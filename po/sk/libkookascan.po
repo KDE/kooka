@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2025-03-01 00:41+0000\n"
 "PO-Revision-Date: 2016-09-01 11:24+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -303,7 +303,7 @@ msgid "Reset this setting to its standard value, %1"
 msgstr ""
 "Ak chcete obnoviť východziu hodnotu vlastnosti, kliknite na toto tlačítko"
 
-#: kscancontrols.cpp:419
+#: kscancontrols.cpp:426
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -313,83 +313,83 @@ msgstr ""
 msgid "No scanner selected"
 msgstr "Nie je vybraný žiadny dokument"
 
-#: kscandevice.cpp:1380
+#: kscandevice.cpp:1399
 #, fuzzy, kde-format
 msgid "Default startup configuration"
 msgstr "Zakázať kontrolu nastavenia &systému pri štarte"
 
-#: kscandevice.cpp:1480
+#: kscandevice.cpp:1499
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr ""
 
-#: kscandevice.cpp:1481
+#: kscandevice.cpp:1500
 #, fuzzy, kde-format
 msgid "Scanner Authentication"
 msgstr "Prihlásenie k hostiteľovi:"
 
-#: kscandevice.cpp:1525
+#: kscandevice.cpp:1544
 #, kde-format
 msgid "OK"
 msgstr "OK"
 
-#: kscandevice.cpp:1526
+#: kscandevice.cpp:1545
 #, fuzzy, kde-format
 msgid "No device"
 msgstr "Nie je nastavené žiadne zariadenie."
 
-#: kscandevice.cpp:1527
+#: kscandevice.cpp:1546
 #, kde-format
 msgid "Bad parameter"
 msgstr "Zlý parameter"
 
-#: kscandevice.cpp:1528
+#: kscandevice.cpp:1547
 #, fuzzy, kde-format
 msgid "Cannot open device"
 msgstr "Nedá sa otvoriť zariadenie skenera."
 
-#: kscandevice.cpp:1529
+#: kscandevice.cpp:1548
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr ""
 
-#: kscandevice.cpp:1530
+#: kscandevice.cpp:1549
 #, fuzzy, kde-format
 msgid "Error while scanning"
 msgstr "Chyba pri kontrole dát: %1"
 
-#: kscandevice.cpp:1531
+#: kscandevice.cpp:1550
 #, fuzzy, kde-format
 msgid "Empty picture"
 msgstr "Rámček obrázku"
 
-#: kscandevice.cpp:1532
+#: kscandevice.cpp:1551
 #, kde-format
 msgid "Out of memory"
 msgstr "Nedostatok pamäte"
 
-#: kscandevice.cpp:1533
+#: kscandevice.cpp:1552
 #, fuzzy, kde-format
 msgid "Needs reload"
 msgstr "Obnoviť všetko"
 
-#: kscandevice.cpp:1534
+#: kscandevice.cpp:1553
 #, kde-format
 msgid "Cancelled"
 msgstr "Zrušené"
 
-#: kscandevice.cpp:1535
+#: kscandevice.cpp:1554
 #, kde-format
 msgid "Not active"
 msgstr "Neaktívny"
 
-#: kscandevice.cpp:1536
+#: kscandevice.cpp:1555
 #, kde-format
 msgid "Not supported"
 msgstr "Nepodporované"
 
-#: kscandevice.cpp:1537
+#: kscandevice.cpp:1556
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Neznámy stav %1"
