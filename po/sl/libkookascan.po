@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2025-03-01 00:41+0000\n"
 "PO-Revision-Date: 2024-05-17 07:11+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -326,7 +326,7 @@ msgstr "(neznano)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Ponovno nastavite to nastavitev na njeno standardno vrednost, %1"
 
-#: kscancontrols.cpp:419
+#: kscancontrols.cpp:426
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "Slikovne datoteke PNM (*.pnm *.pbm *.pgm *.ppm)"
@@ -336,83 +336,83 @@ msgstr "Slikovne datoteke PNM (*.pnm *.pbm *.pgm *.ppm)"
 msgid "No scanner selected"
 msgstr "Ni izbranega optičnega bralnika"
 
-#: kscandevice.cpp:1380
+#: kscandevice.cpp:1399
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Privzeta nastavitev ob zagonu"
 
-#: kscandevice.cpp:1480
+#: kscandevice.cpp:1499
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "Optični bralnik<nl/><icode>%1</icode><nl/>zahteva overitev."
 
-#: kscandevice.cpp:1481
+#: kscandevice.cpp:1500
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Overitev na optičnem bralniku"
 
-#: kscandevice.cpp:1525
+#: kscandevice.cpp:1544
 #, kde-format
 msgid "OK"
 msgstr "V redu"
 
-#: kscandevice.cpp:1526
+#: kscandevice.cpp:1545
 #, kde-format
 msgid "No device"
 msgstr "Ni naprave"
 
-#: kscandevice.cpp:1527
+#: kscandevice.cpp:1546
 #, kde-format
 msgid "Bad parameter"
 msgstr "Slab parameter"
 
-#: kscandevice.cpp:1528
+#: kscandevice.cpp:1547
 #, kde-format
 msgid "Cannot open device"
 msgstr "Ni mogoče odpreti naprave"
 
-#: kscandevice.cpp:1529
+#: kscandevice.cpp:1548
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "ni uspela sane_control_option()"
 
-#: kscandevice.cpp:1530
+#: kscandevice.cpp:1549
 #, kde-format
 msgid "Error while scanning"
 msgstr "Napaka ob skeniranju"
 
-#: kscandevice.cpp:1531
+#: kscandevice.cpp:1550
 #, kde-format
 msgid "Empty picture"
 msgstr "Prazna slika"
 
-#: kscandevice.cpp:1532
+#: kscandevice.cpp:1551
 #, kde-format
 msgid "Out of memory"
 msgstr "Pomanjkanje pomnilnika"
 
-#: kscandevice.cpp:1533
+#: kscandevice.cpp:1552
 #, kde-format
 msgid "Needs reload"
 msgstr "Potreba po ponovnem nalaganju"
 
-#: kscandevice.cpp:1534
+#: kscandevice.cpp:1553
 #, kde-format
 msgid "Cancelled"
 msgstr "Preklicano"
 
-#: kscandevice.cpp:1535
+#: kscandevice.cpp:1554
 #, kde-format
 msgid "Not active"
 msgstr "Ni dejavno"
 
-#: kscandevice.cpp:1536
+#: kscandevice.cpp:1555
 #, kde-format
 msgid "Not supported"
 msgstr "Ni podprto"
 
-#: kscandevice.cpp:1537
+#: kscandevice.cpp:1556
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Neznan status %1"

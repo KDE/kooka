@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2025-03-01 00:41+0000\n"
 "PO-Revision-Date: 2025-01-14 16:30+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -342,7 +342,7 @@ msgstr "(Inconnu)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Réinitialiser ce réglage à sa valeur par défaut, %1"
 
-#: kscancontrols.cpp:419
+#: kscancontrols.cpp:426
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "Fichiers d'image PNM (*.pnm *.pbm *.pgm *.ppm)"
@@ -352,12 +352,12 @@ msgstr "Fichiers d'image PNM (*.pnm *.pbm *.pgm *.ppm)"
 msgid "No scanner selected"
 msgstr "Pas de scanner sélectionné"
 
-#: kscandevice.cpp:1380
+#: kscandevice.cpp:1399
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Configuration de démarrage par défaut"
 
-#: kscandevice.cpp:1480
+#: kscandevice.cpp:1499
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
@@ -365,72 +365,72 @@ msgstr ""
 "Le périphérique de numérisation<nl/><icode>%1</icode><nl/>nécessite une "
 "authentification."
 
-#: kscandevice.cpp:1481
+#: kscandevice.cpp:1500
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Authentification du scanner"
 
-#: kscandevice.cpp:1525
+#: kscandevice.cpp:1544
 #, kde-format
 msgid "OK"
 msgstr "Ok"
 
-#: kscandevice.cpp:1526
+#: kscandevice.cpp:1545
 #, kde-format
 msgid "No device"
 msgstr "Pas de périphérique"
 
-#: kscandevice.cpp:1527
+#: kscandevice.cpp:1546
 #, kde-format
 msgid "Bad parameter"
 msgstr "Paramètre incorrect"
 
-#: kscandevice.cpp:1528
+#: kscandevice.cpp:1547
 #, kde-format
 msgid "Cannot open device"
 msgstr "Impossible d'ouvrir le périphérique"
 
-#: kscandevice.cpp:1529
+#: kscandevice.cpp:1548
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() a échoué"
 
-#: kscandevice.cpp:1530
+#: kscandevice.cpp:1549
 #, kde-format
 msgid "Error while scanning"
 msgstr "Erreur pendant la numérisation"
 
-#: kscandevice.cpp:1531
+#: kscandevice.cpp:1550
 #, kde-format
 msgid "Empty picture"
 msgstr "Image vide"
 
-#: kscandevice.cpp:1532
+#: kscandevice.cpp:1551
 #, kde-format
 msgid "Out of memory"
 msgstr "Mémoire insuffisante"
 
-#: kscandevice.cpp:1533
+#: kscandevice.cpp:1552
 #, kde-format
 msgid "Needs reload"
 msgstr "Nécessite un rechargement"
 
-#: kscandevice.cpp:1534
+#: kscandevice.cpp:1553
 #, kde-format
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: kscandevice.cpp:1535
+#: kscandevice.cpp:1554
 #, kde-format
 msgid "Not active"
 msgstr "Non actif"
 
-#: kscandevice.cpp:1536
+#: kscandevice.cpp:1555
 #, kde-format
 msgid "Not supported"
 msgstr "Non pris en charge"
 
-#: kscandevice.cpp:1537
+#: kscandevice.cpp:1556
 #, kde-format
 msgid "Unknown status %1"
 msgstr "État inconnu %1"
