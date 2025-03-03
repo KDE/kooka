@@ -707,6 +707,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
             QMimeType mime = db.mimeTypeForFile(virtfile);
             if (!(mime.inherits("image/x-portable-bitmap") ||
                   mime.inherits("image/x-portable-greymap") ||
+                  mime.inherits("image/x-portable-anymap") ||
                   mime.inherits("image/x-portable-pixmap"))) {
                 KMessageBox::error(this, xi18nc("@info", "SANE Debug can only read PNM files.<nl/>"
                                               "The specified file is type <icode>%1</icode>.", mime.name()));
