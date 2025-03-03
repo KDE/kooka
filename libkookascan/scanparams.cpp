@@ -512,11 +512,17 @@ void ScanParams::initStartupArea(bool dontRestore)
         applyRect(QRect());				// set maximum scan area
         return;
     }
+
     // set scan area from saved
-    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
-    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
-    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
-    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
+    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X, false);
+    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y, false);
+    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X, false);
+    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y, false);
+
+    // The built in "pnm" device does not support a settable scan area.
+    // If the first option does not exist, assume that the others do
+    // not exist either.
+    if (tl_x==nullptr) return;
 
     QRect rect;
     int val1, val2;
@@ -528,6 +534,7 @@ void ScanParams::initStartupArea(bool dontRestore)
 
     mAreaSelect->selectSize(rect);			// set selector to match
 }
+
 
 void ScanParams::createNoScannerMsg(bool galleryMode)
 {
@@ -953,10 +960,19 @@ void ScanParams::applyRect(const QRect &rect)
 {
     qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect;
 
-    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
-    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
-    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
-    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
+    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X, false);
+    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y, false);
+    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X, false);
+    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y, false);
+
+    // The built in "pnm" device does not support a settable scan area.
+    // If the first option does not exist, assume that the others do
+    // not exist either.
+    if (tl_x==nullptr)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Scanner does not support area setting";
+        return;
+    }
 
     double min1, max1;
     double min2, max2;
