@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-02-14 17:29+0100\n"
+"PO-Revision-Date: 2025-03-04 16:26+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -187,6 +187,8 @@ msgstr "Starta OCR"
 #, kde-format
 msgid "Start the Optical Character Recognition process"
 msgstr ""
+"Starta le processo de Recognition de Character Optic (OCR-Optical Character "
+"Recognition)"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
 #, kde-format
@@ -197,6 +199,8 @@ msgstr "Stoppa OCR"
 #, kde-format
 msgid "Stop the Optical Character Recognition process"
 msgstr ""
+"Stoppa le processo de Recognition de Character Optic (OCR-Optical Character "
+"Recognition)"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:146
 #, kde-format
@@ -206,7 +210,7 @@ msgstr "Configura"
 #: ../plugins/ocr/abstractocrdialogue.cpp:149
 #, kde-format
 msgid "Optical Character Recognition using %1"
-msgstr ""
+msgstr "Recognition de Character Optic (OCR) usante %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:192
 #, kde-format
@@ -273,22 +277,22 @@ msgstr ""
 #: ../plugins/ocr/abstractocrdialogue.cpp:289
 #, kde-format
 msgid "Use the system spell configuration"
-msgstr ""
+msgstr "Usa le configuration de systema de orthographia "
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:291
 #, kde-format
 msgid "Use custom spell configuration"
-msgstr ""
+msgstr "Usa le configuration personalisate de orthographia "
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:293
 #, kde-format
 msgid "Custom Spell Configuration..."
-msgstr ""
+msgstr "Configuration personalisate de orthographia ..."
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:303
 #, kde-format
 msgid "Start interactive spell check"
-msgstr ""
+msgstr "Starta verifica de orthographia interactive"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:309
 #, kde-format
@@ -315,7 +319,7 @@ msgstr "Retene files temporanee"
 #: ../plugins/ocr/abstractocrdialogue.cpp:346
 #, kde-format
 msgid "Verbose message output"
-msgstr ""
+msgstr "Exito de message verbose"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:351
 #, kde-format
@@ -325,7 +329,7 @@ msgstr "Cribrar"
 #: ../plugins/ocr/abstractocrdialogue.cpp:352
 #, kde-format
 msgid "OCR Debugging"
-msgstr ""
+msgstr "Cribrar (debugging) de OCR"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:408
 #, kde-format
@@ -345,12 +349,12 @@ msgstr "Selection: %1"
 #: ../plugins/ocr/abstractocrengine.cpp:107
 #, kde-format
 msgid "OCR is already in progress"
-msgstr ""
+msgstr "OCR ja es in execution"
 
 #: ../plugins/ocr/abstractocrengine.cpp:119
 #, kde-format
 msgid "OCR could not be started."
-msgstr ""
+msgstr "OCR non poteva esser startate."
 
 #: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
@@ -360,17 +364,17 @@ msgstr ""
 #: ../plugins/ocr/abstractocrengine.cpp:122
 #, kde-format
 msgid "OCR Setup Error"
-msgstr ""
+msgstr "Error de configuration de OCR"
 
 #: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
-msgstr ""
+msgstr "Configura OCR..."
 
 #: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
 msgid "The OCR process was stopped"
-msgstr ""
+msgstr "Le processo de OCR esseva stoppate"
 
 #: ../plugins/ocr/abstractocrengine.cpp:250
 #, kde-kuit-format
@@ -387,7 +391,7 @@ msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 #: ../plugins/ocr/abstractocrengine.cpp:264
 #, kde-format
 msgid "OCR Temporary Files"
-msgstr ""
+msgstr "Files temporanee de OCR"
 
 #: ../plugins/ocr/abstractocrengine.cpp:435
 #, kde-kuit-format
@@ -445,7 +449,7 @@ msgstr ""
 #: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
 msgid "OCR Command Failed"
-msgstr ""
+msgstr "Commando de OCR falleva"
 
 #: ../plugins/ocr/abstractocrengine.cpp:611
 #, kde-kuit-format
@@ -471,7 +475,7 @@ msgstr "Percurso de Executabile:"
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
 msgid "Enter or select the path..."
-msgstr ""
+msgstr "Inserta o selige le percurso..."
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
@@ -507,18 +511,18 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
 #, kde-format
 msgid "Czech Republic, Slovakia"
-msgstr ""
+msgstr "Republica Tchec,Slovachia"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
 #, kde-format
 msgid "Great Britain, USA"
-msgstr ""
+msgstr "Grande Britannia, S.U.A."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
 #, kde-format
 msgid "European Countries"
-msgstr ""
+msgstr "Paises Europee"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
@@ -544,7 +548,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
 #, kde-format
 msgid "Font Type Selection"
-msgstr ""
+msgstr "Selection de Typo de Font"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
 #, kde-format
@@ -574,12 +578,12 @@ msgstr "Modificator de OCR"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
 msgid "Enable automatic noise reduction"
-msgstr ""
+msgstr "Habilita reduction de ruito normal"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
 #, kde-format
 msgid "Enable automatic scaling"
-msgstr ""
+msgstr "Habilita scalar automatic"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
 #, kde-format
@@ -624,7 +628,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
 msgid "KADMOS Installation Problem"
-msgstr ""
+msgstr "Problema de installation de KADMOS"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
 #, kde-format
@@ -637,7 +641,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
 msgid "KADMOS Failure"
-msgstr ""
+msgstr "Fallimento de KADMOS"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
@@ -652,17 +656,17 @@ msgstr ""
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
 #, kde-format
 msgid "Layout Detection"
-msgstr ""
+msgstr "Discoperta de Disposition"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
 #, kde-format
 msgid "Column Detection"
-msgstr ""
+msgstr "Discoperta de Columna"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
 #, kde-format
 msgid "Full Layout Detection"
-msgstr ""
+msgstr "Discoperta de Disposition Plen"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
@@ -686,7 +690,7 @@ msgstr "File <filename>%1</filename> non existe."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
-msgstr ""
+msgstr "File <filename>%1</filename> non legibile"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
@@ -907,7 +911,7 @@ msgstr "Selige formato..."
 #: formatdialog.cpp:436
 #, kde-format
 msgid "No format selected."
-msgstr ""
+msgstr "Necun formato seligite."
 
 #: formatdialog.cpp:470
 #, kde-format
@@ -1216,7 +1220,7 @@ msgstr "Grandor de Imagine:"
 #, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr ""
+msgstr "%1 x %2 pix"
 
 #: imgprintdialog.cpp:227
 #, kde-format
@@ -1312,7 +1316,7 @@ msgstr ""
 #: imgsaver.cpp:366
 #, kde-format
 msgid "Save OK"
-msgstr ""
+msgstr "Salveguarda OK"
 
 #: imgsaver.cpp:368
 #, kde-format
@@ -1477,7 +1481,7 @@ msgstr "Rota in senso horari"
 #: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
-msgstr ""
+msgstr "Rota 180 Grados"
 
 #: kooka.cpp:225
 #, kde-format
@@ -1507,7 +1511,7 @@ msgstr "Dele imagine"
 #: kooka.cpp:255 kooka.cpp:538
 #, kde-format
 msgid "Rename Image"
-msgstr ""
+msgstr "Renomina Image"
 
 #: kooka.cpp:261 kooka.cpp:536
 #, kde-format
@@ -1989,12 +1993,12 @@ msgstr ""
 #: kookaview.cpp:267
 #, kde-format
 msgid "Scan Preview"
-msgstr ""
+msgstr "Scande imagine de vista preliminar"
 
 #: kookaview.cpp:277
 #, kde-format
 msgid "OCR results will appear here"
-msgstr ""
+msgstr "Resultatos de OCR apparera ci"
 
 #: kookaview.cpp:286
 #, kde-format
@@ -2042,7 +2046,7 @@ msgstr ""
 #: kookaview.cpp:646
 #, kde-format
 msgid "No selection"
-msgstr ""
+msgstr "Necun Selection"
 
 #: kookaview.cpp:650
 #, kde-format
@@ -2052,7 +2056,7 @@ msgstr "Directorio de galleria %1"
 #: kookaview.cpp:650
 #, kde-format
 msgid "Gallery image %1"
-msgstr ""
+msgstr "Imagine de Galeria  %1"
 
 #: kookaview.cpp:715
 #, kde-format
