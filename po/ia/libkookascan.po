@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kooka package.
 #
-# SPDX-FileCopyrightText: 2023, 2024 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2023, 2024, 2025 giovanni <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2024-07-25 15:42+0200\n"
+"PO-Revision-Date: 2025-03-11 11:53+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -53,13 +53,13 @@ msgstr ""
 #: adddevicedialog.cpp:77
 #, kde-format
 msgid "Scanner device:"
-msgstr ""
+msgstr "Dispositivo de Scander:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Usator specificate"
 
 #: adddevicedialog.cpp:82
 #, kde-format
@@ -129,25 +129,25 @@ msgstr "<subtitle>Auto selige</subtitle>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the grayscale value of the selected threshold"
-msgstr ""
+msgstr "Isto es levalor de scala de gris del limine selectionate"
 
 #: autoselectbar.cpp:90
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform the auto-detection again"
-msgstr ""
+msgstr "Executa novemente discoperta automatic"
 
 #: autoselectbar.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Advanced settings for auto-detection"
-msgstr ""
+msgstr "Preferentias avantiate per discoperta automatic"
 
 #: autoselectdialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr ""
+msgstr "Preferentias de autoseliger"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -167,22 +167,22 @@ msgstr "Selige"
 #: deviceselector.cpp:59
 #, kde-format
 msgid "Select Scan Device"
-msgstr ""
+msgstr "Selectiona Dispositivo de Scander"
 
 #: deviceselector.cpp:71
 #, kde-format
 msgid "Available Scanners:"
-msgstr ""
+msgstr "Dispositivos de scander (scanners) disponibile:"
 
 #: deviceselector.cpp:82
 #, kde-format
 msgid "Always use this device at startup"
-msgstr ""
+msgstr "Usa semprte iste dispositivo al initio"
 
 #: gammadialog.cpp:53
 #, kde-format
 msgid "Edit Gamma Table"
-msgstr ""
+msgstr "Modifica Tabula Gamma"
 
 #: gammadialog.cpp:61
 #, kde-format
@@ -202,12 +202,12 @@ msgstr "Gamma"
 #: gammadialog.cpp:95
 #, kde-format
 msgid "This gamma table is passed to the scanner hardware."
-msgstr ""
+msgstr "Iste tabula gamma es passate al hardware del scanner."
 
 #: imagecanvas.cpp:785
 #, kde-format
 msgid "Fit Best"
-msgstr ""
+msgstr "Adapta Melior"
 
 #: imagecanvas.cpp:786
 #, kde-format
@@ -297,33 +297,33 @@ msgstr "(Incognite)"
 #: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
-msgstr ""
+msgstr "Reassigna iste preferentia a su valor standard, %1"
 
 #: kscancontrols.cpp:426
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "Files de Imagine PNM  (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
-msgstr ""
+msgstr "Nulle scanner seligite"
 
 #: kscandevice.cpp:1399
 #, kde-format
 msgid "Default startup configuration"
-msgstr ""
+msgstr "Configuration initial (de startar) predefinite"
 
 #: kscandevice.cpp:1499
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
-msgstr ""
+msgstr "Le scanner<nl/><icode>%1</icode><nl/>require authentication."
 
 #: kscandevice.cpp:1500
 #, kde-format
 msgid "Scanner Authentication"
-msgstr ""
+msgstr "Authentication de Scanner"
 
 #: kscandevice.cpp:1544
 #, kde-format
@@ -333,22 +333,22 @@ msgstr "OK"
 #: kscandevice.cpp:1545
 #, kde-format
 msgid "No device"
-msgstr ""
+msgstr "Necun dispositivo"
 
 #: kscandevice.cpp:1546
 #, kde-format
 msgid "Bad parameter"
-msgstr ""
+msgstr "Mal parametro"
 
 #: kscandevice.cpp:1547
 #, kde-format
 msgid "Cannot open device"
-msgstr ""
+msgstr "Nonpote aperir dispositivo"
 
 #: kscandevice.cpp:1548
 #, kde-format
 msgid "sane_control_option() failed"
-msgstr ""
+msgstr "sane_control_option() falleva"
 
 #: kscandevice.cpp:1549
 #, kde-format
@@ -358,7 +358,7 @@ msgstr ""
 #: kscandevice.cpp:1550
 #, kde-format
 msgid "Empty picture"
-msgstr ""
+msgstr "Pictura vacue"
 
 #: kscandevice.cpp:1551
 #, kde-format
@@ -368,7 +368,7 @@ msgstr "Foras de Memoria"
 #: kscandevice.cpp:1552
 #, kde-format
 msgid "Needs reload"
-msgstr ""
+msgstr "Il necessita recargar"
 
 #: kscandevice.cpp:1553
 #, kde-format
@@ -472,12 +472,12 @@ msgstr "Dispositivo incognite '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy (Accesso de Scander Nunc Facile)"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Bibliotheca de driver e accesso de scanner"
 
 #: scanglobal.cpp:144
 #, kde-format
@@ -487,7 +487,7 @@ msgstr "LibTIFF"
 #: scanglobal.cpp:145
 #, kde-format
 msgid "TIFF image format library"
-msgstr ""
+msgstr "Bibliotheca de formato de imagine TIFF"
 
 #: scanglobal.cpp:158
 #, kde-format
@@ -497,7 +497,7 @@ msgstr "libpaper"
 #: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Bibliotheca de configuration de grandor de papiro"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -512,22 +512,22 @@ msgstr "Il falleva cargar imagine"
 #: scanimage.cpp:162
 #, kde-format
 msgid "Failed to open TIFF file"
-msgstr ""
+msgstr "Falleva a aperir file TIFF"
 
 #: scanimage.cpp:169
 #, kde-format
 msgid "Failed to read TIFF directory"
-msgstr ""
+msgstr "Falleva a leger directorio TIFF"
 
 #: scanimage.cpp:199
 #, kde-format
 msgid "Failed to read TIFF image"
-msgstr ""
+msgstr "FAlleva a leger imagine TIFF"
 
 #: scanimage.cpp:229
 #, kde-format
 msgid "TIFF not supported"
-msgstr ""
+msgstr "TIFF non supportate"
 
 #: scanparams.cpp:141
 #, kde-kuit-format
@@ -610,32 +610,32 @@ msgstr ""
 #: scanparams.cpp:296
 #, kde-format
 msgid "Reading mode:"
-msgstr ""
+msgstr "Modo de leger:"
 
 #: scanparams.cpp:414
 #, kde-format
 msgid "Default (from scan settings)"
-msgstr ""
+msgstr "Predefinite (ex prefrentias de scander)"
 
 #: scanparams.cpp:415
 #, kde-format
 msgid "Black/white bitmap"
-msgstr ""
+msgstr "bitmap Nigre/Blanc"
 
 #: scanparams.cpp:416
 #, kde-format
 msgid "Grey scale"
-msgstr ""
+msgstr "Scala de gris"
 
 #: scanparams.cpp:417
 #, kde-format
 msgid "Low colour"
-msgstr ""
+msgstr "Color basse"
 
 #: scanparams.cpp:418
 #, kde-format
 msgid "High colour"
-msgstr ""
+msgstr "Color Alte"
 
 #: scanparams.cpp:428
 #, kde-format
@@ -645,7 +645,7 @@ msgstr ""
 #: scanparams.cpp:481
 #, kde-format
 msgid "Edit Gamma Table..."
-msgstr ""
+msgstr "Modifica Tabula Gamma..."
 
 #: scanparams.cpp:553
 #, kde-kuit-format
@@ -826,7 +826,7 @@ msgstr "Grandor complete"
 #: scansizeselector.cpp:125
 #, kde-format
 msgid "(No selection)"
-msgstr ""
+msgstr "(Necun Selection)"
 
 #: scansizeselector.cpp:143
 #, kde-format

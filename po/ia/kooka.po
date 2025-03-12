@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-04 16:26+0100\n"
+"PO-Revision-Date: 2025-03-11 11:39+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -971,12 +971,12 @@ msgstr ""
 #: galleryroot.cpp:187
 #, kde-format
 msgid "New Gallery Created"
-msgstr ""
+msgstr "NOve Galeria Create"
 
 #: galleryroot.cpp:201
 #, kde-format
 msgid "Old Gallery Exists"
-msgstr ""
+msgstr "Vetere Galeria Existe"
 
 #: imagetransform.cpp:59
 #, kde-format
@@ -1426,17 +1426,17 @@ msgstr "%1 <filename>%3</filename><nl/>%2"
 #: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
-msgstr ""
+msgstr "Scander de KDE"
 
 #: kooka.cpp:140
 #, kde-format
 msgid "Scale to Width"
-msgstr ""
+msgstr "Scala in largessa"
 
 #: kooka.cpp:151
 #, kde-format
 msgid "Scale to Height"
-msgstr ""
+msgstr "Scala in altessa"
 
 #: kooka.cpp:160
 #, kde-format
@@ -1446,17 +1446,17 @@ msgstr "Grandor original"
 #: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
-msgstr ""
+msgstr "Assigna Zoom..."
 
 #: kooka.cpp:172
 #, kde-format
 msgid "Keep Zoom Setting"
-msgstr ""
+msgstr "Mantene preferentia de Zoom"
 
 #: kooka.cpp:180
 #, kde-format
 msgid "New Image From Selection"
-msgstr ""
+msgstr "Nove Imagine ex Selection"
 
 #: kooka.cpp:185
 #, kde-format
@@ -1516,7 +1516,7 @@ msgstr "Renomina Image"
 #: kooka.cpp:261 kooka.cpp:536
 #, kde-format
 msgid "Unload Image"
-msgstr ""
+msgstr "Discarga Imagine"
 
 #: kooka.cpp:268
 #, kde-format
@@ -1526,12 +1526,12 @@ msgstr "Proprietates..."
 #: kooka.cpp:277
 #, kde-format
 msgid "Select Scan Device..."
-msgstr ""
+msgstr "Selectiona Dispositivo de Scander..."
 
 #: kooka.cpp:281 kookaview.cpp:551
 #, kde-format
 msgid "Add Scan Device..."
-msgstr ""
+msgstr "Adde dispositivo de Scander..."
 
 #: kooka.cpp:287
 #, kde-format
@@ -1546,7 +1546,7 @@ msgstr "Initia Scansion"
 #: kooka.cpp:297
 #, kde-format
 msgid "Scan Presets..."
-msgstr ""
+msgstr "Preregulationes de Scander..."
 
 #: kooka.cpp:302
 #, kde-format
@@ -1561,7 +1561,7 @@ msgstr "Image OCR..."
 #: kooka.cpp:314
 #, kde-format
 msgid "OCR Selection..."
-msgstr ""
+msgstr "Selection de OCR..."
 
 #: kooka.cpp:318
 #, kde-format
@@ -1571,7 +1571,7 @@ msgstr "File de OCR"
 #: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
-msgstr ""
+msgstr "Salveguarda Texto de Exito de OCR..."
 
 #: kooka.cpp:327
 #, kde-format
@@ -2024,7 +2024,7 @@ msgstr ""
 #: kookaview.cpp:521
 #, kde-format
 msgid "Add Scan Device"
-msgstr ""
+msgstr "Adde dispositivo de Scander"
 
 #: kookaview.cpp:541
 #, kde-kuit-format
@@ -2041,7 +2041,7 @@ msgstr ""
 #: kookaview.cpp:587
 #, kde-format
 msgid "No scanner connected"
-msgstr ""
+msgstr "Nulle dispositivo de scander (scanner) connectite"
 
 #: kookaview.cpp:646
 #, kde-format
@@ -2061,12 +2061,12 @@ msgstr "Imagine de Galeria  %1"
 #: kookaview.cpp:715
 #, kde-format
 msgid "Starting OCR on selection"
-msgstr ""
+msgstr "Startar OCR sur selection"
 
 #: kookaview.cpp:721
 #, kde-format
 msgid "Starting OCR on the image"
-msgstr ""
+msgstr "Startar OCR sur le imagine"
 
 #: kookaview.cpp:728
 #, kde-format
@@ -2077,38 +2077,39 @@ msgstr "File de OCR"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
-msgstr ""
+msgstr "Non pote cargar <filename>%1</filename> per OCR:<nl/>%2"
 
 #: kookaview.cpp:740
 #, kde-format
 msgid "Cannot Read OCR File"
-msgstr ""
+msgstr "Non pote leger file OCR"
 
 #: kookaview.cpp:744
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
-msgstr ""
+msgstr "Startar OCR sur file <filename>%1</filename>"
 
 #: kookaview.cpp:760
 #, kde-format
 msgid "OCR finished"
-msgstr ""
+msgstr "OCR terminate"
 
 #: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
+"Il ha nulle texto de exito de OCR a analysar con controlo orthographic."
 
 #: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
-msgstr ""
+msgstr "Controlo Orthographic de OCR non possibile"
 
 #: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
-msgstr ""
+msgstr "Controlo Orthographic de OCR"
 
 #: kookaview.cpp:789
 #, kde-format
@@ -2120,12 +2121,12 @@ msgstr ""
 #: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
-msgstr ""
+msgstr "OCR non configurate"
 
 #: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr ""
+msgstr "Non pote cargar plugin '%1'"
 
 #: kookaview.cpp:908
 #, kde-kuit-format
@@ -2141,22 +2142,22 @@ msgstr ""
 #: kookaview.cpp:958
 #, kde-format
 msgid "Create new image from selection"
-msgstr ""
+msgstr "Crea nove imagine ex selection"
 
 #: kookaview.cpp:967
 #, kde-format
 msgid "Cannot transform, image is read-only"
-msgstr ""
+msgstr "Non pote transformar, imagine es de sol lectura"
 
 #: kookaview.cpp:1020
 #, kde-format
 msgid "Loaded image %1"
-msgstr ""
+msgstr "Imagine cargate %1"
 
 #: kookaview.cpp:1021
 #, kde-format
 msgid "Unloaded image"
-msgstr ""
+msgstr "Imagina discargate"
 
 #: kookaview.cpp:1038
 #, kde-format
@@ -2166,7 +2167,7 @@ msgstr "Cargante %1..."
 #: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
-msgstr ""
+msgstr "Scander, galeria de imagine e OCR"
 
 #: main.cpp:48
 #, kde-format
@@ -2245,7 +2246,7 @@ msgstr "Mat Colton"
 #: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
-msgstr ""
+msgstr "Graphiches,web"
 
 #: main.cpp:98
 #, kde-format
@@ -2270,12 +2271,12 @@ msgstr ""
 #: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
-msgstr ""
+msgstr "Modo de galeria - non connecte per scander"
 
 #: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr ""
+msgstr "Le specificatiok de dispositivo de  SANE  (p.ex.. 'umax:/dev/sg0')"
 
 #: main.cpp:118
 #, kde-format
@@ -2285,27 +2286,28 @@ msgstr "dispositivo"
 #: newscanpresetdialog.cpp:53
 #, kde-format
 msgid "Edit Scan Preset"
-msgstr ""
+msgstr "Modifica preregulation de Scander"
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
 msgid "Change the name and/or description of the scan preset."
-msgstr ""
+msgstr "Modifica le nomin e/o le description del preregulation de scander."
 
 #: newscanpresetdialog.cpp:58
 #, kde-format
 msgid "Save Scan Preset"
-msgstr ""
+msgstr "Salveguarda preregulation de Scander"
 
 #: newscanpresetdialog.cpp:59
 #, kde-format
 msgid "Enter a name and description for the new scan preset."
 msgstr ""
+"Inserta un nomine e un description per le nove prerewgulation de scander."
 
 #: newscanpresetdialog.cpp:66
 #, kde-format
 msgid "Preset name:"
-msgstr ""
+msgstr "Nomine de preregulation:"
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
@@ -2315,7 +2317,7 @@ msgstr "Description:"
 #: ocrresedit.cpp:159
 #, kde-format
 msgid "Save OCR Result Text"
-msgstr ""
+msgstr "Salveguarda Texto de Exito de OCR"
 
 #: ocrresedit.cpp:160
 #, kde-format
@@ -2342,7 +2344,7 @@ msgstr ""
 #: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
-msgstr ""
+msgstr "Messages celate"
 
 #: prefspages.cpp:82
 #, kde-format
@@ -2399,7 +2401,7 @@ msgstr "Motor de OCR:"
 #: prefspages.cpp:398
 #, kde-format
 msgid "OCR Engine Settings..."
-msgstr ""
+msgstr "Preferentias de Motor de OCR..."
 
 #: prefspages.cpp:444
 #, kde-format
@@ -2494,12 +2496,12 @@ msgstr ""
 #: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
-msgstr ""
+msgstr "Formato de imagine non supportate"
 
 #: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
-msgstr ""
+msgstr "Sub-Imagine %1"
 
 #: scangallery.cpp:776
 #, kde-kuit-format
@@ -2510,7 +2512,7 @@ msgstr ""
 #: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
-msgstr ""
+msgstr "Error in cargar imagine"
 
 #: scangallery.cpp:840
 #, kde-format
@@ -2526,7 +2528,7 @@ msgstr ""
 #: scangallery.cpp:889
 #, kde-format
 msgid "Image Save Error"
-msgstr ""
+msgstr "Error in salveguardar imagine"
 
 #: scangallery.cpp:967
 #, kde-format
@@ -2537,12 +2539,12 @@ msgstr "Omne files (*)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
-msgstr ""
+msgstr "Exporta Imagine"
 
 #: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
-msgstr ""
+msgstr "Importa File de Imagine a Galeria"
 
 #: scangallery.cpp:1110
 #, kde-kuit-format
@@ -2563,7 +2565,7 @@ msgstr ""
 #: scangallery.cpp:1122
 #, kde-format
 msgid "Delete Gallery Item"
-msgstr ""
+msgstr "Dele elemento de Galeria"
 
 #: scangallery.cpp:1135
 #, kde-kuit-format
@@ -2584,7 +2586,7 @@ msgstr "Nove dossier"
 #: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
-msgstr ""
+msgstr "Nomine per le nove dossier:"
 
 #: scangallery.cpp:1194
 #, kde-kuit-format
@@ -2600,12 +2602,12 @@ msgstr ""
 #: scanpresetsdialog.cpp:63
 #, kde-format
 msgid "Scan Presets"
-msgstr ""
+msgstr "Preregulationes de Scander"
 
 #: scanpresetsdialog.cpp:76
 #, kde-format
 msgid "Saved scan preset sets:"
-msgstr ""
+msgstr "Insimules de preregulation de scander salveguardate:"
 
 #: scanpresetsdialog.cpp:80
 #, kde-format
