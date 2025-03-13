@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2025-03-11 11:53+0100\n"
+"PO-Revision-Date: 2025-03-12 12:48+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -172,7 +172,7 @@ msgstr "Selectiona Dispositivo de Scander"
 #: deviceselector.cpp:71
 #, kde-format
 msgid "Available Scanners:"
-msgstr "Dispositivos de scander (scanners) disponibile:"
+msgstr "Scanditores disponibile:"
 
 #: deviceselector.cpp:82
 #, kde-format
@@ -202,7 +202,7 @@ msgstr "Gamma"
 #: gammadialog.cpp:95
 #, kde-format
 msgid "This gamma table is passed to the scanner hardware."
-msgstr "Iste tabula gamma es passate al hardware del scanner."
+msgstr "Iste tabula gamma es passate al hardware del scanditor."
 
 #: imagecanvas.cpp:785
 #, kde-format
@@ -307,7 +307,7 @@ msgstr "Files de Imagine PNM  (*.pnm *.pbm *.pgm *.ppm)"
 #: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
-msgstr "Nulle scanner seligite"
+msgstr "Nulle scanditor seligite"
 
 #: kscandevice.cpp:1399
 #, kde-format
@@ -318,12 +318,12 @@ msgstr "Configuration initial (de startar) predefinite"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
-msgstr "Le scanner<nl/><icode>%1</icode><nl/>require authentication."
+msgstr "Le scanditor <nl/><icode>%1</icode><nl/>require authentication."
 
 #: kscandevice.cpp:1500
 #, kde-format
 msgid "Scanner Authentication"
-msgstr "Authentication de Scanner"
+msgstr "Authentication de Scanditor"
 
 #: kscandevice.cpp:1544
 #, kde-format
@@ -472,12 +472,12 @@ msgstr "Dispositivo incognite '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr "SANE - Scanner Access Now Easy (Accesso de Scander Nunc Facile)"
+msgstr "SANE - Scanner Access Now Easy (Accesso de Scanditor Nunc Facile)"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr "Bibliotheca de driver e accesso de scanner"
+msgstr "Bibliotheca de driver e accesso de scanditor"
 
 #: scanglobal.cpp:144
 #, kde-format
