@@ -404,7 +404,10 @@ QWidget *ScanParams::createScannerParams()
         l = so->getLabel(frame);
         w = so->widget();
         frame->addRow(l, w);
+    }
 
+    if (so!=nullptr || mVirtualFile!=nullptr)
+    {
         // This control allows the image type presented to the application to be
         // tested.  It does not actually affect the format of the scanned image,
         // so it will only affect the image type in Kooka's "Save Assistant"
@@ -504,8 +507,27 @@ QWidget *ScanParams::createScannerParams()
 
 void ScanParams::initStartupArea(bool dontRestore)
 {
-// TODO: restore area a user preference
+    // Prepare to read the current scan area from the scanner.  In most
+    // cases the inital scan area will be set to the meximum bed size,
+    // although that does not need to be the case here.  The bed size
+    // will have already been calculated by KScanDevice::getMaxScanSize().
+    //
+    // First ensure that the four scan area options exist, if they have
+    // not been created already.  Even though the 'create' parameter to
+    // getOption() is true by default, no KScanOption will be created if
+    // no option by that name exists.
+    const KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
+    const KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
+    const KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
+    const KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
+
+    // The "pnm" test device does not support a settable scan area.
+    // If the first option does not exist, assume that the others do
+    // not exist either.
+    if (tl_x==nullptr) return;
+
 #ifdef RESTORE_AREA
+    // TODO: restore area a user preference
     if (dontRestore)					// no saved options available
 #endif
     {
@@ -513,25 +535,14 @@ void ScanParams::initStartupArea(bool dontRestore)
         return;
     }
 
-    // set scan area from saved
-    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X, false);
-    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y, false);
-    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X, false);
-    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y, false);
-
-    // The built in "pnm" device does not support a settable scan area.
-    // If the first option does not exist, assume that the others do
-    // not exist either.
-    if (tl_x==nullptr) return;
-
     QRect rect;
     int val1, val2;
-    tl_x->get(&val1); rect.setLeft(val1);		// pass area to previewer
+    tl_x->get(&val1); rect.setLeft(val1);
     br_x->get(&val2); rect.setWidth(val2 - val1);
     tl_y->get(&val1); rect.setTop(val1);
     br_y->get(&val2); rect.setHeight(val2 - val1);
-    emit newCustomScanSize(rect);
 
+    emit newCustomScanSize(rect);			// pass area to previewer
     mAreaSelect->selectSize(rect);			// set selector to match
 }
 
@@ -968,12 +979,9 @@ void ScanParams::applyRect(const QRect &rect)
 
     // The built in "pnm" device does not support a settable scan area.
     // If the first option does not exist, assume that the others do
-    // not exist either.
-    if (tl_x==nullptr)
-    {
-        qCDebug(LIBKOOKASCAN_LOG) << "Scanner does not support area setting";
-        return;
-    }
+    // not exist either.  A debug message will have been shown earlier
+    // by KScanDevice::getMaxScanSize().
+    if (tl_x==nullptr) return;
 
     double min1, max1;
     double min2, max2;

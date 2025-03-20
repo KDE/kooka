@@ -86,7 +86,7 @@ void KScanDevice::guiSetEnabled(const QByteArray &name, bool state)
 }
 
 
-KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
+KScanOption *KScanDevice::getOption(const QByteArray &name, bool create /* = true */)
 {
     QByteArray alias = aliasName(name);
 
@@ -102,6 +102,14 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     {
 #ifdef DEBUG_CREATE
         qCDebug(LIBKOOKASCAN_LOG) << "does not exist" << alias;
+#endif // DEBUG_CREATE
+        return (nullptr);
+    }
+
+    if (!optionExists(alias))
+    {
+#ifdef DEBUG_CREATE
+        qCDebug(LIBKOOKASCAN_LOG) << "unknown option" << alias;
 #endif // DEBUG_CREATE
         return (nullptr);
     }
@@ -285,14 +293,28 @@ QString KScanDevice::scannerDescription() const
 
 QSize KScanDevice::getMaxScanSize()
 {
+    // This assumes that the TL_X and TL_Y options (defining the top left
+    // of the scan area) have the same range as BR_X and BR_Y (defining the
+    // bottom right).  There is also a general assumption everywhere that
+    // the minimum range value for all four of these options is zero.  So
+    // it only necessary to look at the maximum range values of these two
+    // options.
+    KScanOption *so_w = getOption(SANE_NAME_SCAN_BR_X);
+    KScanOption *so_h = getOption(SANE_NAME_SCAN_BR_Y);
+
+    // The built in "pnm" device does not support a settable scan area.
+    if (so_w==nullptr || so_h==nullptr)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Scanner does not support area setting";
+        return (QSize());
+    }
+
     QSize s;
     double min, max;
 
-    KScanOption *so_w = getOption(SANE_NAME_SCAN_BR_X);
     so_w->getRange(&min, &max);
     s.setWidth(qRound(max));
 
-    KScanOption *so_h = getOption(SANE_NAME_SCAN_BR_Y);
     so_h->getRange(&min, &max);
     s.setHeight(qRound(max));
 
