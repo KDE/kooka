@@ -69,7 +69,7 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     StatusBarManager *sbm = new StatusBarManager(this);
 
     /* Start to create the main view framework */
-    m_view = new KookaView(this, deviceToUse);
+    m_view = new KookaView(this);
     setCentralWidget(m_view);
 
     setAcceptDrops(false); // Waba: Not (yet?) supported
@@ -104,6 +104,8 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     connect(m_view->previewer(), &Previewer::previewFileSizeChanged, sbm, &StatusBarManager::setFileSize);
 
     setCaption(i18n("KDE Scanning"));
+
+    m_view->initScanDevice(deviceToUse);
 
     slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
