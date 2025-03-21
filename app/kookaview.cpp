@@ -190,7 +190,7 @@ WidgetSplitter::WidgetSplitter(Qt::Orientation orientation, QWidget *parent)
 
 // ---------------------------------------------------------------------------
 
-KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
+KookaView::KookaView(KMainWindow *parent)
     : QTabWidget(parent)
 {
     setObjectName("KookaView");
@@ -239,16 +239,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(packager, &ScanGallery::galleryDirectoryRemoved, recentFolder, &GalleryHistory::slotPathRemoved);
     connect(recentFolder, &GalleryHistory::pathSelected, packager, &ScanGallery::slotSelectDirectory);
 
-    /** Scanner Settings **/
-
-    if (!deviceToUse.isEmpty() && deviceToUse != "gallery") {
-        ScanDevices::self()->addUserSpecifiedDevice(deviceToUse,
-                                                    i18n("User specified"),
-                                                    i18n("on command line"),
-                                                    "",
-                                                    true);
-    }
-
     /** Scanner Device **/
     mScanDevice = new KScanDevice(this);
 
@@ -275,6 +265,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mOcrResEdit->setAcceptRichText(false);
     mOcrResEdit->setWordWrapMode(QTextOption::NoWrap);
     mOcrResEdit->setPlaceholderText(i18n("OCR results will appear here"));
+
+    // Connections OcrResEdit --> myself
     connect(mOcrResEdit, &OcrResEdit::spellCheckStatus, this, [this](const QString &msg){ changeStatus(msg); });
 
     /** Tabs **/
@@ -324,18 +316,28 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mOcrSubSplitter->addWidget(mOcrGallerySite);            // TL
     mOcrSubSplitter->addWidget(mOcrImgviewSite);            // TR
     mOcrPage->addWidget(new WidgetSite(this, mOcrResEdit));     // B
-
-    if (slotSelectDevice(deviceToUse, false)) {
-        slotTabChanged(KookaView::TabScan);
-    } else {
-        setCurrentIndex(KookaView::TabGallery);
-    }
 }
+
 
 KookaView::~KookaView()
 {
     delete mScanDevice;
 }
+
+
+void KookaView::initScanDevice(const QByteArray &deviceToUse)
+{
+    qDebug() << deviceToUse;
+    if (!deviceToUse.isEmpty() && deviceToUse!="gallery")
+    {
+        ScanDevices::self()->addUserSpecifiedDevice(deviceToUse, i18n("User specified"),
+                                                    i18n("on command line"), "", true);
+    }
+
+    if (slotSelectDevice(deviceToUse, false)) slotTabChanged(KookaView::TabScan);
+    else setCurrentIndex(KookaView::TabGallery);
+}
+
 
 // this gets called via Kooka::saveSettings() at shutdown
 void KookaView::saveSettings()

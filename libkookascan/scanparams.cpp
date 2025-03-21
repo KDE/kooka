@@ -507,15 +507,20 @@ QWidget *ScanParams::createScannerParams()
 
 void ScanParams::initStartupArea(bool dontRestore)
 {
+#ifndef RESTORE_AREA
+    // TODO: restore area a user preference
+    dontRestore = true;
+#endif
+
     // Prepare to read the current scan area from the scanner.  In most
-    // cases the inital scan area will be set to the meximum bed size,
+    // cases the initial scan area will be set to the maximum bed size,
     // although that does not need to be the case here.  The bed size
     // will have already been calculated by KScanDevice::getMaxScanSize().
     //
     // First ensure that the four scan area options exist, if they have
     // not been created already.  Even though the 'create' parameter to
-    // getOption() is true by default, no KScanOption will be created if
-    // no option by that name exists.
+    // getOption() here is true by default, no KScanOption will be created
+    // if no SANE option by that name exists.
     const KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
     const KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
     const KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
@@ -526,24 +531,23 @@ void ScanParams::initStartupArea(bool dontRestore)
     // not exist either.
     if (tl_x==nullptr) return;
 
-#ifdef RESTORE_AREA
-    // TODO: restore area a user preference
-    if (dontRestore)					// no saved options available
-#endif
+    QRect rect;
+    if (dontRestore)					// saved options available or unwanted
     {
-        applyRect(QRect());				// set maximum scan area
-        return;
+        rect = applyRect(QRect());			// set maximum scan area
+    }
+    else
+    {
+        int val1;
+        int val2;
+        tl_x->get(&val1); rect.setLeft(val1);		// read current scan area
+        br_x->get(&val2); rect.setWidth(val2 - val1);
+        tl_y->get(&val1); rect.setTop(val1);
+        br_y->get(&val2); rect.setHeight(val2 - val1);
+        mAreaSelect->selectSize(rect);			// set selector to match
     }
 
-    QRect rect;
-    int val1, val2;
-    tl_x->get(&val1); rect.setLeft(val1);
-    br_x->get(&val2); rect.setWidth(val2 - val1);
-    tl_y->get(&val1); rect.setTop(val1);
-    br_y->get(&val2); rect.setHeight(val2 - val1);
-
-    emit newCustomScanSize(rect);			// pass area to previewer
-    mAreaSelect->selectSize(rect);			// set selector to match
+    emit newCustomScanSize(rect);			// pass actual area to previewer
 }
 
 
@@ -968,9 +972,9 @@ void ScanParams::setEditCustomGammaTableState()
 
 // This assumes that the SANE unit for the scan area is millimetres.
 // All scanners out there appear to do this.
-void ScanParams::applyRect(const QRect &rect)
+QRect ScanParams::applyRect(const QRect &rect)
 {
-    qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect;
+    qCDebug(LIBKOOKASCAN_LOG) << "init rect" << rect;
 
     KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X, false);
     KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y, false);
@@ -981,19 +985,24 @@ void ScanParams::applyRect(const QRect &rect)
     // If the first option does not exist, assume that the others do
     // not exist either.  A debug message will have been shown earlier
     // by KScanDevice::getMaxScanSize().
-    if (tl_x==nullptr) return;
+    if (tl_x==nullptr) return (QRect());
 
     double min1, max1;
     double min2, max2;
+    QRect res;						// area that was actually set
 
-    if (!rect.isValid()) {				// set full scan area
+    if (!rect.isValid())				// set full scan area
+    {
         tl_x->getRange(&min1, &max1); tl_x->set(min1);
         br_x->getRange(&min1, &max1); br_x->set(max1);
         tl_y->getRange(&min2, &max2); tl_y->set(min2);
         br_y->getRange(&min2, &max2); br_y->set(max2);
 
-        qCDebug(LIBKOOKASCAN_LOG) << "setting full area" << min1 << min2 << "-" << max1 << max2;
-    } else {
+        res.setCoords(min1, min2, max1, max2);
+        qCDebug(LIBKOOKASCAN_LOG) << "setting full area" << res;
+    }
+    else						// set specified scan area
+    {
         double tlx = rect.left();
         double tly = rect.top();
         double brx = rect.right();
@@ -1013,13 +1022,16 @@ void ScanParams::applyRect(const QRect &rect)
         }
         tl_y->set(tly); br_y->set(bry);
 
-        qCDebug(LIBKOOKASCAN_LOG) << "setting area" << tlx << tly << "-" << brx << bry;
+        res.setCoords(tlx, tly, brx, bry);
+        qCDebug(LIBKOOKASCAN_LOG) << "setting area" << res;
     }
 
     tl_x->apply();
     tl_y->apply();
     br_x->apply();
     br_y->apply();
+
+    return (res);
 }
 
 //  The previewer is telling us that the user has drawn or auto-selected a

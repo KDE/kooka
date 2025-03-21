@@ -99,7 +99,7 @@ public:
     /**
      * Default constructor
      */
-    explicit KookaView(KMainWindow *parent, const QByteArray &deviceToUse);
+    explicit KookaView(KMainWindow *parent);
 
     /**
      * Destructor
@@ -116,6 +116,7 @@ public:
     ImageCanvas *imageViewer() const;
     Previewer *previewer() const;
 
+    void initScanDevice(const QByteArray &deviceToUse);
     bool isScannerConnected() const;
     QString scannerName() const;
     void closeScanDevice();
