@@ -55,7 +55,7 @@ bool DestinationNull::scanStarting(ScanImage::ImageType type)
 
 bool DestinationNull::imageScanned(ScanImage::Ptr img)
 {
-    qCDebug(DESTINATION_LOG) << "received image size" << img->size();
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "format" << img->format();
     return (true);
 }
 
