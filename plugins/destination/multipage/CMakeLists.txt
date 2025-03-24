@@ -18,6 +18,14 @@
 #									#
 #########################################################################
 
+find_program(TIFFCP_COMMAND "tiffcp")
+if (TIFFCP_COMMAND)
+  add_definitions("-DHAVE_TIFF")
+  message(STATUS "Found tiffcp(1) command: ${TIFFCP_COMMAND}")
+else ()
+  message(WARNING "tiffcp(1) command not found, multipage TIFF output not available")
+endif ()
+
 set(destinationmultipage_SRCS
   destinationmultipage.cpp
   ${kookadestination_LOG_SRCS}

@@ -66,7 +66,6 @@
 #include <qprocess.h>
 #endif
 
-
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
 
@@ -419,6 +418,11 @@ private:
 };
 
 
+#ifndef TIFFCP_COMMAND
+#define TIFFCP_COMMAND		"tiffcp"
+#endif
+
+
 MultipageTiffWriter::MultipageTiffWriter()
     : AbstractMultipageWriter()
 {
@@ -457,7 +461,7 @@ bool MultipageTiffWriter::startPrint()
 
     if (mTiffcpCommand.isEmpty())			// command not yet found
     {
-        mTiffcpCommand = QStandardPaths::findExecutable("tiffcp");
+        mTiffcpCommand = QStandardPaths::findExecutable(TIFFCP_COMMAND);
         if (mTiffcpCommand.isEmpty())			// that didn't find the command
         {
             KMessageBox::error(nullptr, xi18nc("@info",
