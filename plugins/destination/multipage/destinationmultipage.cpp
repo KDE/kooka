@@ -62,17 +62,14 @@
 #include "destination_logging.h"
 
 #ifdef HAVE_TIFF
-extern "C"
-{
-#include <tiffio.h>
-#include <tiff.h>
-}
-#include <qfile.h>
+#include <qstandardpaths.h>
+#include <qprocess.h>
 #endif
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
+
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -292,7 +289,7 @@ public:
     virtual ~AbstractMultipageWriter() = default;
 
     int totalPages() const				{ return (mTotalPages); }
-    void outputImage(const QImage *img)			{ ++mTotalPages; printImage(img); }
+    bool outputImage(const QImage *img)			{ ++mTotalPages; return (printImage(img)); }
 
     virtual void setPageSize(const QPageSize &pageSize) = 0;
     virtual void setBaseImage(const QImage *img) = 0;
@@ -301,7 +298,7 @@ public:
     virtual void endPrint() = 0;
 
 protected:
-    virtual void printImage(const QImage *img) = 0;
+    virtual bool printImage(const QImage *img) = 0;
 
 private:
     int mTotalPages;
@@ -332,7 +329,7 @@ public:
     void endPrint() override;
 
 protected:
-    void printImage(const QImage *img) override;
+    bool printImage(const QImage *img) override;
 
 private:
     KookaPrint *mPdfPrinter;
@@ -377,9 +374,10 @@ bool MultipagePdfWriter::startPrint()
 }
 
 
-void MultipagePdfWriter::printImage(const QImage *img)
+bool MultipagePdfWriter::printImage(const QImage *img)
 {
     mPdfPrinter->printImage(img);
+    return (true);
 }
 
 
@@ -400,7 +398,7 @@ class MultipageTiffWriter : public AbstractMultipageWriter
 {
 public:
     MultipageTiffWriter();
-    ~MultipageTiffWriter();
+    ~MultipageTiffWriter() = default;
 
     void setPageSize(const QPageSize &pageSize) override;
     void setBaseImage(const QImage *img) override;
@@ -408,19 +406,16 @@ public:
     bool startPrint() override;
     void endPrint() override;
 
-    void setError(const QString &msg)			{ mErrorString = msg; }
-
 protected:
-    void printImage(const QImage *img) override;
+    bool printImage(const QImage *img) override;
 
 private:
     QSize mBaseSize;
     int mBaseResX;
     int mBaseResY;
 
-    QByteArray mFileName;
-    TIFF *mTiff;
-    QString mErrorString;
+    QString mFileName;
+    QString mTiffcpCommand;
 };
 
 
@@ -428,14 +423,6 @@ MultipageTiffWriter::MultipageTiffWriter()
     : AbstractMultipageWriter()
 {
     qCDebug(DESTINATION_LOG);
-    mTiff = nullptr;
-}
-
-
-MultipageTiffWriter::~MultipageTiffWriter()
-{
-    if (mTiff!=nullptr) TIFFClose(mTiff);
-    mTiff = nullptr;
 }
 
 
@@ -460,36 +447,7 @@ void MultipageTiffWriter::setBaseImage(const QImage *img)
 
 void MultipageTiffWriter::setOutputFile(const QString &fileName)
 {
-    mFileName = QFile::encodeName(fileName);
-    mErrorString.clear();
-}
-
-
-static int tiffErrorHandler(TIFF *tiff, void *userData, const char *mod, const char *fmt, va_list ap)
-{
-    MultipageTiffWriter *that = static_cast<MultipageTiffWriter *>(userData);
-
-    QString msg;
-    if (mod!=nullptr) msg = QString("[%1] ").arg(mod);
-    msg += QString::vasprintf(fmt, ap);
-
-    qCWarning(DESTINATION_LOG) << "TIFF error," << msg;
-    that->setError(msg);
-    return (1);
-}
-
-
-static int tiffWarningHandler(TIFF *tiff, void *userData, const char *mod, const char *fmt, va_list ap)
-{
-    MultipageTiffWriter *that = static_cast<MultipageTiffWriter *>(userData);
-
-    QString msg;
-    if (mod!=nullptr) msg = QString("[%1] ").arg(mod);
-    msg += QString::vasprintf(fmt, ap);
-
-    qCWarning(DESTINATION_LOG) << "TIFF warning," << msg;
-    that->setError(msg);
-    return (1);
+    mFileName = fileName;
 }
 
 
@@ -497,22 +455,70 @@ bool MultipageTiffWriter::startPrint()
 {
     if (mBaseSize.isNull()) return (false);		// no reference image
 
-#if TIFFLIB_VERSION>=20221213
-    TIFFOpenOptions *opts = TIFFOpenOptionsAlloc();
-    TIFFOpenOptionsSetErrorHandlerExtR(opts, &tiffErrorHandler, this);
-    TIFFOpenOptionsSetWarningHandlerExtR(opts, &tiffWarningHandler, this);
-    mTiff = TIFFOpenExt(mFileName.constData(), "w", opts);
-    TIFFOpenOptionsFree(opts);
-#else
-    qCDebug(DESTINATION_LOG) << "TIFF library very old, no message handling";
-    mTiff = TIFFOpen(mFileName.constData(), "w");
-    setError(i18n("(see stderr for the error message)"));
-#endif
-
-    if (mTiff==nullptr)
+    if (mTiffcpCommand.isEmpty())			// command not yet found
     {
-        KMessageBox::error(nullptr, xi18nc("@info", "Cannot create the TIFF file <filename>%1</filename><nl/><message>%2</message>",
-                                           mFileName, mErrorString), i18n("Cannot create TIFF"));
+        mTiffcpCommand = QStandardPaths::findExecutable("tiffcp");
+        if (mTiffcpCommand.isEmpty())			// that didn't find the command
+        {
+            KMessageBox::error(nullptr, xi18nc("@info",
+                                               "Cannot locate the <command section=\"1\">tiffcp</command> command,<nl/>"
+                                               "ensure that it is available on <envvar>PATH</envvar>.<nl/><nl/>"
+                                               "The command is part of the <application>libtiff</application> package,<nl/>"
+                                               "but it may need to be installed separately."),
+                               i18n("Cannot find TIFF command"));
+
+            return (false);				// user can try again next time
+        }
+
+        qCDebug(DESTINATION_LOG) << "found command" << mTiffcpCommand;
+    }
+
+    // The 'mFileName' will be a QTemporaryFile which has been open()'ed
+    // and then immediately close()'d by the caller.  So we can assume that
+    // the file already exists, is writeable, and is currently zero size.
+    // tiffcp(1) handles appending to an empty file correctly, so there is
+    // nothing else to do to that file here.
+    return (true);
+}
+
+
+bool MultipageTiffWriter::printImage(const QImage *img)
+{
+    qCDebug(DESTINATION_LOG) << "format" << img->format();
+
+    // The QTemporaryFile created here is the current scanned page.
+    // It is immediately appended to the 'mFileName' output file and
+    // then discarded, so there is no need to keep the temporary file
+    // any longer or to leave autoRemove() disabled.
+    const QString ext = mFileName.mid(mFileName.lastIndexOf('.'));
+    const QString dir = mFileName.left(mFileName.lastIndexOf('/'));
+    QTemporaryFile tempPage(dir+"/pageXXXXXX"+ext);	// reuse the same template
+    if (!tempPage.open())
+    {
+fail:   KMessageBox::error(nullptr,
+                           xi18nc("@info", "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>",
+                                  tempPage.fileName(), tempPage.errorString()),
+                           i18n("Cannot Save File"));
+        return (false);
+    }
+
+    tempPage.close();					// only want the file name
+
+    qDebug() << "saving TIFF to" << tempPage.fileName();
+    if (!img->save(tempPage.fileName(), "TIFF")) goto fail;
+
+    // No image format or conversion options are given to tiffcp(1),
+    // so each page of the resulting file will have the same format as
+    // the corresponding scanned page.
+    const QStringList args = { "-a", tempPage.fileName(), mFileName };
+    qDebug() << "executing command" << mTiffcpCommand << "args" << args;
+    int s = QProcess::execute(mTiffcpCommand, args);
+    if (s!=0)						// problem with tiffcp(1) command
+    {
+        KMessageBox::error(nullptr,
+                           xi18nc("@info", "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see standard error for any message)",
+                                  mFileName, QString::number(s)),
+                            i18n("Cannot Append Page"));
         return (false);
     }
 
@@ -520,76 +526,11 @@ bool MultipageTiffWriter::startPrint()
 }
 
 
-void MultipageTiffWriter::printImage(const QImage *img)
-{
-    qCDebug(DESTINATION_LOG) << "format" << img->format();
-
-    // see /usr/include/tiff.h for value definitions
-    TIFFSetField(mTiff, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
-    TIFFSetField(mTiff, TIFFTAG_XRESOLUTION, float(mBaseResX));
-    TIFFSetField(mTiff, TIFFTAG_YRESOLUTION, float(mBaseResY));
-    TIFFSetField(mTiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-
-    // TODO: option for compression type
-
-    // TODO: set these 3 from image type provided by scanStarting()
-    TIFFSetField(mTiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-    // from https://bitmiracle.github.io/libtiff.net/help/articles/KB/grayscale-color.html
-    TIFFSetField(mTiff, TIFFTAG_SAMPLESPERPIXEL, 3);
-    TIFFSetField(mTiff, TIFFTAG_BITSPERSAMPLE, 8);
-
-    const int h = img->height();
-    const int w = img->width();
-    TIFFSetField(mTiff, TIFFTAG_IMAGEWIDTH, w);
-    TIFFSetField(mTiff, TIFFTAG_IMAGELENGTH, h);
-
-    // The TIFF file is always written as 24-bit RGB in accordance with the
-    // tags set above, therefore the scanned image data must be converted
-    // to RGB888 format (if it is not so already) before writing it.
-    //
-    // The RGB888 format comes from the "!image.hasAlphaChannel()" case
-    // in src/plugins/imageformats/tiff/qtiffhandler.cpp from the
-    // QtImageFormats source.  A scanned image will never have an alpha
-    // chennel.
-    QImage convertedImg(*img);				// shallow copy at this stage
-    if (convertedImg.format()!=QImage::Format_RGB888)
-    {
-        convertedImg.convertTo(QImage::Format_RGB888, Qt::ColorOnly|Qt::NoOpaqueDetection);
-        qCDebug(DESTINATION_LOG) << "converting from" << img->format() << "->" << convertedImg.format();
-    }
-
-    // This is just a guess, since we are writing single scan lines
-    TIFFSetField(mTiff, TIFFTAG_ROWSPERSTRIP, 1);
-    // Write out each scan line of image data in turn
-    for (int i = 0; i<h; ++i)
-    {
-        const uchar *l = convertedImg.scanLine(i);
-        TIFFWriteScanline(mTiff, const_cast<uchar *>(l), i);
-    }
-
-    // loop from first example in https://libtiff.gitlab.io/libtiff/multi_page.html
-    TIFFWriteDirectory(mTiff);
-}
-
-
 void MultipageTiffWriter::endPrint()
 {
-    TIFFClose(mTiff);
-#if TIFFLIB_VERSION>=20221213
-    if (!mErrorString.isEmpty())
-    {
-        // An error or warning was reported by one of the TIFF library calls.
-        // Should not happen, because the write is to a temporary file and
-        // being able to create it was checked in startPrint() above.
-        KMessageBox::error(nullptr, xi18nc("@info", "Possible error writing the TIFF file <filename>%1</filename><nl/><message>%2</message>",
-                                           mFileName, mErrorString), i18n("Error writing TIFF"));
-    }
-#endif
-
-    mTiff = nullptr;
 }
 
-#endif
+#endif							// HAVE_TIFF
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -643,8 +584,7 @@ void DestinationMultipage::batchStart(const MultiScanOptions *opts)
     // local or remote.  This is so that both cases can be treated the
     // same until the PDF generation is finished, when it can be moved
     // to the intended local or remote destination.
-    mSaveFile = new QTemporaryFile(QDir::tempPath()+'/'+QCoreApplication::applicationName()+"XXXXXX."+mimeType.preferredSuffix());
-    mSaveFile->setAutoRemove(false);
+    mSaveFile = new QTemporaryFile(QDir::tempPath()+'/'+QCoreApplication::applicationName()+"saveXXXXXX."+mimeType.preferredSuffix());
     if (!mSaveFile->open())
     {
         KMessageBox::error(parentWidget(),
