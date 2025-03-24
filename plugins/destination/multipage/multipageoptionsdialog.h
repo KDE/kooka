@@ -28,58 +28,36 @@
  *									*
  ************************************************************************/
 
-#ifndef DESTINATIONMULTIPAGE_H
-#define DESTINATIONMULTIPAGE_H
-
-#include "abstractdestination.h"
-
-#include <qurl.h>
+#ifndef MULTIPAGEOPTIONSDIALOG_H
+#define MULTIPAGEOPTIONSDIALOG_H
 
 #include <dialogbase.h>
 
 class QComboBox;
-class QPushButton;
-class QTemporaryFile;
+class QDoubleSpinBox;
+class QRadioButton;
 
-class AbstractMultipageWriter;
 
-//////////////////////////////////////////////////////////////////////////
-//  DestinationMultipage						//
-//////////////////////////////////////////////////////////////////////////
-
-class DestinationMultipage : public AbstractDestination
+class MultipageOptionsDialog : public DialogBase
 {
     Q_OBJECT
 
 public:
-    explicit DestinationMultipage(QObject *pnt, const QVariantList &args);
-    ~DestinationMultipage() override;
+    explicit MultipageOptionsDialog(const QSizeF &pageSize, QWidget *pnt = nullptr);
+    virtual ~MultipageOptionsDialog() = default;
 
-    bool scanStarting(ScanImage::ImageType type) override;
-    bool imageScanned(ScanImage::Ptr img) override;
-    void createGUI(ScanParamsPage *page) override;
-    void batchStart(const MultiScanOptions *opts) override;
-    void batchEnd(bool ok) override;
-    MultiScanOptions::Capabilities capabilities() const override;
-
-    KLocalizedString scanDestinationString() override;
-    void saveSettings() const override;
+    QSizeF pageSize() const;
 
 protected slots:
-    void slotPageSetup();
-    void slotFormatChanged();
+    void slotSettingChanged();
+    void slotValueChanged();
 
 private:
-    QUrl mSaveUrl;
-    QString mSaveMime;
-
-    QTemporaryFile *mSaveFile;
-    AbstractMultipageWriter *mWriter;
-
-    QSizeF mPageSize;
-
-    QComboBox *mFormatCombo;
-    QPushButton *mPageSetupButton;
+    QComboBox *mPageSizeCombo;
+    QDoubleSpinBox *mCustomWidthSpinbox;
+    QDoubleSpinBox *mCustomHeightSpinbox;
+    QRadioButton *mPortraitRadio;
+    QRadioButton *mLandscapeRadio;
 };
 
-#endif							// DESTINATIONMULTIPAGE_H
+#endif							// MULTIPAGEOPTIONSDIALOG_H
