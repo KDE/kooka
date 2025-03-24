@@ -53,6 +53,7 @@
 #include "papersizes.h"
 #include "multipageoptionsdialog.h"
 #include "abstractmultipagewriter.h"
+#include "multipagepdfwriter.h"
 #include "destination_logging.h"
 
 #ifdef HAVE_TIFF
@@ -63,82 +64,6 @@
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
 
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  MultipagePdfWriter							//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-class MultipagePdfWriter : public AbstractMultipageWriter
-{
-public:
-    MultipagePdfWriter();
-    ~MultipagePdfWriter();
-
-    void setPageSize(const QPageSize &pageSize) override;
-    void setBaseImage(const QImage *img) override;
-    void setOutputFile(const QString &fileName) override;
-    bool startPrint() override;
-    void endPrint() override;
-
-protected:
-    bool printImage(const QImage *img) override;
-
-private:
-    KookaPrint *mPdfPrinter;
-};
-
-
-MultipagePdfWriter::MultipagePdfWriter()
-    : AbstractMultipageWriter()
-{
-    qCDebug(DESTINATION_LOG);
-    mPdfPrinter = new KookaPrint();
-}
-
-
-MultipagePdfWriter::~MultipagePdfWriter()
-{
-    delete mPdfPrinter;
-}
-
-
-void MultipagePdfWriter::setPageSize(const QPageSize &pageSize)
-{
-    mPdfPrinter->setPageSize(pageSize);
-}
-
-
-void MultipagePdfWriter::setBaseImage(const QImage *img)
-{
-    mPdfPrinter->setBaseImage(img);
-}
-
-void MultipagePdfWriter::setOutputFile(const QString &fileName)
-{
-    mPdfPrinter->setPdfMode(fileName);
-}
-
-
-bool MultipagePdfWriter::startPrint()
-{
-    mPdfPrinter->startPrint();
-    return (true);
-}
-
-
-bool MultipagePdfWriter::printImage(const QImage *img)
-{
-    mPdfPrinter->printImage(img);
-    return (true);
-}
-
-
-void MultipagePdfWriter::endPrint()
-{
-    mPdfPrinter->endPrint();
-}
 
 //////////////////////////////////////////////////////////////////////////
 //									//

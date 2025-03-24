@@ -30,6 +30,7 @@ set(destinationmultipage_SRCS
   destinationmultipage.cpp
   multipageoptionsdialog.cpp
   abstractmultipagewriter.cpp
+  multipagepdfwriter.cpp
   ${kookadestination_LOG_SRCS}
 )
 
