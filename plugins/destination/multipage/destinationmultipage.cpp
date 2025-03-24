@@ -48,179 +48,19 @@
 
 #include "scanparamspage.h"
 #include "recentsaver.h"
-#include "kookaprint.h"
 #include "kookasettings.h"
-#include "papersizes.h"
 #include "multipageoptionsdialog.h"
 #include "abstractmultipagewriter.h"
 #include "multipagepdfwriter.h"
 #include "destination_logging.h"
 
 #ifdef HAVE_TIFF
-#include <qstandardpaths.h>
-#include <qprocess.h>
+#include "multipagetiffwriter.h"
 #endif
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
 
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  MultipageTiffWriter							//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-#ifdef HAVE_TIFF
-
-class MultipageTiffWriter : public AbstractMultipageWriter
-{
-public:
-    MultipageTiffWriter();
-    ~MultipageTiffWriter() = default;
-
-    void setPageSize(const QPageSize &pageSize) override;
-    void setBaseImage(const QImage *img) override;
-    void setOutputFile(const QString &fileName) override;
-    bool startPrint() override;
-    void endPrint() override;
-
-protected:
-    bool printImage(const QImage *img) override;
-
-private:
-    QSize mBaseSize;
-    int mBaseResX;
-    int mBaseResY;
-
-    QString mFileName;
-    QString mTiffcpCommand;
-};
-
-
-#ifndef TIFFCP_COMMAND
-#define TIFFCP_COMMAND		"tiffcp"
-#endif
-
-
-MultipageTiffWriter::MultipageTiffWriter()
-    : AbstractMultipageWriter()
-{
-    qCDebug(DESTINATION_LOG);
-}
-
-
-void MultipageTiffWriter::setPageSize(const QPageSize &pageSize)
-{
-    // Ignored, size taken from each scanned image
-}
-
-
-void MultipageTiffWriter::setBaseImage(const QImage *img)
-{
-    if (img==nullptr) mBaseSize = QSize();		// unset the reference image
-    else
-    {
-        mBaseSize = img->size();
-        mBaseResX = DPM_TO_DPI(img->dotsPerMeterX());
-        mBaseResY = DPM_TO_DPI(img->dotsPerMeterY());
-        qCDebug(DESTINATION_LOG) << "size (pix)" << mBaseSize << "dpi X" << mBaseResX << "dpi Y" << mBaseResY;
-    }
-}
-
-
-void MultipageTiffWriter::setOutputFile(const QString &fileName)
-{
-    mFileName = fileName;
-}
-
-
-bool MultipageTiffWriter::startPrint()
-{
-    if (mBaseSize.isNull()) return (false);		// no reference image
-
-    if (mTiffcpCommand.isEmpty())			// command not yet found
-    {
-        mTiffcpCommand = QStandardPaths::findExecutable(TIFFCP_COMMAND);
-        if (mTiffcpCommand.isEmpty())			// that didn't find the command
-        {
-            KMessageBox::error(nullptr, xi18nc("@info",
-                                               "Cannot locate the <command section=\"1\">tiffcp</command> command,<nl/>"
-                                               "ensure that it is available on <envvar>PATH</envvar>.<nl/><nl/>"
-                                               "The command is part of the <application>libtiff</application> package,<nl/>"
-                                               "but it may need to be installed separately."),
-                               i18n("Cannot find TIFF command"));
-
-            return (false);				// user can try again next time
-        }
-
-        qCDebug(DESTINATION_LOG) << "found command" << mTiffcpCommand;
-    }
-
-    // The 'mFileName' will be a QTemporaryFile which has been open()'ed
-    // and then immediately close()'d by the caller.  So we can assume that
-    // the file already exists, is writeable, and is currently zero size.
-    // tiffcp(1) handles appending to an empty file correctly, so there is
-    // nothing else to do to that file here.
-    return (true);
-}
-
-
-bool MultipageTiffWriter::printImage(const QImage *img)
-{
-    qCDebug(DESTINATION_LOG) << "format" << img->format();
-
-    // The QTemporaryFile created here is the current scanned page.
-    // It is immediately appended to the 'mFileName' output file and
-    // then discarded, so there is no need to keep the temporary file
-    // any longer or to leave autoRemove() disabled.
-    const QString ext = mFileName.mid(mFileName.lastIndexOf('.'));
-    const QString dir = mFileName.left(mFileName.lastIndexOf('/'));
-    QTemporaryFile tempPage(dir+"/pageXXXXXX"+ext);	// reuse the same template
-    if (!tempPage.open())
-    {
-fail:   KMessageBox::error(nullptr,
-                           xi18nc("@info", "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>",
-                                  tempPage.fileName(), tempPage.errorString()),
-                           i18n("Cannot Save File"));
-        return (false);
-    }
-
-    tempPage.close();					// only want the file name
-
-    qDebug() << "saving TIFF to" << tempPage.fileName();
-    if (!img->save(tempPage.fileName(), "TIFF")) goto fail;
-
-    // No image format or conversion options are given to tiffcp(1),
-    // so each page of the resulting file will have the same format as
-    // the corresponding scanned page.
-    const QStringList args = { "-a", tempPage.fileName(), mFileName };
-    qDebug() << "executing command" << mTiffcpCommand << "args" << args;
-    int s = QProcess::execute(mTiffcpCommand, args);
-    if (s!=0)						// problem with tiffcp(1) command
-    {
-        KMessageBox::error(nullptr,
-                           xi18nc("@info", "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see standard error for any message)",
-                                  mFileName, QString::number(s)),
-                            i18n("Cannot Append Page"));
-        return (false);
-    }
-
-    return (true);
-}
-
-
-void MultipageTiffWriter::endPrint()
-{
-}
-
-#endif							// HAVE_TIFF
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  DestinationMultipage						//
-//									//
-//////////////////////////////////////////////////////////////////////////
 
 DestinationMultipage::DestinationMultipage(QObject *pnt, const QVariantList &args)
     : AbstractDestination(pnt, "DestinationMultipage")

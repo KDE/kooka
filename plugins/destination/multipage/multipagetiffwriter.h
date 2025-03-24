@@ -28,52 +28,40 @@
  *									*
  ************************************************************************/
 
-#ifndef DESTINATIONMULTIPAGE_H
-#define DESTINATIONMULTIPAGE_H
+#ifndef MULTIPAGETIFFWRITER_H
+#define MULTIPAGETIFFWRITER_H
 
-#include "abstractdestination.h"
+#include "abstractmultipagewriter.h"
 
-#include <dialogbase.h>
+#include <qstring.h>
+#include <qsize.h>
 
-class QComboBox;
-class QPushButton;
-class QTemporaryFile;
-class AbstractMultipageWriter;
+class QPageSize;
+class QImage;
 
 
-class DestinationMultipage : public AbstractDestination
+class MultipageTiffWriter : public AbstractMultipageWriter
 {
-    Q_OBJECT
-
 public:
-    explicit DestinationMultipage(QObject *pnt, const QVariantList &args);
-    ~DestinationMultipage() override;
+    MultipageTiffWriter();
+    ~MultipageTiffWriter() = default;
 
-    bool scanStarting(ScanImage::ImageType type) override;
-    bool imageScanned(ScanImage::Ptr img) override;
-    void createGUI(ScanParamsPage *page) override;
-    void batchStart(const MultiScanOptions *opts) override;
-    void batchEnd(bool ok) override;
-    MultiScanOptions::Capabilities capabilities() const override;
+    void setPageSize(const QPageSize &pageSize) override;
+    void setBaseImage(const QImage *img) override;
+    void setOutputFile(const QString &fileName) override;
+    bool startPrint() override;
+    void endPrint() override;
 
-    KLocalizedString scanDestinationString() override;
-    void saveSettings() const override;
-
-protected slots:
-    void slotPageSetup();
-    void slotFormatChanged();
+protected:
+    bool printImage(const QImage *img) override;
 
 private:
-    QUrl mSaveUrl;
-    QString mSaveMime;
+    QSize mBaseSize;
+    int mBaseResX;
+    int mBaseResY;
 
-    QTemporaryFile *mSaveFile;
-    AbstractMultipageWriter *mWriter;
-
-    QSizeF mPageSize;
-
-    QComboBox *mFormatCombo;
-    QPushButton *mPageSetupButton;
+    QString mFileName;
+    QString mTiffcpCommand;
 };
 
-#endif							// DESTINATIONMULTIPAGE_H
+#endif							// MULTIPAGETIFFWRITER_H
