@@ -52,6 +52,7 @@
 #include "kookasettings.h"
 #include "papersizes.h"
 #include "multipageoptionsdialog.h"
+#include "abstractmultipagewriter.h"
 #include "destination_logging.h"
 
 #ifdef HAVE_TIFF
@@ -62,40 +63,6 @@
 K_PLUGIN_FACTORY_WITH_JSON(DestinationMultipageFactory, "kookadestination-multipage.json", registerPlugin<DestinationMultipage>();)
 #include "destinationmultipage.moc"
 
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  AbstractMultipageWriter						//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-class AbstractMultipageWriter
-{
-public:
-    AbstractMultipageWriter();
-    virtual ~AbstractMultipageWriter() = default;
-
-    int totalPages() const				{ return (mTotalPages); }
-    bool outputImage(const QImage *img)			{ ++mTotalPages; return (printImage(img)); }
-
-    virtual void setPageSize(const QPageSize &pageSize) = 0;
-    virtual void setBaseImage(const QImage *img) = 0;
-    virtual void setOutputFile(const QString &fileName) = 0;
-    virtual bool startPrint() = 0;
-    virtual void endPrint() = 0;
-
-protected:
-    virtual bool printImage(const QImage *img) = 0;
-
-private:
-    int mTotalPages;
-};
-
-
-AbstractMultipageWriter::AbstractMultipageWriter()
-{
-    mTotalPages = 0;
-}
 
 //////////////////////////////////////////////////////////////////////////
 //									//

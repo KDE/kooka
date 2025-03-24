@@ -29,6 +29,7 @@ endif ()
 set(destinationmultipage_SRCS
   destinationmultipage.cpp
   multipageoptionsdialog.cpp
+  abstractmultipagewriter.cpp
   ${kookadestination_LOG_SRCS}
 )
 
