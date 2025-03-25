@@ -24,6 +24,7 @@
         "Description[tr]": "Taranan görseli yazdırın",
         "Description[uk]": "Надрукувати скановане зображення",
         "Description[x-test]": "xxPrint the scanned imagexx",
+        "Description[zh_TW]": "列印已掃描的圖片",
         "Icon": "document-print",
         "License": "GPL",
         "Name": "Print Image",

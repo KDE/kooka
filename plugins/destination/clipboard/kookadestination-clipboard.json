@@ -24,6 +24,7 @@
         "Description[tr]": "Taranan görseli panoya kopyalayın",
         "Description[uk]": "Копіювати скановане зображення до буфера",
         "Description[x-test]": "xxCopy the scanned image to the clipboardxx",
+        "Description[zh_TW]": "將已掃描的圖片複製到剪貼簿",
         "Icon": "edit-copy",
         "License": "GPL",
         "Name": "Copy Image",

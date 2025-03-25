@@ -24,6 +24,7 @@
         "Description[tr]": "Taranan görseli paylaşın",
         "Description[uk]": "Оприлюднення сканованого зображення",
         "Description[x-test]": "xxShare the scanned imagexx",
+        "Description[zh_TW]": "分享已掃描的圖片",
         "Icon": "document-share",
         "License": "GPL",
         "Name": "Share Image",

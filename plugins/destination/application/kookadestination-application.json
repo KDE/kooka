@@ -24,6 +24,7 @@
         "Description[tr]": "Taranan görseli bir uygulamada açın",
         "Description[uk]": "Відкрити скановане зображення у програмі",
         "Description[x-test]": "xxOpen the scanned image in an applicationxx",
+        "Description[zh_TW]": "以應用程式開啟已掃描的圖片",
         "Icon": "system-run",
         "License": "GPL",
         "Name": "Application",

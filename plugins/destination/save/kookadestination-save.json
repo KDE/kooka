@@ -24,6 +24,7 @@
         "Description[tr]": "Taranan görseli kaydedin",
         "Description[uk]": "Зберегти скановане зображення",
         "Description[x-test]": "xxSave the scanned imagexx",
+        "Description[zh_TW]": "儲存已掃描的圖片",
         "Icon": "document-save",
         "License": "GPL",
         "Name": "Save Image",
