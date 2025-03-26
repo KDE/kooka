@@ -2,12 +2,13 @@
 # This file is distributed under the same license as the kooka package.
 #
 # SPDX-FileCopyrightText: 2023, 2024, 2025 giovanni <g.sora@tiscali.it>
+# giovanni <g.sora@tiscali.it>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2025-03-12 12:48+0100\n"
+"PO-Revision-Date: 2025-03-25 15:32+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -353,7 +354,7 @@ msgstr "sane_control_option() falleva"
 #: kscandevice.cpp:1549
 #, kde-format
 msgid "Error while scanning"
-msgstr ""
+msgstr "Error durante que on scandeva"
 
 #: kscandevice.cpp:1550
 #, kde-format
@@ -450,7 +451,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
-msgstr ""
+msgstr "Fundo de autodiscoperta"
 
 #: previewer.cpp:342
 #, kde-format
@@ -502,7 +503,7 @@ msgstr "Bibliotheca de configuration de grandor de papiro"
 #: scanimage.cpp:76
 #, kde-format
 msgid "Loading non-local images is not yet implemented"
-msgstr ""
+msgstr "Cargar imagines nonlocal non es ancora implementate"
 
 #: scanimage.cpp:128
 #, kde-format
@@ -533,7 +534,7 @@ msgstr "TIFF non supportate"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
-msgstr ""
+msgstr "<title>Scanditor&nbsp;Preferentias</title>"
 
 #: scanparams.cpp:161
 #, kde-format
@@ -640,7 +641,7 @@ msgstr "Color Alte"
 #: scanparams.cpp:428
 #, kde-format
 msgid "Force image format:"
-msgstr ""
+msgstr "Fortia formato de imagine:"
 
 #: scanparams.cpp:481
 #, kde-format
