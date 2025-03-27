@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-25 15:46+0100\n"
+"PO-Revision-Date: 2025-03-26 12:16+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -308,6 +308,9 @@ msgid ""
 "Custom spell settings above do not affect this spelling check, use the "
 "language setting in the dialog to change the dictionary language."
 msgstr ""
+"Le preferentias de orthographiar de supra non influentia iste verifica "
+"orthographic, usa le preferentia de linguage in le dialogo per cambiar le "
+"linguage de dictionario."
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:332
 #, kde-format
@@ -766,6 +769,10 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>Imagine Bitmap </b> es un formatogeneralmente usate per imagines sub MS "
+"Windows. Il es convenibile per imagines de color, scala de gris e arte de "
+"linea (line art).<p>Iste formato es generalmente  supportate ma non es "
+"recommendate, in loco usa un formato aperite."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -773,6 +780,9 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>Portable Bitmap</b>, como usate per Netpbm, es un formato non comprimite "
+"per imagines de line art (bitmap). Solmente profunditate de 1 bit per pixel "
+"es supportate."
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -780,6 +790,9 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>Portable Greymap</b>, como usate per Netpbm, es un formato non comprimite "
+"per imagines de scala de gris. Solmente profunditate de 8 bit per pixel es "
+"supportate."
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -787,6 +800,9 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>Portable Pixmap</b>, como usate per Netpbm, es un formato non comprimite "
+"per imagines de color plen. Solmente profunditate de 24 bit per pixel  RGB "
+"es supportate."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -796,6 +812,10 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> es un formato sin perdita que sovente es supportate per "
+"applicationes de illustration de PC, ben que il es plus tosto vetere e non "
+"complexe.  Il es convenibileper imagines de color e scala de gris.<p> Iste "
+"formato non es recommendate, in loco usa un formato aperite. "
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -804,6 +824,9 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X Bitmap</b> es sovente usate per le Systema de X Window  per immagazinar "
+"bitmaps de cursor e icones.<p>A minus que requirite per iste scopo, in loco "
+"usa un formato de scopo general."
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -812,6 +835,9 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X Bitmap</b> es sovente usate per le Systema de X Window  per icones de "
+"color e altere imagines. <p>A minus que requirite per iste scopo, in loco "
+"usa un formato de scopo general."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -821,6 +847,10 @@ msgid ""
 "grayscale images, indexed or true color.<p>PNG is an open format which is "
 "widely supported."
 msgstr ""
+"<b>Portable Network Graphics</b> es un formato comprimite sin perdita "
+"lossless designate per esser portabile e extensibile.  Il es convenibile per "
+"ulle typo de imagines de color o scala de gris, indicisate o color ver (true "
+"color).<p>PNG es un formato aperite que es generalmente supportate."
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -830,6 +860,10 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
+"<b>JPEG</b> es un formato comprimite convenibile per imagines de ver  color "
+"(true color) o scalade gris. Il es un formato con perdita, assi il non es  "
+"recommendate per archivar o reperite cargar e salveguardar.<p> Isto es un "
+"formato aperite que es generalmente supportate."
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -838,6 +872,10 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
+"<b>JPEG 2000</b> esseva intendite como un actuialisation del formato JPEG, "
+"con le option de compression sin perdita, ma usque nunc il non es "
+"generalmente supportate. Il es convenibile per images de true color (color "
+"ver) o scala de gris."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -932,7 +970,7 @@ msgstr "Formato de file:"
 #: formatdialog.cpp:338
 #, kde-format
 msgid "Image sub-format:"
-msgstr ""
+msgstr "Sub-Formato de image:"
 
 #: formatdialog.cpp:384
 #, kde-format
@@ -952,7 +990,7 @@ msgstr "Necun formato seligite."
 #: formatdialog.cpp:470
 #, kde-format
 msgid "No information is available for this format."
-msgstr ""
+msgstr "Nulle information es disponibile per iste formato."
 
 #: galleryroot.cpp:101
 #, kde-kuit-format
@@ -1081,6 +1119,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
 msgstr ""
+"<div>Isto es le resolution de schermo currente. Il non pote esser cambiate "
+"hic.</div>"
 
 #: imgprintdialog.cpp:114
 #, kde-format
@@ -1790,7 +1830,7 @@ msgstr ""
 #: kookasettings.kcfg:125
 #, kde-format
 msgid "Allow click-to-rename"
-msgstr ""
+msgstr "Permitte clicca-per -renominar (click-to-rename)"
 
 #. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:126
@@ -1849,6 +1889,8 @@ msgstr "Dimension de vista preliminar:"
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
 msgstr ""
+"<div>Selectiona le grandor de vista preliminar predefinite per le vista de "
+"miniaturas.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
@@ -1911,7 +1953,7 @@ msgstr ""
 #: kookasettings.kcfg:238
 #, kde-format
 msgid "Layout analysis mode:"
-msgstr ""
+msgstr "Modo de analysys de disposition:"
 
 #. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
 #: kookasettings.kcfg:251
@@ -1935,7 +1977,7 @@ msgstr "Transforma:"
 #: kookasettings.kcfg:263
 #, kde-format
 msgid "Invert input"
-msgstr ""
+msgstr "Inverte ingresso"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
 #: kookasettings.kcfg:268
@@ -2402,7 +2444,7 @@ msgstr "Habilita Messages/Demandas"
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "%1 debe esser restartate proque iste preferentias ha effecto."
 
 #: prefspages.cpp:235
 #, kde-format
@@ -2674,7 +2716,7 @@ msgstr ""
 #: scanpresetsdialog.cpp:94
 #, kde-format
 msgid "Delete the selected scan preset set"
-msgstr ""
+msgstr "Dele le insimul de preselection de scander seligite"
 
 #: scanpresetsdialog.cpp:98
 #, kde-format
@@ -2689,7 +2731,7 @@ msgstr ""
 #: scanpresetsdialog.cpp:146
 #, kde-format
 msgid "No preset set selected."
-msgstr ""
+msgstr "Nulle insimul de preselection seligite."
 
 #: scanpresetsdialog.cpp:212
 #, kde-format
