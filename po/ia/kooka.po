@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-26 12:16+0100\n"
+"PO-Revision-Date: 2025-04-02 15:08+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -120,7 +120,7 @@ msgstr "Imprimente imagine"
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Nonpote salveguardar imagine a <filename>%1</filename><nl/><message>%2</"
+"Non pote salveguardar imagine a <filename>%1</filename><nl/><message>%2</"
 "message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:127
@@ -151,7 +151,7 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
 "resource> is not supported."
 msgstr ""
-"Nonpote salveguardar a  <filename>%2</filename><nl/>Le formato de imagine "
+"Non pote salveguardar a  <filename>%2</filename><nl/>Le formato de imagine "
 "<resource>%1</resource> non es supportate."
 
 #: ../plugins/destination/share/destinationshare.cpp:143
@@ -520,7 +520,8 @@ msgstr "Error"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
-msgstr "Nonpote leger file de resultato de GOCR <filename>%1</filename><nl/>%2"
+msgstr ""
+"Non pote leger file de resultato de GOCR <filename>%1</filename><nl/>%2"
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
@@ -553,7 +554,7 @@ msgid ""
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
-"Le files de classificator perKADMOS nonpoteva esser trovate.\n"
+"Le files de classificator perKADMOS non poteva esser trovate.\n"
 "OCR con KADMOS non essera possibile.\n"
 "\n"
 "Cambia le motor de OCR in le dialogo de preferentias."
@@ -1416,7 +1417,7 @@ msgstr "Necun spatio lassate sur le dispositivo"
 #: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
-msgstr "Nonpote scriber formato de iamgine '%1'"
+msgstr "Non pote scriber formato de imagine '%1'"
 
 #: imgsaver.cpp:376
 #, kde-format
