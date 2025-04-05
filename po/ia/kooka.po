@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-04-02 15:08+0200\n"
+"PO-Revision-Date: 2025-04-04 12:42+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -885,6 +885,9 @@ msgid ""
 "description language.  Use this format for importing into other "
 "applications, or to use with (e.g.) TeX."
 msgstr ""
+"<b>Encapsulated PostScript</b> es derivate ex le linguage de description de "
+"pagina  PostScript&trade; .  Usa iste formato per importar in altere "
+"applicationes, o usa con (p.ex.) TeX."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -893,6 +896,9 @@ msgid ""
 "and is used extensively by animation and video applications.<p>This format "
 "is not recommended, use an open format instead."
 msgstr ""
+"<b>Truevision Targa</b> pote immagazinar imagines de color plen con un  "
+"canal alpha, e es usate frequentemente per applicationes de animation e "
+"video.<p>Iste formato non es recommendate, in loco usa un formato aperite."
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -902,6 +908,10 @@ msgid ""
 "colors and optional transparency.<p>For legal reasons this format is not "
 "recommended, use an open format instead."
 msgstr ""
+"<b>Graphics Interchange Format</b> es un formato popular ma affectate con  "
+"patentes sovente usate per graphices web.Il usa compression sin perdita "
+"usque 256 coloresetransparentia optional<p>Per rationes legal iste formato "
+"non es recommendate, in locousa un formato aperite."
 
 #: formatdialog.cpp:207
 #, kde-format
@@ -912,6 +922,12 @@ msgid ""
 "variations, there may sometimes be compatibility problems. Unless required "
 "for use with other applications, use an open format instead."
 msgstr ""
+"<b>Tagged Image File Format</b> es un formato versatile e extensibile "
+"generalmente supportate per applicationes de illustrationes e publicar. It "
+"supporta imagines indicisate e de true color con transparentia alpha. "
+"<p>Proque il ha multe variationes, il potera haber aliquando problemas de "
+"compatibilitate.A minus que il es requirite per usar con altere "
+"applicationes usa, in loco, un formato aperite."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -921,6 +937,11 @@ msgid ""
 "types of images.<p>Images produced by a scanner will not be animated, so "
 "unless specifically required for use with other applications use PNG instead."
 msgstr ""
+"<b>Multiple-image Network Graphics</b> es derivate ex le standard PNG e es "
+"intendite per imagines anomate.  Il es un formato aperite convenibile per "
+"omne typos de imagine.<p>Imagines producite perun scanditor non essera "
+"animate, assi , a minus que es precisemente requirite per usar con altere "
+"applicationes usa PNG in loco. "
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -929,6 +950,9 @@ msgid ""
 "bit true color images with optional lossless compression.<p>Unless "
 "specifically required, use an open format instead."
 msgstr ""
+"Isto es le formato de imagine native de <b>Silicon Graphics</b>, supportante "
+"imaginestrue color de 24 bitcon compression sin perdita optional.<p>A minus "
+"que es precisemente requirite, usa in loco un formato aperite."
 
 #: formatdialog.cpp:241
 #, kde-format
@@ -937,6 +961,9 @@ msgid ""
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
+"<b>Wireless Bitmap</b> es un formato de bitmap monochrome optimizate per  "
+"dispositivos mobile WAP.  Il supporta solmente bitmapsnigre e blanc.<p>A "
+"minus que es precisemente requirite, usaun formato de scopo general in loco."
 
 #: formatdialog.cpp:251
 #, kde-format
@@ -947,6 +974,11 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> es intendite esser un standard aperite per imagines de true "
+"colour  con transparentia optional.  Il es generalmente supportate per "
+"navigatores de web  moderne e software de graphiches.<p>Varie methodos de "
+"compression compression, ambe con e sin perdita, es supportate. Compression "
+"con perdita non es recommendate per archivar e repetite cargar e salveguarda."
 
 #: formatdialog.cpp:280
 #, kde-format
@@ -1001,6 +1033,10 @@ msgid ""
 "gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
+"Incapace a crear le directorio <filename>%1</filename><nl/>per le galeria "
+"de  the  Kooka  - %3..<nl/><nl/>Tu directorio de documento <filename>%2</"
+"filename><nl/>essera usate.<nl/><nl/>Verifica le preferentia e permissiones "
+"del directorio de documento.."
 
 #: galleryroot.cpp:112
 #, kde-format
@@ -1015,6 +1051,9 @@ msgid ""
 "new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
 "a new gallery at the new location?"
 msgstr ""
+"Un galeria de vetere Kooka esseva trovate a <filename>%1</filename>.<nl/>Le "
+"nove location preferite es nunc <filename>%2</filename>.<nl/><nl/>Tu vole "
+"crear un nove galeria al nove location?"
 
 #: galleryroot.cpp:168
 #, kde-format
@@ -1042,6 +1081,10 @@ msgid ""
 "gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
 "may do so by simply copying or moving the files."
 msgstr ""
+"Kooka usara le nove galeria, <link url=\"file:%1\"><filename>%1</filename></"
+"link>.<nl/><nl/>Si tu vole adder imagines ex tu vetere galeria <link url="
+"\"file:%2\"><filename>%2</filename></link>,<nl/>alora tu poterea facer isto "
+"per simplemente copiar o moverle files."
 
 #: galleryroot.cpp:187
 #, kde-format
@@ -1108,6 +1151,8 @@ msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
 msgstr ""
+"<div>Imprime al mesme grandor bìvidite sur le schermo, determinate perle "
+"resolution del schermo.</div<"
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1137,6 +1182,9 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
+"<div>Imprimeal grandor determinate per le resolution de scander. Le "
+"resolution es salveguardate con le imagine e usate si disponibile; si il non "
+"es, ilpote esser insertate ci.</div>"
 
 #: imgprintdialog.cpp:119
 #, kde-format
@@ -1156,6 +1204,8 @@ msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
 msgstr ""
+"<div>Isto es lke resolutionj de scander como salveguardate con le imagine. "
+"IL pote esser cambiate si necessari.</div>"
 
 #: imgprintdialog.cpp:132
 #, kde-format
@@ -1170,6 +1220,8 @@ msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
 msgstr ""
+"<div>Imprime scalate al grandor specificate. Le imagine es centrate sur le "
+"papito,</div>"
 
 #: imgprintdialog.cpp:137
 #, kde-format
@@ -1187,7 +1239,7 @@ msgstr " mm"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>Le largor al qual le imagine essera imprimite.</div> "
 
 #: imgprintdialog.cpp:151
 #, kde-format
@@ -1199,7 +1251,7 @@ msgstr "Altessa de imagine:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>Le altessa al qual le imagine essera imprimite.</div>"
 
 #: imgprintdialog.cpp:166
 #, kde-format
