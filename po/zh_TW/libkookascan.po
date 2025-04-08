@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2025-01-02 17:37+0900\n"
+"PO-Revision-Date: 2025-04-07 15:45+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -809,7 +809,9 @@ msgid ""
 "<div>Threshold for auto-detection. All pixels lighter (on a black "
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
-msgstr "<div>自動偵測的閥值"
+msgstr ""
+"<div>自動偵測的閥值。所有比這個值更亮（背景為黑色時）或更暗（背景為白色時）的"
+"像素都會視為影像的一部分。</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69
