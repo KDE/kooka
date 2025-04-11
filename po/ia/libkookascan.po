@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2025-03-25 15:32+0100\n"
+"PO-Revision-Date: 2025-04-10 16:12+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -50,6 +50,15 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Si tu scanditor non ha essite discoperite automaticamente, tu pote "
+"specificar lo hic. Le <interface>Dispositivo de Scander</interface> es le "
+"nomine del dispositivo de retroadministration de SANE backend device. Le "
+"<interface>Fabricante</interface>, <interface>Typo</interface> e "
+"<interface>Description</interface> pote esser usate per identifica le "
+"scanditor plus tarde.<nl/><nl/>Plus information sur <link url=\"?1\">retro-"
+"administratio (backends) de SANE</link>, <link url=\"?2\">localisar "
+"dispositivos</link>, <link url=\"?3\">Scanditores HP</link>, <link url=\"?"
+"4\">dispositivo non trovate</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
@@ -86,6 +95,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"Le <interface>Dispositivo de ScanderScanner</interface> deberea esser un "
+"nomine de backend (retro-administration) (con parametros optional) que es "
+"comprendite per SANE. Vide <link url=\"man:/sane\">sane(7)</link> or <link "
+"url=\"man:/sane-dll\">sane&#8209;dll(5)</link> per  plus informationsu "
+"backends disponibile e le formato de nomines de dispositivo."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -98,6 +112,13 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Per trovar le information que debe esser insertate, essaya localisar le  "
+"dipositivo usante le commando <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> for scandiotores SCSI, USB o de "
+"portos parallel port, o le commando <link url=\"man:/scanimage"
+"\">scanimage(1)</link>  con le option  <icode>&#8209;L</icode> per "
+"canditores de rete. Si le scanditor es trovate, alora inserta le nomine de "
+"dispositivo monstrate per iste commandos."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -110,6 +131,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Per scanditor HP USB o de rete que usa <link url=\"http://hplip.sourceforge."
+"net/\">HPLIP</link>, essaya usar le commando <command>hp&#8209;probe</"
+"command>  per localisar lo, per exemplo <icode>hp&#8209;probe&nbsp;&#8209;"
+"b&nbsp;usb</icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. "
+"Nota que si le scanditor es trovate per HPLIP, alora le nomine de "
+"dispositivo the  <icode>hp:</icode> que il monstra debe esser reimplaciate "
+"per <icode>hpaio:</icode> per SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -119,6 +147,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Si iste commandos falle a localisar tu scanditor, alora il poterea non esser "
+"supportate per SANE. Verifica le documentation de SANE per un lista de "
+"dispositivos supportate <link url=\"http://www.sane-project.org/sane-"
+"supported-devices.html\"></link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -446,6 +478,12 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
+"Le discoperta automatic de imagines sur previsualisation depende de le color "
+"de fundo sur le imagine de previsualisation (le exito del scander con nulle "
+"documento cargate).\n"
+"\n"
+"Pro favor tu selige si le fundo del imagine de previsualisation es nigre o "
+"blanc."
 
 #: previewer.cpp:341
 #, kde-format
@@ -545,6 +583,8 @@ msgstr "&Vista preliminar"
 #, kde-format
 msgid "Start a preview scan and show the preview image"
 msgstr ""
+"Starta un scansion de previsualisation e monstra le imagine de "
+"previsualisation"
 
 #: scanparams.cpp:167
 #, kde-format
@@ -554,7 +594,7 @@ msgstr "Ini&tia Scansion"
 #: scanparams.cpp:168
 #, kde-format
 msgid "Start a scan and save the scanned image"
-msgstr ""
+msgstr "Starta un scansion e salveguarda le imagine scandite"
 
 #: scanparams.cpp:200
 #, kde-format
@@ -584,7 +624,7 @@ msgstr "Avantiate"
 #: scanparams.cpp:275
 #, kde-format
 msgid "SANE Debug (from PNM image)"
-msgstr ""
+msgstr "SANE Debug (ex imagine  PNM )"
 
 #: scanparams.cpp:276
 #, kde-kuit-format
@@ -594,11 +634,15 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
+"Opera in le mesme modo que le verscanditor face (includente area de scansion "
+"scan, tractament de imagine etc.), ma legente ab le file de imagine "
+"specificate. Vide <link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> per plus "
+"information."
 
 #: scanparams.cpp:278
 #, kde-format
 msgid "Virtual Scanner (any image format)"
-msgstr ""
+msgstr "Scanditor Virtual (ulle formato de imagine)"
 
 #: scanparams.cpp:279
 #, kde-kuit-format
@@ -607,6 +651,8 @@ msgid ""
 "Do not perform any scanning or processing, but simply read the specified "
 "image file. This is for testing the image saving, etc."
 msgstr ""
+"Non executa ulle scander o tractamento, ma simplemente lege le file de "
+"imagine specificate.Isto es per essayar le salveguardar de imagine, etc."
 
 #: scanparams.cpp:296
 #, kde-format
@@ -655,6 +701,8 @@ msgid ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 msgstr ""
+"<title>Nulle scanditor seligite </title><nl/><nl/>Selige un dispositivo de "
+"scander  per executar lescansion."
 
 #: scanparams.cpp:573
 #, kde-kuit-format
@@ -673,17 +721,17 @@ msgstr ""
 #: scanparams.cpp:675
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
-msgstr ""
+msgstr "Scansion de profunditate de 1 bit non pote esser facite in color"
 
 #: scanparams.cpp:678
 #, kde-format
 msgid "16-bit depth scans are not supported"
-msgstr ""
+msgstr "Scansiones de profunditate de 16-bit non es supportate"
 
 #: scanparams.cpp:688
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
-msgstr ""
+msgstr "Un file debe esser insertate per essayar un scansion virtual"
 
 #: scanparams.cpp:694
 #, kde-kuit-format
@@ -692,6 +740,8 @@ msgid ""
 "The testing or virtual file <filename>%1</filename><nl/>was not found or is "
 "not readable."
 msgstr ""
+"Le file a essayar o virtual <filename>%1</filename><nl/>non esseva trovate o "
+"non es legibile."
 
 #: scanparams.cpp:704
 #, kde-kuit-format
@@ -700,6 +750,8 @@ msgid ""
 "SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
 "%1</icode>."
 msgstr ""
+"SANE Debug pote solment eleger files PNM.<nl/>Le typo del file specificate "
+"es <icode>%1</icode>."
 
 #: scanparams.cpp:721
 #, kde-kuit-format
@@ -714,13 +766,13 @@ msgstr "Scander in execution.<nl/><nl/>%1"
 #: scanparams.cpp:742
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
-msgstr ""
+msgstr "Non pote facer previsualisation in modode Scanditor Virtual"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:12
 #, kde-format
 msgid "Query network for available scanners"
-msgstr ""
+msgstr "Demanda in le rete per scanditores disponibile"
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:13
@@ -736,6 +788,7 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Usa lepreferentias de proxy de systema per acceder a scanditores de rete"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -750,7 +803,7 @@ msgstr ""
 #: scansettings.kcfg:28
 #, kde-format
 msgid "Show the scanner selection dialog"
-msgstr ""
+msgstr "Monstra le dialogo de selection de scanditor"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:29
@@ -777,7 +830,7 @@ msgstr ""
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
-msgstr ""
+msgstr "Grandor de pulvere  (pixeles):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:70
@@ -791,7 +844,7 @@ msgstr ""
 #: scansettings.kcfg:77
 #, kde-format
 msgid "Add/subtract margin (mm):"
-msgstr ""
+msgstr "Adde/subtrahe margine (mm)"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:78
@@ -804,7 +857,7 @@ msgstr ""
 #: scansettings.kcfg:85
 #, kde-format
 msgid "Scanner background:"
-msgstr ""
+msgstr "Fundo de Scanditor:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:86
@@ -817,7 +870,7 @@ msgstr ""
 #: scansizeselector.cpp:119
 #, kde-format
 msgid "Set the size of the scanned area"
-msgstr ""
+msgstr "Assifìgna le grandor del area scandite"
 
 #: scansizeselector.cpp:124
 #, kde-format
