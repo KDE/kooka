@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-04-04 12:42+0200\n"
+"PO-Revision-Date: 2025-04-16 11:41+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1266,6 +1266,8 @@ msgid ""
 "<div>Print using as much of the available space on the paper as possible. "
 "The aspect ratio can be maintained.</div>"
 msgstr ""
+"<div>Imprime usante le plus possibile del spatio disponibile sur le  papiro. "
+"Le proportiones essera mantenite.</div>"
 
 #: imgprintdialog.cpp:178
 #, kde-format
@@ -1277,7 +1279,7 @@ msgstr "Altere optiones"
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
-msgstr "Mantene le rata de aspecto inter dimensiones"
+msgstr "Mantene le proportiones inter dimensiones"
 
 #: imgprintdialog.cpp:183
 #, kde-format

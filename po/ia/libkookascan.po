@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2025-04-11 11:13+0200\n"
+"PO-Revision-Date: 2025-04-16 11:37+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -717,6 +717,15 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
+"<title>Necun scanditor trovate, o incapace a acceder a illo</title><nl/><nl/"
+">Il habeva un problema usante le bibliotheca SANE (Scanner Access Now Easy)  "
+"per acceder  al dispositivo scanditor.  Il poterea haber un problema con tu "
+"installation de SANE, o il pote non esser configurate per supportar tu "
+"scanditor.<nl/><nl/>Verifica que SANE es correctemente installate e "
+"configurate sur tu systema, e etiam que le nomine del dispositivo scanditor "
+"e preferentias es correcte.<nl/><nl/>Vide le pagina initial del projecto "
+"SANE (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
+"per plus information sur installation e configuration de SANE."
 
 #: scanparams.cpp:675
 #, kde-format
@@ -782,6 +791,9 @@ msgid ""
 ">Note that this does not mean a query over the entire network, but only "
 "those hosts configured for SANE.</div>"
 msgstr ""
+"<div>Marca isto si tu vole un requesta de rete per scanditores disponibile."
+"<br/><br/>Nota que isto non significa un requesta sur tote le integre rete, "
+"ma solmente  sur ille hospites configurate per SANE.</div>"
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:18
@@ -798,6 +810,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Marca isto si tu vole usar le preferentias de proxy de systema standard "
+"per acceder a scanditores de rete.<br/><br/>Nota alcun retroadministratione "
+"(backends) de SANE (per exemplo 'escl') poterea non functionar correctemente "
+"trans un proxy.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
