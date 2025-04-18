@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-04-16 11:41+0200\n"
+"PO-Revision-Date: 2025-04-17 17:47+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1288,6 +1288,8 @@ msgid ""
 "<div>Adjust the height or width to maintain the original aspect ratio of the "
 "printed image.</div>"
 msgstr ""
+"<div>Adapta le altessa o largessa per mantener le proportiones original  del "
+"imagine imprimite.</div>"
 
 #: imgprintdialog.cpp:189
 #, kde-format
@@ -1302,6 +1304,8 @@ msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
 msgstr ""
+"<div>Imprime al resolution leplus basse possibile. Istopoterea non "
+"functionar como intendite sur omne imprimitores.</div>"
 
 #: imgprintdialog.cpp:196
 #, kde-format
@@ -1334,6 +1338,8 @@ msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
 msgstr ""
+"<div>Selige si marcas de taliar/unir es imprimite. Le marcar reducera le "
+"area imprimibile disponibile.</div>"
 
 #: imgprintdialog.cpp:214
 #, kde-format
@@ -1511,6 +1517,9 @@ msgid ""
 "one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
 "filename>"
 msgstr ""
+"Le nomin de file che tu forniva non ha extension de filea.<nl/>On deberea "
+"adder illo original?<nl/><nl/>Isto resultarea in le nove nomine de file "
+"<filename>%1</filename>"
 
 #: imgsaver.cpp:417
 #, kde-format
@@ -1920,6 +1929,8 @@ msgstr "Usa un imagined e fundo personalisate"
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
 msgstr ""
+"<div>Assigna un imagine de fundo personalisate per le vista de miniatura.</"
+"div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
@@ -1931,7 +1942,7 @@ msgstr "Imagine:"
 #: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>Le imagine de fundo a usar per levista de miniatura.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:165
