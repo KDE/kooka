@@ -22,6 +22,7 @@
         "Description[tr]": "<emphasis>GOCR</emphasis> (bazen <emphasis>JOCR</emphasis> olarak da bilinir), ilk olarak Jörg&nbsp;Schulenburg tarafından başlatılan ve şu an etkin bir geliştirici takımı tarafından sürdürülen bir açık kaynaklı optik karakter tanıma işletkesidir.<nl/><nl/>GOCR üzerine daha fazla bilgi için  <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> adresine bakın.",
         "Description[uk]": "<emphasis>GOCR</emphasis> (іноді програму називають <emphasis>JOCR</emphasis>) — рушій розпізнавання текстів з відкритим кодом, першим розробником якого є Joerg&nbsp;Schulenburg. Зараз за розробку відповідає команда інших розробників.<nl/><nl/>Докладніші дані щодо GOCR можна знайти на сторінці <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link>.",
         "Description[x-test]": "xx<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source OCR engine, originally started by Joerg&nbsp;Schulenburg and now with a team of active developers.<nl/><nl/>See <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> for more information on GOCR.xx",
+        "Description[zh_TW]": "<emphasis>GOCR</emphasis>（有的時候叫做 <emphasis>JOCR</emphasis>）是一個開源的 OCR 引擎，最初由 Joerg&nbsp;Schulenburg 開始這個計畫，現在則由一群活躍的開發者團隊開發。<nl/><nl/>閱讀 <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> 以取得 GOCR 的更多資訊。",
         "Icon": "gocr",
         "License": "GPL",
         "Name": "GOCR",
