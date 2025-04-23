@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-04-17 17:47+0200\n"
+"PO-Revision-Date: 2025-04-22 16:13+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1801,6 +1801,11 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
+"<title>Modo Galeria - Necun scanditor seligite</title><nl/><nl/>In iste modo "
+"tu pote navigar, manipular e facer OCR sur images ja in le galeria.<nl/><nl/"
+"><link url=\"a:1\">Selection un dispositivo scanditor </link> per exequer "
+"scander, o <link url=\"a:2\">adde un dispositivo </link> siun scanditor non "
+"es discoperite automaticamente."
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -1833,6 +1838,9 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
+"<div>Marca isto si tu vole que  Kooka carga le ultime imagine selectionate "
+"in le  visor al startar.<br/><br/>Si tu imagine es grande, ille poterea "
+"relentar le  comenciamento de Kooka.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -1847,6 +1855,8 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
+"<div>Marca isto si tu vole sempre usar le assistente de salveguarda le "
+"imagine, anque si il ha un formato predefinite per le typo de imagine.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1861,6 +1871,8 @@ msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
+"<div>Marca isto di tu vole sempre insertarun nomine de file quando on scande "
+"un imagine.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
@@ -1875,6 +1887,9 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
+"<div>Marca isto per monstrar solmente formatos de file recommendat per le "
+"typo de scander. Leva le marca pe monstrar tote le formatos compatibile.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:91
@@ -1889,6 +1904,8 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
+"<div>Marca isto permemorar le formato de file seligite per le typo de "
+"imagine  scandite  o demanda lo novemente.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:125
@@ -1903,6 +1920,8 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
+"<div>Marca isto di tu vole poter renominar elementos de galeria per cliccar "
+"sur illos (alteremente usa leoption de \"Renomina\" del menu).</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:131
@@ -1917,6 +1936,8 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
+"<div>Selige si e ubi un lista de dossieres de galerie recentemente accessite "
+"essera monstrate.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
@@ -1972,6 +1993,9 @@ msgid ""
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
+"<div>Racemos (Clusters) plus parve que iste grandor essera considerate "
+"ruito, e ignorate. 0 significa non discoperi racemos de pulvere, -1 "
+"significa discoperir los automaticamente. Le predefinite es 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
@@ -1986,6 +2010,9 @@ msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
+"<div>Le valor de limine a basso del qual pixeles gris es considerate esser "
+"nigre. 0 significa discoperi automaticamente le nivello de gris. Le "
+"predefinite es 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
@@ -2000,6 +2027,9 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
+"<div>Le intervallo minime in pixeles que es considerate esser spatio de "
+"parola.  Le predefinite es 0 que significa discoperir automaticamente "
+"spatios.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -2014,6 +2044,9 @@ msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
+"<div>Le limine de certitude de acceptar per recognition, characteres con un  "
+"certitude plus basse es considerate esser incognoscite. Le predefinite es 95."
+"</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:238
@@ -2168,6 +2201,11 @@ msgid ""
 "icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
 "reported error: <message>%1</message>"
 msgstr ""
+"Il habeva un problema a aperir le dispositivo scanditor.<nl/><nl/>Verifica "
+"que le scanditor es connectite e activate, e que le suppoerto de SANE per "
+"illo es correctemente configurate.<nl/><nl/>Essayar a usar le dispositivo "
+"scanditor: <icode>%3</icode><nl/>libkookascan reportava error: <message>%2</"
+"message><nl/>SANE reportava error: <message>%1</message>"
 
 #: kookaview.cpp:521
 #, kde-format
@@ -2185,6 +2223,13 @@ msgid ""
 "to use. Use the <interface>Add Scan Device</interface> option to enter the "
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
+"Necun dispositivo scanditor es disponibile.<nl/><nl/>Si tu scanditor es un "
+"typo que pote esser auto-discoperite per SANE, verifica que il es "
+"connectite, activate e configurate correctemente.<nl/><nl/>Si le scanditor "
+"non pote esser discoperite automaticamente per SANE (isto include alcun "
+"scanditores de rete), tu debe specificar le dispositivo a usa. Usa le option "
+"<interface>Adde Dispositivo de Scander </interface> per insertar le nomine "
+"del motor (backend) e parametros, o vide ille dialogo per plus information."
 
 #: kookaview.cpp:587
 #, kde-format
@@ -2265,6 +2310,8 @@ msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
+"Necun motor de  OCR es configurate.\n"
+"Pro favor selectionae configura un per poter exequer OCR."
 
 #: kookaview.cpp:791
 #, kde-format
@@ -2286,6 +2333,11 @@ msgid ""
 ">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
 "<message>%1</message>"
 msgstr ""
+"Il habevaun problemadurantele vista preliminar o le scandee.<nl/>Verifica "
+"que le scanditor es ancora connectite e active, <nl/>e que ille medio es "
+"cargate si requirite.<nl/><nl/>Essayante a usar dispositivo scanditor: "
+"<icode>%3</icode><nl/>libkookascan reportava error: <message>%2</message><nl/"
+">SANE reportava error: <message>%1</message>"
 
 #: kookaview.cpp:958
 #, kde-format
@@ -2329,6 +2381,15 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"Kooka forni accesso a hardware de scanditor usante le bibliotheca de <a href="
+"\"http://www.sane-project.org/\">SANE</a>.\n"
+"\n"
+"Kooka te permitte scander, salveguardar e vider ulle formato de imagine que "
+"KDE supporta, e pote exequer Recognition Optic de Character (Optical "
+"Character Recognition - OCR)  usante le programmas a fonte aperite <a href="
+"\"http://jocr.sourceforge.net/\">GOCR</a> o <a href=\"http://www.gnu.org/"
+"software/ocrad/ocrad.html\">OCRAD</a>, o le bibliotheca commercial <a href="
+"\"http://www.rerecognition.com/\">KADMOS</a>."
 
 #: main.cpp:58
 #, kde-format
@@ -2345,6 +2406,19 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
+"Iste programma es distribuite sub le terminos del GPL v2 como puiblicate\n"
+"per le Free Software Foundation.\n"
+"\n"
+"Como un special exception, permission es date ler ligar (link) iste "
+"programma\n"
+"con ulle version del motor KADMOS OCR/ICR de reRecognition GmbH\n"
+"(http://www.rerecognition.com), e distribuer le exito executabile\n"
+"sin includer lecodice fonte KADMOS in le distribution fonte.\n"
+"\n"
+"Nota que ligar (linking) contras  KADMOS non es permittite sub le terminos\n"
+"del licentia Qt GPL , assi si tu volefacer isto alora tu debe haber un "
+"licentia\n"
+"de disveloppamento commercial de  Qt.\n"
 
 #: main.cpp:71
 #, kde-format
@@ -2501,6 +2575,8 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
+"Usa iste button per rehabilitar omne messages e demandas que\n"
+"ha essite celate per usar \"Non Demanda me novemente\""
 
 #: prefspages.cpp:85
 #, kde-format
@@ -2558,6 +2634,7 @@ msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
 "OCR."
 msgstr ""
+"Necun motor OCR es seligite. Selige e configura un per poter exequer OCR."
 
 #: prefspages.cpp:452
 #, kde-format
@@ -2636,6 +2713,10 @@ msgid ""
 "yet possible. Converting 'on the fly' is planned for a future release.\n"
 "Kooka corrects the extension."
 msgstr ""
+"Tu insertava un extension de file que differe eb le que es existente. Illo "
+"non es ancora possibile.Converter \"al volo\" es planificate per versiones "
+"futur.\n"
+"Kooka corrige le extension. "
 
 #: scangallery.cpp:602
 #, kde-format
@@ -2702,6 +2783,8 @@ msgid ""
 "Do you really want to permanently delete the folder<nl/><filename>%1</"
 "filename><nl/>and all of its contents? It cannot be restored."
 msgstr ""
+"Tu vermente vole deler permanentemente le dossier <nl/><filename>%1</"
+"filename><nl/>e tote su contentos? Il non pote esser restabilite."
 
 #: scangallery.cpp:1115
 #, kde-kuit-format
@@ -2710,6 +2793,8 @@ msgid ""
 "Do you really want to permanently delete the image<nl/><filename>%1</"
 "filename>?<nl/>It cannot be restored."
 msgstr ""
+"Tu vermente vole deler permanentemente le imagine<nl/><filename>%1</"
+"filename>?<nl/>Ilnonpote esser restabilite."
 
 #: scangallery.cpp:1122
 #, kde-format
@@ -2768,6 +2853,8 @@ msgstr "Selige"
 #, kde-format
 msgid "Load the selected scan preset set to use as scanner settings"
 msgstr ""
+"Carga le insimulde preselection de scander seligite per usar como "
+"preferentias de scander "
 
 #: scanpresetsdialog.cpp:86
 #, kde-format
@@ -2778,6 +2865,8 @@ msgstr "Salveguarda..."
 #, kde-format
 msgid "Save the current scanner settings as a new scan preset set"
 msgstr ""
+"Salveguarda le preferentias de scanditor currente como un nove insimul de "
+"preselection de scander  "
 
 #: scanpresetsdialog.cpp:94
 #, kde-format
@@ -2793,6 +2882,8 @@ msgstr "Edita ..."
 #, kde-format
 msgid "Change the name or description of the selected scan preset set"
 msgstr ""
+"Cambia le nomine o le description de insimul de preselection de scander "
+"seligite"
 
 #: scanpresetsdialog.cpp:146
 #, kde-format
@@ -2809,7 +2900,7 @@ msgstr "%1, %2 dpi"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
-msgstr ""
+msgstr "Tu vermente vole deler le insimul <resource>%1</resource>?"
 
 #: scanpresetsdialog.cpp:290
 #, kde-format
@@ -2841,6 +2932,8 @@ msgid ""
 "<qt>This is the uncompressed size of the scanned image. It tries to warn you "
 "if you try to produce too big an image by changing its background color."
 msgstr ""
+"<qt>Isto es le grandor non comprimite del imagine scandite. Il essaya avisar "
+"te si tu essaya producer image troppo grande  per cambiar su color de fundo."
 
 #: statusbarmanager.cpp:108
 #, kde-format
