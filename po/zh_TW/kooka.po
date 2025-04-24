@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-02 18:45+0900\n"
+"PO-Revision-Date: 2025-04-19 15:53+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -1903,19 +1903,12 @@ msgstr "信心："
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "The numeric value gray pixels are \n"
-#| "considered to be black.\n"
-#| "\n"
-#| "Default is 160"
+#, kde-format
 msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
-"灰色像素被認為是黑色的數值。\n"
-"\n"
-"預設為 160"
+"<div>辨識用的接受信心閥值，信心低於此數值的字元會視為未知。預設是 95。</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:238
@@ -2070,6 +2063,10 @@ msgid ""
 "icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
 "reported error: <message>%1</message>"
 msgstr ""
+"開啟掃描器裝置時發生問題。<nl/><nl/>請檢查掃描器是否已連線且是否已開機，並確"
+"認是否正確設定 SANE 對於它的支援。<nl/><nl/>嘗試使用掃描器裝置：<icode>%3</"
+"icode><nl/>libkookascan 回報錯誤：<message>%2</message><nl/>SANE 回報錯誤："
+"<message>%1</message>"
 
 #: kookaview.cpp:521
 #, kde-format
@@ -2153,7 +2150,7 @@ msgstr "OCR 已完成"
 #: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
-msgstr ""
+msgstr "沒有能進行拼字檢查的 OCR 辨識結果文字。"
 
 #: kookaview.cpp:768
 #, kde-format
@@ -2194,6 +2191,10 @@ msgid ""
 ">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
 "<message>%1</message>"
 msgstr ""
+"預覽或掃描時發生問題。<nl/>請檢查掃描器是否仍然連線且未關機，<nl/>以及如果有"
+"需要的話媒體是否已載入。<nl/><nl/>嘗試使用掃描器裝置：<icode>%3</icode><nl/"
+">libkookascan 回報錯誤：<message>%2</message><nl/>SANE 回報錯誤：<message>"
+"%1</message>"
 
 #: kookaview.cpp:958
 #, kde-format
@@ -2237,6 +2238,14 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"Kooka 透過 <a href=\"http://www.sane-project.org/\">SANE</a> 函式庫提供對於掃"
+"描器硬體裝置的存取。\n"
+"\n"
+"Kooka 讓您掃描、儲存或檢視掃描結果，影像格式可以使用任何 KDE 支援的格式。"
+"Kooka 也支援對掃描結果進行 OCR 文字辨識，這個功能利用開源 <a href=\"http://"
+"jocr.sourceforge.net/\">GOCR</a> 或是 <a href=\"http://www.gnu.org/software/"
+"ocrad/ocrad.html\">OCRAD</a> 程式，或是商用的 <a href=\"http://www."
+"rerecognition.com/\">KADMOS</a> 函式庫。"
 
 #: main.cpp:58
 #, kde-format
