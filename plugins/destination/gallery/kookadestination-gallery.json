@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Save the scanned image to the scan gallery",
+        "Description[ar]": "احفظ الصورة الممسوحة ضوئياً في معرض المسح الضوئي",
         "Description[ca@valencia]": "Guarda la imatge escanejada a la galeria d'escaneig",
         "Description[ca]": "Desa la imatge escanejada a la galeria d'escaneig",
         "Description[cs]": "Uložit skenované snímky do galerie skenů",

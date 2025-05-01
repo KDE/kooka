@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Open the scanned image in an application",
+        "Description[ar]": "افتح الصورة الممسوحة ضوئيًا في تطبيق",
         "Description[ca@valencia]": "Obri la imatge escanejada en una aplicació",
         "Description[ca]": "Obre la imatge escanejada en una aplicació",
         "Description[cs]": "Otevřít skenovaný snímek v aplikaci",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Save the scanned image",
+        "Description[ar]": "احفظ الصورة الممسوحة ضوئيًا",
         "Description[ca@valencia]": "Guarda la imatge escanejada",
         "Description[ca]": "Desa la imatge escanejada",
         "Description[cs]": "Uložit skenovaný snímek",

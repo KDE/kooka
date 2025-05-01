@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Share the scanned image",
+        "Description[ar]": "شارك الصورة الممسوحة ضوئياً",
         "Description[ca@valencia]": "Compartix la imatge escanejada",
         "Description[ca]": "Comparteix la imatge escanejada",
         "Description[cs]": "Sdílet skenovaný snímek",

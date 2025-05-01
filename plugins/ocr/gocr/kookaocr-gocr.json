@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source OCR engine, originally started by Joerg&nbsp;Schulenburg and now with a team of active developers.<nl/><nl/>See <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> for more information on GOCR.",
+        "Description[ar]": "GOCR (يُعرف أحيانًا باسم JOCR) هو محرك OCR مفتوح المصدر، بدأه في الأصل يورغ شولنبرغ، ويعمل عليه الآن فريق من المطورين النشطين. لمزيد من المعلومات حول GOCR، يُرجى زيارة <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link>.",
         "Description[ca@valencia]": "<emphasis>GOCR</emphasis> (a vegades conegut com a <emphasis>JOCR</emphasis>) és un motor d'OCR de codi font obert, començat originalment per en Joerg&nbsp;Schulenburg i ara hi ha un equip de desenvolupadors actius. <nl/><nl/>Vegeu <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> per a obtindre més informació quant a GOCR.",
         "Description[ca]": "El <emphasis>GOCR</emphasis> (a vegades conegut com a <emphasis>JOCR</emphasis>) és un motor d'OCR de codi font obert, començat originalment per en Joerg&nbsp;Schulenburg i ara hi ha un equip de desenvolupadors actius. <nl/><nl/>Vegeu <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> per a obtenir més informació quant al GOCR.",
         "Description[en_GB]": "<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source OCR engine, originally started by Joerg&nbsp;Schulenburg and now with a team of active developers.<nl/><nl/>See <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> for more information on GOCR.",
@@ -27,6 +28,7 @@
         "Icon": "gocr",
         "License": "GPL",
         "Name": "GOCR",
+        "Name[ar]": "GOCR",
         "Name[ca@valencia]": "GOCR",
         "Name[ca]": "GOCR",
         "Name[cs]": "GOCR",
