@@ -167,17 +167,24 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mDelayTimeSpinbox, row, 3, Qt::AlignLeft);
     ++row;
 
-    // Row 8: Spacing
+    // Row 8: Delay Before First Scan check box
+    mDelayBeforeFirstCheck = new QCheckBox(i18n("Wait or delay before the first scan"), w);
+    mDelayBeforeFirstCheck->setToolTip(i18nc("@info:tooltip", "Wait for confirmation or delay for the set time before the first scan starts"));
+    connect(mDelayBeforeFirstCheck, &QCheckBox::checkStateChanged, this, &MultiScanDialog::slotGuiChange);
+    gl->addWidget(mDelayBeforeFirstCheck, row, 0, 1, -1, Qt::AlignLeft);
+    ++row;
+
+    // Row 9: Spacing
     gl->setRowMinimumHeight(row, 2*DialogBase::verticalSpacing());
     ++row;
 
-    // Row 9: Destination group
+    // Row 10: Destination group
     grp = new QGroupBox(i18n("Destination"), w);
     grp->setFlat(true);
     gl->addWidget(grp, row, 0, 1, -1);
     ++row;
 
-    // Row 10: Batch Multiple Scans check box
+    // Row 11: Batch Multiple Scans check box
     mBatchMultipleCheck = new QCheckBox(i18n("Process multiple scans as a batch"), w);
     mBatchMultipleCheck->setToolTip(i18nc("@info:tooltip",
                                           "Set this option on to process multiple scans together in a batch, "
@@ -190,7 +197,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mBatchMultipleCheck, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
 
-    // Row 11: Automatically Generate Filename check box
+    // Row 12: Automatically Generate Filename check box
     mGenerateFilenameCheck = new QCheckBox(i18n("Automatically generate file names"), w);
     mGenerateFilenameCheck->setToolTip(i18nc("@info:tooltip",
                                               "Set this option on to automatically generate a file name when possible, "
@@ -207,17 +214,17 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mGenerateFilenameCheck, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
 
-    // Row 12: Spacing
+    // Row 13: Spacing
     gl->setRowMinimumHeight(row, 2*DialogBase::verticalSpacing());
     ++row;
 
-    // Row 13: Rotation group
+    // Row 14: Rotation group
     grp = new QGroupBox(i18n("Rotation"), w);
     grp->setFlat(true);
     gl->addWidget(grp, row, 0, 1, -1);
     ++row;
 
-    // Row 14: Odd pages rotation combo box and label
+    // Row 15: Odd pages rotation combo box and label
     QLabel *lab = new QLabel(i18n("Odd pages:"), w);
     gl->addWidget(lab, row, 0, 1, 2, labelAlign);
 
@@ -226,7 +233,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mRotateOddCombo, row, 2, 1, -1);
     ++row;
 
-    // Row 15: Even pages rotation combo box and label
+    // Row 16: Even pages rotation combo box and label
     lab = new QLabel(i18n("Even pages:"), w);
     gl->addWidget(lab, row, 0, 1, 2, labelAlign);
 
@@ -264,6 +271,7 @@ void MultiScanDialog::setOptions(const MultiScanOptions &opts)
                                     (f & MultiScanOptions::BatchMultiple));
 
     mGenerateFilenameCheck->setChecked(f & MultiScanOptions::AutoGenerate);
+    mDelayBeforeFirstCheck->setChecked(f & MultiScanOptions::FirstWait);
 
     int idx = mRotateOddCombo->findData(mOptions.rotation(MultiScanOptions::RotateOdd));
     if (idx!=-1) mRotateOddCombo->setCurrentIndex(idx);
@@ -287,6 +295,7 @@ const MultiScanOptions &MultiScanDialog::options()
     mOptions.setFlags(MultiScanOptions::MultiScan, mScanMultiRadio->isChecked());
     mOptions.setFlags(MultiScanOptions::ManualWait, mMultiManualScanRadio->isChecked());
     mOptions.setFlags(MultiScanOptions::DelayWait, mMultiDelayScanRadio->isChecked());
+    mOptions.setFlags(MultiScanOptions::FirstWait, mDelayBeforeFirstCheck->isChecked() && mDelayBeforeFirstCheck->isEnabled());
 
     mOptions.setFlags(MultiScanOptions::BatchMultiple, mBatchMultipleCheck->isChecked());
     mOptions.setFlags(MultiScanOptions::AutoGenerate, mGenerateFilenameCheck->isChecked());
@@ -307,18 +316,21 @@ void MultiScanDialog::slotGuiChange()
     const MultiScanOptions::Flags f = mOptions.flags();
     const bool multi = mScanMultiRadio->isChecked();
     const bool adf = (mSourceCombo!=nullptr) ? KScanDevice::matchesAdf(mSourceCombo->currentText().toLatin1()) : false;
+    const bool first = mDelayBeforeFirstCheck->isChecked();
 
     mMultiEmptyAdfRadio->setEnabled(adf && multi && (f & MultiScanOptions::AdfAvailable));
-    mMultiManualScanRadio->setEnabled(multi);
-    mMultiDelayScanRadio->setEnabled(multi);
+    mMultiManualScanRadio->setEnabled(multi || first);
+    mMultiDelayScanRadio->setEnabled(multi || first);
     mBatchMultipleCheck->setEnabled(multi);
     mGenerateFilenameCheck->setEnabled(multi);
-    mRotateOddCombo->setEnabled(multi);
+    mDelayBeforeFirstCheck->setEnabled(!adf);
+    // Not disabling mRotateOddCombo, as even with a single scan the
+    // first page can be rotated.
     mRotateEvenCombo->setEnabled(multi);
 
     if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
 
-    mDelayTimeSpinbox->setEnabled(multi && mMultiDelayScanRadio->isChecked());
+    mDelayTimeSpinbox->setEnabled((multi || first) && mMultiDelayScanRadio->isChecked());
 
     // Destination capabilties override any states set above.
     if (!mCapabilities.testFlag(MultiScanOptions::AcceptBatch))

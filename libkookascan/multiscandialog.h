@@ -73,6 +73,7 @@ private:
     QRadioButton *mMultiManualScanRadio;
     QRadioButton *mMultiDelayScanRadio;
     KPluralHandlingSpinBox *mDelayTimeSpinbox;
+    QCheckBox *mDelayBeforeFirstCheck;
 
     QCheckBox *mBatchMultipleCheck;
     QCheckBox *mGenerateFilenameCheck;
