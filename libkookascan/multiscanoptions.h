@@ -62,6 +62,7 @@ public:
         DelayWait = 0x0020,
         BatchMultiple = 0x0040,
         AutoGenerate = 0x0080,
+        FirstWait = 0x0100,
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
