@@ -68,6 +68,7 @@ add_subdirectory(application)
 add_subdirectory(clipboard)
 add_subdirectory(print)
 add_subdirectory(save)
+add_subdirectory(multipage)
 
 if (KF${Q}Purpose_FOUND)
   add_subdirectory(share)

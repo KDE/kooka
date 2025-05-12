@@ -93,6 +93,7 @@ public:
         AdfEmpty,					// empty for subsequent scans
         NotSaved,					// not accepted by destination
     };
+    Q_ENUM(Status)
 
     /**
      * Construct a new scanner device object.
@@ -664,6 +665,7 @@ private:
     void loadOptionSetInternal(const KScanOptSet *optSet, bool prio);
     void applyAllOptions(bool prio);
 
+    ScanImage::ImageType getScanFormat(const SANE_Parameters *p);
     KScanDevice::Status createNewImage(const SANE_Parameters *p);
 
     KScanDevice::Status acquireData(bool isPreview);

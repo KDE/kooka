@@ -111,6 +111,9 @@ public:
     QSize imagePrintArea() const			{ return (QSize(qRound(mPrintWidthMm), qRound(mPrintHeightMm))); }
     QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
+    void setPdfMode(const QString &outputFile);
+    int totalPages() const				{ return (m_totalPages); }
+
 protected:
     void drawMarkerAroundPoint(QPainter *painter, const QPoint &p);
     void drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Corner dir);
@@ -148,6 +151,7 @@ private:
     int mPrintResolution;				// printer resolution
 
     bool m_copyMode;
+    bool m_singlePageMode;
 };
 
 #endif							// KOOKAPRINT_H

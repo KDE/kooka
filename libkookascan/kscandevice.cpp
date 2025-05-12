@@ -92,7 +92,7 @@ void KScanDevice::guiSetEnabled(const QByteArray &name, bool state)
 }
 
 
-KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
+KScanOption *KScanDevice::getOption(const QByteArray &name, bool create /* = true */)
 {
     QByteArray alias = aliasName(name);
 
@@ -108,6 +108,14 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     {
 #ifdef DEBUG_CREATE
         qCDebug(LIBKOOKASCAN_LOG) << "does not exist" << alias;
+#endif // DEBUG_CREATE
+        return (nullptr);
+    }
+
+    if (!optionExists(alias))
+    {
+#ifdef DEBUG_CREATE
+        qCDebug(LIBKOOKASCAN_LOG) << "unknown option" << alias;
 #endif // DEBUG_CREATE
         return (nullptr);
     }
@@ -294,14 +302,28 @@ QString KScanDevice::scannerDescription() const
 
 QSize KScanDevice::getMaxScanSize()
 {
+    // This assumes that the TL_X and TL_Y options (defining the top left
+    // of the scan area) have the same range as BR_X and BR_Y (defining the
+    // bottom right).  There is also a general assumption everywhere that
+    // the minimum range value for all four of these options is zero.  So
+    // it only necessary to look at the maximum range values of these two
+    // options.
+    KScanOption *so_w = getOption(SANE_NAME_SCAN_BR_X);
+    KScanOption *so_h = getOption(SANE_NAME_SCAN_BR_Y);
+
+    // The built in "pnm" device does not support a settable scan area.
+    if (so_w==nullptr || so_h==nullptr)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Scanner does not support area setting";
+        return (QSize());
+    }
+
     QSize s;
     double min, max;
 
-    KScanOption *so_w = getOption(SANE_NAME_SCAN_BR_X);
     so_w->getRange(&min, &max);
     s.setWidth(qRound(max));
 
-    KScanOption *so_h = getOption(SANE_NAME_SCAN_BR_Y);
     so_h->getRange(&min, &max);
     s.setHeight(qRound(max));
 
@@ -626,8 +648,7 @@ void KScanDevice::showOptions()
         if (so->isGroup()) continue;
 
         int cap = so->getCapabilities();
-        std::cerr <<
-            " " << qPrintable(optionName.left(31).leftJustified(32)) << " |" <<
+        std::cerr << " " << qPrintable(optionName.left(31).leftJustified(32)) << " |" <<
             optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) << 
             optionNotifyString((cap & SANE_CAP_HARD_SELECT)) << 
             optionNotifyString((cap & SANE_CAP_SOFT_DETECT)) << 
@@ -648,16 +669,23 @@ void KScanDevice::showOptions()
 
 // Deduce the scanned image type from the SANE parameters.
 // The logic is very similar to ScanImage::imageType(),
-// except that the image type cannot be LowColour.
-static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
+// except that the image type cannot be LowColour unless
+// that format is forced for testing.
+ScanImage::ImageType KScanDevice::getScanFormat(const SANE_Parameters *p)
 {
-    if (p==nullptr) return (ScanImage::None);
+    if (p==nullptr) return (ScanImage::None);		// no parameters to look at
+
+    if (mTestFormat!=ScanImage::None)			// force the test format
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Testing with image format" << mTestFormat;
+        return (mTestFormat);
+    }
 
     if (p->depth==1) 					// Line art (bitmap)
     {
         return (ScanImage::BlackWhite);
     }
-    else if (p->depth==8)				// 8 bit RGB
+    else if (p->depth==8)				// 8 bit colour
     {
         if (p->format==SANE_FRAME_GRAY)			// Grey scale
         {
@@ -676,19 +704,31 @@ static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
 }
 
 
-//  Create a new image to receive the scan or preview
-KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
+// Get the QImage format to be used for a scan image type.
+static QImage::Format getImageFormat(ScanImage::ImageType stype)
 {
-    QImage::Format fmt;
-    ScanImage::ImageType itype = getImageFormat(p);	// what format should this be?
-    switch (itype)					// choose QImage option for that
+    switch (stype)					// choose QImage option for that
     {
 default:
-case ScanImage::None:		return (KScanDevice::ParamError);
-case ScanImage::BlackWhite:	fmt = QImage::Format_Mono;		break;
-case ScanImage::Greyscale:	fmt = QImage::Format_Indexed8;		break;
-case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
+case ScanImage::None:		return (QImage::Format_Invalid);
+case ScanImage::BlackWhite:	return (QImage::Format_Mono);
+case ScanImage::Greyscale:	return (QImage::Format_Grayscale8);
+case ScanImage::LowColour:	return (QImage::Format_Indexed8);
+case ScanImage::HighColour:	return (QImage::Format_RGB32);
     }
+}
+
+
+//  Create a new image to receive the scan or preview.
+KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
+{
+    const ScanImage::ImageType itype = getScanFormat(p);
+    QImage::Format fmt = getImageFormat(itype);
+    if (fmt==QImage::Format_Invalid) return (KScanDevice::ParamError);
+
+    // To produce a LowColour image, it has to be first scanned into an
+    // RGB image and then down converted.
+    if (fmt==QImage::Format_Indexed8) fmt = QImage::Format_RGB32;
 
     // mScanImage is the master allocated image for the result of the scan.
     // Once the QSharedPointer has been reset() to point to the image, it
@@ -705,14 +745,10 @@ case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
     mScanImage.reset(newImage);				// capture the new image pointer
     mScanImage->setImageType(itype);			// remember the image format
 
-    if (itype==ScanImage::BlackWhite)			// line art (bitmap)
+    if (fmt==QImage::Format_Mono)			// line art (bitmap)
     {
-        mScanImage->setColor(0,qRgb(0x00,0x00,0x00));	// set black/white palette
-        mScanImage->setColor(1,qRgb(0xFF,0xFF,0xFF));
-    }
-    else if (itype==ScanImage::Greyscale)		// 8 bit grey
-    {							// set grey scale palette
-        for (int i = 0; i<256; i++) mScanImage->setColor(i,qRgb(i,i,i));
+        mScanImage->setColor(0, qRgb(0x00,0x00,0x00));	// set black/white palette
+        mScanImage->setColor(1, qRgb(0xFF,0xFF,0xFF));
     }
 
     return (KScanDevice::Ok);
@@ -1087,19 +1123,13 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 
             if (mSaneParameters.lines>=1 && mSaneParameters.pixels_per_line>0)
             {						// check for a plausible image
-                fmt = getImageFormat(&mSaneParameters);	// find format it will have
+                fmt = getScanFormat(&mSaneParameters);	// find format it will have
                 if (fmt==ScanImage::None)		// scan format not recognised?
                 {
                     stat = KScanDevice::ParamError;	// no point starting scan
                     goto finish;			// clean up anything started
                 }
             }
-        }
-
-        if (mTestFormat!=ScanImage::None)
-        {
-            fmt = mTestFormat;
-            qCDebug(LIBKOOKASCAN_LOG) << "Testing with image format" << fmt;
         }
     }
     else fmt = ScanImage::Preview;			// special to indicate preview
@@ -1319,7 +1349,6 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         // of the scanners that I have available to test, both using the
         // socket notifier and not.  So that is what we now do, in this
         // much simpler loop.
-
         while (true)					// loop for one scanned frame
         {
             if (mSocketNotifier!=nullptr)		// using the socket notifier
@@ -1366,29 +1395,28 @@ finish:
 }
 
 
-/* This function calls at least sane_read and converts the read data from the scanner
- * to the qimage.
- * The function needs:
- * QImage img valid
- * the data-buffer  set to a appropriate size
- **/
+// Call sane_read() and convert the data read from the scanner to
+// the target QImage format.  It assumes that mSaneBuf as allocated
+// in acquireData() is an appropriate size as derived from the SANE
+// parameters.
+//
+// TODO: would need to be extended for 16-bit scanner support
 
-// TODO: probably needs to be extended for 16-bit scanner support
+#define CHECK_NEXT_ROW()	((mPixelX>=mSaneParameters.pixels_per_line) ? ((mPixelX = 0), (++mPixelY), true) : false)
+#define CHECK_LAST_LINE()	(mPixelY<mSaneParameters.lines)
+#define MONO_VALUE(g)		((g)>=0x80 ? 1 : 0)
 
 void KScanDevice::doProcessABlock()
 {
-    int val,i;
-    QRgb col, newCol;
-
-    SANE_Byte *rptr = nullptr;
-    SANE_Int bytes_read = 0;
-    int chan = 0;
-    mSaneStatus = SANE_STATUS_GOOD;
-    uchar eight_pix = 0;
-
     if (mScanningState==KScanDevice::ScanIdle) return;	// scan finished, no more to do
 							// block notifications while working
     if (mSocketNotifier!=nullptr) mSocketNotifier->setEnabled(false);
+
+    const bool isMono = (mScanImage->format()==QImage::Format_Mono);
+    const bool isRgb = (mScanImage->format()==QImage::Format_RGB32);
+
+    SANE_Int bytes_read = 0;
+    mSaneStatus = SANE_STATUS_GOOD;
 
     while (true)
     {
@@ -1411,73 +1439,65 @@ void KScanDevice::doProcessABlock()
         ++mBlocksRead;
 	mBytesRead += bytes_read;
 
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-
-	rptr = mScanBuf;				// start of scan data
-	switch (mSaneParameters.format)
+        SANE_Byte *rptr = mScanBuf;			// start of scan data
+	switch (mSaneParameters.format)			// look at frame format
 	{
 case SANE_FRAME_RGB:
             if (mSaneParameters.lines<1) break;
             bytes_read += mBytesUsed;			// die übergebliebenen Bytes dazu
             mBytesUsed = bytes_read % 3;
 
-            for (val = 0; val<((bytes_read-mBytesUsed)/3); val++)
+            for (int val = 0; val<((bytes_read-mBytesUsed)/3); val++)
             {
-                red   = *rptr++;
-                green = *rptr++;
-                blue  = *rptr++;
+                int red   = *rptr++;
+                int green = *rptr++;
+                int blue  = *rptr++;
 
-                if (mPixelX>=mSaneParameters.pixels_per_line)
-                {					// reached end of a row
-                    mPixelX = 0;
-                    mPixelY++;
-                }
-                if (mPixelY<mScanImage->height())	// within image height
+                CHECK_NEXT_ROW();			// reached end of a row?
+                if (CHECK_LAST_LINE())			// within image height
                 {
-		    mScanImage->setPixel(mPixelX, mPixelY, qRgb(red, green, blue));
+                    if (isMono)
+                    {
+                        const uchar g = qGray(red, green, blue);
+                        mScanImage->setPixel(mPixelX, mPixelY, MONO_VALUE(g));
+                    }
+                    else mScanImage->setPixel(mPixelX, mPixelY, qRgb(red, green, blue));
                 }
-                mPixelX++;
+                ++mPixelX;
             }
 
-            for (val = 0; val<mBytesUsed; val++)	// Copy the remaining bytes down
+            for (int val = 0; val<mBytesUsed; val++)	// Copy the remaining bytes down
             {						// to the beginning of the block
                 *(mScanBuf+val) = *rptr++;
             }
             break;
 
 case SANE_FRAME_GRAY:
-            for (val = 0; val<bytes_read ; val++)
+            for (int val = 0; val<bytes_read ; val++)
             {
-                if (mPixelY>=mSaneParameters.lines) break;
+                if (!CHECK_LAST_LINE()) break;
                 if (mSaneParameters.depth==8)		// Greyscale
                 {
-		    if (mPixelX>=mSaneParameters.pixels_per_line)
-                    {					// reached end of a row
-                        mPixelX = 0;
-                        mPixelY++;
-                    }
-		    mScanImage->setPixel(mPixelX, mPixelY, *rptr++);
-		    mPixelX++;
+                    CHECK_NEXT_ROW();			// reached end of a row?
+                    const uchar g = *rptr++;
+                    if (isMono) mScanImage->setPixel(mPixelX, mPixelY, MONO_VALUE(g));
+                    else if (isRgb) mScanImage->setPixel(mPixelX, mPixelY, qRgb(g, g, g));
+                    else mScanImage->setPixel(mPixelX, mPixelY, g);
+		    ++mPixelX;
                 }
                 else					// Lineart (bitmap)
-                {					// needs to be converted to byte
-		    eight_pix = *rptr++;
-		    for (i = 0; i<8; i++)
+                {
+                    // For a lineart (bitmap) scan, SANE actually delivers eight
+                    // scanned pixels packed into one byte.
+		    uchar eight_pix = *rptr++;
+		    for (int i = 0; i<8; i++)
 		    {
-                        if (mPixelY<mSaneParameters.lines)
+                        if (CHECK_LAST_LINE())
                         {
-                            chan = (eight_pix & 0x80)>0 ? 0 : 1;
+                            mScanImage->setPixel(mPixelX, mPixelY, MONO_VALUE(eight_pix));
                             eight_pix = eight_pix << 1;
-                            mScanImage->setPixel(mPixelX, mPixelY, chan);
-                            mPixelX++;
-                            if( mPixelX>=mSaneParameters.pixels_per_line)
-                            {
-                                mPixelX = 0;
-                                mPixelY++;
-                                break;
-                            }
+                            ++mPixelX;
+                            if (CHECK_NEXT_ROW()) break;	// reached end of a row?
                         }
 		    }
                 }
@@ -1487,48 +1507,64 @@ case SANE_FRAME_GRAY:
 case SANE_FRAME_RED:
 case SANE_FRAME_GREEN:
 case SANE_FRAME_BLUE:
-            for (val = 0; val<bytes_read ; val++)
+
+            // Separate colour frames will only be seen for a 3 pass scanner.
+            // Even assuming that scanners that work this way still exist, it
+            // is not possible to assemble the results into an image format that
+            // is not full RGB, because the image acts as a temporary buffer
+            // that accumulates each independent pass in turn.
+            //
+            // Because getScanFormat() creates a result image of the appropriate
+            // format to receive the scan, this can only happen either if SANE
+            // changes its mind (specifies scan parameters appropriate for a grey
+            // or bitmap image and then delivers a RED/GREEN/BLUE frame), or the
+            // image format is forced for testing.
+            if (!isRgb)
             {
-                if (mPixelX>=mSaneParameters.pixels_per_line)
-                {					// reached end of a row
-                    mPixelX = 0;
-		    mPixelY++;
-                }
+                qCDebug(LIBKOOKASCAN_LOG) << "Frame type" << mSaneParameters.format << "into image format" << mScanImage->format() << "not supported";
+                mSaneStatus = SANE_STATUS_INVAL;
+                break;
+            }
 
-                if (mPixelY<mSaneParameters.lines)
+            for (int val = 0; val<bytes_read; ++val)
+            {
+                CHECK_NEXT_ROW();			// reached end of a row?
+                if (CHECK_LAST_LINE())			// within image height
                 {
-		    col = mScanImage->pixel(mPixelX, mPixelY);
+		    QRgb curCol = mScanImage->pixel(mPixelX, mPixelY);
+                    QRgb newCol;
 
-		    red   = qRed(col);
-		    green = qGreen(col);
-		    blue  = qBlue(col);
-		    chan  = *rptr++;
+		    int red   = qRed(curCol);
+		    int green = qGreen(curCol);
+		    int blue  = qBlue(curCol);
+		    int chan  = *rptr++;
 
 		    switch (mSaneParameters.format)
 		    {
-case SANE_FRAME_RED:    newCol = qRgba(chan, green, blue, 0xFF);
+case SANE_FRAME_RED:    newCol = qRgb(chan, green, blue);
                         break;
 
-case SANE_FRAME_GREEN:  newCol = qRgba(red, chan, blue, 0xFF);
+case SANE_FRAME_GREEN:  newCol = qRgb(red, chan, blue);
                         break;
 
-case SANE_FRAME_BLUE:   newCol = qRgba(red, green, chan, 0xFF);
+case SANE_FRAME_BLUE:   newCol = qRgb(red, green, chan);
                         break;
 
-default:                newCol = qRgba(0xFF, 0xFF, 0xFF, 0xFF);
+default:                newCol = qRgb(0xFF, 0xFF, 0xFF);
                         break;
 		    }
 		    mScanImage->setPixel(mPixelX, mPixelY, newCol);
-		    mPixelX++;
+		    ++mPixelX;
                 }
             }
             break;
 
 default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParameters.format;
+            mSaneStatus = SANE_STATUS_INVAL;
             break;
-	}						// switch of scan format
+	}						// end of switch on frame format
 
-	if ((mSaneParameters.lines>0) && ((mSaneParameters.lines*mPixelY)>0))
+	if (mSaneParameters.lines>0 && (mSaneParameters.lines*mPixelY)>0)
 	{
             int progress =  int((double(MAX_PROGRESS)/mSaneParameters.lines)*mPixelY);
             if (progress<MAX_PROGRESS) emit sigScanProgress(progress);
@@ -1580,7 +1616,7 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
         // value referred to as "status".
         qCDebug(LIBKOOKASCAN_LOG) << "Scan cancelled, SANE status" << mSaneStatus;
 
-        // Set his explicitly in case the "scan cancelled" state has not been
+        // Set this explicitly in case the "scan cancelled" state has not been
         // noted already - for example, if the scanner has a physical "stop"
         // button which generates an immediate SANE_STATUS_CANCELLED.  The
         // caller will translate the state ScanStopNow into Cancelled.
@@ -1633,10 +1669,21 @@ KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat, int scan
             }
         }
 
+        if (mTestFormat!=ScanImage::None)		// force an image format
+        {
+            const QImage::Format newFmt = getImageFormat(mTestFormat);
+            if (newFmt!=QImage::Format_Invalid && newFmt!=mScanImage->format())
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "test converting" << mScanImage->format() << "->" << newFmt;
+                mScanImage->convertTo(newFmt, Qt::NoOpaqueDetection);
+                mScanImage->setImageType(mTestFormat);
+            }
+        }
+
+	mScanImage->setScannerName(mScannerName);
         // TODO: should these two take account of rotation?
 	mScanImage->setXResolution(mCurrScanResolutionX);
 	mScanImage->setYResolution(mCurrScanResolutionY);
-	mScanImage->setScannerName(mScannerName);
 
 	if (mScanningPreview)
 	{
@@ -1662,21 +1709,25 @@ KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat, int scan
         }
     }
 
-    if (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled)
+    // sane_cancel() was originally called unconditionally at this stage,
+    // even for normal scan termination.  However, it seems to have side
+    // effects, such as feeding through anything remaining in the ADF even
+    // if only one page has been requested to be scanned.  So do not call it
+    // if the scanning status was 'Ok' or if it is 'Cancelled' - in the second
+    // case sane_cancel() will have already been called by doProcessABlock().
+    // But do call it if there has been any other error, or if the ADF has
+    // fed through all its documents and is empty.
+    bool needsCancel = (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled);
+    // This device seems to need a call of sane_cancel() unconditionally,
+    // otherwise scan_start() for the next preview or scan operation after a
+    // successful one fails with SANE_STATUS_EOF.
+    if (scannerBackendName()=="pnm") needsCancel = true;
+    if (needsCancel)
     {
-        // sane_cancel() was originally called unconditionally here, even for
-        // normal scan termination.  However, it seems to have side effects,
-        // such as feeding through anything remaining in the ADF even if only
-        // one page has been requested to be scanned.  So do not call it if
-        // the scanning status was 'Ok' or if it is 'Cancelled' - in the second
-        // case sane_cancel() will have already been called by doProcessABlock().
-        // But do call it if there has been any other error, or if the ADF has
-        // fed through all its documents and is empty.
         ScanDevices::self()->deactivateNetworkProxy();
         qCDebug(LIBKOOKASCAN_LOG) << "calling sane_cancel() for status" << stat;
         sane_cancel(mScannerHandle);
         ScanDevices::self()->reactivateNetworkProxy();
-
     }
 
     // This status is never reported to the outside.

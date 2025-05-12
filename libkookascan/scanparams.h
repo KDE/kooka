@@ -349,7 +349,7 @@ private:
     QWidget *createScannerParams();
     ScanParamsPage *createTab(QTabWidget *tw, const QString &title, const char *name = nullptr);
 
-    void applyRect(const QRect &rect);
+    QRect applyRect(const QRect &rect);
     void setMaximalScanSize();
 
     bool getGammaTableFrom(const QByteArray &opt, KGammaTable *gt);

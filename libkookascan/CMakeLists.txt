@@ -31,7 +31,7 @@ endif (LIBPAPER_LIB AND LIBPAPER_HDR)
 
 ############### Support for multi-page TIFF images ###############
 
-include(FindTIFF)
+find_package(TIFF)
 if (TIFF_FOUND)
   message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
   message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
@@ -96,6 +96,7 @@ set(kookascan_SRCS
   multiscanoptions.cpp
   multiscandialog.cpp
   continuescandialog.cpp
+  papersizes.cpp
 )
 kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 ecm_qt_declare_logging_category(kookascan_SRCS

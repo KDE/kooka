@@ -380,6 +380,18 @@
       <default>image/png</default>
     </entry>
 
+    <entry name="DestinationMultipageMime" key="MultipageMime" type="String">
+      <default>application/pdf</default>
+    </entry>
+
+    <!-- KConfigXT does not have a "SizeF" data type, so save these separately -->
+    <entry name="DestinationMultipageSizeWidth" key="MultipageSizeWidth" type="Double">
+      <default>210.0</default>
+    </entry>
+    <entry name="DestinationMultipageSizeHeight" key="MultipageSizeHeight" type="Double">
+      <default>297.0</default>
+    </entry>
+
     <entry name="DestinationExportDest" key="ExportDest" type="String">
     </entry>
 

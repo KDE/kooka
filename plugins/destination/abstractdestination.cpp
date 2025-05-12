@@ -129,7 +129,8 @@ QUrl AbstractDestination::saveTempImage(const ImageFormat &fmt, ScanImage::Ptr i
 
 
 QComboBox *AbstractDestination::createFormatCombo(const QStringList &mimeTypes,
-                                                  const QString &configuredMime)
+                                                  const QString &configuredMime,
+                                                  bool includeOther)
 {
     // For the image format combo, we do not yet know the format of the
     // scanned image.  Therefore the approach taken here, trying to balance
@@ -157,8 +158,11 @@ QComboBox *AbstractDestination::createFormatCombo(const QStringList &mimeTypes,
         combo->addItem(QIcon::fromTheme(mimeType.iconName()), mimeType.comment(), mimeType.name());
     }
 
-    if (configuredMime=="") configuredIndex = combo->count();
-    combo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
+    if (includeOther)
+    {
+        if (configuredMime=="") configuredIndex = combo->count();
+        combo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
+    }
     if (configuredIndex!=-1) combo->setCurrentIndex(configuredIndex);
 
     return (combo);					// the created combo box
