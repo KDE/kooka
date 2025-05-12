@@ -44,7 +44,7 @@
 #include "libkookascan_logging.h"
 
 
-ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
+ContinueScanDialog::ContinueScanDialog(bool isFirst, int timeout, QWidget *pnt)
     : QDialog(pnt)
 {
     qCDebug(LIBKOOKASCAN_LOG) << "timeout" << timeout;
@@ -54,32 +54,58 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
     mPauseButton = nullptr;
 
     setModal(true);
-    setWindowTitle(i18n("Next Page"));
+    setWindowTitle(isFirst ? i18n("First Page") : i18n("Next Page"));
 
-    QString buttonText;
+    QString buttonText = i18n("Start Scan");
     mButtonBox = new QDialogButtonBox(this);
     if (timeout==0)					// not timed so static
     {
-        buttonText = i18n("Scan Next");
-        mMessageText = kxi18nc("@info",
-                               "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
-                               "<nl/><nl/>"
-                               "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
-                               "<nl/>"
-                               "or click <interface>Finish</interface> to end the scan batch "
-                               "or <interface>Cancel</interface> to cancel the entire scan.");
         mTimer = nullptr;
+
+        if (isFirst)
+        {
+            mMessageText = kxi18nc("@info",
+                                   "<emphasis strong=\"1\">Ready to scan the first page</emphasis>%1..."
+                                   "<nl/><nl/>"
+                                   "Prepare the page and then click <interface>Start&nbsp;Scan</interface> to scan it,"
+                                   "<nl/>"
+                                   "or <interface>Cancel</interface> to cancel the scan.");
+        }
+        else
+        {
+            buttonText = i18n("Scan Next");
+            mMessageText = kxi18nc("@info",
+                                   "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
+                                   "<nl/><nl/>"
+                                   "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
+                                   "<nl/>"
+                                   "or click <interface>Finish</interface> to end the scan batch "
+                                   "or <interface>Cancel</interface> to cancel the entire scan.");
+        }
     }
     else						// timed with countdown
     {
-        buttonText = i18n("Scan Now");
-        mMessageText = kxi18nc("@info",
-                               "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
-                               "<nl/><nl/>"
-                               "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
-                               "<nl/>"
-                               "or click <interface>Finish</interface> to end the scan batch "
-                               "or <interface>Cancel</interface> to cancel the entire scan.");
+        if (isFirst)
+        {
+
+            mMessageText = kxi18nc("@info",
+                                   "<emphasis strong=\"1\">Waiting to scan the first page</emphasis>%1..."
+                                   "<nl/><nl/>"
+                                   "Prepare the page and then wait, or click <interface>Start&nbsp;Scan</interface> to scan it immediately"
+                                   "<nl/>"
+                                   "or <interface>Cancel</interface> to cancel the scan.");
+        }
+        else
+        {
+            buttonText = i18n("Scan Now");
+            mMessageText = kxi18nc("@info",
+                                   "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
+                                   "<nl/><nl/>"
+                                   "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
+                                   "<nl/>"
+                                   "or click <interface>Finish</interface> to end the scan batch "
+                                   "or <interface>Cancel</interface> to cancel the entire scan.");
+        }
 
         mTimer = new QTimer(this);
         mTimer->setInterval(1000);
@@ -104,10 +130,13 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
 
     if (mPauseButton!=nullptr) mButtonBox->addButton(mPauseButton, QDialogButtonBox::ActionRole);
 
-    but = new QPushButton(i18n("Finish"), mButtonBox);
-    but->setIcon(KStandardGuiItem::ok().icon());
-    connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Close; });
-    mButtonBox->addButton(but, QDialogButtonBox::ApplyRole);
+    if (!isFirst)
+    {
+        but = new QPushButton(i18n("Finish"), mButtonBox);
+        but->setIcon(KStandardGuiItem::ok().icon());
+        connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Close; });
+        mButtonBox->addButton(but, QDialogButtonBox::ApplyRole);
+    }
 
     but = new QPushButton("", mButtonBox);
     KStandardGuiItem::assign(but, KStandardGuiItem::Cancel);

@@ -169,6 +169,18 @@ public:
     KScanDevice::Status acquirePreview(bool forceGray = false, int dpi = 0);
 
     /**
+     * Delay or wait before a scan, if requested.
+     *
+     * @param isFirst If @c true, indicates that this is being called
+     * before the first scan of a batch.
+     * @return The user's selected action, which may be one of
+     * @c KScanDevice::Ok to continue scanning,
+     * @c KScanDevice::AdfEmpty to finish the batch,
+     * @c KScanDevice::Cancelled to cancel the batch.
+     **/
+    KScanDevice::Status delayWait(bool isFirst);
+
+    /**
      * Acquire a scan from the current scanner device.
      * When the scan is complete, a result image will be sent by
      * @c sigNewImage.
@@ -705,6 +717,7 @@ private:
     bool mScanningPreview;
     QSocketNotifier *mSocketNotifier;
     bool mScanningAdf;
+    int mScanCount;
 
     int mCurrScanResolutionX;
     int mCurrScanResolutionY;

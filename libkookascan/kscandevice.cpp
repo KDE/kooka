@@ -824,6 +824,48 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
 }
 
 
+KScanDevice::Status KScanDevice::delayWait(bool isFirst)
+{
+    KScanDevice::Status stat = KScanDevice::Ok;
+
+    // Set the LED to indicate a user requested wait or minimum delay.
+    emit sigScanPauseStart();
+
+    // If doing a manual or delayed wait, then ask or indicate to
+    // the user respectively.
+    const MultiScanOptions::Flags f = mMultiScanOptions.flags();
+    if (!(f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))) return (stat);
+
+    ContinueScanDialog dlg(isFirst, ((f & MultiScanOptions::DelayWait) ? mMultiScanOptions.delay() : 0), nullptr);
+    int res = dlg.exec();
+
+    // scanFinished() in the acquireScan() looop will not have called
+    // sane_cancel() if the scan status was KScanDevice::Ok, because
+    // we may be intending to continue a multiple scan loop.  But, if
+    // the user has requested to end or cancel the batch, sane_cancel()
+    // needs to be called now.
+    if (res!=QDialogButtonBox::Ok)
+    {
+        ScanDevices::self()->deactivateNetworkProxy();
+        sane_cancel(mScannerHandle);
+        ScanDevices::self()->reactivateNetworkProxy();
+    }
+
+    if (res==QDialogButtonBox::Cancel)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch after" << mScanCount << "scans";
+        stat = KScanDevice::Cancelled;
+    }
+    else if (res==QDialogButtonBox::Close)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch after" << mScanCount << "scans";
+        stat = KScanDevice::AdfEmpty;
+    }
+
+    return (stat);
+}
+
+
 /* Starts scanning
  *  depending on if a filename is given or not, the function tries to open
  *  the file using the Qt-Image-IO or really scans the image.
@@ -869,7 +911,7 @@ KScanDevice::Status KScanDevice::acquireScan()
     minDelayTimer.setInterval(MULTI_DELAY);
 
     // Main loop of the individual or batch scan.
-    int scanCount = 0;
+    mScanCount = 0;
     if (mScanningAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
     const MultiScanOptions::Flags f = mMultiScanOptions.flags();
     if (f & MultiScanOptions::MultiScan) qCDebug(LIBKOOKASCAN_LOG) << "Multi scan options" << qPrintable(mMultiScanOptions.toString());
@@ -882,20 +924,20 @@ KScanDevice::Status KScanDevice::acquireScan()
         // If the ADF is empty the first time through the loop, then it
         // is an error which the user should see.  For subsequent scans,
         // it just means that the scanning is finished.
-        if (scanCount>0 && stat==KScanDevice::AdfNoDoc)
+        if (mScanCount>0 && stat==KScanDevice::AdfNoDoc)
         {
-            qCDebug(LIBKOOKASCAN_LOG) << "ADF empty after" << scanCount << "scans";
+            qCDebug(LIBKOOKASCAN_LOG) << "ADF empty after" << mScanCount << "scans";
             stat = KScanDevice::AdfEmpty;
         }
 
         // Count up the scans to indicate that this is now not the
         // first time through the ADF loop.
-        ++scanCount;
+        ++mScanCount;
 
         // Signal the scan status to the application, adjusted for the
         // ADF state as above.  This may in turn adjust the final state.
         // Then, if any error has happened, exit the loop now.
-        stat = scanFinished(stat, scanCount);
+        stat = scanFinished(stat, mScanCount);
         if (stat!=KScanDevice::Ok) break;
 
         // If doing a single scan, whether from the ADF or flatbed,
@@ -911,41 +953,18 @@ KScanDevice::Status KScanDevice::acquireScan()
         // the scan carriage time to return to be ready for the next scan.
         if (!mScanningAdf || scannerBackendName()=="test") minDelayTimer.start();
 
-        // Set the LED to indicate a user requested wait or or minimum delay.
-        emit sigScanPauseStart();
-
         // If doing a manual or delayed wait, then ask or indicate to
         // the user respectively.
-        //
-        // TODO: maybe do this at the top of the loop so as to be
-        // able to wait or delay the first page of the scan.
-        if (f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))
+        const KScanDevice::Status waitStatus = delayWait(false);
+        if (waitStatus!=KScanDevice::Ok)
         {
-            ContinueScanDialog dlg(((f & MultiScanOptions::DelayWait) ? mMultiScanOptions.delay() : 0), nullptr);
-            int res = dlg.exec();
-
-            // scanFinished() above will not have called sane_cancel() if the
-            // scan status was KScanDevice::Ok, because we may be intending
-            // to continue a multiple scan loop.  But, if the user has requested
-            // to end or cancel the batch, sane_cancel() needs to be called now.
-            if (res!=QDialogButtonBox::Ok)
-            {
-                ScanDevices::self()->deactivateNetworkProxy();
-                sane_cancel(mScannerHandle);
-                ScanDevices::self()->reactivateNetworkProxy();
-            }
-
-            if (res==QDialogButtonBox::Cancel)
-            {
-                qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch after" << scanCount << "scans";
-                stat = KScanDevice::Cancelled;
-                break;
-            }
-            if (res==QDialogButtonBox::Close)
-            {
-                qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch after" << scanCount << "scans";
-                break;
-            }
+            // If the user chose to cancel the batch, then set that as the
+            // final status.
+            if (waitStatus==KScanDevice::Cancelled) stat = waitStatus;
+            // Otherwise, if the user chose to finish the batch then leave
+            // the final status as KScanDevice::Ok from above.  Then exit
+            // the multiple scan loop.
+            break;
         }
 
         // In addition to the time that the user may have taken above, enforce
@@ -1100,6 +1119,33 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     {
         stat = startAcquire(fmt);
         if (stat!=KScanDevice::Ok) goto finish;
+
+        // This initial delayWait() must happen after the startAcquire() above,
+        // which will have called the destination plugin's scanStarting() to do
+        // any prompting which is needed to proceed with the scan.  This should
+        // of course happen before the delay.  If scanning from the ADF, then
+        // startAcquire() is called later, after the first scan, which is too late
+        // from the user's point of view.  Since the delay/wait is intended for
+        // situations where the user needs to hold or align an original before the
+        // scan starts, it is not particularly useful and therefore not supported
+        // when using the ADF.
+        //
+        // Previewing does not honour the "delay/wait before first scan" option,
+        // it always happens immediately.
+        if (!isPreview && mScanCount==0 && (mMultiScanOptions.flags() & MultiScanOptions::FirstWait))
+        {
+            const KScanDevice::Status waitStatus = delayWait(true);
+            if (waitStatus!=KScanDevice::Ok)
+            {
+                // If the user chose to cancel the batch, then set that as the
+                // returned scan status.  delayWait() will have called scan_cancel()
+                // internally.
+                if (waitStatus==KScanDevice::Cancelled) stat = waitStatus;
+                // The user will not have been offered the option to finish the
+                // batch, so the above should always apply.
+                goto finish;
+            }
+        }
     }
 
     ScanDevices::self()->deactivateNetworkProxy();
@@ -1670,6 +1716,7 @@ static void writeFlag(KConfigGroup &grp, const KConfigSkeletonItem *item, MultiS
     // AdfAvailable does not need to be saved
     writeFlag(grp, ScanSettings::self()->multiManualWaitItem(), (f & MultiScanOptions::ManualWait));
     writeFlag(grp, ScanSettings::self()->multiDelayWaitItem(), (f & MultiScanOptions::DelayWait));
+    writeFlag(grp, ScanSettings::self()->multiFirstWaitItem(), (f & MultiScanOptions::FirstWait));
     writeFlag(grp, ScanSettings::self()->multiBatchMultipleItem(), (f & MultiScanOptions::BatchMultiple));
     writeFlag(grp, ScanSettings::self()->multiAutoGenerateItem(), (f & MultiScanOptions::AutoGenerate));
     // Source does not need to be saved, the SANE parameter mirrors it
@@ -1712,6 +1759,7 @@ bool KScanDevice::loadStartupConfig()
     mMultiScanOptions.setFlags(MultiScanOptions::MultiScan, readFlag(grp, ScanSettings::self()->multiScanItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::ManualWait, readFlag(grp, ScanSettings::self()->multiManualWaitItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::DelayWait, readFlag(grp, ScanSettings::self()->multiDelayWaitItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::FirstWait, readFlag(grp, ScanSettings::self()->multiFirstWaitItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::BatchMultiple, readFlag(grp, ScanSettings::self()->multiBatchMultipleItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::AutoGenerate, readFlag(grp, ScanSettings::self()->multiAutoGenerateItem()));
     // Source does not need to be loaded, the SANE parameter mirrors it

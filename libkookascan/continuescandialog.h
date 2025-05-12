@@ -49,7 +49,7 @@ class KOOKASCAN_EXPORT ContinueScanDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ContinueScanDialog(int timeout, QWidget *pnt = nullptr);
+    explicit ContinueScanDialog(bool isFirst, int timeout, QWidget *pnt = nullptr);
     virtual ~ContinueScanDialog() = default;
 
     // The return type of this function must be 'int' so that it can
