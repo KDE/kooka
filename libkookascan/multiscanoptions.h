@@ -64,6 +64,11 @@ public:
         AutoGenerate = 0x0080,
         FirstWait = 0x0100,
         FirstScan = 0x0200,
+        // This and the corresponding 'Capability' option do not mean that
+        // it is not possible to cancel a scan batch, but that cancelling it
+        // makes no sense - each scan is processed as soon as it arrives, so
+        // "Cancel" is equivalent to "Finish" from the user's point of view.
+        CantCancel = 0x0400,
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -84,6 +89,7 @@ public:
         AlwaysBatch = 0x02,				///< always considers scan as batch
         FileNames = 0x04,				///< accepts or requires file names
         DefaultBatch = 0x08,				///< default option should be to batch
+        CannotCancel = 0x10,				///< cancelling batch makes no sense
     };
     Q_DECLARE_FLAGS(Capabilities, Capability)
 

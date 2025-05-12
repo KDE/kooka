@@ -108,5 +108,5 @@ KLocalizedString DestinationGallery::scanDestinationString()
 
 MultiScanOptions::Capabilities DestinationGallery::capabilities() const
 {
-    return (MultiScanOptions::AcceptBatch|MultiScanOptions::DefaultBatch|MultiScanOptions::FileNames);
+    return (MultiScanOptions::AcceptBatch|MultiScanOptions::DefaultBatch|MultiScanOptions::FileNames|MultiScanOptions::CannotCancel);
 }

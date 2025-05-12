@@ -61,3 +61,9 @@ KLocalizedString DestinationClipboard::scanDestinationString()
 {
     return (ki18n("Copying image to clipboard"));
 }
+
+
+MultiScanOptions::Capabilities DestinationClipboard::capabilities() const
+{
+    return (MultiScanOptions::CannotCancel);
+}

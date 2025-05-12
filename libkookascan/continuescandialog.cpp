@@ -50,7 +50,9 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
     const MultiScanOptions::Flags f = options.flags();
     mTimeout = ((f & MultiScanOptions::DelayWait) ? options.delay() : 0);
     qCDebug(LIBKOOKASCAN_LOG) << "timeout" << mTimeout;
+
     const bool isFirst = (f & MultiScanOptions::FirstScan);
+    const bool noCancel = (f & MultiScanOptions::CantCancel);
 
     mTextLabel = nullptr;
     mPauseButton = nullptr;
@@ -76,20 +78,31 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
         else
         {
             buttonText = i18n("Scan Next");
-            mMessageText = kxi18nc("@info",
-                                   "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
-                                   "<nl/><nl/>"
-                                   "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
-                                   "<nl/>"
-                                   "or click <interface>Finish</interface> to end the scan batch "
-                                   "or <interface>Cancel</interface> to cancel the entire scan.");
+            if (noCancel)
+            {
+                mMessageText = kxi18nc("@info",
+                                       "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
+                                       "<nl/><nl/>"
+                                       "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
+                                       "<nl/>"
+                                       "or click <interface>Finish</interface> to end the scan batch.");
+            }
+            else
+            {
+                mMessageText = kxi18nc("@info",
+                                       "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
+                                       "<nl/><nl/>"
+                                       "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
+                                       "<nl/>"
+                                       "or click <interface>Finish</interface> to end the scan batch "
+                                       "or <interface>Cancel</interface> to cancel the entire scan.");
+            }
         }
     }
     else						// timed with countdown
     {
         if (isFirst)
         {
-
             mMessageText = kxi18nc("@info",
                                    "<emphasis strong=\"1\">Waiting to scan the first page</emphasis>%1..."
                                    "<nl/><nl/>"
@@ -100,13 +113,25 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
         else
         {
             buttonText = i18n("Scan Now");
-            mMessageText = kxi18nc("@info",
+            if (noCancel)
+            {
+                mMessageText = kxi18nc("@info",
                                    "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
                                    "<nl/><nl/>"
                                    "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
                                    "<nl/>"
-                                   "or click <interface>Finish</interface> to end the scan batch "
-                                   "or <interface>Cancel</interface> to cancel the entire scan.");
+                                   "or click <interface>Finish</interface> to end the scan batch.");
+            }
+            else
+            {
+                mMessageText = kxi18nc("@info",
+                                       "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
+                                       "<nl/><nl/>"
+                                       "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
+                                       "<nl/>"
+                                       "or click <interface>Finish</interface> to end the scan batch "
+                                       "or <interface>Cancel</interface> to cancel the entire scan.");
+            }
         }
 
         mTimer = new QTimer(this);
@@ -140,10 +165,13 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
         mButtonBox->addButton(but, QDialogButtonBox::ApplyRole);
     }
 
-    but = new QPushButton("", mButtonBox);
-    KStandardGuiItem::assign(but, KStandardGuiItem::Cancel);
-    connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Cancel; });
-    mButtonBox->addButton(but, QDialogButtonBox::RejectRole);
+    if (isFirst || !noCancel)
+    {
+        but = new QPushButton("", mButtonBox);
+        KStandardGuiItem::assign(but, KStandardGuiItem::Cancel);
+        connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Cancel; });
+        mButtonBox->addButton(but, QDialogButtonBox::RejectRole);
+    }
 
     KMessageBox::createKMessageBox(this,				// dialog
                                    mButtonBox,				// buttons

@@ -167,6 +167,14 @@ public:
      *
      * The base class implementation returns a null value (indicating
      * no special capabilities).
+     *
+     * As a general rule, if a destination implements batching (therefore
+     * including AcceptBatch in its capabilities) but processes each scan
+     * as it arrives (therefore does not implement @c endBatch() or does
+     * not process the accumulated scanned files there), then these
+     * capabilities should also include CannotCancel.  This capability
+     * does not affect scan or batch processing, but keeps the GUI consistent
+     * with what is possible.
      **/
     virtual MultiScanOptions::Capabilities capabilities() const	{ return (MultiScanOptions::Capabilities()); }
 

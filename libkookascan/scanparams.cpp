@@ -1099,4 +1099,9 @@ void ScanParams::setDestinationCapabilities(MultiScanOptions::Capabilities cap)
 {
     qCDebug(LIBKOOKASCAN_LOG) << cap;
     mDestinationCapabilities = cap;
+
+    // Update the "Can't Cancel" flag in the options to reflect whether
+    // the destination can do that.
+    MultiScanOptions *opts = mSaneDevice->multiScanOptions();
+    opts->setFlags(MultiScanOptions::CantCancel, (cap & MultiScanOptions::CannotCancel));
 }

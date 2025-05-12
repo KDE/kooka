@@ -45,6 +45,7 @@ public:
     bool imageScanned(ScanImage::Ptr img) override;
 
     KLocalizedString scanDestinationString() override;
+    MultiScanOptions::Capabilities capabilities() const override;
 };
 
 #endif							// DESTINATIONCLIPBOARD_H
