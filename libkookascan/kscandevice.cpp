@@ -835,8 +835,9 @@ KScanDevice::Status KScanDevice::delayWait(bool isFirst)
     // the user respectively.
     const MultiScanOptions::Flags f = mMultiScanOptions.flags();
     if (!(f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))) return (stat);
+    mMultiScanOptions.setFlags(MultiScanOptions::FirstScan, isFirst);
 
-    ContinueScanDialog dlg(isFirst, ((f & MultiScanOptions::DelayWait) ? mMultiScanOptions.delay() : 0), nullptr);
+    ContinueScanDialog dlg(mMultiScanOptions, nullptr);
     int res = dlg.exec();
 
     // scanFinished() in the acquireScan() looop will not have called

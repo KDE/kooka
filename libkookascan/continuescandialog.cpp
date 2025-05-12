@@ -44,12 +44,14 @@
 #include "libkookascan_logging.h"
 
 
-ContinueScanDialog::ContinueScanDialog(bool isFirst, int timeout, QWidget *pnt)
+ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget *pnt)
     : QDialog(pnt)
 {
-    qCDebug(LIBKOOKASCAN_LOG) << "timeout" << timeout;
+    const MultiScanOptions::Flags f = options.flags();
+    mTimeout = ((f & MultiScanOptions::DelayWait) ? options.delay() : 0);
+    qCDebug(LIBKOOKASCAN_LOG) << "timeout" << mTimeout;
+    const bool isFirst = (f & MultiScanOptions::FirstScan);
 
-    mTimeout = timeout;
     mTextLabel = nullptr;
     mPauseButton = nullptr;
 
@@ -58,7 +60,7 @@ ContinueScanDialog::ContinueScanDialog(bool isFirst, int timeout, QWidget *pnt)
 
     QString buttonText = i18n("Start Scan");
     mButtonBox = new QDialogButtonBox(this);
-    if (timeout==0)					// not timed so static
+    if (mTimeout==0)					// not timed so static
     {
         mTimer = nullptr;
 

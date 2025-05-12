@@ -36,6 +36,8 @@
 
 #include <klocalizedstring.h>
 
+#include "multiscanoptions.h"
+
 #include "kookascan_export.h"
 
 class QPushButton;
@@ -49,11 +51,12 @@ class KOOKASCAN_EXPORT ContinueScanDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ContinueScanDialog(bool isFirst, int timeout, QWidget *pnt = nullptr);
+    explicit ContinueScanDialog(const MultiScanOptions &options, QWidget *pnt = nullptr);
     virtual ~ContinueScanDialog() = default;
 
     // The return type of this function must be 'int' so that it can
-    // override QDialog::exec() without warnings.
+    // override QDialog::exec() without warnings, even though it is
+    // really a QDialog::DialogCode.
     int exec() override;
 
 protected:

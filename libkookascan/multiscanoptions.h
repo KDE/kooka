@@ -63,6 +63,7 @@ public:
         BatchMultiple = 0x0040,
         AutoGenerate = 0x0080,
         FirstWait = 0x0100,
+        FirstScan = 0x0200,
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
