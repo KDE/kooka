@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Save the scanned image",
+        "Description[ar]": "احفظ الصورة الممسوحة ضوئيًا",
         "Description[ca@valencia]": "Guarda la imatge escanejada",
         "Description[ca]": "Desa la imatge escanejada",
         "Description[cs]": "Uložit skenovaný snímek",
@@ -12,6 +13,7 @@
         "Description[fr]": "Enregistrer l'image numérisée",
         "Description[gl]": "Gardar a imaxe escaneada.",
         "Description[he]": "שמירת התמונה שנסרקה",
+        "Description[ia]": "Salveguarda le imagine scandite",
         "Description[it]": "Salva l'immagine scansionata",
         "Description[ka]": "სკანირებული გამოსახულების შენახვა",
         "Description[ko]": "스캔한 그림 저장",
@@ -23,6 +25,7 @@
         "Description[tr]": "Taranan görseli kaydedin",
         "Description[uk]": "Зберегти скановане зображення",
         "Description[x-test]": "xxSave the scanned imagexx",
+        "Description[zh_TW]": "儲存已掃描的圖片",
         "Icon": "document-save",
         "License": "GPL",
         "Name": "Save Image",

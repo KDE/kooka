@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Copy the scanned image to the clipboard",
+        "Description[ar]": "انسخ الصورة الممسوحة ضوئياً إلى الحافظة",
         "Description[ca@valencia]": "Copia la imatge escanejada a dins del porta-retalls",
         "Description[ca]": "Copia la imatge escanejada al porta-retalls",
         "Description[cs]": "Zkopírovat skenované snímky do schránky",
@@ -12,6 +13,7 @@
         "Description[fr]": "Copier l'image numérisée dans le presse-papier",
         "Description[gl]": "Copiar a imaxe escaneada no portapapeis.",
         "Description[he]": "העתקת התמונה שנסרקה ללוח הגזירים",
+        "Description[ia]": "Copia le imagine scandite a area de transferentia ",
         "Description[it]": "Copia l'immagine scansionata negli appunti",
         "Description[ka]": "სკანირებული გამოსახულების ბუფერში კოპირება",
         "Description[ko]": "스캔한 그림을 클립보드에 복사",
@@ -23,6 +25,7 @@
         "Description[tr]": "Taranan görseli panoya kopyalayın",
         "Description[uk]": "Копіювати скановане зображення до буфера",
         "Description[x-test]": "xxCopy the scanned image to the clipboardxx",
+        "Description[zh_TW]": "將已掃描的圖片複製到剪貼簿",
         "Icon": "edit-copy",
         "License": "GPL",
         "Name": "Copy Image",

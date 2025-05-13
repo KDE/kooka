@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Print the scanned image",
+        "Description[ar]": "اطبع الصورة الممسوحة ضوئياً",
         "Description[ca@valencia]": "Imprimix la imatge escanejada",
         "Description[ca]": "Imprimeix la imatge escanejada",
         "Description[cs]": "Vytisknout skenovaný snímek",
@@ -12,6 +13,7 @@
         "Description[fr]": "Imprimer l'image numérisée",
         "Description[gl]": "Imprimir a imaxe escaneada.",
         "Description[he]": "הדפסת התמונה שנסרקה",
+        "Description[ia]": "Imprimeleimagine scandite",
         "Description[it]": "Stampa l'immagine scansionata",
         "Description[ka]": "სკანირებული გამოსახულების დაბეჭდვა",
         "Description[ko]": "스캔한 그림 인쇄",
@@ -23,6 +25,7 @@
         "Description[tr]": "Taranan görseli yazdırın",
         "Description[uk]": "Надрукувати скановане зображення",
         "Description[x-test]": "xxPrint the scanned imagexx",
+        "Description[zh_TW]": "列印已掃描的圖片",
         "Icon": "document-print",
         "License": "GPL",
         "Name": "Print Image",
