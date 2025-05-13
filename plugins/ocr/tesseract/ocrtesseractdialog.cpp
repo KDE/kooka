@@ -58,6 +58,12 @@ OcrTesseractDialog::OcrTesseractDialog(AbstractOcrEngine *plugin, QWidget *pnt)
 }
 
 
+static bool numericStringLessThan(const QString &a, const QString &b)
+{
+    return (a.toInt()<b.toInt());
+}
+
+
 bool OcrTesseractDialog::setupGui()
 {
     AbstractOcrDialogue::setupGui();			// build the standard GUI
@@ -147,9 +153,12 @@ bool OcrTesseractDialog::setupGui()
     m_segmentationMode = new QComboBox(w);
     m_segmentationMode->setToolTip(ski->toolTip());
     m_segmentationMode->addItem(i18n("(default)"), QString());
-    for (QMap<QString,QString>::const_iterator it = vals.constBegin(); it != vals.constEnd(); ++it)
+
+    QStringList keys = vals.keys();
+    std::sort(keys.begin(), keys.end(), &numericStringLessThan);
+    for (const QString &key : std::as_const(keys))
     {
-        m_segmentationMode->addItem(it.value(), it.key());
+        m_segmentationMode->addItem(vals[key], key);
     }
  
     if (vals.isEmpty()) m_segmentationMode->setEnabled(false);
@@ -172,11 +181,14 @@ bool OcrTesseractDialog::setupGui()
     m_engineMode = new QComboBox(w);
     m_engineMode->setToolTip(ski->toolTip());
     m_engineMode->addItem(i18n("(default)"), QString());
-    for (QMap<QString,QString>::const_iterator it = vals.constBegin(); it != vals.constEnd(); ++it)
+
+    keys = vals.keys();
+    std::sort(keys.begin(), keys.end(), &numericStringLessThan);
+    for (const QString &key : std::as_const(keys))
     {
-        m_engineMode->addItem(it.value(), it.key());
+        m_engineMode->addItem(vals[key], key);
     }
- 
+
     if (vals.isEmpty()) m_engineMode->setEnabled(false);
     else
     {
