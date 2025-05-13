@@ -284,8 +284,30 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
         KProcess proc;
         proc.setOutputChannelMode(KProcess::MergedChannels);
         proc << m_ocrCmd << QString("--%1").arg(opt);
-
         proc.execute(5000);
+
+        // The format of the Tesseract help output for the "--help-psm" and "--help-oem"
+        // options is, for Tesseract 5.4 and earlier:
+        //
+        //   Page segmentation modes:
+        //     0    Orientation and script detection (OSD) only.
+        //
+        //   OCR Engine modes:
+        //     0    Legacy engine only.
+        //
+        // For Tesseract 5.5 the format is:
+        //
+        //   Page segmentation modes (PSM):
+        //     0|osd_only                Orientation and script detection (OSD) only.
+        //
+        //   OCR Engine modes (OEM):
+        //     0|tesseract_only          Legacy engine only.
+        //
+        // This change is possibly so that the command line options can take textual
+        // values as well as just numbers, but here we still use the numeric values
+        // for backwards compatibility.
+        const QRegularExpression rx((opt=="list-langs") ? "^\\s*(\\w+)()$"
+                                                        : "^\\s*(\\d+)(\\|\\w+)?\\s+(\\w.+)?$");
         const QByteArray output = proc.readAllStandardOutput();
         const QList<QByteArray> lines = output.split('\n');
         for (const QByteArray &line : lines)
@@ -293,13 +315,11 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
             const QString lineStr = QString::fromLocal8Bit(line);
             qCDebug(OCR_LOG) << "line:" << lineStr;
 
-            const QRegularExpression rx((opt=="list-langs") ? "^\\s*(\\w+)()$"
-                                                            : "^\\s*(\\d+)\\s+(\\w.+)?$");
             const QRegularExpressionMatch match = rx.match(lineStr);
             if (match.hasMatch())
             {
                 const QString value = match.captured(1);
-                QString desc = match.captured(2).simplified();
+                QString desc = match.captured(3).simplified();
                 if (desc.endsWith(QLatin1Char('.')) || desc.endsWith(QLatin1Char(','))) desc.chop(1);
                 result.insert(value, desc);
             }
