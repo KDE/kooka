@@ -71,7 +71,7 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
             mMessageText = kxi18nc("@info",
                                    "<emphasis strong=\"1\">Ready to scan the first page</emphasis>%1..."
                                    "<nl/><nl/>"
-                                   "Prepare the page and then click <interface>Start&nbsp;Scan</interface> to scan it,"
+                                   "Prepare the page and then use <interface>Start&nbsp;Scan</interface> to scan it,"
                                    "<nl/>"
                                    "or <interface>Cancel</interface> to cancel the scan.");
         }
@@ -83,18 +83,18 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
                 mMessageText = kxi18nc("@info",
                                        "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
                                        "<nl/><nl/>"
-                                       "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
+                                       "Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to scan it,"
                                        "<nl/>"
-                                       "or click <interface>Finish</interface> to end the scan batch.");
+                                       "or <interface>Finish</interface> to end the scan batch.");
             }
             else
             {
                 mMessageText = kxi18nc("@info",
                                        "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
                                        "<nl/><nl/>"
-                                       "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
+                                       "Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to scan it,"
                                        "<nl/>"
-                                       "or click <interface>Finish</interface> to end the scan batch "
+                                       "or <interface>Finish</interface> to end the scan batch "
                                        "or <interface>Cancel</interface> to cancel the entire scan.");
             }
         }
@@ -106,7 +106,7 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
             mMessageText = kxi18nc("@info",
                                    "<emphasis strong=\"1\">Waiting to scan the first page</emphasis>%1..."
                                    "<nl/><nl/>"
-                                   "Prepare the page and then wait, or click <interface>Start&nbsp;Scan</interface> to scan it immediately"
+                                   "Prepare the page and then wait, or use <interface>Start&nbsp;Scan</interface> to scan it immediately"
                                    "<nl/>"
                                    "or <interface>Cancel</interface> to cancel the scan.");
         }
@@ -118,18 +118,18 @@ ContinueScanDialog::ContinueScanDialog(const MultiScanOptions &options, QWidget 
                 mMessageText = kxi18nc("@info",
                                    "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
                                    "<nl/><nl/>"
-                                   "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
+                                   "Prepare the next page and then wait, or use <interface>Scan&nbsp;Now</interface> to scan it immediately"
                                    "<nl/>"
-                                   "or click <interface>Finish</interface> to end the scan batch.");
+                                   "or <interface>Finish</interface> to end the scan batch.");
             }
             else
             {
                 mMessageText = kxi18nc("@info",
                                        "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
                                        "<nl/><nl/>"
-                                       "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
+                                       "Prepare the next page and then wait, or use <interface>Scan&nbsp;Now</interface> to scan it immediately"
                                        "<nl/>"
-                                       "or click <interface>Finish</interface> to end the scan batch "
+                                       "or <interface>Finish</interface> to end the scan batch "
                                        "or <interface>Cancel</interface> to cancel the entire scan.");
             }
         }
