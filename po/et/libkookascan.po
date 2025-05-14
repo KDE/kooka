@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2020-01-23 22:47+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -308,17 +308,17 @@ msgstr "Sätte lähtestamine standardväärtusele %1"
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "Skannerit pole valitud"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Vaikimisi käivitamisseadistus"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -329,72 +329,72 @@ msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr ""
 "Skanner<nl/><emphasis strong=\"1\">%1</emphasis><nl/>nõuab autentimist."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Skanneri autentimine"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "OK"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "Seade puudub"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "Halb parameeter"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "Seadme avamine nurjus"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() nurjus"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "Tõrge skannimisel"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "Tühi pilt"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "Mälu napib"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "Vajab taaslaadimist"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "Katkestatud"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "Pole aktiivne"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "Pole toetatud"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Tundmatu olek %1"
@@ -634,45 +634,45 @@ msgstr ""
 msgid "Reading mode:"
 msgstr "Lugemisrežiim:"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:416
+#: scanparams.cpp:419
 #, fuzzy, kde-format
 #| msgid "Gray"
 msgid "Grey scale"
 msgstr "Hall"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:420
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "Värv"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:421
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:428
+#: scanparams.cpp:431
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "Virtuaalskanner (suvaline pildivorming)"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:484
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Muuda gammatabelit..."
 
-#: scanparams.cpp:553
+#: scanparams.cpp:575
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -686,7 +686,7 @@ msgstr ""
 "<emphasis strong=\"1\">Skannerit pole valitud</emphasis><nl/><nl/>Vali "
 "skannimiseks skanneriseade."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:595
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -720,22 +720,22 @@ msgstr ""
 "häälestamise kohta leiab SANE projekti koduleheküljelt (<link url=\"http://"
 "www.sane-project.org\">www.sane-project.org</link>)."
 
-#: scanparams.cpp:675
+#: scanparams.cpp:697
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1-bitise sügavusega skanni ei saa värvilisena teha"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:700
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16-bitise sügavusega skannimine ei ole toetatud"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:710
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Testimiseks või virtuaalseks skannimiseks tuleb anda fail"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:716
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -745,7 +745,7 @@ msgstr ""
 "Test- või virtuaalfaili <filename>%1</filename> ei leitud või ei ole see "
 "loetav"
 
-#: scanparams.cpp:704
+#: scanparams.cpp:727
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -755,18 +755,18 @@ msgstr ""
 "SANE silumine saab lugeda ainult PNM-faile.<nl/>Selle faili tüüp on <icode>"
 "%1</icode>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:744
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Käib skannimine"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:745
 #, fuzzy, kde-kuit-format
 #| msgid "Scan in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Käib skannimine"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:765
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Virtuaalskanneri režiimis ei ole eelvaatlus võimalik"

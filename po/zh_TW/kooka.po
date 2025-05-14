@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2025-04-19 15:53+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1182
+#: kookaview.cpp:1184
 #, kde-format
 msgid "Other..."
 msgstr "其他..."
@@ -80,13 +80,13 @@ msgstr "正在複製圖片到剪貼簿"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:680
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "列印圖片"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:696
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -98,7 +98,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:697
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -369,7 +369,7 @@ msgstr "檢查 OCR 引擎選擇與其設定。"
 msgid "OCR Setup Error"
 msgstr "OCR 設定錯誤"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:794
 #, kde-format
 msgid "Configure OCR..."
 msgstr "設定 OCR..."
@@ -494,7 +494,7 @@ msgstr "GOCR 執行檔未配置或無法使用。"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:263
 #, kde-format
 msgid "Error"
 msgstr "錯誤"
@@ -688,9 +688,9 @@ msgstr "完整版面偵測"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:161
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:93
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:155
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:183
 #, kde-format
 msgid "(default)"
 msgstr "(預設)"
@@ -721,13 +721,13 @@ msgstr "無法開啟檔案 <filename>%1</filename>"
 msgid "Name or path of the OCRAD executable:"
 msgstr "OCRAD 執行檔的名稱或路徑："
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:78
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
 msgstr "Tesseract 執行檔未配置或無法使用。"
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
 #, kde-format
 msgid "Select a file if required..."
 msgstr "選擇需要的檔案…"
@@ -1455,167 +1455,167 @@ msgstr "%1 <filename>%3</filename><nl/>%2"
 msgid "KDE Scanning"
 msgstr "KDE 掃描"
 
-#: kooka.cpp:140
+#: kooka.cpp:142
 #, kde-format
 msgid "Scale to Width"
 msgstr "調整到寬度"
 
-#: kooka.cpp:151
+#: kooka.cpp:153
 #, kde-format
 msgid "Scale to Height"
 msgstr "調整到高度"
 
-#: kooka.cpp:160
+#: kooka.cpp:162
 #, kde-format
 msgid "Original Size"
 msgstr "原始大小"
 
-#: kooka.cpp:166
+#: kooka.cpp:168
 #, kde-format
 msgid "Set Zoom..."
 msgstr "設定縮放..."
 
-#: kooka.cpp:172
+#: kooka.cpp:174
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "保留縮放設定"
 
-#: kooka.cpp:180
+#: kooka.cpp:182
 #, kde-format
 msgid "New Image From Selection"
 msgstr "從選取建立圖片"
 
-#: kooka.cpp:185
+#: kooka.cpp:187
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "垂直翻轉"
 
-#: kooka.cpp:192
+#: kooka.cpp:194
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "水平翻轉"
 
-#: kooka.cpp:202
+#: kooka.cpp:204
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "逆時針旋轉"
 
-#: kooka.cpp:209
+#: kooka.cpp:211
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "順時針旋轉"
 
-#: kooka.cpp:216
+#: kooka.cpp:218
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "旋轉 180 度"
 
-#: kooka.cpp:225
+#: kooka.cpp:227
 #, kde-format
 msgid "New Folder..."
 msgstr "新增資料夾..."
 
-#: kooka.cpp:230
+#: kooka.cpp:232
 #, kde-format
 msgid "Open With"
 msgstr "開啟方式"
 
-#: kooka.cpp:236
+#: kooka.cpp:238
 #, kde-format
 msgid "Save Image..."
 msgstr "儲存圖片..."
 
-#: kooka.cpp:243
+#: kooka.cpp:245
 #, kde-format
 msgid "Import Image..."
 msgstr "匯入圖片..."
 
-#: kooka.cpp:248 kooka.cpp:537
+#: kooka.cpp:250 kooka.cpp:539
 #, kde-format
 msgid "Delete Image"
 msgstr "刪除圖片"
 
-#: kooka.cpp:255 kooka.cpp:538
+#: kooka.cpp:257 kooka.cpp:540
 #, kde-format
 msgid "Rename Image"
 msgstr "重新命名圖片"
 
-#: kooka.cpp:261 kooka.cpp:536
+#: kooka.cpp:263 kooka.cpp:538
 #, kde-format
 msgid "Unload Image"
 msgstr "取消載入圖片"
 
-#: kooka.cpp:268
+#: kooka.cpp:270
 #, kde-format
 msgid "Properties..."
 msgstr "屬性…"
 
-#: kooka.cpp:277
+#: kooka.cpp:279
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "選擇掃描裝置..."
 
-#: kooka.cpp:281 kookaview.cpp:551
+#: kooka.cpp:283 kookaview.cpp:553
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "新增掃描裝置..."
 
-#: kooka.cpp:287
+#: kooka.cpp:289
 #, kde-format
 msgid "Preview"
 msgstr "預覽"
 
-#: kooka.cpp:292
+#: kooka.cpp:294
 #, kde-format
 msgid "Start Scan"
 msgstr "開始掃描"
 
-#: kooka.cpp:297
+#: kooka.cpp:299
 #, kde-format
 msgid "Scan Presets..."
 msgstr "掃描預設檔..."
 
-#: kooka.cpp:302
+#: kooka.cpp:304
 #, kde-format
 msgid "Auto Select"
 msgstr "自動選擇"
 
-#: kooka.cpp:310
+#: kooka.cpp:312
 #, kde-format
 msgid "OCR Image..."
 msgstr "辨識圖片中的文字..."
 
-#: kooka.cpp:314
+#: kooka.cpp:316
 #, kde-format
 msgid "OCR Selection..."
 msgstr "辨識選擇區域中的文字..."
 
-#: kooka.cpp:318
+#: kooka.cpp:320
 #, kde-format
 msgid "OCR File..."
 msgstr "辨識檔案中的文字..."
 
-#: kooka.cpp:322
+#: kooka.cpp:324
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "儲存 OCR 結果文字..."
 
-#: kooka.cpp:327
+#: kooka.cpp:329
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "對 OCR 結果進行拼字檢查..."
 
-#: kooka.cpp:524
+#: kooka.cpp:526
 #, kde-format
 msgid "Unload Folder"
 msgstr "取消載入資料夾"
 
-#: kooka.cpp:525
+#: kooka.cpp:527
 #, kde-format
 msgid "Delete Folder"
 msgstr "刪除資料夾"
 
-#: kooka.cpp:526
+#: kooka.cpp:528
 #, kde-format
 msgid "Rename Folder"
 msgstr "重新命名資料夾"
@@ -1670,7 +1670,7 @@ msgstr "相簿與縮圖"
 msgid "Image Gallery and Thumbnail View"
 msgstr "圖片相簿與縮圖檢視"
 
-#: kookapref.cpp:61 kookaview.cpp:292
+#: kookapref.cpp:61 kookaview.cpp:284
 #, kde-format
 msgid "OCR"
 msgstr "OCR"
@@ -2023,37 +2023,37 @@ msgstr "掃描工具列"
 msgid "Image View"
 msgstr "影像檢視"
 
-#: kookaview.cpp:246
-#, kde-format
-msgid "User specified"
-msgstr "使用者指定"
-
-#: kookaview.cpp:247
-#, kde-format
-msgid "on command line"
-msgstr "在指令列上"
-
-#: kookaview.cpp:267
+#: kookaview.cpp:257
 #, kde-format
 msgid "Scan Preview"
 msgstr "掃描預覽"
 
-#: kookaview.cpp:277
+#: kookaview.cpp:267
 #, kde-format
 msgid "OCR results will appear here"
 msgstr "OCR 結果將會顯示於此"
 
-#: kookaview.cpp:286
+#: kookaview.cpp:278
 #, kde-format
 msgid "Scan"
 msgstr "掃描"
 
-#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
+#: kookaview.cpp:281 kookaview.cpp:567 kookaview.cpp:586 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "相簿"
 
-#: kookaview.cpp:466
+#: kookaview.cpp:333
+#, kde-format
+msgid "User specified"
+msgstr "使用者指定"
+
+#: kookaview.cpp:334
+#, kde-format
+msgid "on command line"
+msgstr "在指令列上"
+
+#: kookaview.cpp:468
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2068,12 +2068,12 @@ msgstr ""
 "icode><nl/>libkookascan 回報錯誤：<message>%2</message><nl/>SANE 回報錯誤："
 "<message>%1</message>"
 
-#: kookaview.cpp:521
+#: kookaview.cpp:523
 #, kde-format
 msgid "Add Scan Device"
 msgstr "新增掃描裝置"
 
-#: kookaview.cpp:541
+#: kookaview.cpp:543
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2090,79 +2090,79 @@ msgstr ""
 "置</interface>選項來輸入後端名稱及參數。更多資訊請見在新增掃描裝置時見該對話"
 "框。"
 
-#: kookaview.cpp:587
+#: kookaview.cpp:589
 #, kde-format
 msgid "No scanner connected"
 msgstr "未連線掃描器"
 
-#: kookaview.cpp:646
+#: kookaview.cpp:648
 #, kde-format
 msgid "No selection"
 msgstr "無選取區域"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:652
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "相簿資料夾 %1"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:652
 #, kde-format
 msgid "Gallery image %1"
 msgstr "相簿圖片 %1"
 
-#: kookaview.cpp:715
+#: kookaview.cpp:717
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "正對選擇的區域開始光學文字辨識"
 
-#: kookaview.cpp:721
+#: kookaview.cpp:723
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "正對圖片開始光學文字辨識"
 
-#: kookaview.cpp:728
+#: kookaview.cpp:730
 #, kde-format
 msgid "OCR File"
 msgstr "OCR 檔案"
 
-#: kookaview.cpp:738
+#: kookaview.cpp:740
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "無法為 OCR 載入 <filename>%1</filename>：<nl/>%2"
 
-#: kookaview.cpp:740
+#: kookaview.cpp:742
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "無法讀取 OCR 檔案"
 
-#: kookaview.cpp:744
+#: kookaview.cpp:746
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "正對檔案 <filename>%1</filename> 開始光學文字辨識"
 
-#: kookaview.cpp:760
+#: kookaview.cpp:762
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR 已完成"
 
-#: kookaview.cpp:767
+#: kookaview.cpp:769
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "沒有能進行拼字檢查的 OCR 辨識結果文字。"
 
-#: kookaview.cpp:768
+#: kookaview.cpp:770
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "無法進行 OCR 拼字檢查"
 
-#: kookaview.cpp:773
+#: kookaview.cpp:775
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OCR 拼字檢查"
 
-#: kookaview.cpp:789
+#: kookaview.cpp:791
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2171,17 +2171,17 @@ msgstr ""
 "未設定 OCR 引擎。\n"
 "請選擇一個並設定它以進行光學文字辨識。"
 
-#: kookaview.cpp:791
+#: kookaview.cpp:793
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR 尚未設定"
 
-#: kookaview.cpp:800
+#: kookaview.cpp:802
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "無法載入 OCR 外掛「%1」"
 
-#: kookaview.cpp:908
+#: kookaview.cpp:910
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2196,27 +2196,27 @@ msgstr ""
 ">libkookascan 回報錯誤：<message>%2</message><nl/>SANE 回報錯誤：<message>"
 "%1</message>"
 
-#: kookaview.cpp:958
+#: kookaview.cpp:960
 #, kde-format
 msgid "Create new image from selection"
 msgstr "從選取的區域建立新影像"
 
-#: kookaview.cpp:967
+#: kookaview.cpp:969
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "無法轉換，圖片是唯獨的"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1022
 #, kde-format
 msgid "Loaded image %1"
 msgstr "已載入圖片 %1"
 
-#: kookaview.cpp:1021
+#: kookaview.cpp:1023
 #, kde-format
 msgid "Unloaded image"
 msgstr "已取消載入圖片"
 
-#: kookaview.cpp:1038
+#: kookaview.cpp:1040
 #, kde-format
 msgid "Loading %1..."
 msgstr "載入 %1 中..."

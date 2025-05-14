@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2024-05-17 07:11+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -331,88 +331,88 @@ msgstr "Ponovno nastavite to nastavitev na njeno standardno vrednost, %1"
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "Slikovne datoteke PNM (*.pnm *.pbm *.pgm *.ppm)"
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "Ni izbranega optičnega bralnika"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Privzeta nastavitev ob zagonu"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "Optični bralnik<nl/><icode>%1</icode><nl/>zahteva overitev."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Overitev na optičnem bralniku"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "V redu"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "Ni naprave"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "Slab parameter"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "Ni mogoče odpreti naprave"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "ni uspela sane_control_option()"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "Napaka ob skeniranju"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "Prazna slika"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "Pomanjkanje pomnilnika"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "Potreba po ponovnem nalaganju"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "Preklicano"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "Ni dejavno"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "Ni podprto"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Neznan status %1"
@@ -648,42 +648,42 @@ msgstr ""
 msgid "Reading mode:"
 msgstr "Način branja:"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Privzeto (iz nastavitev skeniranja)"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Črno/bela bitna slika"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:419
 #, kde-format
 msgid "Grey scale"
 msgstr "Lestvica sivin"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:420
 #, kde-format
 msgid "Low colour"
 msgstr "Nizke barve"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:421
 #, kde-format
 msgid "High colour"
 msgstr "Visoke barve"
 
-#: scanparams.cpp:428
+#: scanparams.cpp:431
 #, kde-format
 msgid "Force image format:"
 msgstr "Obvezen format slike:"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:484
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Uredi tabelo gama..."
 
-#: scanparams.cpp:553
+#: scanparams.cpp:575
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -693,7 +693,7 @@ msgstr ""
 "<title>Noben optični bralnik ni izbran</title><nl/><nl/>Izberite napravo za "
 "izvajanje optičnega branja."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:595
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -716,22 +716,22 @@ msgstr ""
 "\"http://www.sane-project.org\">www.sane-project.org</link>) za dodatne "
 "informacije o namestitvi in nastavitvi SANE."
 
-#: scanparams.cpp:675
+#: scanparams.cpp:697
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1-bitno globinsko skeniranje ni možno v barvah"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:700
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16-bitna skeniranja niso podprta"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:710
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Za testiranje ali navidezno skeniranje je treba vnesti datoteko"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:716
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -741,7 +741,7 @@ msgstr ""
 "Preskusne ali navidezne datoteke <filename>%1</filename><nl/> ni bilo mogoče "
 "najti oz. ni berljiva."
 
-#: scanparams.cpp:704
+#: scanparams.cpp:727
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -751,17 +751,17 @@ msgstr ""
 "SANE razhroščevanje lahko bere samo datoteke PNM.<nl/>Navedena datoteka je "
 "tipa <icode>%1</icode>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:744
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Skeniranje v teku"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:745
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Skeniranje v teku<nl/><nl/>%1"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:765
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Predogled ni mogoč v načinu navideznega optičnega bralnika"

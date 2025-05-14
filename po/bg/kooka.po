@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2024-11-09 20:04+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -44,7 +44,7 @@ msgstr "<qt><p>%1<br><filename>%3</filename><br><br>%2"
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1182
+#: kookaview.cpp:1184
 #, kde-format
 msgid "Other..."
 msgstr "Друго..."
@@ -80,13 +80,13 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "<qt><p>%1<br><filename>%3</filename><br><br>%2"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:680
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Печат на %1"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:696
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -95,7 +95,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:697
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -362,7 +362,7 @@ msgstr "Показване на диалога за избор на скенер
 msgid "OCR Setup Error"
 msgstr "Проблем при граматичния анализ"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:794
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -489,7 +489,7 @@ msgstr ""
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:263
 #, kde-format
 msgid "Error"
 msgstr "Грешка"
@@ -676,9 +676,9 @@ msgstr "Разпознаване на пълното разположение"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:161
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:93
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:155
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:183
 #, kde-format
 msgid "(default)"
 msgstr "(по подразбиране)"
@@ -709,13 +709,13 @@ msgstr "<qt><p>%1<br><filename>%3</filename><br><br>%2"
 msgid "Name or path of the OCRAD executable:"
 msgstr ""
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:78
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
 msgstr ""
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
 #, fuzzy, kde-format
 msgid "Select a file if required..."
 msgstr "Избор на скенер..."
@@ -1442,167 +1442,167 @@ msgstr "<qt><p>%1<br><filename>%3</filename><br><br>%2"
 msgid "KDE Scanning"
 msgstr "Програма за сканиране"
 
-#: kooka.cpp:140
+#: kooka.cpp:142
 #, kde-format
 msgid "Scale to Width"
 msgstr "Мащабиране до широчината"
 
-#: kooka.cpp:151
+#: kooka.cpp:153
 #, kde-format
 msgid "Scale to Height"
 msgstr "Мащабиране до височината"
 
-#: kooka.cpp:160
+#: kooka.cpp:162
 #, kde-format
 msgid "Original Size"
 msgstr "Оригинален размер"
 
-#: kooka.cpp:166
+#: kooka.cpp:168
 #, kde-format
 msgid "Set Zoom..."
 msgstr "Мащабиране..."
 
-#: kooka.cpp:172
+#: kooka.cpp:174
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "Запазване на настройките за мащабиране"
 
-#: kooka.cpp:180
+#: kooka.cpp:182
 #, kde-format
 msgid "New Image From Selection"
 msgstr "Ново изображение от избраната област"
 
-#: kooka.cpp:185
+#: kooka.cpp:187
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Огледално по вертикала"
 
-#: kooka.cpp:192
+#: kooka.cpp:194
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Огледално по хоризонтала"
 
-#: kooka.cpp:202
+#: kooka.cpp:204
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "Завъртане обратно на часовниковата стрелка"
 
-#: kooka.cpp:209
+#: kooka.cpp:211
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "Завъртане по часовниковата стрелка"
 
-#: kooka.cpp:216
+#: kooka.cpp:218
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "Завъртане на 180 градуса"
 
-#: kooka.cpp:225
+#: kooka.cpp:227
 #, fuzzy, kde-format
 msgid "New Folder..."
 msgstr "Нова папка"
 
-#: kooka.cpp:230
+#: kooka.cpp:232
 #, kde-format
 msgid "Open With"
 msgstr "Отваряне с"
 
-#: kooka.cpp:236
+#: kooka.cpp:238
 #, kde-format
 msgid "Save Image..."
 msgstr "Запазване на изображението..."
 
-#: kooka.cpp:243
+#: kooka.cpp:245
 #, kde-format
 msgid "Import Image..."
 msgstr "Внасяне на изображение..."
 
-#: kooka.cpp:248 kooka.cpp:537
+#: kooka.cpp:250 kooka.cpp:539
 #, kde-format
 msgid "Delete Image"
 msgstr "Изтриване на изображение"
 
-#: kooka.cpp:255 kooka.cpp:538
+#: kooka.cpp:257 kooka.cpp:540
 #, kde-format
 msgid "Rename Image"
 msgstr "Преименуване на изображение"
 
-#: kooka.cpp:261 kooka.cpp:536
+#: kooka.cpp:263 kooka.cpp:538
 #, kde-format
 msgid "Unload Image"
 msgstr ""
 
-#: kooka.cpp:268
+#: kooka.cpp:270
 #, kde-format
 msgid "Properties..."
 msgstr "Настройки..."
 
-#: kooka.cpp:277
+#: kooka.cpp:279
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "Избор на скенер..."
 
-#: kooka.cpp:281 kookaview.cpp:551
+#: kooka.cpp:283 kookaview.cpp:553
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Добавяне на скенер..."
 
-#: kooka.cpp:287
+#: kooka.cpp:289
 #, kde-format
 msgid "Preview"
 msgstr "Преглед"
 
-#: kooka.cpp:292
+#: kooka.cpp:294
 #, kde-format
 msgid "Start Scan"
 msgstr "Начало на сканирането"
 
-#: kooka.cpp:297
+#: kooka.cpp:299
 #, fuzzy, kde-format
 msgid "Scan Presets..."
 msgstr "Настройки на сканиране..."
 
-#: kooka.cpp:302
+#: kooka.cpp:304
 #, fuzzy, kde-format
 msgid "Auto Select"
 msgstr "Няма избрано"
 
-#: kooka.cpp:310
+#: kooka.cpp:312
 #, kde-format
 msgid "OCR Image..."
 msgstr "Разпознаване на текст от изображение..."
 
-#: kooka.cpp:314
+#: kooka.cpp:316
 #, kde-format
 msgid "OCR Selection..."
 msgstr "Разпознаване на текст от избрана област..."
 
-#: kooka.cpp:318
+#: kooka.cpp:320
 #, fuzzy, kde-format
 msgid "OCR File..."
 msgstr "Разпознаване на текст от изображение..."
 
-#: kooka.cpp:322
+#: kooka.cpp:324
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "Запис на резултата от разпознаването..."
 
-#: kooka.cpp:327
+#: kooka.cpp:329
 #, fuzzy, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "Резултат от разпознаването на текст"
 
-#: kooka.cpp:524
+#: kooka.cpp:526
 #, kde-format
 msgid "Unload Folder"
 msgstr ""
 
-#: kooka.cpp:525
+#: kooka.cpp:527
 #, kde-format
 msgid "Delete Folder"
 msgstr "Изтриване на папка"
 
-#: kooka.cpp:526
+#: kooka.cpp:528
 #, kde-format
 msgid "Rename Folder"
 msgstr "Преименуване на папка"
@@ -1657,7 +1657,7 @@ msgstr "Галерия и миниатюри"
 msgid "Image Gallery and Thumbnail View"
 msgstr ""
 
-#: kookapref.cpp:61 kookaview.cpp:292
+#: kookapref.cpp:61 kookaview.cpp:284
 #, kde-format
 msgid "OCR"
 msgstr "Разпознаване"
@@ -2017,37 +2017,37 @@ msgstr "Инструменти за сканиране"
 msgid "Image View"
 msgstr "Преглед на изображения"
 
-#: kookaview.cpp:246
-#, kde-format
-msgid "User specified"
-msgstr ""
-
-#: kookaview.cpp:247
-#, kde-format
-msgid "on command line"
-msgstr ""
-
-#: kookaview.cpp:267
+#: kookaview.cpp:257
 #, kde-format
 msgid "Scan Preview"
 msgstr "Преглед на сканирането"
 
-#: kookaview.cpp:277
+#: kookaview.cpp:267
 #, kde-format
 msgid "OCR results will appear here"
 msgstr ""
 
-#: kookaview.cpp:286
+#: kookaview.cpp:278
 #, kde-format
 msgid "Scan"
 msgstr "Сканиране"
 
-#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
+#: kookaview.cpp:281 kookaview.cpp:567 kookaview.cpp:586 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "Галерия"
 
-#: kookaview.cpp:466
+#: kookaview.cpp:333
+#, kde-format
+msgid "User specified"
+msgstr ""
+
+#: kookaview.cpp:334
+#, kde-format
+msgid "on command line"
+msgstr ""
+
+#: kookaview.cpp:468
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2058,12 +2058,12 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:521
+#: kookaview.cpp:523
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Добавяне на скенер"
 
-#: kookaview.cpp:541
+#: kookaview.cpp:543
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2075,79 +2075,79 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:587
+#: kookaview.cpp:589
 #, kde-format
 msgid "No scanner connected"
 msgstr "Няма свързан скенер"
 
-#: kookaview.cpp:646
+#: kookaview.cpp:648
 #, kde-format
 msgid "No selection"
 msgstr "Няма избрано"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:652
 #, kde-format
 msgid "Gallery folder %1"
 msgstr ""
 
-#: kookaview.cpp:650
+#: kookaview.cpp:652
 #, kde-format
 msgid "Gallery image %1"
 msgstr ""
 
-#: kookaview.cpp:715
+#: kookaview.cpp:717
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Разпознаване на текст от маркирана област"
 
-#: kookaview.cpp:721
+#: kookaview.cpp:723
 #, fuzzy, kde-format
 msgid "Starting OCR on the image"
 msgstr "Разпознаване на текст от цялото изображение"
 
-#: kookaview.cpp:728
+#: kookaview.cpp:730
 #, fuzzy, kde-format
 msgid "OCR File"
 msgstr "Програма GOCR"
 
-#: kookaview.cpp:738
+#: kookaview.cpp:740
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "<qt><p>%1<br><filename>%3</filename><br><br>%2"
 
-#: kookaview.cpp:740
+#: kookaview.cpp:742
 #, fuzzy, kde-format
 msgid "Cannot Read OCR File"
 msgstr "Файлът „%1“ не може да се отвори"
 
-#: kookaview.cpp:744
+#: kookaview.cpp:746
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "<qt><p>%1<br><filename>%3</filename><br><br>%2"
 
-#: kookaview.cpp:760
+#: kookaview.cpp:762
 #, kde-format
 msgid "OCR finished"
 msgstr "Разпознаването на текст приключи"
 
-#: kookaview.cpp:767
+#: kookaview.cpp:769
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:768
+#: kookaview.cpp:770
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:773
+#: kookaview.cpp:775
 #, fuzzy, kde-format
 msgid "OCR Spell Check"
 msgstr "Проверка на правописа"
 
-#: kookaview.cpp:789
+#: kookaview.cpp:791
 #, fuzzy, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2156,17 +2156,17 @@ msgstr ""
 "Тази версия на програмата Kooka не е компилирана с поддръжка на KADMOS.\n"
 "Моля, изберете друг софтуер за разпознаване на текст от настройките."
 
-#: kookaview.cpp:791
+#: kookaview.cpp:793
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:800
+#: kookaview.cpp:802
 #, fuzzy, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "Файлът „%1“ не може да се отвори"
 
-#: kookaview.cpp:908
+#: kookaview.cpp:910
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2177,27 +2177,27 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:958
+#: kookaview.cpp:960
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Създаване на ново изображение от избраната област"
 
-#: kookaview.cpp:967
+#: kookaview.cpp:969
 #, fuzzy, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Грешка при запис. Файлът е забранен за запис."
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1022
 #, kde-format
 msgid "Loaded image %1"
 msgstr "Заредено е изображение %1"
 
-#: kookaview.cpp:1021
+#: kookaview.cpp:1023
 #, kde-format
 msgid "Unloaded image"
 msgstr ""
 
-#: kookaview.cpp:1038
+#: kookaview.cpp:1040
 #, fuzzy, kde-format
 msgid "Loading %1..."
 msgstr "Зареждане на %1"

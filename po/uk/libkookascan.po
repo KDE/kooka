@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkookascan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2024-05-17 16:42+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -337,17 +337,17 @@ msgstr "Повернути параметру стандартне значен�
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "файли зображень PNM (*.pnm *.pbm *.pgm *.ppm)"
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "Не вибрано жодного сканера"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Типові початкові налаштування"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
@@ -355,72 +355,72 @@ msgstr ""
 "Для отримання доступу до сканера<nl/><icode>%1</icode><nl/>слід пройти "
 "розпізнавання."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Розпізнавання для доступу до сканера"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "Гаразд"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "Немає пристрою"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "Помилковий параметр"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "Не вдалося відкрити файл пристрою"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "Помилка sane_control_option()"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "Помилка під час сканування"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "Порожнє зображення"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "Не вистачає пам'яті"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "Потребує перезавантаження"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "Скасовано"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "Неактивний"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "Не підтримується"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Невідомий стан %1"
@@ -659,42 +659,42 @@ msgstr ""
 msgid "Reading mode:"
 msgstr "Режим читання:"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Типовий (з параметрів сканування)"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Чорно-білий растр"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:419
 #, kde-format
 msgid "Grey scale"
 msgstr "Тони сірого"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:420
 #, kde-format
 msgid "Low colour"
 msgstr "Декілька кольорів"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:421
 #, kde-format
 msgid "High colour"
 msgstr "Якісний колір"
 
-#: scanparams.cpp:428
+#: scanparams.cpp:431
 #, kde-format
 msgid "Force image format:"
 msgstr "Примусовий формат зображення:"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:484
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Редагувати таблицю гам…"
 
-#: scanparams.cpp:553
+#: scanparams.cpp:575
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -703,7 +703,7 @@ msgid ""
 msgstr ""
 "<title>Не вказано сканера</title><nl/><nl/>Вкажіть пристрій для сканування."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:595
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -726,22 +726,22 @@ msgstr ""
 "можна знайти на домашній сторінці SANE (<link url=\"http://www.sane-project."
 "org\">www.sane-project.org</link>)."
 
-#: scanparams.cpp:675
+#: scanparams.cpp:697
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "Сканування з 1-бітовою глибиною кольорів не можна виконувати у кольорі"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:700
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "Підтримки сканування з 16-бітовою глибиною кольорів не передбачено"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:710
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Для тестування або віртуального сканування слід вказати файл"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:716
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -751,7 +751,7 @@ msgstr ""
 "Тестовий або віртуальний файл <filename>%1</filename><nl/>не було виявлено "
 "або цей файл непридатний до читання"
 
-#: scanparams.cpp:704
+#: scanparams.cpp:727
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -761,17 +761,17 @@ msgstr ""
 "Діагностична програма SANE може читати лише файли PNM.<nl/>Вказаний файл "
 "належить до типу <icode>%1</icode>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:744
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Виконуємо сканування"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:745
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Виконуємо сканування<nl/><nl/>%1"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:765
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Попередній перегляд у режимі віртуального сканера неможливий"

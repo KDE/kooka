@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2021-04-25 12:54-0700\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1182
+#: kookaview.cpp:1184
 #, kde-format
 msgid "Other..."
 msgstr "...ਹੋਰ"
@@ -80,13 +80,13 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:680
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "ਚਿੱਤਰ ਪਰਿੰਟ ਕਰੋ"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:696
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -95,7 +95,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:697
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -388,7 +388,7 @@ msgstr "ਅਗਲੀ ਵਾਰ ਸ਼ੁਰੂ ਹੋਣ ਸਮੇਂ ਸਕੈਨ�
 msgid "OCR Setup Error"
 msgstr "ਪਾਰਸ ਸਮੱਸਿਆ"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:794
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -518,7 +518,7 @@ msgstr ""
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:263
 #, kde-format
 msgid "Error"
 msgstr "ਗਲਤੀ"
@@ -705,9 +705,9 @@ msgstr "ਪੂਰਾ ਢਾਂਚਾ ਖੋਜ"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:161
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:93
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:155
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:183
 #, kde-format
 msgid "(default)"
 msgstr ""
@@ -741,13 +741,13 @@ msgstr "orf %1 ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 msgid "Name or path of the OCRAD executable:"
 msgstr ""
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:78
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
 msgstr ""
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Select a file if required..."
@@ -1532,196 +1532,196 @@ msgstr ""
 msgid "KDE Scanning"
 msgstr "ਕੇਡੀਈ ਸਕੈਨਿੰਗ"
 
-#: kooka.cpp:140
+#: kooka.cpp:142
 #, fuzzy, kde-format
 #| msgid "Scale to W&idth"
 msgid "Scale to Width"
 msgstr "ਚੌੜਾਈ ਲ਼ਈ ਠੀਕ(&i)"
 
-#: kooka.cpp:151
+#: kooka.cpp:153
 #, fuzzy, kde-format
 #| msgid "Scale to &Height"
 msgid "Scale to Height"
 msgstr "ਉਚਾਈ ਲਈ ਠੀਕ(&H)"
 
-#: kooka.cpp:160
+#: kooka.cpp:162
 #, fuzzy, kde-format
 #| msgid "Original &Size"
 msgid "Original Size"
 msgstr "ਅਸਲੀ ਅਕਾਰ(&S)"
 
-#: kooka.cpp:166
+#: kooka.cpp:168
 #, kde-format
 msgid "Set Zoom..."
 msgstr "ਅਕਾਰ ਨਿਰਧਾਰਨ..."
 
-#: kooka.cpp:172
+#: kooka.cpp:174
 #, fuzzy, kde-format
 #| msgid "Keep &Zoom Setting"
 msgid "Keep Zoom Setting"
 msgstr "ਅਕਾਰ ਸਥਾਪਨ ਰੱਖੋ(&Z)"
 
-#: kooka.cpp:180
+#: kooka.cpp:182
 #, fuzzy, kde-format
 #| msgid "Create From Selectio&n"
 msgid "New Image From Selection"
 msgstr "ਚੋਣ ਤੋਂ ਬਣਾਓ(&n)"
 
-#: kooka.cpp:185
+#: kooka.cpp:187
 #, fuzzy, kde-format
 #| msgid "Mirror Image &Vertically"
 msgid "Mirror Vertically"
 msgstr "ਚਿੱਤਰ ਲਈ ਲੰਬਕਾਰੀ ਪ੍ਰਤੀਬਿੰਬ(&V)"
 
-#: kooka.cpp:192
+#: kooka.cpp:194
 #, fuzzy, kde-format
 #| msgid "&Mirror Image Horizontally"
 msgid "Mirror Horizontally"
 msgstr "ਚਿੱਤਰ ਲਈ ਖਿਤਿਜੀ ਪ੍ਰਤੀਬਿੰਬ(&M)"
 
-#: kooka.cpp:202
+#: kooka.cpp:204
 #, fuzzy, kde-format
 #| msgid "Rotate Image Counter-Clock&wise"
 msgid "Rotate Counter-Clockwise"
 msgstr "ਘੜੀ ਦੀ ਉਲਟ ਦੇਸ਼ ਵਿੱਚ ਘੁੰਮਾਓ(&w)"
 
-#: kooka.cpp:209
+#: kooka.cpp:211
 #, fuzzy, kde-format
 #| msgid "&Rotate Image Clockwise"
 msgid "Rotate Clockwise"
 msgstr "ਘੜੀ ਦੀ ਦਿਸ਼ਾ ਵਿੱਚ ਘੁੰਮਾਓ(&R)"
 
-#: kooka.cpp:216
+#: kooka.cpp:218
 #, fuzzy, kde-format
 #| msgid "Rotate Image 180 &Degrees"
 msgid "Rotate 180 Degrees"
 msgstr "180 ਡਿਗਰੀ ਤੇ ਘੁੰਮਾਓ(&D)"
 
-#: kooka.cpp:225
+#: kooka.cpp:227
 #, fuzzy, kde-format
 #| msgid "New Folder"
 msgid "New Folder..."
 msgstr "ਨਵਾਂ ਫੋਲਡਰ"
 
-#: kooka.cpp:230
+#: kooka.cpp:232
 #, kde-format
 msgid "Open With"
 msgstr ""
 
-#: kooka.cpp:236
+#: kooka.cpp:238
 #, fuzzy, kde-format
 #| msgid "&Save Image..."
 msgid "Save Image..."
 msgstr "ਚਿੱਤਰ ਸੰਭਾਲੋ(&S)"
 
-#: kooka.cpp:243
+#: kooka.cpp:245
 #, fuzzy, kde-format
 #| msgid "&Import Image..."
 msgid "Import Image..."
 msgstr "ਚਿੱਤਰ ਆਯਾਤ(&I)..."
 
-#: kooka.cpp:248 kooka.cpp:537
+#: kooka.cpp:250 kooka.cpp:539
 #, fuzzy, kde-format
 #| msgid "&Delete Image"
 msgid "Delete Image"
 msgstr "ਚਿੱਤਰ ਹਟਾਓ(&D)"
 
-#: kooka.cpp:255 kooka.cpp:538
+#: kooka.cpp:257 kooka.cpp:540
 #, fuzzy, kde-format
 #| msgid "&Delete Image"
 msgid "Rename Image"
 msgstr "ਚਿੱਤਰ ਹਟਾਓ(&D)"
 
-#: kooka.cpp:261 kooka.cpp:536
+#: kooka.cpp:263 kooka.cpp:538
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unload Image"
 msgstr "ਚਿੱਤਰ ਲਾਹੋ(&U)"
 
-#: kooka.cpp:268
+#: kooka.cpp:270
 #, kde-format
 msgid "Properties..."
 msgstr ""
 
-#: kooka.cpp:277
+#: kooka.cpp:279
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Select Scan Device..."
 msgstr "ਸਕੈਨ ਜੰਤਰ ਚੁਣੋ"
 
-#: kooka.cpp:281 kookaview.cpp:551
+#: kooka.cpp:283 kookaview.cpp:553
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Add Scan Device..."
 msgstr "ਸਕੈਨ ਜੰਤਰ ਚੁਣੋ"
 
-#: kooka.cpp:287
+#: kooka.cpp:289
 #, fuzzy, kde-format
 #| msgid "Scan Preview"
 msgid "Preview"
 msgstr "ਸਕੈਨ ਦਰਿਸ਼"
 
-#: kooka.cpp:292
+#: kooka.cpp:294
 #, fuzzy, kde-format
 #| msgid "Start OCR"
 msgid "Start Scan"
 msgstr "OCR ਚਾਲੂ"
 
-#: kooka.cpp:297
+#: kooka.cpp:299
 #, fuzzy, kde-format
 #| msgid "Scan Parameter"
 msgid "Scan Presets..."
 msgstr "ਸਕੈਨ ਮੁੱਲ"
 
-#: kooka.cpp:302
+#: kooka.cpp:304
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "Auto Select"
 msgstr "ਫੋਂਟ ਕਿਸਮ ਚੋਣ"
 
-#: kooka.cpp:310
+#: kooka.cpp:312
 #, fuzzy, kde-format
 #| msgid "&OCR Image..."
 msgid "OCR Image..."
 msgstr "&OCR ਚਿੱਤਰ..."
 
-#: kooka.cpp:314
+#: kooka.cpp:316
 #, fuzzy, kde-format
 #| msgid "O&CR on Selection..."
 msgid "OCR Selection..."
 msgstr "ਚੋਣ ਤੇ O&CR..."
 
-#: kooka.cpp:318
+#: kooka.cpp:320
 #, fuzzy, kde-format
 #| msgid "&OCR Image..."
 msgid "OCR File..."
 msgstr "&OCR ਚਿੱਤਰ..."
 
-#: kooka.cpp:322
+#: kooka.cpp:324
 #, fuzzy, kde-format
 #| msgid "Save OCR Result Text"
 msgid "Save OCR Result Text..."
 msgstr "OCR ਨਤੀਜਾ ਪਾਠ ਸੰਭਾਲੋ"
 
-#: kooka.cpp:327
+#: kooka.cpp:329
 #, fuzzy, kde-format
 #| msgid "Show OCR Results"
 msgid "Spell Check OCR Result..."
 msgstr "OCR ਨਤੀਜਾ ਵੇਖਾਓ"
 
-#: kooka.cpp:524
+#: kooka.cpp:526
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unload Folder"
 msgstr "ਚਿੱਤਰ ਲਾਹੋ(&U)"
 
-#: kooka.cpp:525
+#: kooka.cpp:527
 #, fuzzy, kde-format
 #| msgid "New Folder"
 msgid "Delete Folder"
 msgstr "ਨਵਾਂ ਫੋਲਡਰ"
 
-#: kooka.cpp:526
+#: kooka.cpp:528
 #, fuzzy, kde-format
 #| msgid "New Folder"
 msgid "Rename Folder"
@@ -1781,7 +1781,7 @@ msgstr "ਥੰਮਨੇਲ"
 msgid "Image Gallery and Thumbnail View"
 msgstr ""
 
-#: kookapref.cpp:61 kookaview.cpp:292
+#: kookapref.cpp:61 kookaview.cpp:284
 #, kde-format
 msgid "OCR"
 msgstr "OCR"
@@ -2139,38 +2139,38 @@ msgstr ""
 msgid "Image View"
 msgstr "ਚਿੱਤਰ ਦਰਿਸ਼"
 
-#: kookaview.cpp:246
+#: kookaview.cpp:257
+#, kde-format
+msgid "Scan Preview"
+msgstr "ਸਕੈਨ ਦਰਿਸ਼"
+
+#: kookaview.cpp:267
+#, kde-format
+msgid "OCR results will appear here"
+msgstr ""
+
+#: kookaview.cpp:278
+#, kde-format
+msgid "Scan"
+msgstr ""
+
+#: kookaview.cpp:281 kookaview.cpp:567 kookaview.cpp:586 scangallery.cpp:122
+#, kde-format
+msgid "Gallery"
+msgstr "ਗੈਲਰੀ"
+
+#: kookaview.cpp:333
 #, kde-format
 msgid "User specified"
 msgstr ""
 
-#: kookaview.cpp:247
+#: kookaview.cpp:334
 #, fuzzy, kde-format
 #| msgid "OCR Command Failed"
 msgid "on command line"
 msgstr "OCR ਕਮਾਂਡ ਫੇਲ੍ਹ ਹੈ"
 
-#: kookaview.cpp:267
-#, kde-format
-msgid "Scan Preview"
-msgstr "ਸਕੈਨ ਦਰਿਸ਼"
-
-#: kookaview.cpp:277
-#, kde-format
-msgid "OCR results will appear here"
-msgstr ""
-
-#: kookaview.cpp:286
-#, kde-format
-msgid "Scan"
-msgstr ""
-
-#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
-#, kde-format
-msgid "Gallery"
-msgstr "ਗੈਲਰੀ"
-
-#: kookaview.cpp:466
+#: kookaview.cpp:468
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2181,13 +2181,13 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:521
+#: kookaview.cpp:523
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Add Scan Device"
 msgstr "ਸਕੈਨ ਜੰਤਰ ਚੁਣੋ"
 
-#: kookaview.cpp:541
+#: kookaview.cpp:543
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2199,105 +2199,105 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:587
+#: kookaview.cpp:589
 #, kde-format
 msgid "No scanner connected"
 msgstr ""
 
-#: kookaview.cpp:646
+#: kookaview.cpp:648
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "No selection"
 msgstr "ਫੋਂਟ ਕਿਸਮ ਚੋਣ"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:652
 #, fuzzy, kde-format
 #| msgid "Gallery Folders"
 msgid "Gallery folder %1"
 msgstr "ਗੈਲਰੀ ਫੋਲਡਰ"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:652
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Gallery image %1"
 msgstr "%1 ਨੂੰ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: kookaview.cpp:715
+#: kookaview.cpp:717
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "ਚੋਣ ਤੇ OCR ਚਾਲੂ ਕੀਤਾ ਜਾਦਾ ਹੈ"
 
-#: kookaview.cpp:721
+#: kookaview.cpp:723
 #, fuzzy, kde-format
 #| msgid "Starting OCR on the entire image"
 msgid "Starting OCR on the image"
 msgstr "ਸਾਰੇ ਚਿੱਤਰ ਤੇ OCR ਚਾਲੂ ਕੀਤਾ ਜਾਦਾ ਹੈ"
 
-#: kookaview.cpp:728
+#: kookaview.cpp:730
 #, fuzzy, kde-format
 #| msgid "OCR Engine"
 msgid "OCR File"
 msgstr "OCR ਇੰਜਣ"
 
-#: kookaview.cpp:738
+#: kookaview.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "orf %1 ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 
-#: kookaview.cpp:740
+#: kookaview.cpp:742
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr ""
 
-#: kookaview.cpp:744
+#: kookaview.cpp:746
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "orf %1 ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 
-#: kookaview.cpp:760
+#: kookaview.cpp:762
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR finished"
 msgstr "GOCR ਇੰਜਣ"
 
-#: kookaview.cpp:767
+#: kookaview.cpp:769
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:768
+#: kookaview.cpp:770
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:773
+#: kookaview.cpp:775
 #, fuzzy, kde-format
 #| msgid "Spell-Check"
 msgid "OCR Spell Check"
 msgstr "ਸ਼ਬਦ-ਜੋੜ ਜਾਂਚ"
 
-#: kookaview.cpp:789
+#: kookaview.cpp:791
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
 
-#: kookaview.cpp:791
+#: kookaview.cpp:793
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:800
+#: kookaview.cpp:802
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr ""
 
-#: kookaview.cpp:908
+#: kookaview.cpp:910
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2308,29 +2308,29 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:958
+#: kookaview.cpp:960
 #, kde-format
 msgid "Create new image from selection"
 msgstr "ਚੋਣ ਤੋਂ ਨਵਾਂ ਚਿੱਤਰ ਬਣਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: kookaview.cpp:967
+#: kookaview.cpp:969
 #, fuzzy, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "ਚਿੱਤਰ ਸੰਭਾਲਿਆ ਨਹੀ ਜਾ ਸਕਦਾ ਹੈ, ਇਸ ਤੇ ਲਿਖਣ ਪਾਬੰਦੀ ਹੈ!"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1022
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loaded image %1"
 msgstr "%1 ਨੂੰ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: kookaview.cpp:1021
+#: kookaview.cpp:1023
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unloaded image"
 msgstr "ਚਿੱਤਰ ਲਾਹੋ(&U)"
 
-#: kookaview.cpp:1038
+#: kookaview.cpp:1040
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loading %1..."

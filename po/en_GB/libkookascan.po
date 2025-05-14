@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2024-05-24 19:24+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -331,88 +331,88 @@ msgstr "Reset this setting to its standard value, %1"
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "No scanner selected"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Default startup configuration"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Scanner Authentication"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "OK"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "No device"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "Bad parameter"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "Cannot open device"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() failed"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "Error while scanning"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "Empty picture"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "Out of memory"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "Needs reload"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "Not active"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "Not supported"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Unknown status %1"
@@ -648,42 +648,42 @@ msgstr ""
 msgid "Reading mode:"
 msgstr "Reading mode:"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Default (from scan settings)"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Black/white bitmap"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:419
 #, kde-format
 msgid "Grey scale"
 msgstr "Grey scale"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:420
 #, kde-format
 msgid "Low colour"
 msgstr "Low colour"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:421
 #, kde-format
 msgid "High colour"
 msgstr "High colour"
 
-#: scanparams.cpp:428
+#: scanparams.cpp:431
 #, kde-format
 msgid "Force image format:"
 msgstr "Force image format:"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:484
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Edit Gamma Table..."
 
-#: scanparams.cpp:553
+#: scanparams.cpp:575
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -693,7 +693,7 @@ msgstr ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:595
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -715,22 +715,22 @@ msgstr ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 
-#: scanparams.cpp:675
+#: scanparams.cpp:697
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1-bit depth scan cannot be done in colour"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:700
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16-bit depth scans are not supported"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:710
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "A file must be entered for testing or virtual scanning"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:716
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -740,7 +740,7 @@ msgstr ""
 "The testing or virtual file <filename>%1</filename><nl/>was not found or is "
 "not readable."
 
-#: scanparams.cpp:704
+#: scanparams.cpp:727
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -750,17 +750,17 @@ msgstr ""
 "SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
 "%1</icode>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:744
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Scan in progress"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:745
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Scan in progress<nl/><nl/>%1"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:765
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Cannot preview in Virtual Scanner mode"

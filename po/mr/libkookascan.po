@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -311,89 +311,89 @@ msgstr "या संयोजनेला त्याच्या मूलभ
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "कोणताही स्कॅनर निवडला नाही"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "मूलभूत सुरुवातीची संयोजना"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, fuzzy, kde-kuit-format
 #| msgid "<qt>The scanner<br><b>%1</b><br>requires authentication."
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "<qt><b>%1</b><br>या स्कॅनरला अधिप्रमाणनाची गरज आहे."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "स्कॅनर अधिप्रमाणन"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "ठीक आहे"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "साधन नाही"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "दूषित घटक"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "साधन उघडू शकत नाही"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() अपयशी"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "स्कॅन करतेवेळी त्रुटी आढळली"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "रिकामे चित्र"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "स्मृती कमी पडली"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "पुन्हा दाखल करण्याची गरज आहे"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "रद्द केले"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "निष्क्रिय"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "समर्थीत नाही"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "अपरिचीत स्थिती %1"
@@ -627,45 +627,45 @@ msgstr ""
 msgid "Reading mode:"
 msgstr "चाचणी पद्धत"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:416
+#: scanparams.cpp:419
 #, fuzzy, kde-format
 #| msgid "Gray"
 msgid "Grey scale"
 msgstr "धूसर"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:420
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "रंग"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:421
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:428
+#: scanparams.cpp:431
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "आभासी स्कॅनर (कोणतेही प्रतिमा स्वरूप)"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:484
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "गॅमा कोष्टक संपादित करा..."
 
-#: scanparams.cpp:553
+#: scanparams.cpp:575
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>No scanner selected</b><p>Select a scanner device to perform "
@@ -676,7 +676,7 @@ msgid ""
 "perform scanning."
 msgstr "<qt><b>कोणताही स्कॅनर निवडला नाही</b><p>स्कॅन करण्याकरिता स्कॅनर साधन निवडा."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:595
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -690,22 +690,22 @@ msgid ""
 "for more information on SANE installation and setup."
 msgstr ""
 
-#: scanparams.cpp:675
+#: scanparams.cpp:697
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:678
+#: scanparams.cpp:700
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:688
+#: scanparams.cpp:710
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "चाचणीसाठी किंवा आभासी स्कॅनिंगसाठी फाईल दाखल करणे गरजेचे आहे"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:716
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>The testing or virtual file<br><filename>%1</filename><br>was not "
@@ -718,7 +718,7 @@ msgstr ""
 "<qt>चाचणी किंवा आभासी फाईल<br><filename>%1</filename><br>सापडली नाही किंवा "
 "वाचण्याजोगी नाही"
 
-#: scanparams.cpp:704
+#: scanparams.cpp:727
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>SANE Debug can only read PNM files.<br>This file is type <b>%1</b>."
@@ -728,19 +728,19 @@ msgid ""
 "%1</icode>."
 msgstr "<qt>SANE डिबग फक्त PNM फाईल्स वाचू शकतो.<br>हा फाईल प्रकार <b>%1</b>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:744
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress"
 msgstr "स्कॅन चालू आहे"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:745
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "स्कॅन चालू आहे"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:765
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "आभासी स्कॅनर पद्धतीत पूर्वावलोकन करू शकत नाही"
