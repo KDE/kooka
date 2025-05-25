@@ -2034,8 +2034,8 @@ msgid ""
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
 "<div>Separació mínima en píxels que es considerarà un espai entre els "
-"caràcters. El valor predeterminat és 0, que vol dir detectar automàticament "
-"l'espaiat entre caràcters.</div>"
+"caràcters. El valor predeterminat és 0, el qual vol dir detectar "
+"automàticament l'espaiat entre caràcters.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
