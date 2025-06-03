@@ -25,5 +25,5 @@ set(destinationprint_SRCS
 
 kcoreaddons_add_plugin(destinationprint SOURCES ${destinationprint_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-target_link_libraries(destinationprint Qt${Q}::Gui)
+target_link_libraries(destinationprint Qt6::Gui)
 target_link_libraries(destinationprint kookadestination kookascan)

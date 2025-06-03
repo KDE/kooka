@@ -25,6 +25,6 @@ set(destinationshare_SRCS
 
 kcoreaddons_add_plugin(destinationshare SOURCES ${destinationshare_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-target_link_libraries(destinationshare Qt${Q}::Gui)
-target_link_libraries(destinationshare KF${Q}::Purpose KF${Q}::PurposeWidgets)
+target_link_libraries(destinationshare Qt6::Gui)
+target_link_libraries(destinationshare KF6::Purpose KF6::PurposeWidgets)
 target_link_libraries(destinationshare kookadestination kookascan)

@@ -11,6 +11,6 @@
 ##									##
 ##########################################################################
 
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS DocTools)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS DocTools)
 
 kdoctools_create_handbook(index.docbook INSTALL_DESTINATION ${KDE_INSTALL_DOCBUNDLEDIR}/en SUBDIR kooka)

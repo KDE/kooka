@@ -26,8 +26,8 @@ set(ocrgocr_SRCS
 
 kcoreaddons_add_plugin(ocrgocr SOURCES ${ocrgocr_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-target_link_libraries(ocrgocr Qt${Q}::Core Qt${Q}::Gui)
-target_link_libraries(ocrgocr KF${Q}::I18n KF${Q}::WidgetsAddons)
+target_link_libraries(ocrgocr Qt6::Core Qt6::Gui)
+target_link_libraries(ocrgocr KF6::I18n KF6::WidgetsAddons)
 target_link_libraries(ocrgocr kookaocr kookascan)
 
 install(FILES gocr.png DESTINATION ${PICS_INSTALL_DIR})

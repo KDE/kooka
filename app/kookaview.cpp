@@ -32,9 +32,6 @@
 #include "kookaview.h"
 
 #include <kio_version.h>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
-#define HAVE_KIO_APPLICATIONLAUNCHERJOB
-#endif
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -57,12 +54,8 @@
 #include <kfileitem.h>
 #include <kmainwindow.h>
 
-#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
 #include <kio/applicationlauncherjob.h>
 #include <kio/jobuidelegatefactory.h>
-#else
-#include <krun.h>
-#endif
 
 #include "scandevices.h"
 #include "kscandevice.h"
@@ -1194,32 +1187,20 @@ void KookaView::slotOpenWith(int idx)
     QList<QUrl> urllist;
     urllist.append(ftvi->url());
 
-#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
     KIO::ApplicationLauncherJob *job;
-#endif
     if (idx!=-1)			 		// application from the menu
     {
         Q_ASSERT(idx<mOpenWithOffers.count());
         KService::Ptr ptr = mOpenWithOffers[idx];
-#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
         job = new KIO::ApplicationLauncherJob(ptr, mMainWindow);
-#else
-        KRun::runService(*ptr, urllist, mMainWindow);
-#endif
     }
     else    						// last item = "Other..."
     {
-#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
         job = new KIO::ApplicationLauncherJob(mMainWindow);
-#else
-        KRun::displayOpenWithDialog(urllist, mMainWindow);
-#endif
     }
-#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
     job->setUrls(urllist);
     job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
     job->start();
-#endif
 }
 
 

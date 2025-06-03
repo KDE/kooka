@@ -15,7 +15,7 @@ project(libfiletree)
 
 ########### dependencies ###############
 
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n KIO)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n KIO)
 
 ########### libfiletree ###############
 
@@ -35,6 +35,6 @@ ecm_qt_declare_logging_category(libfiletree_SRCS
 add_library(libfiletree STATIC ${libfiletree_SRCS})
 set_target_properties(libfiletree PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(libfiletree
-  Qt${Q}::Core Qt${Q}::Widgets
-  KF${Q}::KIOCore
+  Qt6::Core Qt6::Widgets
+  KF6::KIOCore
 )

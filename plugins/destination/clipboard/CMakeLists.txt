@@ -25,5 +25,5 @@ set(destinationclipboard_SRCS
 
 kcoreaddons_add_plugin(destinationclipboard SOURCES ${destinationclipboard_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-target_link_libraries(destinationclipboard Qt${Q}::Gui)
+target_link_libraries(destinationclipboard Qt6::Gui)
 target_link_libraries(destinationclipboard kookadestination kookascan)

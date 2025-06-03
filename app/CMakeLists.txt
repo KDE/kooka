@@ -14,8 +14,8 @@
 
 ########### dependencies ###############
 
-find_package(Qt${Q} ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO IconThemes XmlGui Crash)
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO IconThemes XmlGui Crash)
 
 ############### Packages used by KDE ###############
 
@@ -74,9 +74,9 @@ kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
 
 add_library(kookacore SHARED ${kookacore_SRCS})
 generate_export_header(kookacore BASE_NAME kookacore)
-set_target_properties(kookacore PROPERTIES VERSION ${VERSION} SOVERSION ${Q})
-target_link_libraries(kookacore Qt${Q}::Core Qt${Q}::Gui Qt${Q}::PrintSupport)
-target_link_libraries(kookacore KF${Q}::I18n KF${Q}::KIOFileWidgets KF${Q}::KIOWidgets KF${Q}::IconThemes KF${Q}::ConfigGui)
+set_target_properties(kookacore PROPERTIES VERSION ${VERSION} SOVERSION 6)
+target_link_libraries(kookacore Qt6::Core Qt6::Gui Qt6::PrintSupport)
+target_link_libraries(kookacore KF6::I18n KF6::KIOFileWidgets KF6::KIOWidgets KF6::IconThemes KF6::ConfigGui)
 target_link_libraries(kookacore kookascan)
 target_link_libraries(kookacore libfiletree)
 
@@ -111,15 +111,15 @@ set(kooka_SRCS
 
 add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
-  Qt${Q}::PrintSupport
+  Qt6::PrintSupport
   dialogutil
   kookacore
   kookadestination
   kookaocr
-  KF${Q}::KIOCore KF${Q}::KIOFileWidgets KF${Q}::KIOWidgets
-  KF${Q}::XmlGui
-  KF${Q}::Crash
-  KF${Q}::TextWidgets
+  KF6::KIOCore KF6::KIOFileWidgets KF6::KIOWidgets
+  KF6::XmlGui
+  KF6::Crash
+  KF6::TextWidgets
 )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)

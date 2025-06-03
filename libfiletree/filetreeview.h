@@ -241,11 +241,7 @@ protected:
      * @reimp
      * @see QTreeWidget::mimeData()
      **/
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> &items) const override;
-#else
-    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const override;
-#endif
 
     /**
      * @reimp

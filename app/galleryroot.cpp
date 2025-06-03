@@ -155,11 +155,7 @@ static QString findGalleryRoot()
     } else if (!oldexists && newexists) {		// only new exists
         dir = newpath;					// fine, just use that
     } else if (oldexists && !newexists) {		// only old exists
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
         if (KMessageBox::questionTwoActions(nullptr,
-#else
-        if (KMessageBox::questionYesNo(nullptr,
-#endif
                                        xi18nc("@info",
                                               "An old Kooka gallery was found at <filename>%1</filename>."
                                               "<nl/>The preferred new location is now <filename>%2</filename>."
@@ -169,11 +165,7 @@ static QString findGalleryRoot()
                                        KGuiItem(i18nc("@action:button", "Create New"), QStringLiteral("folder-new")),
                                        KGuiItem(i18nc("@action:button", "Continue With Old"), QStringLiteral("dialog-cancel")),
                                        "GalleryNoMigrate")
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
             == KMessageBox::PrimaryAction) {
-#else
-            == KMessageBox::Yes) {
-#endif
             // yes, create new
             bool created;
             dir = createGallery(newdir, &created);

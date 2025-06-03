@@ -78,7 +78,7 @@ set(kadmos_SRCS
 
 kcoreaddons_add_plugin(kadmos SOURCES ${kadmos_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-target_link_libraries(kadmos Qt${Q}::Core Qt${Q}::Gui)
-target_link_libraries(kadmos KF${Q}::I18n KF${Q}::WidgetsAddons)
+target_link_libraries(kadmos Qt6::Core Qt6::Gui)
+target_link_libraries(kadmos KF6::I18n KF6::WidgetsAddons)
 target_link_libraries(kadmos kookaocr kookascan)
 target_link_libraries(kadmos librep)

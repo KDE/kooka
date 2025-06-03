@@ -14,7 +14,7 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
-find_dependency(KF5Config)
-find_dependency(KF5WidgetsAddons)
+find_dependency(KF6Config)
+find_dependency(KF6WidgetsAddons)
 
 set(DIALOGUTIL_LIBRARIES "-ldialogutil")

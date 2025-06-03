@@ -54,10 +54,6 @@
 
 #define YESNO(b)	((b) ? " Y" : " -")
 
-#if (QT_VERSION>=QT_VERSION_CHECK(5, 12, 0))
-#define HAVE_REVERSE_LOOKUP
-#endif
-
 
 int main(int argc, char **argv)
 {
@@ -99,11 +95,7 @@ int main(int argc, char **argv)
         .arg("Read",FIELD23)
         .arg("Write",FIELD23)
         .arg("MIME type",FIELD4)
-#ifdef HAVE_REVERSE_LOOKUP
         .arg("Reverse",FIELD5)
-#else
-        .arg("",FIELD5)
-#endif
         .arg("Extension",FIELD6)
        << Qt::endl;
     ts << QString(FMT)
@@ -111,11 +103,7 @@ int main(int argc, char **argv)
         .arg("----",FIELD23)
         .arg("-----",FIELD23)
         .arg("---------",FIELD4)
-#ifdef HAVE_REVERSE_LOOKUP
         .arg("-------",FIELD5)
-#else
-        .arg("",FIELD5)
-#endif
         .arg("---------",FIELD6)
        << Qt::endl;
 
@@ -131,7 +119,6 @@ int main(int argc, char **argv)
         QString ext = (isDefault ? "" : mime.suffixes().value(0));
         QString icon = mime.iconName();
 
-#ifdef HAVE_REVERSE_LOOKUP
         QString backfmt = "(none)";
         QList<QByteArray> formats = QImageReader::imageFormatsForMimeType(mime.name().toLocal8Bit());
         int fcount = formats.count();			// get format from file name
@@ -140,9 +127,6 @@ int main(int argc, char **argv)
             backfmt = formats.first().trimmed().toUpper();
             if (fcount>1) backfmt += QString(" (+%1)").arg(fcount-1);
         }
-#else
-        QString backfmt = "";
-#endif
 
         ts << QString(FMT)
             .arg(format.constData(),FIELD1)

@@ -166,11 +166,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 
     // Now all the text output by GOCR is in m_ocrResultText. Split this up
     // first into lines and then into words, and save this as the OCR results.
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QStringList lines = ocrResultText.split('\n', Qt::SkipEmptyParts);
-#else
-    QStringList lines = ocrResultText.split('\n', QString::SkipEmptyParts);
-#endif
     //qCDebug(OCR_LOG) << "RESULT" << ocrResultText;
     qCDebug(OCR_LOG) << "split to" << lines.count() << "lines";
 
@@ -179,11 +175,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     for (const QString &itLine : std::as_const(lines))
     {
         startLine();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         const QStringList words = itLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
-#else
-        const QStringList words = itLine.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-#endif
         for (const QString &itWord : std::as_const(words))
         {
             OcrWordData wd;

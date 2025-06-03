@@ -215,14 +215,7 @@ void ThumbView::slotSetSize(KIconLoader::StdSizes size)
 {
     m_thumbSize = size;
 
-#if KIO_VERSION>=QT_VERSION_CHECK(5, 76, 0)
     setIconSize(size);
-#else
-    // see KDirOperator::setIconsZoom() in kio/src/kfilewidgets/kdiroperator.cpp
-    const int val = ((size-KIconLoader::SizeSmall)*100) / (KIconLoader::SizeEnormous-KIconLoader::SizeSmall);
-    qCDebug(KOOKA_LOG) << "size" << size << "-> val" << val;
-    setIconsZoom(val);
-#endif
 }
 
 void ThumbView::slotFinishedLoading()

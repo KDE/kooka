@@ -18,7 +18,7 @@
 #									#
 #########################################################################
 
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS Service)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Service)
 
 #########################################################################
 #									#
@@ -33,6 +33,6 @@ set(destinationapplication_SRCS
 
 kcoreaddons_add_plugin(destinationapplication SOURCES ${destinationapplication_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-target_link_libraries(destinationapplication Qt${Q}::Core Qt${Q}::Widgets)
-target_link_libraries(destinationapplication KF${Q}::I18n KF${Q}::WidgetsAddons KF${Q}::Service)
+target_link_libraries(destinationapplication Qt6::Core Qt6::Widgets)
+target_link_libraries(destinationapplication KF6::I18n KF6::WidgetsAddons KF6::Service)
 target_link_libraries(destinationapplication kookadestination kookacore kookascan)
