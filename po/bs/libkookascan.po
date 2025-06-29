@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kde 49i410\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2015-02-04 15:57+0000\n"
 "Last-Translator: Nermin Demir <nermin.demir95@gmail.com>\n"
 "Language-Team: Bosnian\n"
@@ -252,47 +252,47 @@ msgstr "%1x%2 pix, %3 bpp"
 msgid "Image Zoom"
 msgstr "Uvećanje slike"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "Posebna:"
@@ -307,7 +307,7 @@ msgstr "(Nepoznato)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Resetuj ovu postavku na njenu standardnu vrijednost, %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -446,7 +446,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -459,19 +459,19 @@ msgstr ""
 "\n"
 "Molimo, izaberite da li je pozadina slike koja se pregleda crna ili bijela."
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Autodetekcija pozadine"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Bijela"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -637,49 +637,49 @@ msgstr ""
 "<qt>Nemoj izvesti nijedno skeniranje ili obradu, već jednostavno samo učitaj "
 "sliku. Ovo služi za testiranje spašavanja slike, itd."
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "Način učitavanja:"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, fuzzy, kde-format
 #| msgid "Grayscale"
 msgid "Grey scale"
 msgstr "Crno bijela"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, kde-format
 msgid "Low colour"
 msgstr ""
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "Virtualni skener (bilo koji format slike)"
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Uredi gama tabelu..."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>No scanner selected</b><p>Select a scanner device to perform "
@@ -691,7 +691,7 @@ msgid ""
 msgstr ""
 "<qt><b>Skener nije izabran</b><p>Izaberi skener uređaj za početak skeniranja."
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>Problem: No scanner found, or unable to access it</b><p>There was "
@@ -722,22 +722,22 @@ msgstr ""
 "project.org\">www.sane-project.org</a>) za više informacija o instalaciji i "
 "postavkama."
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1-bit duboko skeniranja ne može biti urađena u boji"
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16-bit duboka skeniranja nisu podržana"
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Datoteka mora biti unešena za testiranje ili virtualno skeniranje"
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>The testing or virtual file<br><filename>%1</filename><br>was not "
@@ -750,7 +750,7 @@ msgstr ""
 "<qt>Testiranje ili virtualna datoteka<br><filename>%1</filename><br>nije "
 "pronađena ili se ne može učitati."
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>SANE Debug can only read PNM files.<br>This file is type <b>%1</b>."
@@ -762,18 +762,18 @@ msgstr ""
 "<qt>SANE otklanjanje greška može učitati samo PNM datoteke.<br>Ova datoteka "
 "je tipa <b>%1</b>."
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Skeniranje u toku"
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, fuzzy, kde-kuit-format
 #| msgid "Scan in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Skeniranje u toku"
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Ne mogu pregledati u načinu Virtualnog skenera"
@@ -929,23 +929,23 @@ msgstr "Puna veličina"
 msgid "(No selection)"
 msgstr "(Nema izbora)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "Uspravno"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "Položeno"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, fuzzy, kde-format
 #| msgid "<qt>Set the orientation for a preset size of the scanned area"
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "<qt>Postavi orijentaciju na pretpodešenu veličinu skeniranog područja"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "Izbor"

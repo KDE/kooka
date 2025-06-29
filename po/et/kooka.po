@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2020-01-23 22:46+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -47,7 +47,7 @@ msgstr "Pildi <filename>%2</filename><nl/>salvestamine nurjus<nl/>%1"
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1184
+#: kookaview.cpp:1177
 #, kde-format
 msgid "Other..."
 msgstr "Muu..."
@@ -87,13 +87,13 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:680
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Pildi trükkimine"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:696
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -105,7 +105,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:697
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -387,7 +387,7 @@ msgstr "Kontrolli OMT mootori valikut ja seadistusi."
 msgid "OCR Setup Error"
 msgstr "Tõrge OMT seadistmisel"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:794
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
 #, kde-format
 msgid "Configure OCR..."
 msgstr "Seadista OMT..."
@@ -409,24 +409,24 @@ msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:264
+#: ../plugins/ocr/abstractocrengine.cpp:260
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr "OMT ajutised failid"
 
-#: ../plugins/ocr/abstractocrengine.cpp:435
+#: ../plugins/ocr/abstractocrengine.cpp:427
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr "Ajutise faili <filename>%1</filename> loomine nurjus"
 
-#: ../plugins/ocr/abstractocrengine.cpp:481
+#: ../plugins/ocr/abstractocrengine.cpp:473
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr "Pildi salvestamine ajutisse faili <filename>%1</filename> nurjus"
 
-#: ../plugins/ocr/abstractocrengine.cpp:509
+#: ../plugins/ocr/abstractocrengine.cpp:501
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -435,14 +435,14 @@ msgid ""
 msgstr ""
 "Täitmisfaili <command>%1</command> ei leitud asukohast <envar>PATH</envar>."
 
-#: ../plugins/ocr/abstractocrengine.cpp:519
+#: ../plugins/ocr/abstractocrengine.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
 msgstr ""
 "Täitmisfaili <filename>%1</filename> ei ole olemas või ei saa seda kasutada."
 
-#: ../plugins/ocr/abstractocrengine.cpp:591
+#: ../plugins/ocr/abstractocrengine.cpp:583
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -450,19 +450,19 @@ msgid ""
 msgstr ""
 "Käsku <command>%1</command> tabas krahh väljumiskoodiga <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:596
+#: ../plugins/ocr/abstractocrengine.cpp:588
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr "Käsk <command>%1</command> lõpetas staatusega <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:600
+#: ../plugins/ocr/abstractocrengine.cpp:592
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr "OMT protsessi käivitamine nurjus."
 
-#: ../plugins/ocr/abstractocrengine.cpp:601
+#: ../plugins/ocr/abstractocrengine.cpp:593
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -472,18 +472,18 @@ msgstr ""
 "Rohkem teavet võib leida <link url=\"%1\">standardveaväljundi</link> "
 "logifailist."
 
-#: ../plugins/ocr/abstractocrengine.cpp:604
+#: ../plugins/ocr/abstractocrengine.cpp:596
 #, kde-format
 msgid "OCR Command Failed"
 msgstr "OMT käsk nurjus"
 
-#: ../plugins/ocr/abstractocrengine.cpp:611
+#: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr "OMT tulemuse töötlemine nurjus."
 
-#: ../plugins/ocr/abstractocrengine.cpp:612
+#: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
 msgid "OCR Processing Failed"
 msgstr "OMT töötlemine nurjus"
@@ -528,7 +528,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr "GOCR-i tulemusfaili <filename>%1</filename> lugemine nurjus<nl/>%2"
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:299
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr "GOCR-i täitmisfaili nimi või asukoht:"
@@ -1042,7 +1042,7 @@ msgstr ""
 msgid "Error creating gallery"
 msgstr "Tõrge galerii loomisel"
 
-#: galleryroot.cpp:164
+#: galleryroot.cpp:160
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1054,25 +1054,25 @@ msgstr ""
 "uus asukoht on nüüd <filename>%2</filename>.<nl/><nl/>Kas luua uus galerii "
 "uude asukohta?"
 
-#: galleryroot.cpp:168
+#: galleryroot.cpp:164
 #, kde-format
 msgid "Create New Gallery"
 msgstr "Uue galerii loomine"
 
-#: galleryroot.cpp:169
+#: galleryroot.cpp:165
 #, fuzzy, kde-format
 #| msgid "Create New Gallery"
 msgctxt "@action:button"
 msgid "Create New"
 msgstr "Uue galerii loomine"
 
-#: galleryroot.cpp:170
+#: galleryroot.cpp:166
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
 msgstr ""
 
-#: galleryroot.cpp:183 galleryroot.cpp:197
+#: galleryroot.cpp:175 galleryroot.cpp:189
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1086,12 +1086,12 @@ msgstr ""
 "<link url=\"file:%2\"><filename>%2</filename></link>,<nl/>siis seda võib "
 "teha lihtsalt faile kopeerides või liigutades."
 
-#: galleryroot.cpp:187
+#: galleryroot.cpp:179
 #, kde-format
 msgid "New Gallery Created"
 msgstr "Uus galerii on loodud"
 
-#: galleryroot.cpp:201
+#: galleryroot.cpp:193
 #, kde-format
 msgid "Old Gallery Exists"
 msgstr "Olemas on vana galerii"
@@ -1138,13 +1138,13 @@ msgctxt "@title:group"
 msgid "Scaling"
 msgstr "Skaleerimine"
 
-#: imgprintdialog.cpp:100
+#: imgprintdialog.cpp:93
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
 msgstr "Suurus nagu ekraanil"
 
-#: imgprintdialog.cpp:101
+#: imgprintdialog.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1154,12 +1154,12 @@ msgstr ""
 "<div>Trükkimine sama suurelt nagu ekraanil, kasutades ekraani lahutusvõimet."
 "</div>"
 
-#: imgprintdialog.cpp:105
+#: imgprintdialog.cpp:98
 #, kde-format
 msgid "Screen resolution:"
 msgstr "Ekraani lahutusvõime:"
 
-#: imgprintdialog.cpp:110
+#: imgprintdialog.cpp:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1167,13 +1167,13 @@ msgid ""
 msgstr ""
 "<div>See on ekraani praegune lahutusvõime. Seda ei saa siin muuta.</div>"
 
-#: imgprintdialog.cpp:114
+#: imgprintdialog.cpp:107
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
 msgstr "Suurus nagu skannimisel"
 
-#: imgprintdialog.cpp:115
+#: imgprintdialog.cpp:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1185,18 +1185,18 @@ msgstr ""
 "lahutusvõime salvestatakse koos pildiga ja vajadusel kasutatakse; kui see "
 "nii ei ole, saab selle siin määrata.</div>"
 
-#: imgprintdialog.cpp:119
+#: imgprintdialog.cpp:112
 #, kde-format
 msgid "Scan resolution:"
 msgstr "Skannimise lahutusvõime:"
 
-#: imgprintdialog.cpp:124
+#: imgprintdialog.cpp:117
 #, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
 msgstr " dpi"
 
-#: imgprintdialog.cpp:125
+#: imgprintdialog.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1206,13 +1206,13 @@ msgstr ""
 "<div>See on koos pildiga salvestatav skannimise lahutusvõime. Vajaduse "
 "korral saab seda muuta.</div>"
 
-#: imgprintdialog.cpp:132
+#: imgprintdialog.cpp:125
 #, kde-format
 msgctxt "@option:radio"
 msgid "Custom size"
 msgstr "Kohandatud suurus"
 
-#: imgprintdialog.cpp:133
+#: imgprintdialog.cpp:126
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1222,43 +1222,43 @@ msgstr ""
 "<div>Trükkimine skaleerituna määratud suurusele. Pilt tsentreeritakse lehel."
 "</div>"
 
-#: imgprintdialog.cpp:137
+#: imgprintdialog.cpp:130
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
 msgstr "Pildi laius:"
 
-#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#: imgprintdialog.cpp:135 imgprintdialog.cpp:149
 #, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
 msgstr " mm"
 
-#: imgprintdialog.cpp:143
+#: imgprintdialog.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
 msgstr "<div>Trükitava pildi laius.</div>"
 
-#: imgprintdialog.cpp:151
+#: imgprintdialog.cpp:144
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
 msgstr "Pildi kõrgus:"
 
-#: imgprintdialog.cpp:157
+#: imgprintdialog.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
 msgstr "<div>Trükitava pildi kõrgus.</div>"
 
-#: imgprintdialog.cpp:166
+#: imgprintdialog.cpp:159
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
 msgstr "Mahutamine leheküljele"
 
-#: imgprintdialog.cpp:167
+#: imgprintdialog.cpp:160
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1268,19 +1268,19 @@ msgstr ""
 "<div>Trükkimine lehe nii suurele alale, kui vähegi võimalik. Proportsiooni "
 "saab säilitada.</div>"
 
-#: imgprintdialog.cpp:178
+#: imgprintdialog.cpp:171
 #, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
 msgstr "Muud valikud"
 
-#: imgprintdialog.cpp:182
+#: imgprintdialog.cpp:175
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
 msgstr "Proportsiooni säilitamine"
 
-#: imgprintdialog.cpp:183
+#: imgprintdialog.cpp:176
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1290,13 +1290,13 @@ msgstr ""
 "<div>Trükitava pildi algse proportsiooni säilitamiseks pildi kõrguse või "
 "laiuse kohendamine.</div>"
 
-#: imgprintdialog.cpp:189
+#: imgprintdialog.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
 msgstr "Madal lahutusvõime (kiire mustandtrükk)"
 
-#: imgprintdialog.cpp:190
+#: imgprintdialog.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1306,31 +1306,31 @@ msgstr ""
 "<div>Trükkimine võimalikult madala lahutusvõimega. See ei pruugi anda kõigis "
 "printerites häid tulemusi.</div>"
 
-#: imgprintdialog.cpp:196
+#: imgprintdialog.cpp:189
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
 msgstr "Lõikemärgid:"
 
-#: imgprintdialog.cpp:200
+#: imgprintdialog.cpp:193
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
 msgstr "Puuduvad"
 
-#: imgprintdialog.cpp:201
+#: imgprintdialog.cpp:194
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
 msgstr "Mitme lehe korral"
 
-#: imgprintdialog.cpp:202
+#: imgprintdialog.cpp:195
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr "Alati"
 
-#: imgprintdialog.cpp:203
+#: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1340,54 +1340,54 @@ msgstr ""
 "<div>Valimine, kas lõikemärke trükkida või mitte. Need märgid vähendavad "
 "saadaolevat trükiala.</div>"
 
-#: imgprintdialog.cpp:214
+#: imgprintdialog.cpp:207
 #, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
 msgstr "Trükkimise paigutus"
 
-#: imgprintdialog.cpp:219
+#: imgprintdialog.cpp:212
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
 msgstr "Pildi suurus:"
 
-#: imgprintdialog.cpp:222
+#: imgprintdialog.cpp:215
 #, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
 msgstr "%1 x %2 pikslit"
 
-#: imgprintdialog.cpp:227
+#: imgprintdialog.cpp:220
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
 msgstr "Saadaolev trükkimisala:"
 
-#: imgprintdialog.cpp:234
+#: imgprintdialog.cpp:227
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
 msgstr "Pildi trükkimisala:"
 
-#: imgprintdialog.cpp:241
+#: imgprintdialog.cpp:234
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
 msgstr "Nõutavad leheküljed:"
 
-#: imgprintdialog.cpp:304
+#: imgprintdialog.cpp:297
 #, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
 msgstr "%1 dpi"
 
-#: imgprintdialog.cpp:321
+#: imgprintdialog.cpp:314
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
 msgstr "Skaleerimiseks peab olema määratud skannimise lahutusvõime."
 
-#: imgprintdialog.cpp:326
+#: imgprintdialog.cpp:319
 #, kde-format
 msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
@@ -1396,19 +1396,19 @@ msgstr ""
 "Kohandatud skaleerimiseks tuleb määrata korrektne suurus. Määratud "
 "mõõtmetest on vähemalt üks null."
 
-#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#: imgprintdialog.cpp:397 imgprintdialog.cpp:401
 #, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
 msgstr "%1 x %2 mm"
 
-#: imgprintdialog.cpp:412
+#: imgprintdialog.cpp:405
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
 msgstr "%1"
 
-#: imgprintdialog.cpp:414
+#: imgprintdialog.cpp:407
 #, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
@@ -1506,7 +1506,7 @@ msgstr "Halb parameeter"
 msgid "Unknown status %1"
 msgstr "Tundmatu olek %1"
 
-#: imgsaver.cpp:414
+#: imgsaver.cpp:409
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1517,47 +1517,47 @@ msgstr ""
 "Pakutud failinimel puudub laiend.<nl/>Kas lisada algne?<nl/><nl/>Selle "
 "tulemusel saab uueks failinimeks <filename>%1</filename>"
 
-#: imgsaver.cpp:417
+#: imgsaver.cpp:412
 #, kde-format
 msgid "Extension Missing"
 msgstr "Laiend puudub"
 
-#: imgsaver.cpp:418
+#: imgsaver.cpp:413
 #, kde-format
 msgid "Add Extension"
 msgstr "Lisa laiend"
 
-#: imgsaver.cpp:419
+#: imgsaver.cpp:414
 #, kde-format
 msgid "Do Not Add"
 msgstr "Ära lisa"
 
-#: imgsaver.cpp:448
+#: imgsaver.cpp:439
 #, kde-format
 msgid "Target already exists"
 msgstr "Sihtmärk on juba olemas"
 
-#: imgsaver.cpp:461
+#: imgsaver.cpp:452
 #, kde-format
 msgid "Unable to copy the file"
 msgstr "Faili kopeerimine nurjus"
 
-#: imgsaver.cpp:462
+#: imgsaver.cpp:453
 #, kde-format
 msgid "Unable to rename the file"
 msgstr "Faili nime muutmine nurjus"
 
-#: imgsaver.cpp:463
+#: imgsaver.cpp:454
 #, kde-format
 msgid "Error copying file"
 msgstr "Tõrge faili kopeerimisel"
 
-#: imgsaver.cpp:464
+#: imgsaver.cpp:455
 #, kde-format
 msgid "Error renaming file"
 msgstr "Tõrge faili nime muutmisel"
 
-#: imgsaver.cpp:465
+#: imgsaver.cpp:456
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -1668,7 +1668,7 @@ msgstr "Omadused..."
 msgid "Select Scan Device..."
 msgstr "Skannimisseadme valik..."
 
-#: kooka.cpp:283 kookaview.cpp:553
+#: kooka.cpp:283 kookaview.cpp:546
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Skannimisseadme lisamine..."
@@ -1785,7 +1785,7 @@ msgstr "Galerii ja pisipildid"
 msgid "Image Gallery and Thumbnail View"
 msgstr "Pildigalerii ja pisipildivaade"
 
-#: kookapref.cpp:61 kookaview.cpp:284
+#: kookapref.cpp:61 kookaview.cpp:277
 #, kde-format
 msgid "OCR"
 msgstr "OMT"
@@ -2171,43 +2171,43 @@ msgstr "Pildinäitaja riba"
 msgid "Scanning Toolbar"
 msgstr "Skannimisriba"
 
-#: kookaview.cpp:207
+#: kookaview.cpp:200
 #, kde-format
 msgid "Image View"
 msgstr "Pildivaade"
 
-#: kookaview.cpp:257
+#: kookaview.cpp:250
 #, kde-format
 msgid "Scan Preview"
 msgstr "Skannimise eelvaatlus"
 
-#: kookaview.cpp:267
+#: kookaview.cpp:260
 #, kde-format
 msgid "OCR results will appear here"
 msgstr "Siia ilmuvad OMT tulemused"
 
-#: kookaview.cpp:278
+#: kookaview.cpp:271
 #, kde-format
 msgid "Scan"
 msgstr "Skannimine"
 
-#: kookaview.cpp:281 kookaview.cpp:567 kookaview.cpp:586 scangallery.cpp:122
+#: kookaview.cpp:274 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "Galerii"
 
-#: kookaview.cpp:333
+#: kookaview.cpp:326
 #, kde-format
 msgid "User specified"
 msgstr ""
 
-#: kookaview.cpp:334
+#: kookaview.cpp:327
 #, fuzzy, kde-format
 #| msgid "OCR Command Failed"
 msgid "on command line"
 msgstr "OMT käsk nurjus"
 
-#: kookaview.cpp:468
+#: kookaview.cpp:461
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -2230,12 +2230,12 @@ msgstr ""
 ">libkookascan teatas tõrkest: <emphasis>%2</emphasis><nl/>SANE teatas "
 "tõrkest: <emphasis>%1</emphasis>"
 
-#: kookaview.cpp:523
+#: kookaview.cpp:516
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Skannimisseadme lisamine"
 
-#: kookaview.cpp:543
+#: kookaview.cpp:536
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2254,43 +2254,43 @@ msgstr ""
 "lisamine</interface> taustaprogrammi nime ja parameetrite sisestamiseks või "
 "uuri seda dialoogi täpsema teabe saamiseks."
 
-#: kookaview.cpp:589
+#: kookaview.cpp:582
 #, kde-format
 msgid "No scanner connected"
 msgstr "Ühtegi skannerit pole ühendatud"
 
-#: kookaview.cpp:648
+#: kookaview.cpp:641
 #, kde-format
 msgid "No selection"
 msgstr "Midagi pole valitud"
 
-#: kookaview.cpp:652
+#: kookaview.cpp:645
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "Galerii kataloog %1"
 
-#: kookaview.cpp:652
+#: kookaview.cpp:645
 #, kde-format
 msgid "Gallery image %1"
 msgstr "Galerii pilt %1"
 
-#: kookaview.cpp:717
+#: kookaview.cpp:710
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Valitud alal OMT käivitamine"
 
-#: kookaview.cpp:723
+#: kookaview.cpp:716
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "OMT käivitamine kogu pildil"
 
-#: kookaview.cpp:730
+#: kookaview.cpp:723
 #, fuzzy, kde-format
 #| msgid "OCR Engine"
 msgid "OCR File"
 msgstr "OMT mootor"
 
-#: kookaview.cpp:740
+#: kookaview.cpp:733
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
@@ -2298,13 +2298,13 @@ msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "GOCR-i tulemusfaili <filename>%1</filename> lugemine nurjus<nl/>%2"
 
-#: kookaview.cpp:742
+#: kookaview.cpp:735
 #, fuzzy, kde-format
 #| msgid "Cannot load OCR plugin '%1'"
 msgid "Cannot Read OCR File"
 msgstr "OMT plugina \"%1\" laadimine nurjus"
 
-#: kookaview.cpp:746
+#: kookaview.cpp:739
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Cannot open file <filename>%1</filename>"
@@ -2312,27 +2312,27 @@ msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "Faili <filename>%1</filename> avamine nurjus"
 
-#: kookaview.cpp:762
+#: kookaview.cpp:755
 #, kde-format
 msgid "OCR finished"
 msgstr "OMT on valmis"
 
-#: kookaview.cpp:769
+#: kookaview.cpp:762
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "OMT tulemusteksti, mille õigekirja kontrollida, ei ole."
 
-#: kookaview.cpp:770
+#: kookaview.cpp:763
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "OMT õigekirja kontroll ei ole võimalik"
 
-#: kookaview.cpp:775
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OMT õigekirja kontroll"
 
-#: kookaview.cpp:791
+#: kookaview.cpp:784
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2341,17 +2341,17 @@ msgstr ""
 "OMT mootorit pole seadistatud.\n"
 "OMT sooritamiseks vali ja seadista mootor."
 
-#: kookaview.cpp:793
+#: kookaview.cpp:786
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OMT on seadistamata"
 
-#: kookaview.cpp:802
+#: kookaview.cpp:795
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "OMT plugina \"%1\" laadimine nurjus"
 
-#: kookaview.cpp:910
+#: kookaview.cpp:903
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -2374,27 +2374,27 @@ msgstr ""
 ">libkookascan teatas tõrkest: <emphasis>%2</emphasis><nl/>SANE teatas "
 "tõrkest: <emphasis>%1</emphasis>"
 
-#: kookaview.cpp:960
+#: kookaview.cpp:953
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Uue pildi loomine valiku põhjal"
 
-#: kookaview.cpp:969
+#: kookaview.cpp:962
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Teisendamine ei ole võimalik, pilt on kirjutuskaitstud"
 
-#: kookaview.cpp:1022
+#: kookaview.cpp:1015
 #, kde-format
 msgid "Loaded image %1"
 msgstr "Laaditi pilt %1"
 
-#: kookaview.cpp:1023
+#: kookaview.cpp:1016
 #, kde-format
 msgid "Unloaded image"
 msgstr "Pilt suleti"
 
-#: kookaview.cpp:1040
+#: kookaview.cpp:1033
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 laadimine ..."
@@ -3002,32 +3002,32 @@ msgstr "Pisipildid"
 msgid "Preview Size"
 msgstr "Eelvaatluse suurus"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:333
 #, kde-format
 msgid "Very Large"
 msgstr "Väga suur"
 
-#: thumbview.cpp:341
+#: thumbview.cpp:334
 #, kde-format
 msgid "Large"
 msgstr "Suur"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:335
 #, kde-format
 msgid "Medium"
 msgstr "Keskmine"
 
-#: thumbview.cpp:343
+#: thumbview.cpp:336
 #, kde-format
 msgid "Small"
 msgstr "Väike"
 
-#: thumbview.cpp:344
+#: thumbview.cpp:337
 #, kde-format
 msgid "Very Small"
 msgstr "Väga väike"
 
-#: thumbview.cpp:345
+#: thumbview.cpp:338
 #, kde-format
 msgid "Tiny"
 msgstr "Tilluke"

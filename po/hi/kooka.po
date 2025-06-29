@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2008-03-31 14:37+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1184
+#: kookaview.cpp:1177
 #, kde-format
 msgid "Other..."
 msgstr ""
@@ -81,14 +81,14 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "ओआरएफ %1 अस्तित्व में नहीं है."
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:680
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
 #, fuzzy, kde-format
 #| msgid "Print %1"
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "छापें %1"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:696
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -97,7 +97,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:697
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -406,7 +406,7 @@ msgstr "अगली दफा प्रारंभ हो तो स्कै�
 msgid "OCR Setup Error"
 msgstr "पार्से समस्या"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:794
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -429,24 +429,24 @@ msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:264
+#: ../plugins/ocr/abstractocrengine.cpp:260
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:435
+#: ../plugins/ocr/abstractocrengine.cpp:427
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:481
+#: ../plugins/ocr/abstractocrengine.cpp:473
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:509
+#: ../plugins/ocr/abstractocrengine.cpp:501
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -454,34 +454,34 @@ msgid ""
 "envar>."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:519
+#: ../plugins/ocr/abstractocrengine.cpp:511
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
 msgstr "ओआरएफ %1 अस्तित्व में नहीं है."
 
-#: ../plugins/ocr/abstractocrengine.cpp:591
+#: ../plugins/ocr/abstractocrengine.cpp:583
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:596
+#: ../plugins/ocr/abstractocrengine.cpp:588
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:600
+#: ../plugins/ocr/abstractocrengine.cpp:592
 #, fuzzy, kde-kuit-format
 #| msgid "Parsing of the OCR Result File failed:"
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr "ओसीआर परिणाम फ़ाइल को पार्स करने में असफल."
 
-#: ../plugins/ocr/abstractocrengine.cpp:601
+#: ../plugins/ocr/abstractocrengine.cpp:593
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -489,19 +489,19 @@ msgid ""
 "link> log file."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:604
+#: ../plugins/ocr/abstractocrengine.cpp:596
 #, kde-format
 msgid "OCR Command Failed"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:611
+#: ../plugins/ocr/abstractocrengine.cpp:603
 #, fuzzy, kde-kuit-format
 #| msgid "Parsing of the OCR Result File failed:"
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr "ओसीआर परिणाम फ़ाइल को पार्स करने में असफल."
 
-#: ../plugins/ocr/abstractocrengine.cpp:612
+#: ../plugins/ocr/abstractocrengine.cpp:604
 #, fuzzy, kde-format
 #| msgid "OCR Post Processing"
 msgid "OCR Processing Failed"
@@ -548,7 +548,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr ""
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:299
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr ""
@@ -993,7 +993,7 @@ msgstr ""
 msgid "Error creating gallery"
 msgstr ""
 
-#: galleryroot.cpp:164
+#: galleryroot.cpp:160
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1002,26 +1002,26 @@ msgid ""
 "a new gallery at the new location?"
 msgstr ""
 
-#: galleryroot.cpp:168
+#: galleryroot.cpp:164
 #, fuzzy, kde-format
 #| msgid "Show Gallery"
 msgid "Create New Gallery"
 msgstr "दीर्घा दिखाएँ"
 
-#: galleryroot.cpp:169
+#: galleryroot.cpp:165
 #, fuzzy, kde-format
 #| msgid "Show Gallery"
 msgctxt "@action:button"
 msgid "Create New"
 msgstr "दीर्घा दिखाएँ"
 
-#: galleryroot.cpp:170
+#: galleryroot.cpp:166
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
 msgstr ""
 
-#: galleryroot.cpp:183 galleryroot.cpp:197
+#: galleryroot.cpp:175 galleryroot.cpp:189
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1031,12 +1031,12 @@ msgid ""
 "may do so by simply copying or moving the files."
 msgstr ""
 
-#: galleryroot.cpp:187
+#: galleryroot.cpp:179
 #, kde-format
 msgid "New Gallery Created"
 msgstr ""
 
-#: galleryroot.cpp:201
+#: galleryroot.cpp:193
 #, kde-format
 msgid "Old Gallery Exists"
 msgstr ""
@@ -1087,14 +1087,14 @@ msgctxt "@title:group"
 msgid "Scaling"
 msgstr ""
 
-#: imgprintdialog.cpp:100
+#: imgprintdialog.cpp:93
 #, fuzzy, kde-format
 #| msgid "Scale to same size as on screen"
 msgctxt "@option:radio"
 msgid "Size as on screen"
 msgstr "ऑन स्क्रीन के आकार जैसे स्केल करें"
 
-#: imgprintdialog.cpp:101
+#: imgprintdialog.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1102,26 +1102,26 @@ msgid ""
 "resolution.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:105
+#: imgprintdialog.cpp:98
 #, fuzzy, kde-format
 #| msgid "Screen resolution: %1 dpi"
 msgid "Screen resolution:"
 msgstr "स्क्रीन रेज़ोल्यूशन: %1 डीपीआई"
 
-#: imgprintdialog.cpp:110
+#: imgprintdialog.cpp:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:114
+#: imgprintdialog.cpp:107
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
 msgstr ""
 
-#: imgprintdialog.cpp:115
+#: imgprintdialog.cpp:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1130,20 +1130,20 @@ msgid ""
 "here.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:119
+#: imgprintdialog.cpp:112
 #, fuzzy, kde-format
 #| msgid "Scan resolution (dpi) "
 msgid "Scan resolution:"
 msgstr "स्कैन रेज़ोल्यूशन (डीपीआई)"
 
-#: imgprintdialog.cpp:124
+#: imgprintdialog.cpp:117
 #, fuzzy, kde-format
 #| msgid " dpi"
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
 msgstr "डीपीआई"
 
-#: imgprintdialog.cpp:125
+#: imgprintdialog.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1151,14 +1151,14 @@ msgid ""
 "if necessary.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:132
+#: imgprintdialog.cpp:125
 #, fuzzy, kde-format
 #| msgid "&Dust size"
 msgctxt "@option:radio"
 msgid "Custom size"
 msgstr "धूल आकार (&D)"
 
-#: imgprintdialog.cpp:133
+#: imgprintdialog.cpp:126
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1166,46 +1166,46 @@ msgid ""
 "</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:137
+#: imgprintdialog.cpp:130
 #, fuzzy, kde-format
 #| msgid "Image width:"
 msgctxt "@label:spinbox"
 msgid "Image width:"
 msgstr "छवि की चौड़ाईः"
 
-#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#: imgprintdialog.cpp:135 imgprintdialog.cpp:149
 #, fuzzy, kde-format
 #| msgid " mm"
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
 msgstr "मिमि"
 
-#: imgprintdialog.cpp:143
+#: imgprintdialog.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:151
+#: imgprintdialog.cpp:144
 #, fuzzy, kde-format
 #| msgid "Image height:"
 msgctxt "@label:spinbox"
 msgid "Image height:"
 msgstr "छवि की ऊंचाईः"
 
-#: imgprintdialog.cpp:157
+#: imgprintdialog.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:166
+#: imgprintdialog.cpp:159
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
 msgstr ""
 
-#: imgprintdialog.cpp:167
+#: imgprintdialog.cpp:160
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1213,21 +1213,21 @@ msgid ""
 "The aspect ratio can be maintained.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:178
+#: imgprintdialog.cpp:171
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgctxt "@title:group"
 msgid "Other Options"
 msgstr "प्रारंभ में"
 
-#: imgprintdialog.cpp:182
+#: imgprintdialog.cpp:175
 #, fuzzy, kde-format
 #| msgid "Maintain aspect ratio"
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
 msgstr "आस्पेक्ट रेशो बनाए रखें"
 
-#: imgprintdialog.cpp:183
+#: imgprintdialog.cpp:176
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1235,14 +1235,14 @@ msgid ""
 "printed image.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:189
+#: imgprintdialog.cpp:182
 #, fuzzy, kde-format
 #| msgid "Generate low resolution PostScript (fast draft print)"
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
 msgstr "कम रेज़ोल्यूशन पोस्टस्क्रिप्ट तैयार करें (फास्ट ड्राफ़्ट प्रिंट)"
 
-#: imgprintdialog.cpp:190
+#: imgprintdialog.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1250,31 +1250,31 @@ msgid ""
 "on all printers.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:196
+#: imgprintdialog.cpp:189
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
 msgstr ""
 
-#: imgprintdialog.cpp:200
+#: imgprintdialog.cpp:193
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
 msgstr ""
 
-#: imgprintdialog.cpp:201
+#: imgprintdialog.cpp:194
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
 msgstr ""
 
-#: imgprintdialog.cpp:202
+#: imgprintdialog.cpp:195
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr ""
 
-#: imgprintdialog.cpp:203
+#: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1282,79 +1282,79 @@ msgid ""
 "available printable area.</div>"
 msgstr ""
 
-#: imgprintdialog.cpp:214
+#: imgprintdialog.cpp:207
 #, fuzzy, kde-format
 #| msgid "Print %1"
 msgctxt "@title:group"
 msgid "Print Layout"
 msgstr "छापें %1"
 
-#: imgprintdialog.cpp:219
+#: imgprintdialog.cpp:212
 #, fuzzy, kde-format
 #| msgid "Image View"
 msgctxt "@label:textbox"
 msgid "Image size:"
 msgstr "छवि दृश्य"
 
-#: imgprintdialog.cpp:222
+#: imgprintdialog.cpp:215
 #, fuzzy, kde-format
 #| msgid "%1 x %2"
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
 msgstr "%1 x %2"
 
-#: imgprintdialog.cpp:227
+#: imgprintdialog.cpp:220
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
 msgstr ""
 
-#: imgprintdialog.cpp:234
+#: imgprintdialog.cpp:227
 #, fuzzy, kde-format
 #| msgid "Image Print Size"
 msgctxt "@label:textbox"
 msgid "Image print area:"
 msgstr "छवि छपाई आकार"
 
-#: imgprintdialog.cpp:241
+#: imgprintdialog.cpp:234
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
 msgstr ""
 
-#: imgprintdialog.cpp:304
+#: imgprintdialog.cpp:297
 #, fuzzy, kde-format
 #| msgid " dpi"
 msgctxt "@info:status"
 msgid "%1 dpi"
 msgstr "डीपीआई"
 
-#: imgprintdialog.cpp:321
+#: imgprintdialog.cpp:314
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
 msgstr ""
 
-#: imgprintdialog.cpp:326
+#: imgprintdialog.cpp:319
 #, kde-format
 msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
 "specified dimensions is zero."
 msgstr ""
 
-#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#: imgprintdialog.cpp:397 imgprintdialog.cpp:401
 #, fuzzy, kde-format
 #| msgid "%1 x %2"
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
 msgstr "%1 x %2"
 
-#: imgprintdialog.cpp:412
+#: imgprintdialog.cpp:405
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
 msgstr ""
 
-#: imgprintdialog.cpp:414
+#: imgprintdialog.cpp:407
 #, fuzzy, kde-format
 #| msgid "%1 x %2"
 msgctxt "@info:status total(rows,cols)"
@@ -1482,7 +1482,7 @@ msgstr "स्कैन पैरामीटर"
 msgid "Unknown status %1"
 msgstr ""
 
-#: imgsaver.cpp:414
+#: imgsaver.cpp:409
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1491,47 +1491,47 @@ msgid ""
 "filename>"
 msgstr ""
 
-#: imgsaver.cpp:417
+#: imgsaver.cpp:412
 #, kde-format
 msgid "Extension Missing"
 msgstr ""
 
-#: imgsaver.cpp:418
+#: imgsaver.cpp:413
 #, kde-format
 msgid "Add Extension"
 msgstr ""
 
-#: imgsaver.cpp:419
+#: imgsaver.cpp:414
 #, kde-format
 msgid "Do Not Add"
 msgstr "जोड़ें नहीं"
 
-#: imgsaver.cpp:448
+#: imgsaver.cpp:439
 #, kde-format
 msgid "Target already exists"
 msgstr ""
 
-#: imgsaver.cpp:461
+#: imgsaver.cpp:452
 #, kde-format
 msgid "Unable to copy the file"
 msgstr ""
 
-#: imgsaver.cpp:462
+#: imgsaver.cpp:453
 #, kde-format
 msgid "Unable to rename the file"
 msgstr ""
 
-#: imgsaver.cpp:463
+#: imgsaver.cpp:454
 #, kde-format
 msgid "Error copying file"
 msgstr ""
 
-#: imgsaver.cpp:464
+#: imgsaver.cpp:455
 #, kde-format
 msgid "Error renaming file"
 msgstr ""
 
-#: imgsaver.cpp:465
+#: imgsaver.cpp:456
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -1659,7 +1659,7 @@ msgstr ""
 msgid "Select Scan Device..."
 msgstr "स्कैन उपकरण चुनें"
 
-#: kooka.cpp:283 kookaview.cpp:553
+#: kooka.cpp:283 kookaview.cpp:546
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Add Scan Device..."
@@ -1792,7 +1792,7 @@ msgstr "लघु छवि"
 msgid "Image Gallery and Thumbnail View"
 msgstr "लघु छवि दृश्य"
 
-#: kookapref.cpp:61 kookaview.cpp:284
+#: kookapref.cpp:61 kookaview.cpp:277
 #, kde-format
 msgid "OCR"
 msgstr "ओसीआर"
@@ -2147,42 +2147,42 @@ msgstr "छवि प्रदर्शक औज़ार-पट्टी"
 msgid "Scanning Toolbar"
 msgstr ""
 
-#: kookaview.cpp:207
+#: kookaview.cpp:200
 #, kde-format
 msgid "Image View"
 msgstr "छवि दृश्य"
 
-#: kookaview.cpp:257
+#: kookaview.cpp:250
 #, kde-format
 msgid "Scan Preview"
 msgstr "स्कैन पूर्वावलोकन"
 
-#: kookaview.cpp:267
+#: kookaview.cpp:260
 #, kde-format
 msgid "OCR results will appear here"
 msgstr ""
 
-#: kookaview.cpp:278
+#: kookaview.cpp:271
 #, kde-format
 msgid "Scan"
 msgstr ""
 
-#: kookaview.cpp:281 kookaview.cpp:567 kookaview.cpp:586 scangallery.cpp:122
+#: kookaview.cpp:274 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "गैलरी"
 
-#: kookaview.cpp:333
+#: kookaview.cpp:326
 #, kde-format
 msgid "User specified"
 msgstr ""
 
-#: kookaview.cpp:334
+#: kookaview.cpp:327
 #, kde-format
 msgid "on command line"
 msgstr ""
 
-#: kookaview.cpp:468
+#: kookaview.cpp:461
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2193,13 +2193,13 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:523
+#: kookaview.cpp:516
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Add Scan Device"
 msgstr "स्कैन उपकरण चुनें"
 
-#: kookaview.cpp:543
+#: kookaview.cpp:536
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2211,105 +2211,105 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:589
+#: kookaview.cpp:582
 #, kde-format
 msgid "No scanner connected"
 msgstr ""
 
-#: kookaview.cpp:648
+#: kookaview.cpp:641
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "No selection"
 msgstr "फ़ॉन्ट क़िस्म चयन"
 
-#: kookaview.cpp:652
+#: kookaview.cpp:645
 #, fuzzy, kde-format
 #| msgid "Gallery Folders"
 msgid "Gallery folder %1"
 msgstr "दीर्घा फ़ोल्डर"
 
-#: kookaview.cpp:652
+#: kookaview.cpp:645
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Gallery image %1"
 msgstr "%1 लोड किया जा रहा है"
 
-#: kookaview.cpp:717
+#: kookaview.cpp:710
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "चयन पर ओसीआर प्रारंभ किया जा रहा है"
 
-#: kookaview.cpp:723
+#: kookaview.cpp:716
 #, fuzzy, kde-format
 #| msgid "Starting OCR on the entire image"
 msgid "Starting OCR on the image"
 msgstr "सम्पूर्ण छवि में ओसीआर प्रारंभ किया जा रहा है"
 
-#: kookaview.cpp:730
+#: kookaview.cpp:723
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR File"
 msgstr "जीओसीआर इंजिन"
 
-#: kookaview.cpp:740
+#: kookaview.cpp:733
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "ओआरएफ %1 अस्तित्व में नहीं है."
 
-#: kookaview.cpp:742
+#: kookaview.cpp:735
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr ""
 
-#: kookaview.cpp:746
+#: kookaview.cpp:739
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "ओआरएफ %1 अस्तित्व में नहीं है."
 
-#: kookaview.cpp:762
+#: kookaview.cpp:755
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR finished"
 msgstr "जीओसीआर इंजिन"
 
-#: kookaview.cpp:769
+#: kookaview.cpp:762
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:770
+#: kookaview.cpp:763
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:775
+#: kookaview.cpp:768
 #, fuzzy, kde-format
 #| msgid "Spell-Check"
 msgid "OCR Spell Check"
 msgstr "वर्तनी जाँच"
 
-#: kookaview.cpp:791
+#: kookaview.cpp:784
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
 
-#: kookaview.cpp:793
+#: kookaview.cpp:786
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:802
+#: kookaview.cpp:795
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr ""
 
-#: kookaview.cpp:910
+#: kookaview.cpp:903
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2320,29 +2320,29 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:960
+#: kookaview.cpp:953
 #, kde-format
 msgid "Create new image from selection"
 msgstr "चयनित से नई छवि बनाएँ"
 
-#: kookaview.cpp:969
+#: kookaview.cpp:962
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr ""
 
-#: kookaview.cpp:1022
+#: kookaview.cpp:1015
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loaded image %1"
 msgstr "%1 लोड किया जा रहा है"
 
-#: kookaview.cpp:1023
+#: kookaview.cpp:1016
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unloaded image"
 msgstr "छवि अनलोड करें (&U)"
 
-#: kookaview.cpp:1040
+#: kookaview.cpp:1033
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loading %1..."
@@ -2945,33 +2945,33 @@ msgstr "लघु छवि"
 msgid "Preview Size"
 msgstr ""
 
-#: thumbview.cpp:340
+#: thumbview.cpp:333
 #, kde-format
 msgid "Very Large"
 msgstr ""
 
-#: thumbview.cpp:341
+#: thumbview.cpp:334
 #, fuzzy, kde-format
 #| msgid "Image"
 msgid "Large"
 msgstr "छवि"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:335
 #, kde-format
 msgid "Medium"
 msgstr ""
 
-#: thumbview.cpp:343
+#: thumbview.cpp:336
 #, kde-format
 msgid "Small"
 msgstr ""
 
-#: thumbview.cpp:344
+#: thumbview.cpp:337
 #, kde-format
 msgid "Very Small"
 msgstr ""
 
-#: thumbview.cpp:345
+#: thumbview.cpp:338
 #, kde-format
 msgid "Tiny"
 msgstr ""

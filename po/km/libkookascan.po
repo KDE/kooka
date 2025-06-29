@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2012-07-05 10:23+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -253,47 +253,47 @@ msgstr "%1x%2 pixels, %3 bpp"
 msgid "Image Zoom"
 msgstr "ពង្រីក​រូបភាព"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "២៥ %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "៥០ %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "៧៥ %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "១០០ %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "១៥០ %"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "២០០ %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "៣០០ %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "៤០០ %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "ផ្ទាល់ខ្លួន ៖"
@@ -308,7 +308,7 @@ msgstr "(មិនស្គាល់)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "កំណត់​ការ​កំណត់​នេះ​ឡើង​វិញ ចំពោះ​តម្លៃ​ស្តង់ដារ​របស់​វា %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -447,7 +447,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr ""
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -460,21 +460,21 @@ msgstr ""
 "\n"
 "សូម​ជ្រើស​ថា​តើ​ផ្ទៃខាងក្រោយ​របស់​រូបភាព​មើល​ជា​មុន​ពណ៌ស ឬ​ពណ៌​ខ្មៅ ។"
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, fuzzy, kde-format
 #| msgid "Autodetection Background"
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "រក​ឃើញ​ផ្ទៃខាងក្រោយ​ដោយ​ស្វ័យប្រវត្តិ"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, fuzzy, kde-format
 #| msgid "White"
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "ស"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, fuzzy, kde-format
 #| msgid "Black"
 msgctxt "@action:button Name of colour"
@@ -627,51 +627,51 @@ msgid ""
 "image file. This is for testing the image saving, etc."
 msgstr ""
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, fuzzy, kde-format
 #| msgid "Testing Mode"
 msgid "Reading mode:"
 msgstr "របៀប​ក្នុង​ការ​សាកល្បង"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, fuzzy, kde-format
 #| msgid "Gray"
 msgid "Grey scale"
 msgstr "ប្រផេះ"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "ពណ៌"
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "កម្មវិធី​វិភាគ​រក​និម្មិត (ទ្រង់ទ្រាយ​រូបភាព​មួយ​ចំនួន)"
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "កែសម្រួល​តារាង​ហ្គាម៉ា..."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>No scanner selected</b><p>Select a scanner device to perform "
@@ -684,7 +684,7 @@ msgstr ""
 "<qt><b>គ្មាន​កម្មវិធី​វិភាគ​រក​​ដែល​បាន​​ជ្រើស​ឡើយ</b><p>ជ្រើស​ឧបករណ៍​កម្មវិធី​វិភាគ​រក ដើម្បី​​ធ្វើ​ការ​វិភាគ​"
 "រក ។"
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>Problem: No scanner found, or unable to access it</b><p>There was "
@@ -714,22 +714,22 @@ msgstr ""
 "(<a href=\"http://www.sane-project.org\">www.sane-project.org</a>) អំពី​ព័ត៌មាន​"
 "បន្ថែម​​ក្នុង​​​ការ​រៀបចំ និង​ការ​ដំឡើង SANE ។"
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "ត្រូវ​តែ​បញ្ចូល​ឯកសារ​សម្រាប់ការ​​សាកល្បង​ ឬ​ការ​វិភាគ​រក​​និម្មិត"
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>The testing or virtual file<br><filename>%1</filename><br>was not "
@@ -742,7 +742,7 @@ msgstr ""
 "<qt>ការ​សាកល្បង ឬ​ឯកសារ​និម្មិត<br><filename>%1</filename><br>​មិន​អាច​ត្រូវ​បាន​រក​​​ឃើញ ឬ​មិន​"
 "អាច​អាន​បាន"
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>SANE Debug can only read PNM files.<br>This file is type <b>%1</b>."
@@ -753,19 +753,19 @@ msgid ""
 msgstr ""
 "<qt>បំបាត់​កំហុស SANE អាច​​អាន​តែ​ឯកសារ PNM ប៉ុណ្ណោះ ។<br>ឯកសារ​នេះ​ជា​ប្រភេទ <b>%1</b> ។"
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress"
 msgstr "កំពុង​ដំណើរការ​វិភាគ​រក"
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "កំពុង​ដំណើរការ​វិភាគ​រក"
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "មិន​អាច​មើល​​ជាមុន​​ជា​របៀប​កម្មវិធី​វិភាគ​រក​និម្មិត​បាន​ទេ"
@@ -905,22 +905,22 @@ msgstr "ទំហំ​ពេញ"
 msgid "(No selection)"
 msgstr "(គ្មាន​ជម្រើស)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "រូបភាព"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "ទេសភាព"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr ""
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "ជម្រើស"

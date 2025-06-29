@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2024-12-24 20:39+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -271,47 +271,47 @@ msgstr "%1x%2 पिक्स, %3 bpp"
 msgid "Image Zoom"
 msgstr "इमेज ज़ूम"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "२५ %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "५० %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "७५ %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&१०० %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "१५० &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "२०० %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "३०० %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "४०० %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "आचारः:"
@@ -326,7 +326,7 @@ msgstr "(अज्ञात)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "एतत् सेटिङ्ग् तस्य मानकमूल्ये, %1 इत्यत्र पुनः सेट् कुर्वन्तु"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "PNM चित्रसञ्चिकाः (*.pnm *.pbm *.pgm *.ppm)"
@@ -464,7 +464,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2मि.मी"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -477,19 +477,19 @@ msgstr ""
 "\n"
 "कृपया पूर्वावलोकनप्रतिबिम्बस्य पृष्ठभूमिः कृष्णा वा श्वेतवर्णः वा इति चिनोतु ।"
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "स्वतः अन्वेषण पृष्ठभूमि"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "श्वेतः"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -643,47 +643,47 @@ msgstr ""
 "किमपि स्कैनिङ्गं वा प्रक्रियां वा न कुर्वन्तु, अपितु केवलं निर्दिष्टं चित्रसञ्चिकां पठन्तु । एतत् "
 "प्रतिबिम्बसञ्चयस्य परीक्षणार्थम् इत्यादि ।"
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "पठनविधिः :"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "पूर्वनिर्धारितम् (स्कैन सेटिंग्स् तः)"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "कृष्ण/श्वेत बिटमैप"
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, kde-format
 msgid "Grey scale"
 msgstr "ग्रे स्केल"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, kde-format
 msgid "Low colour"
 msgstr "निम्नवर्णः"
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr "उच्चवर्णः"
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, kde-format
 msgid "Force image format:"
 msgstr "बलप्रतिबिम्बस्वरूपम् :"
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "गामा सारणी सम्पादयतु..."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -692,7 +692,7 @@ msgid ""
 msgstr ""
 "<title>कोऽपि स्कैनरः चयनितः नास्ति</title><nl/><nl/> स्कैनिङ्गं कर्तुं स्कैनरयन्त्रं चिनोतु ।"
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -713,22 +713,22 @@ msgstr ""
 "\"http://www.sane-project.org\"> www.sane-project.org इत्यत्र</link> ) SANE "
 "संस्थापनस्य सेटअपस्य च अधिकसूचनार्थं ।"
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "१-बिट् गभीरता-स्कैन् वर्णेन कर्तुं न शक्यते"
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "१६-बिट् गभीरतास्कैन्स् समर्थिताः न सन्ति"
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "परीक्षणार्थं वा वर्चुअल् स्कैनिङ्गार्थं वा सञ्चिका प्रविष्टा भवितुमर्हति"
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -738,7 +738,7 @@ msgstr ""
 "परीक्षणं वा आभासीसञ्चिकां वा <filename>%1</filename><nl/>न प्राप्ता अथवा पठनीया "
 "नास्ति ।"
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -748,17 +748,17 @@ msgstr ""
 "SANE Debug केवलं PNM सञ्चिकाः पठितुं शक्नोति।<nl/>निर्दिष्टसञ्चिका <icode>%1</icode> "
 "इति प्रकारः अस्ति ।"
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "स्कैन् प्रचलति"
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "स्कैन् प्रचलति<nl/><nl/>%1"
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Virtual Scanner मोड् मध्ये पूर्वावलोकनं कर्तुं न शक्यते"
@@ -888,22 +888,22 @@ msgstr "पूर्ण आकार"
 msgid "(No selection)"
 msgstr "(चयनं नास्ति)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "चित्रम्"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "भूप्रदेश"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "स्कैन् कृतस्य क्षेत्रस्य पूर्वनिर्धारित आकारस्य अभिमुखीकरणं सेट् कुर्वन्तु"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "चयनम्"

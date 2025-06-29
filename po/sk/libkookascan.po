@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2016-09-01 11:24+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -247,47 +247,47 @@ msgstr "%1x%2 pix, %3 bpp"
 msgid "Image Zoom"
 msgstr "Mierka obrázka"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "Vlastné:"
@@ -303,7 +303,7 @@ msgid "Reset this setting to its standard value, %1"
 msgstr ""
 "Ak chcete obnoviť východziu hodnotu vlastnosti, kliknite na toto tlačítko"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -441,7 +441,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -450,19 +450,19 @@ msgid ""
 "Please select whether the background of the preview image is black or white."
 msgstr ""
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Priesvitné pozadie:"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Biela"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -612,48 +612,48 @@ msgid ""
 "image file. This is for testing the image saving, etc."
 msgstr ""
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, fuzzy, kde-format
 msgid "Reading mode:"
 msgstr "Režim zobrazenia"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, fuzzy, kde-format
 #| msgid "Grayscale"
 msgid "Grey scale"
 msgstr "Šedá škála"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, kde-format
 msgid "Low colour"
 msgstr ""
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, kde-format
 msgid "Force image format:"
 msgstr ""
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, fuzzy, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Zobraziť tabuľku najlepších výsledkov"
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -661,7 +661,7 @@ msgid ""
 "perform scanning."
 msgstr ""
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -675,22 +675,22 @@ msgid ""
 "for more information on SANE installation and setup."
 msgstr ""
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr ""
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -698,7 +698,7 @@ msgid ""
 "not readable."
 msgstr ""
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -706,17 +706,17 @@ msgid ""
 "%1</icode>."
 msgstr ""
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, fuzzy, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Importuje sa..."
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, fuzzy, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Importuje sa..."
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr ""
@@ -835,22 +835,22 @@ msgstr "Plná veľkosť"
 msgid "(No selection)"
 msgstr "(Žiadny výber)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "Portrét"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "Krajinka"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr ""
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "Výber"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -251,47 +251,47 @@ msgstr "%1x%2 पिक्सेल्स, %3 bpp"
 msgid "Image Zoom"
 msgstr "प्रतिमा झूम"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "ऐच्छिक :"
@@ -306,7 +306,7 @@ msgstr "(अपरिचीत)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "या संयोजनेला त्याच्या मूलभूत किंमतीला पुन्हस्थापित करा, %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -445,7 +445,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr ""
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -454,21 +454,21 @@ msgid ""
 "Please select whether the background of the preview image is black or white."
 msgstr ""
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, fuzzy, kde-format
 #| msgid "Autodetection Background"
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "स्वयंचलित ओळखण्याची पार्श्वभूमी "
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, fuzzy, kde-format
 #| msgid "White"
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "पांढरा"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, fuzzy, kde-format
 #| msgid "Black"
 msgctxt "@action:button Name of colour"
@@ -621,51 +621,51 @@ msgid ""
 "image file. This is for testing the image saving, etc."
 msgstr ""
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, fuzzy, kde-format
 #| msgid "Testing Mode"
 msgid "Reading mode:"
 msgstr "चाचणी पद्धत"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, fuzzy, kde-format
 #| msgid "Gray"
 msgid "Grey scale"
 msgstr "धूसर"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "रंग"
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "आभासी स्कॅनर (कोणतेही प्रतिमा स्वरूप)"
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "गॅमा कोष्टक संपादित करा..."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>No scanner selected</b><p>Select a scanner device to perform "
@@ -676,7 +676,7 @@ msgid ""
 "perform scanning."
 msgstr "<qt><b>कोणताही स्कॅनर निवडला नाही</b><p>स्कॅन करण्याकरिता स्कॅनर साधन निवडा."
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -690,22 +690,22 @@ msgid ""
 "for more information on SANE installation and setup."
 msgstr ""
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "चाचणीसाठी किंवा आभासी स्कॅनिंगसाठी फाईल दाखल करणे गरजेचे आहे"
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>The testing or virtual file<br><filename>%1</filename><br>was not "
@@ -718,7 +718,7 @@ msgstr ""
 "<qt>चाचणी किंवा आभासी फाईल<br><filename>%1</filename><br>सापडली नाही किंवा "
 "वाचण्याजोगी नाही"
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>SANE Debug can only read PNM files.<br>This file is type <b>%1</b>."
@@ -728,19 +728,19 @@ msgid ""
 "%1</icode>."
 msgstr "<qt>SANE डिबग फक्त PNM फाईल्स वाचू शकतो.<br>हा फाईल प्रकार <b>%1</b>."
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress"
 msgstr "स्कॅन चालू आहे"
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "स्कॅन चालू आहे"
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "आभासी स्कॅनर पद्धतीत पूर्वावलोकन करू शकत नाही"
@@ -864,22 +864,22 @@ msgstr "पूर्ण आकार"
 msgid "(No selection)"
 msgstr "(निवड नाही)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "पोर्ट्रेट"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "लँडस्केप"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr ""
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "निवड"

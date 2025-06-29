@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2020-01-23 22:47+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -248,47 +248,47 @@ msgstr "%1x%2 pikslit, %3 bpp"
 msgid "Image Zoom"
 msgstr "Pildi suurendus"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "Kohandatud:"
@@ -303,7 +303,7 @@ msgstr "(Tundmatu)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Sätte lähtestamine standardväärtusele %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -446,7 +446,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2 mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -459,19 +459,19 @@ msgstr ""
 "\n"
 "Palun vali, kas eelvaatluspildi taust peab olema must või valge."
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Automaattuvastuse taust"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Valge"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -629,50 +629,50 @@ msgstr ""
 "Skannimist ega töötlemist ette ei võeta, vaid lihtsalt loetakse määratud "
 "pildifaili. See on mõeldud näiteks pildi salvestamise jms testimiseks."
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "Lugemisrežiim:"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, fuzzy, kde-format
 #| msgid "Gray"
 msgid "Grey scale"
 msgstr "Hall"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "Värv"
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "Virtuaalskanner (suvaline pildivorming)"
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Muuda gammatabelit..."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -686,7 +686,7 @@ msgstr ""
 "<emphasis strong=\"1\">Skannerit pole valitud</emphasis><nl/><nl/>Vali "
 "skannimiseks skanneriseade."
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -720,22 +720,22 @@ msgstr ""
 "häälestamise kohta leiab SANE projekti koduleheküljelt (<link url=\"http://"
 "www.sane-project.org\">www.sane-project.org</link>)."
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1-bitise sügavusega skanni ei saa värvilisena teha"
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16-bitise sügavusega skannimine ei ole toetatud"
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Testimiseks või virtuaalseks skannimiseks tuleb anda fail"
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -745,7 +745,7 @@ msgstr ""
 "Test- või virtuaalfaili <filename>%1</filename> ei leitud või ei ole see "
 "loetav"
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -755,18 +755,18 @@ msgstr ""
 "SANE silumine saab lugeda ainult PNM-faile.<nl/>Selle faili tüüp on <icode>"
 "%1</icode>."
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Käib skannimine"
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, fuzzy, kde-kuit-format
 #| msgid "Scan in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Käib skannimine"
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Virtuaalskanneri režiimis ei ole eelvaatlus võimalik"
@@ -897,22 +897,22 @@ msgstr "Täielik suurus"
 msgid "(No selection)"
 msgstr "(Valik puudub)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "Püstpaigutus"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "Rõhtpaigutus"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "Skannitava ala valmissuuruse suuna määramine"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "Valik"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2024-08-17 10:10+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -275,47 +275,47 @@ msgstr "%1x%2 piks., %3 bpp"
 msgid "Image Zoom"
 msgstr "Powiększenie obrazu"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "Własne:"
@@ -330,7 +330,7 @@ msgstr "(Nieznane)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Wyzeruj to ustawienie do jej standardowej wartości, %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "Pliki obrazów PNM (*.pnm *.pbm *.pgm *.ppm)"
@@ -468,7 +468,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -481,19 +481,19 @@ msgstr ""
 "\n"
 "Proszę wybrać czy tło podglądu obrazu ma być czarne czy białe."
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Samoczynne wykrywanie tła"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Białe"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -648,47 +648,47 @@ msgstr ""
 "Nie wykonuj skanowania ani przetwarzania, lecz tylko odczytaj podany plik "
 "obrazu. Jest to przeznaczone dla prób zapisywania obrazu, itp."
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "Tryb odczytywania:"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Domyślne (z ustawień skanu)"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Czarno-biała bitmapa"
 
-#: scanparams.cpp:419
+#: scanparams.cpp:415
 #, kde-format
 msgid "Grey scale"
 msgstr "Odcienie szarości"
 
-#: scanparams.cpp:420
+#: scanparams.cpp:416
 #, kde-format
 msgid "Low colour"
 msgstr "Mało barw"
 
-#: scanparams.cpp:421
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr "Dużo barw"
 
-#: scanparams.cpp:431
+#: scanparams.cpp:427
 #, kde-format
 msgid "Force image format:"
 msgstr "Wymuś format obrazu:"
 
-#: scanparams.cpp:484
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Edytuj tabelę gamma..."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:571
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -698,7 +698,7 @@ msgstr ""
 "<title>Nie wybrano żadnego skanera</title><nl/><nl/>Wybierz urządzenie "
 "skanujące, aby wykonać skanowanie."
 
-#: scanparams.cpp:595
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -721,22 +721,22 @@ msgstr ""
 "SANE (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "po więcej informacji na temat instalacji i ustawień SANE."
 
-#: scanparams.cpp:697
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "Skanowania w głębi 1-bitowej nie można przeprowadzić w kolorze"
 
-#: scanparams.cpp:700
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "Skanowanie w głębi 16-bitowej nie jest obsługiwane"
 
-#: scanparams.cpp:710
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Plik musi zostać wpisany, aby przetestować wirtualne skanowanie"
 
-#: scanparams.cpp:716
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -746,7 +746,7 @@ msgstr ""
 "Plik testowy lub wirtualny<filename>%1</filename> nie został znaleziony lub "
 "jest nie-do-odczytu"
 
-#: scanparams.cpp:727
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -756,17 +756,17 @@ msgstr ""
 "Debugowanie SANE może odczytywać tylko pliki PNM.<nl/>Plik ten jest typu "
 "<icode>%1</icode>."
 
-#: scanparams.cpp:744
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Skanowanie w trakcie"
 
-#: scanparams.cpp:745
+#: scanparams.cpp:741
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Skanowanie w trakcie<nl/><nl/>%1"
 
-#: scanparams.cpp:765
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Nie można podejrzeć w trybie wirtualnego skanera"
@@ -903,22 +903,22 @@ msgstr "Pełny rozmiar"
 msgid "(No selection)"
 msgstr "(Brak zaznaczenia)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "W pionie"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "W poziomie"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "Ustaw kierunek dla nastawy rozmiaru dla skanowanego obszaru"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "Zaznaczenie"
