@@ -342,7 +342,7 @@ msgstr "სკანერი არჩეული არაა"
 #: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
-msgstr "ნაგულისხმები გაშვების მორგება"
+msgstr "ნაგულისხმევი გაშვების მორგება"
 
 #: kscandevice.cpp:1521
 #, kde-kuit-format
@@ -656,7 +656,7 @@ msgstr "წაკითხვის რეჟიმი:"
 #: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
-msgstr "ნაგულისხმები (სკანირების პარამეტრებიდან)"
+msgstr "ნაგულისხმევი (სკანირების პარამეტრებიდან)"
 
 #: scanparams.cpp:414
 #, kde-format

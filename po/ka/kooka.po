@@ -710,7 +710,7 @@ msgstr "სრული განლაგების ამოცნობა"
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:183
 #, kde-format
 msgid "(default)"
-msgstr "(ნაგულისხმები)"
+msgstr "(ნაგულისხმევი)"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
