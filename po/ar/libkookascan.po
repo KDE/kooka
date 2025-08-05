@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2025-04-30 21:57+0400\n"
+"PO-Revision-Date: 2025-08-04 19:43+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -50,9 +50,9 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
-"إذا لم يكتشف الماسح الضوئي الخاص بك تلقائيًا، فيمكنك تحديده هنا. "
-"<interface>جهاز الماسح الضوئي</interface> هو اسم جهاز SANE الخلفي. يمكن "
-"استخدام <interface>الشركة المصنعة</interface> و<interface>النوع</interface> "
+"إذا لم يكتشف الماسح الضوئي الخاص بك آليًّا، فيمكنك تحديده هنا. <interface>جهاز "
+"الماسح الضوئي</interface> هو اسم جهاز SANE الخلفي. يمكن استخدام "
+"<interface>الشركة المصنعة</interface> و<interface>النوع</interface> "
 "و<interface>الوصف</interface> لتحديد الماسح الضوئي لاحقًا.<nl/><nl/>مزيد من "
 "المعلومات حول <link url=\"?1\">أجهزة SANE الخلفية</link>، و<link url=\"?"
 "2\">تحديد موقع الأجهزة</link>، و<link url=\"?3\">أجهزة المسح الضوئي HP</"
@@ -150,7 +150,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr "<subtitle>تحديد آلي</subtitle>"
+msgstr "<subtitle>تحديد آليّ</subtitle>"
 
 #: autoselectbar.cpp:82
 #, kde-format
@@ -162,19 +162,19 @@ msgstr "هذه هي قيمة التدرج الرمادي للعتبة المحد
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform the auto-detection again"
-msgstr "أجري الاكتشاف التلقائي مرة أخرى"
+msgstr "أجري الاكتشاف الآليّ مرة أخرى"
 
 #: autoselectbar.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Advanced settings for auto-detection"
-msgstr "الإعدادات المتقدمة للكشف الآلي"
+msgstr "الإعدادات المتقدمة للكشف الآليّ"
 
 #: autoselectdialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr "إعدادات التحديد التلقائي"
+msgstr "إعدادات التحديد الآليّ"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -324,7 +324,7 @@ msgstr "(مجهول)"
 #: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
-msgstr "أعد ضبط هذا الإعداد إلى قيمته القياسية، %1"
+msgstr "صفّر هذا الإعداد إلى قيمته القياسية، %1"
 
 #: kscancontrols.cpp:422
 #, kde-format
@@ -472,7 +472,7 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
-"يعتمد الاكتشاف الآلي للصور في المعاينة على لون خلفية صورة المعاينة (نتيجة "
+"يعتمد الاكتشاف الآليّ للصور في المعاينة على لون خلفية صورة المعاينة (نتيجة "
 "المسح الضوئي دون تحميل أي مستند).\n"
 "\n"
 "يرجى تحديد ما إذا كانت خلفية صورة المعاينة سوداء أم بيضاء."
@@ -481,7 +481,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
-msgstr "الكشف التلقائي للخلفية"
+msgstr "الكشف الآليّ للخلفية"
 
 #: previewer.cpp:338
 #, kde-format
@@ -828,8 +828,8 @@ msgid ""
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
 msgstr ""
-"<div>عتبة الكشف التلقائي. جميع البكسلات الأفتح (على خلفية سوداء) أو الأغمق "
-"(على خلفية بيضاء) من هذه العتبة تُعتبر جزءًا من الصورة.</div>"
+"<div>عتبة الكشف الآليّ. جميع البكسلات الأفتح (على خلفية سوداء) أو الأغمق (على "
+"خلفية بيضاء) من هذه العتبة تُعتبر جزءًا من الصورة.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2025-08-03 11:58+0400\n"
+"PO-Revision-Date: 2025-08-04 18:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -596,12 +596,12 @@ msgstr "مُغير التعرف على المحارف ضوئياً"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
 msgid "Enable automatic noise reduction"
-msgstr "مكّن تنقيص الضجيج التلقائي"
+msgstr "مكّن تنقيص الضجيج الآليّ"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
 #, kde-format
 msgid "Enable automatic scaling"
-msgstr "مكّن تغيير القياس التلقائي"
+msgstr "مكّن تغيير القياس الآليّ"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
 #, kde-format
@@ -680,12 +680,12 @@ msgstr "لم يُهيأ الملف القابل للتنفيذ OCRAD أو غير
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
 msgid "No Layout Detection"
-msgstr "لا إكتشاف للتصميم"
+msgstr "لا يتكشف تخطيط"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
 #, kde-format
 msgid "Layout Detection"
-msgstr "اكتشاف للتصميم"
+msgstr "اكتشاف التخطيط"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
 #, kde-format
@@ -695,7 +695,7 @@ msgstr "اكتشاف العمود"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
 #, kde-format
 msgid "Full Layout Detection"
-msgstr "الاكتشاف الكامل للتصميم"
+msgstr "الاكتشاف الكامل للتخطيط"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
@@ -1666,7 +1666,7 @@ msgstr "مسبقات الضبط للمسح الضوئي..."
 #: kooka.cpp:304
 #, kde-format
 msgid "Auto Select"
-msgstr "تحديد آلي"
+msgstr "تحديد آليّ"
 
 #: kooka.cpp:312
 #, kde-format
@@ -1776,7 +1776,7 @@ msgstr ""
 "يمكنك تصفح الصور الموجودة في المعرض ومعالجتها والتعرف الضوئي على الحروف "
 "عليها.<nl/> <nl/> <link url=\"a:1\">حدد جهاز ماسح ضوئي</link> لإجراء المسح "
 "الضوئي، أو <link url=\"a:2\">أضف جهازًا</link> إذا لم يكتشف الماسح الضوئي "
-"آليًا."
+"آليًّا."
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -1943,7 +1943,7 @@ msgstr "حجم المعاينة:"
 #: kookasettings.kcfg:166
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
-msgstr "<div>حدد حجم المعاينة الافتراضي لعرض الصورة المصغرة.</div>"
+msgstr "<div>حدد حجم المعاينة المبدئي لعرض الصورة المصغرة.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
@@ -1960,7 +1960,7 @@ msgid ""
 "detect them. The default is 10.</div>"
 msgstr ""
 "<div> ستُعتبر العناقيد الأصغر من هذا الحجم ضوضاء وتُهمل.  0 يعني لا تكتشف "
-"عناقيد الغبار، -1 يعني اكتشافها آليًا. المبدئي هو 10.</div>."
+"عناقيد الغبار، -1 يعني اكتشافها آليًّا. المبدئي هو 10.</div>."
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
@@ -1976,7 +1976,7 @@ msgid ""
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
 "<div>قيمة الحد التي تُعتبر فيها البكسلات الرمادية سوداء إذا انخفضت عن هذه "
-"القيمة.0 تعني الكشف الآلي عن مستوى الرمادي. القيمة المبدئية هي 160.</div>"
+"القيمة.0 تعني الكشف الآليّ عن مستوى الرمادي. القيمة المبدئية هي 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
@@ -1992,7 +1992,7 @@ msgid ""
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
 "<div>الحد الأدنى للفجوة بالبكسلات التي تُعتبر تباعدًا بين الكلمات. القيمة "
-"المبدئيّة هي 0، مما يعني اكتشاف التباعد آليًأ.</div>"
+"المبدئيّة هي 0، مما يعني اكتشاف التباعد آليًّأ.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -2185,9 +2185,9 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 "لا تتوفر أجهزة ماسح ضوئي.<nl/><nl/>إذا كان الماسح الضوئي لديك من النوع الذي "
-"يمكن لـ SANE اكتشافه تلقائيًا، فتأكد من توصيله وتشغيله وتهيئته بشكل صحيح.<nl/"
-"><nl/>إذا تعذر على SANE اكتشاف الماسح الضوئي تلقائيًا (وهذا يشمل بعض أجهزة "
-"المسح الضوئي الشبكية)، فيجب عليك تحديد الجهاز المراد استخدامه. استخدم خيار "
+"يمكن لـ SANE اكتشافه آليًّا، فتأكد من توصيله وتشغيله وتهيئته بشكل صحيح.<nl/"
+"><nl/>إذا تعذر على SANE اكتشاف الماسح الضوئي آليًّا (وهذا يشمل بعض أجهزة المسح "
+"الضوئي الشبكية)، فيجب عليك تحديد الجهاز المراد استخدامه. استخدم خيار "
 "<interface>إضافة جهاز مسح</interface> لإدخال اسم الواجهة الخلفية والمعلمات، "
 "أو راجع مربع الحوار هذا لمزيد من المعلومات."
 
@@ -2567,7 +2567,7 @@ msgstr "في الأسفل"
 #: prefspages.cpp:266
 #, kde-format
 msgid "Thumbnail View"
-msgstr "عرض الأظافر"
+msgstr "عرض المصغرات"
 
 #: prefspages.cpp:380
 #, kde-format
@@ -2921,7 +2921,7 @@ msgstr "امسح: %1"
 #: thumbview.cpp:98
 #, kde-format
 msgid "Thumbnails"
-msgstr "الأظافر"
+msgstr "المصغرات"
 
 #: thumbview.cpp:109
 #, kde-format
