@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2025-08-04 19:43+0400\n"
+"PO-Revision-Date: 2025-08-05 20:57+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -56,7 +56,7 @@ msgstr ""
 "و<interface>الوصف</interface> لتحديد الماسح الضوئي لاحقًا.<nl/><nl/>مزيد من "
 "المعلومات حول <link url=\"?1\">أجهزة SANE الخلفية</link>، و<link url=\"?"
 "2\">تحديد موقع الأجهزة</link>، و<link url=\"?3\">أجهزة المسح الضوئي HP</"
-"link>، و<link url=\"?4\">لم يتم العثور على الجهاز</link>."
+"link>، و<link url=\"?4\">لم يعثر على الجهاز</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
@@ -113,8 +113,8 @@ msgstr ""
 "<link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;scanner(1)</link> "
 "لأجهزة SCSI أو USB أو الماسحات الضوئية ذات المنافذ المتوازية، أو الأمر<link "
 "url=\"man:/scanimage\">scanimage(1)</link> مع الخيار<icode>&#8209;L</icode> "
-"لأجهزة المسح الضوئي الشبكية. إذا تم العثور على الماسح الضوئي، فأدخل اسم "
-"الجهاز الذي يظهر بهذه الأوامر."
+"لأجهزة المسح الضوئي الشبكية. إذا عثر على الماسح الضوئي، فأدخل اسم الجهاز "
+"الذي يظهر بهذه الأوامر."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -131,8 +131,8 @@ msgstr ""
 "hplip.sourceforge.net/\">HPLIP</link>، حاول استخدام الأمر <command>hp&#8209;"
 "probe</command> لتحديد موقعه، على سبيل المثال <icode>hp&#8209;probe&nbsp;"
 "&#8209;b&nbsp;usb</icode> أو <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</"
-"icode>. لاحظ أنه إذا تم العثور على الماسح الضوئي بواسطة HPLIP، فيجب استبدال "
-"اسم الجهاز <icode>hp:</icode> الذي يعرضه بـ <icode>hpaio:</icode> لـ SANE."
+"icode>. لاحظ أنه إذا عثر على الماسح الضوئي بواسطة HPLIP، فيجب استبدال اسم "
+"الجهاز <icode>hp:</icode> الذي يعرضه بـ <icode>hpaio:</icode> لـ SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -706,13 +706,13 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
-"<title>لم يتم العثور على ماسح ضوئي، أو تعذر الوصول إليه</title><nl/><nl/"
-">حدثت مشكلة في استخدام مكتبة SANE (سهولة الوصول إلى الماسح الضوئي الآن) "
-"للوصول إلى جهاز الماسح الضوئي. قد تكون هناك مشكلة في تثبيت SANE، أو قد لا "
-"يكون مُهيأً لدعم الماسح الضوئي.<nl/><nl/>تأكد من تثبيت SANE وتهيئته بشكل صحيح "
-"على نظامك، ومن صحة اسم جهاز الماسح الضوئي وإعداداته.<nl/><nl/>راجع الصفحة "
-"الرئيسة لمشروع SANE (<link url=\"http://www.sane-project.org\">www.sane-"
-"project.org</link>) لمزيد من المعلومات حول تثبيت SANE وإعداده."
+"<title>لم يعثر على ماسح ضوئي، أو تعذر الوصول إليه</title><nl/><nl/>حدثت "
+"مشكلة في استخدام مكتبة SANE (سهولة الوصول إلى الماسح الضوئي الآن) للوصول إلى "
+"جهاز الماسح الضوئي. قد تكون هناك مشكلة في تثبيت SANE، أو قد لا يكون مُهيأً "
+"لدعم الماسح الضوئي.<nl/><nl/>تأكد من تثبيت SANE وتهيئته بشكل صحيح على نظامك، "
+"ومن صحة اسم جهاز الماسح الضوئي وإعداداته.<nl/><nl/>راجع الصفحة الرئيسة "
+"لمشروع SANE (<link url=\"http://www.sane-project.org\">www.sane-project.org</"
+"link>) لمزيد من المعلومات حول تثبيت SANE وإعداده."
 
 #: scanparams.cpp:693
 #, kde-format
@@ -780,7 +780,7 @@ msgid ""
 msgstr ""
 "<div>حدد هذا الخيار إذا كنت تريد استعلامًا عن الشبكة للماسحات الضوئية "
 "المتوفرة.<br/><br/>لاحظ أن هذا لا يعني استعلامًا على الشبكة بأكملها، ولكن فقط "
-"على المضيفين الذين تم تكوينهم لـ SANE.</div>"
+"على المضيفين الذين ضُبطوا لـ SANE.</div>"
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:18
@@ -844,8 +844,8 @@ msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
 "ignored</div>"
 msgstr ""
-"<div>ضبط حجم الغبار؛ سيتم تجاهل المناطق الداكنة أو الفاتحة الأصغر من هذا "
-"الحجم</div>"
+"<div>ضبط حجم الغبار؛ سيتجاهل المناطق الداكنة أو الفاتحة الأصغر من هذا الحجم</"
+"div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:77

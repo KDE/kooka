@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2025-08-04 18:47+0400\n"
+"PO-Revision-Date: 2025-08-05 13:14+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -191,12 +191,12 @@ msgstr "تعرف المحارف ضوئياً"
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
 msgid "Start OCR"
-msgstr "إبدء التعرف على المحارف ضوئياً"
+msgstr "ابدأ التعرف على المحارف ضوئياً"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
 msgid "Start the Optical Character Recognition process"
-msgstr "إبدء تشغيل إجراء التعرف على المحارف ضوئياً"
+msgstr "ابدأ تشغيل إجراء التعرف على المحارف ضوئياً"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
 #, kde-format
@@ -531,7 +531,7 @@ msgstr "الجمهورية التشيكية ، سلوفاكيا"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
 #, kde-format
 msgid "Great Britain, USA"
-msgstr "بريطانيا العظمى ، الولايات المتحدة الامريكية"
+msgstr "بريطانيا العظمى ، الولايات المتحدة الأمريكية"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
 #, kde-format
@@ -561,7 +561,7 @@ msgstr "خطأ تثبيت"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
 #, kde-format
 msgid "Please classify the font type and language of the text on the image:"
-msgstr "الرجاء تصنيف نوع المرف و ولغة النص فى الصورة:"
+msgstr "الرجاء تصنيف نوع الخط و ولغة النص في الصورة:"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
 #, kde-format
@@ -630,7 +630,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
 msgid "This version of Kooka is configured to use the Kadmos engine."
-msgstr "تم تكوين هذا الإصدار من كوكا لاستخدام محرك Kadmos."
+msgstr "ضُبطَ هذا الإصدار من كوكا لاستخدام محرك Kadmos."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
 #, kde-format
@@ -649,12 +649,12 @@ msgid ""
 "OCR with the KADMOS engine is not possible."
 msgstr ""
 "ملف الـمصنف الضروري للتعرف الضوئي على المحارف لا يمكن تحميله: %1،\n"
-"إن إستعمال المحرك KADMOS للتعرف على المحارف ضوئياً غير ممكن."
+"إن استعمال المحرك KADMOS للتعرف على المحارف ضوئياً غير ممكن."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
 msgid "KADMOS Installation Problem"
-msgstr "مشكلة فى تثبيت KADMOS"
+msgstr "مشكلة في تثبيت KADMOS"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
 #, kde-format
@@ -847,7 +847,7 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
-"<b>JPEG</b> هو تنسيق مضغوط مناسب للون الحقيقي أو التدرج الرماديالصور. وهو "
+"<b>JPEG</b> هو تنسيق مضغوط مناسب للون الحقيقي أو التدرج الرمادي الصور. وهو "
 "تنسيق ضائع، لذا لا يُنصح باستخدامه للأرشفة أو للتحميل والحفظ المتكرر. وهو "
 "تنسيق مفتوح ومدعوم على نطاق واسع."
 
@@ -880,7 +880,7 @@ msgid ""
 "is not recommended, use an open format instead."
 msgstr ""
 "يمكن لـ <b>Truevision Targa</b> تخزين صور كاملة الألوان باستخدام قناة ألفا،"
-"ويستخدم على نطاق واسع في تطبيقات الرسوم المتحركة والفيديو.<p>هذا التنسيقلا "
+"ويستخدم على نطاق واسع في تطبيقات الرسوم المتحركة والفيديو.<p>هذا التنسيق لا "
 "ينصح بذلك، استخدم تنسيقًا مفتوحًا بدلاً من ذلك."
 
 #: formatdialog.cpp:196
@@ -906,10 +906,10 @@ msgid ""
 "for use with other applications, use an open format instead."
 msgstr ""
 "<b>تنسيق ملف الصور ذو العلامات</b> هو تنسيق ملف متعدد الاستخدامات وقابل "
-"للتوسيعمدعومة على نطاق واسع من خلال تطبيقات التصوير والنشر. يدعم هذا التنسيق "
-"الصور المفهرسة والصور ذات الألوان الحقيقية مع شفافية ألفا. <p>نظرًا لتعدد "
-"أشكاله، قد تحدث أحيانًا مشاكل في التوافق. ما لم يكن ذلك ضروريًا للاستخدام مع "
-"تطبيقات أخرى، استخدم تنسيقًا مفتوح المصدر."
+"للتوسيع مدعومة على نطاق واسع من خلال تطبيقات التصوير والنشر. يدعم هذا "
+"التنسيق الصور المفهرسة والصور ذات الألوان الحقيقية مع شفافية ألفا. <p>نظرًا "
+"لتعدد أشكاله، قد تحدث أحيانًا مشاكل في التوافق. ما لم يكن ذلك ضروريًا "
+"للاستخدام مع تطبيقات أخرى، استخدم تنسيقًا مفتوح المصدر."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -1495,12 +1495,12 @@ msgstr ""
 #: imgsaver.cpp:412
 #, kde-format
 msgid "Extension Missing"
-msgstr "التمديدة ناقصة"
+msgstr "الامتداد ناقص"
 
 #: imgsaver.cpp:413
 #, kde-format
 msgid "Add Extension"
-msgstr "أضف تمديدة"
+msgstr "أضف امتداد"
 
 #: imgsaver.cpp:414
 #, kde-format
@@ -1906,8 +1906,8 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
-"<div>حدد ما إذا كنت تريد إدراج مجلدات المعرض التي تم الوصول إليها مؤخرًا وأين "
-"مكانهاسيظهر.</div>"
+"<div> حدد ما إذا كنت تريد إدراج قائمة مجلدات المعرض التي زرتها مؤخرًا وأين.</"
+"div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
@@ -1992,7 +1992,7 @@ msgid ""
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
 "<div>الحد الأدنى للفجوة بالبكسلات التي تُعتبر تباعدًا بين الكلمات. القيمة "
-"المبدئيّة هي 0، مما يعني اكتشاف التباعد آليًّأ.</div>"
+"المبدئيّة هي 0، مما يعني اكتشاف التباعد أليًا.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -2044,7 +2044,7 @@ msgstr "اعكس الدخل"
 #: kookasettings.kcfg:268
 #, kde-format
 msgid "Set threshold"
-msgstr "عين العتمبة"
+msgstr "عين العتبة"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
 #: kookasettings.kcfg:274
@@ -2363,7 +2363,7 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
-"يُوزّع هذا البرنامج بموجب شروط رخصة جنو العمومية (GPL)\n"
+"يُوزّع هذا البرنامج بموجب شروط رخصة غنو العمومية (GPL)\n"
 " الإصدار الثاني الصادرة عن مؤسسة البرمجيات الحرة.\n"
 "\n"
 "كاستثناء خاص، يُسمح بربط هذا البرنامج بأي إصدار من محرك\n"
@@ -2494,7 +2494,7 @@ msgstr "الوصف:"
 #: ocrresedit.cpp:159
 #, kde-format
 msgid "Save OCR Result Text"
-msgstr "إحفظ نصّ نتائج التعرف الضوئي على المحارف"
+msgstr "احفظ نصّ نتائج التعرف الضوئي على المحارف"
 
 #: ocrresedit.cpp:160
 #, kde-format
@@ -2531,8 +2531,8 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
-"استخدم هذا الزر لإعادة تفعيل جميع الرسائل والأسئلة التي تم إخفاؤها باستخدام "
-"خيار \"عدم السؤال مرة أخرى\"."
+"استخدم هذا الزر لإعادة تفعيل جميع الرسائل والأسئلة المخفية باستخدام خيار "
+"\"عدم السؤال مرة أخرى\"."
 
 #: prefspages.cpp:85
 #, kde-format
@@ -2690,9 +2690,9 @@ msgid ""
 "yet possible. Converting 'on the fly' is planned for a future release.\n"
 "Kooka corrects the extension."
 msgstr ""
-"لقد أدخلت إمتداد ملف يختلف من الموجود مسبقاً. و ذلك ليس ممكن حالياً. سيكون هذا "
+"لقد أدخلت امتداد ملف يختلف من الموجود مسبقاً. و ذلك ليس ممكن حالياً. سيكون هذا "
 "ممكن في المستقبل القريب في إصدار جديد.\n"
-"يقوم Kooka بتصحيح الإمتداد."
+"يقوم Kooka بتصحيح الامتداد."
 
 #: scangallery.cpp:602
 #, kde-format
@@ -2750,7 +2750,7 @@ msgstr "صدّر لقطة الشاشة بصيغة ..."
 #: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
-msgstr "إستورِد ملف الصورة إلى المعرض"
+msgstr "استورد ملف الصورة إلى المعرض"
 
 #: scangallery.cpp:1110
 #, kde-kuit-format
