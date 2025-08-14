@@ -525,13 +525,13 @@ msgstr "اسم أو مسار الملف القابل للتنفيذ GOCR:"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
 #, kde-format
 msgid "Czech Republic, Slovakia"
-msgstr "الجمهورية التشيكية ، سلوفاكيا"
+msgstr "الجمهورية التشيكية، سلوفاكيا"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
 #, kde-format
 msgid "Great Britain, USA"
-msgstr "بريطانيا العظمى ، الولايات المتحدة الأمريكية"
+msgstr "بريطانيا العظمى، الولايات المتحدة الأمريكية"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
 #, kde-format
@@ -1414,7 +1414,7 @@ msgstr "صورة بتدرج الرمادي (حتى عمق 8 بت)"
 #: imgsaver.cpp:336
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
-msgstr "صورة الرسم الخطي (أسود وأبيض ، العمق 1 بت)"
+msgstr "صورة الرسم الخطي (أسود وأبيض، العمق 1 بت)"
 
 #: imgsaver.cpp:340
 #, kde-format
