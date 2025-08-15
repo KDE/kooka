@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2025-08-09 13:50+0400\n"
+"PO-Revision-Date: 2025-08-14 09:32+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1510,7 +1510,7 @@ msgstr "لا تضف"
 #: imgsaver.cpp:439
 #, kde-format
 msgid "Target already exists"
-msgstr "الهدف موجود بالفعل"
+msgstr "الهدف موجود فعلًا"
 
 #: imgsaver.cpp:452
 #, kde-format
@@ -1809,9 +1809,9 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
-"<div>حدد هذا الخيار إذا كنت تريد أن يقوم كوكا بتحميل آخر صورة محددة في "
-"العارض عند بدء التشغيل.<br/><br/>إذا كانت صورك كبيرة، فقد يؤدي ذلك إلى إبطاء "
-"بدء تشغيل كوكا.</div>"
+"<div>حدد هذا الخيار إذا كنت تريد أن يحمل كوكا آخر صورة محددة في العارض عند "
+"بدء التشغيل.<br/><br/>إذا كانت صورك كبيرة، فقد يؤدي ذلك إلى إبطاء بدء تشغيل "
+"كوكا.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -2692,7 +2692,7 @@ msgid ""
 msgstr ""
 "لقد أدخلت امتداد ملف يختلف من الموجود مسبقاً. و ذلك ليس ممكن حالياً. سيكون هذا "
 "ممكن في المستقبل القريب في إصدار جديد.\n"
-"يقوم Kooka بتصحيح الامتداد."
+"يصحح كوكا الامتداد."
 
 #: scangallery.cpp:602
 #, kde-format
