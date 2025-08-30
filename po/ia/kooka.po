@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2025-04-22 16:13+0200\n"
+"PO-Revision-Date: 2025-08-29 12:44+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1152,7 +1152,7 @@ msgid ""
 "resolution.</div>"
 msgstr ""
 "<div>Imprime al mesme grandor bìvidite sur le schermo, determinate perle "
-"resolution del schermo.</div<"
+"resolution del schermo.</div>"
 
 #: imgprintdialog.cpp:98
 #, kde-format
