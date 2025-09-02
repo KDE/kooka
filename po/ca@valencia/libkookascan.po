@@ -195,12 +195,12 @@ msgstr "Blanc"
 #: deviceselector.cpp:58
 #, kde-format
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #: deviceselector.cpp:59
 #, kde-format
 msgid "Select Scan Device"
-msgstr "Seleccioneu el dispositiu d'escaneig"
+msgstr "Trieu el dispositiu d'escaneig"
 
 #: deviceselector.cpp:71
 #, kde-format
@@ -482,7 +482,7 @@ msgstr ""
 "fons de la imatge de vista prèvia (el resultat de l'escaneig sense cap "
 "document carregat).\n"
 "\n"
-"Seleccioneu si el fons de la vista prèvia de la imatge és negre o blanc."
+"Trieu si el fons de la vista prèvia de la imatge és negre o blanc."
 
 #: previewer.cpp:337
 #, kde-format
@@ -699,8 +699,8 @@ msgid ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 msgstr ""
-"<title>Cap escàner seleccionat</title><nl/><nl/>Selecciona un dispositiu "
-"d'escàner per a realitzar l'escaneig."
+"<title>Cap escàner seleccionat</title><nl/><nl/>Tria un dispositiu d'escàner "
+"per a realitzar l'escaneig."
 
 #: scanparams.cpp:591
 #, kde-kuit-format
@@ -890,8 +890,8 @@ msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
-"<div>Seleccioneu si un escaneig amb la safata d'escaneig buida resultarà en "
-"una imatge en negre o en blanc</div>"
+"<div>Trieu si un escaneig amb la safata d'escaneig buida resultarà en una "
+"imatge en negre o en blanc</div>"
 
 #: scansizeselector.cpp:119
 #, kde-format

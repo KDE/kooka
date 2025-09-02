@@ -495,7 +495,7 @@ msgstr "Camí cap a l'executable:"
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
 msgid "Enter or select the path..."
-msgstr "Introduïu o seleccioneu el camí…"
+msgstr "Introduïu o trieu el camí…"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
@@ -574,7 +574,7 @@ msgstr "Classifiqueu la lletra i l'idioma del text de la imatge:"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
 #, kde-format
 msgid "Font Type Selection"
-msgstr "Seleccioneu la lletra"
+msgstr "Trieu la lletra"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
 #, kde-format
@@ -998,8 +998,8 @@ msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
-"Seleccioneu un format d'imatge per a guardar la imatge escanejada.<nl/>Açò "
-"és un <emphasis strong=\"1\">%1</emphasis>."
+"Trieu un format d'imatge per a guardar la imatge escanejada.<nl/>Açò és un "
+"<emphasis strong=\"1\">%1</emphasis>."
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -1019,7 +1019,7 @@ msgstr "Nom del fitxer:"
 #: formatdialog.cpp:398
 #, kde-format
 msgid "Select Format..."
-msgstr "Selecciona el format…"
+msgstr "Tria el format…"
 
 #: formatdialog.cpp:436
 #, kde-format
@@ -1343,8 +1343,8 @@ msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
 msgstr ""
-"<div>Selecciona si s'imprimixen les marques de retall/unió. Estes marques "
-"reduïxen l'àrea d'impressió disponible.</div>"
+"<div>Tria si s'imprimixen les marques de retall/unió. Estes marques reduïxen "
+"l'àrea d'impressió disponible.</div>"
 
 #: imgprintdialog.cpp:207
 #, kde-format
@@ -1673,7 +1673,7 @@ msgstr "Propietats…"
 #: kooka.cpp:279
 #, kde-format
 msgid "Select Scan Device..."
-msgstr "Seleccioneu el dispositiu d'escaneig…"
+msgstr "Tria el dispositiu d'escaneig…"
 
 #: kooka.cpp:283 kookaview.cpp:546
 #, kde-format
@@ -1698,7 +1698,7 @@ msgstr "Valors predefinits d'escaneig…"
 #: kooka.cpp:304
 #, kde-format
 msgid "Auto Select"
-msgstr "Selecciona automàticament"
+msgstr "Tria automàticament"
 
 #: kooka.cpp:312
 #, kde-format
@@ -1806,7 +1806,7 @@ msgid ""
 msgstr ""
 "<title>Mode de galeria - No s'ha seleccionat cap escàner</title>><nl/><nl/"
 ">En este mode podeu veure, manipular i fer OCR de les imatges que ja es "
-"troben en la galeria.<nl/><nl/><link url=\"a:1\">Seleccioneu un dispositiu "
+"troben en la galeria.<nl/><nl/><link url=\"a:1\">Trieu un dispositiu "
 "d'escàner</link> per a portar a terme l'escaneig, o <link url=\"a:2\">afegiu "
 "un dispositiu</link> si no s'ha detectat automàticament cap escàner."
 
@@ -1941,8 +1941,8 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
-"<div>Selecciona quan i com es mostrarà la llista de carpetes de galeria "
-"accedides recentment.</div>"
+"<div>Tria quan i com es mostrarà la llista de carpetes de galeria accedides "
+"recentment.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
@@ -1982,7 +1982,7 @@ msgstr "Mida de la vista prèvia:"
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
 msgstr ""
-"<div>Selecciona la mida de la vista prèvia predeterminada per a la vista de "
+"<div>Tria la mida de la vista prèvia predeterminada per a la vista de "
 "miniatures.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
@@ -2260,7 +2260,7 @@ msgstr "Imatges de la galeria %1"
 #: kookaview.cpp:710
 #, kde-format
 msgid "Starting OCR on selection"
-msgstr "Seleccioneu l'inici OCR"
+msgstr "Trieu l'inici OCR"
 
 #: kookaview.cpp:716
 #, kde-format
@@ -2317,7 +2317,7 @@ msgid ""
 "Please select and configure one in order to perform OCR."
 msgstr ""
 "No s'ha seleccionat cap motor OCR.\n"
-"Seleccioneu-ne un i configureu-lo per a portar a terme OCR."
+"Trieu-ne un i configureu-lo per a portar a terme OCR."
 
 #: kookaview.cpp:786
 #, kde-format
@@ -2640,8 +2640,8 @@ msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
 "OCR."
 msgstr ""
-"No s'ha seleccionat cap motor OCR. Seleccioneu-ne un i configureu-lo per a "
-"poder portar a terme OCR."
+"No s'ha seleccionat cap motor OCR. Trieu-ne un i configureu-lo per a poder "
+"portar a terme OCR."
 
 #: prefspages.cpp:452
 #, kde-format
@@ -2854,7 +2854,7 @@ msgstr "Conjunts guardats de valors predefinits d'escaneig:"
 #: scanpresetsdialog.cpp:80
 #, kde-format
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #: scanpresetsdialog.cpp:82
 #, kde-format
