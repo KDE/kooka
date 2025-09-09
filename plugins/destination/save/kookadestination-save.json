@@ -26,7 +26,6 @@
         "Description[sv]": "Spara den inlästa bilden",
         "Description[tr]": "Taranan görseli kaydedin",
         "Description[uk]": "Зберегти скановане зображення",
-        "Description[x-test]": "xxSave the scanned imagexx",
         "Description[zh_TW]": "儲存已掃描的圖片",
         "Icon": "document-save",
         "License": "GPL",
@@ -60,7 +59,6 @@
         "Name[sv]": "Spara bild",
         "Name[tr]": "Görseli Kaydet",
         "Name[uk]": "Збереження зображення",
-        "Name[x-test]": "xxSave Imagexx",
         "Name[zh_TW]": "儲存圖片"
     }
 }
