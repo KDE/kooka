@@ -202,7 +202,7 @@
 > <guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Configurar Kooka...</guimenuitem
+>Configurar Kooka…</guimenuitem
 > <guimenuitem
 >Guardar la imagen</guimenuitem
 > <guimenuitem
@@ -245,7 +245,7 @@
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Nueva carpeta...</guimenuitem
+>Nueva carpeta…</guimenuitem
 > </menuchoice
 ></term
 > 
@@ -434,7 +434,7 @@ Scan Parameters... Ctrl+Shift+S
 ><guimenu
 >Escanear</guimenu
 > <guimenuitem
->OCR de imagen...</guimenuitem
+>OCR de imagen…</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
@@ -455,7 +455,7 @@ Scan Parameters... Ctrl+Shift+S
 ><guimenu
 >Escanear</guimenu
 > <guimenuitem
->Selección de OCR...</guimenuitem
+>Selección de OCR…</guimenuitem
 > </menuchoice
 ></term
 > 
@@ -713,7 +713,7 @@ Keep Zoom Setting Ctrl+Z
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Seleccionar dispositivo de escáner...</guimenuitem
+>Seleccionar dispositivo de escáner…</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -730,7 +730,7 @@ Keep Zoom Setting Ctrl+Z
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Añadir dispositivo de escáner...</guimenuitem
+>Añadir dispositivo de escáner…</guimenuitem
 > </menuchoice>
 </term
 ><listitem>
