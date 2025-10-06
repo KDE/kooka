@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kooka package.
 #
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-29 00:41+0000\n"
-"PO-Revision-Date: 2024-10-26 09:33+0300\n"
+"PO-Revision-Date: 2025-10-05 12:28+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -140,9 +140,9 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
-"אם הפקודות האלה לא מצליחות לאתר את הסורק שלך, יכול להיות שאינו נתמךע״י SANE. "
-"אפשר למצוא בתיעוד של SANE את <link url=\"http://www.sane-project.org/sane-"
-"supported-devices.html\">רשימת ההתקנים הנתמכים</link>."
+"אם הפקודות האלה לא מצליחות לאתר את הסורק שלך, יכול להיות שאינו נתמך ע״י "
+"SANE. אפשר למצוא בתיעוד של SANE את <link url=\"http://www.sane-project.org/"
+"sane-supported-devices.html\">רשימת ההתקנים הנתמכים</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -740,7 +740,7 @@ msgid ""
 "SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
 "%1</icode>."
 msgstr ""
-"ניפוי שגיאות של SANE יכול לקרוא קובצי  PNM בלבד.<nl/>הקובץ שצוין הוא מסוג "
+"ניפוי שגיאות של SANE יכול לקרוא קובצי PNM בלבד.<nl/>הקובץ שצוין הוא מסוג "
 "<icode>%1</icode>."
 
 #: scanparams.cpp:740
