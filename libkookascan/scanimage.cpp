@@ -193,7 +193,7 @@ QString ScanImage::loadTiffDir(const QString &filename, int subno)
     if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0)) {
 							// Successfully read, now convert
         tmpImg = tmpImg.rgbSwapped();			// swap red and blue
-        tmpImg = tmpImg.mirrored();			// reverse (it's upside down)
+        tmpImg = tmpImg.flipped();			// reverse (it's upside down)
     } else {
         TIFFClose(tif);
         return (i18n("Failed to read TIFF image"));
@@ -321,7 +321,7 @@ case MultiScanOptions::Rotate90:
         break;
 
 case MultiScanOptions::Rotate180:
-        tmpImg = mirrored(true, true);
+        tmpImg = flipped(Qt::Horizontal|Qt::Vertical);
         break;
 
 case MultiScanOptions::Rotate270:
