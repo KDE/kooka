@@ -26,7 +26,7 @@ option(WITH_KADMOS "Enable the Kadmos OCR engine" false)
 #									#
 #########################################################################
 
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n ConfigWidgets TextWidgets IconThemes Sonnet WidgetsAddons)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n ConfigWidgets TextWidgets IconThemes Sonnet WidgetsAddons)
 
 #########################################################################
 #									#
@@ -49,9 +49,9 @@ set(kookaocr_SRCS
 )
 
 add_library(kookaocr SHARED ${kookaocr_SRCS})
-set_target_properties(kookaocr PROPERTIES VERSION ${VERSION} SOVERSION ${Q})
-target_link_libraries(kookaocr Qt${Q}::Core Qt${Q}::Widgets)
-target_link_libraries(kookaocr KF${Q}::I18n KF${Q}::WidgetsAddons KF${Q}::ConfigWidgets KF${Q}::SonnetCore KF${Q}::SonnetUi)
+set_target_properties(kookaocr PROPERTIES VERSION ${VERSION} SOVERSION 6)
+target_link_libraries(kookaocr Qt6::Core Qt6::Widgets)
+target_link_libraries(kookaocr KF6::I18n KF6::WidgetsAddons KF6::ConfigWidgets KF6::SonnetCore KF6::SonnetUi)
 target_link_libraries(kookaocr kookascan kookacore)
 target_link_libraries(kookaocr dialogutil)
 

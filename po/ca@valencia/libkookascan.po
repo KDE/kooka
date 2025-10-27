@@ -3,13 +3,13 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2012, 2014, 2016, 2018, 2020.
-# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2017, 2020, 2021, 2024.
+# SPDX-FileCopyrightText: 2012, 2014, 2016, 2018, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2020, 2021, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2024-05-17 09:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -195,12 +195,12 @@ msgstr "Blanc"
 #: deviceselector.cpp:58
 #, kde-format
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #: deviceselector.cpp:59
 #, kde-format
 msgid "Select Scan Device"
-msgstr "Seleccioneu el dispositiu d'escaneig"
+msgstr "Trieu el dispositiu d'escaneig"
 
 #: deviceselector.cpp:71
 #, kde-format
@@ -277,47 +277,47 @@ msgstr "%1x%2 píxels, %3 bpp"
 msgid "Image Zoom"
 msgstr "Ampliació de la imatge"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25%"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50%"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75%"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100%"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150&%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200%"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300%"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400%"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "A mida:"
@@ -332,93 +332,93 @@ msgstr "(Desconeguda)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Reinicia esta opció al seu valor estàndard, %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "Fitxers d'imatge PNM (*.pnm *.pbm *.pgm *.ppm)"
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "Cap escàner seleccionat"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Configureu l'inici predeterminat"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "L'escàner<nl/><icode>%1</icode><nl/>requerix autenticació."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Autenticació de l'escàner"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "D'acord"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "Cap dispositiu"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "Paràmetre incorrecte"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "No s'ha pogut obrir el dispositiu"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() ha fallat"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "S'ha produït un error en escanejar"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "Imatge buida"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "Memòria exhaurida"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "Necessita tornar a carregar"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "Cancel·lat"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "No actiu"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "No acceptat"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Estat desconegut %1"
@@ -470,7 +470,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2 mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -482,21 +482,21 @@ msgstr ""
 "fons de la imatge de vista prèvia (el resultat de l'escaneig sense cap "
 "document carregat).\n"
 "\n"
-"Seleccioneu si el fons de la vista prèvia de la imatge és negre o blanc."
+"Trieu si el fons de la vista prèvia de la imatge és negre o blanc."
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Detecció automàtica del fons"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Blanc"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -652,57 +652,57 @@ msgstr ""
 "el fitxer d'imatge especificat. Açò és per a provar la guardada de la "
 "imatge, etc."
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "Mode de lectura:"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Predeterminat (de la configuració de l'escaneig)"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Mapa de bits blanc i negre"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:415
 #, kde-format
 msgid "Grey scale"
 msgstr "Escala de grisos"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:416
 #, kde-format
 msgid "Low colour"
 msgstr "Color baix"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr "Color alt"
 
-#: scanparams.cpp:428
+#: scanparams.cpp:427
 #, kde-format
 msgid "Force image format:"
 msgstr "Força el format d'imatge:"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Edita la taula de gamma…"
 
-#: scanparams.cpp:553
+#: scanparams.cpp:571
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 msgstr ""
-"<title>Cap escàner seleccionat</title><nl/><nl/>Selecciona un dispositiu "
-"d'escàner per a realitzar l'escaneig."
+"<title>Cap escàner seleccionat</title><nl/><nl/>Tria un dispositiu d'escàner "
+"per a realitzar l'escaneig."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -725,22 +725,22 @@ msgstr ""
 "project.org\">www.sane-project.org</link>) per a obtindre més informació "
 "sobre la instal·lació i configuració de SANE."
 
-#: scanparams.cpp:675
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "L'escaneig amb profunditat d'1 bit no es pot realitzar en color"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "No s'admet l'escaneig amb profunditat de 16 bits"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Haureu d'indicar un fitxer per a un escaneig de prova o virtual"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -750,7 +750,7 @@ msgstr ""
 "El fitxer de proves o virtual <filename>%1</filename><nl/>no s'ha trobat o "
 "no es pot llegir."
 
-#: scanparams.cpp:704
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -760,17 +760,17 @@ msgstr ""
 "La depuració de SANE sols pot llegir fitxers PNM.<nl/>Este fitxer és del "
 "tipus <icode>%1</icode>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "L'escaneig està en curs"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:741
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "L'escaneig està en curs<nl/><nl/>%1"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "No es pot previsualitzar en el mode «Escàner virtual»"
@@ -890,8 +890,8 @@ msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
-"<div>Seleccioneu si un escaneig amb la safata d'escaneig buida resultarà en "
-"una imatge en negre o en blanc</div>"
+"<div>Trieu si un escaneig amb la safata d'escaneig buida resultarà en una "
+"imatge en negre o en blanc</div>"
 
 #: scansizeselector.cpp:119
 #, kde-format
@@ -908,22 +908,22 @@ msgstr "Mida completa"
 msgid "(No selection)"
 msgstr "(Sense selecció)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "Vertical"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "Apaïsat"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "Establix l'orientació d'una mida predefinida de la zona escanejada"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "Selecció"

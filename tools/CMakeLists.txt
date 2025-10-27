@@ -15,8 +15,8 @@ project(kookatools)
 
 ########### dependencies ###############
 
-find_package(Qt${Q} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui)
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
 
 ########### sanedump ###############
 
@@ -40,8 +40,8 @@ set(qimageioinfo_SRCS
 )
 
 add_executable(qimageioinfo ${qimageioinfo_SRCS})
-target_link_libraries(qimageioinfo Qt${Q}::Core Qt${Q}::Gui)
-target_link_libraries(qimageioinfo KF${Q}::CoreAddons)
+target_link_libraries(qimageioinfo Qt6::Core Qt6::Gui)
+target_link_libraries(qimageioinfo KF6::CoreAddons)
 
 ########### install files ###############
 

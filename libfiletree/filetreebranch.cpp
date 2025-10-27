@@ -249,11 +249,7 @@ FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path) const
 #ifdef DEBUG_MAPPING
     qCDebug(LIBFILETREE_LOG) << path;
 #endif
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     const QStringList pathSplit = path.split('/', Qt::SkipEmptyParts);
-#else
-    const QStringList pathSplit = path.split('/', QString::SkipEmptyParts);
-#endif
     FileTreeViewItem *item = m_root;
 
     for (const QString &part : pathSplit)

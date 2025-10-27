@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2024-12-27 10:42+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1182
+#: kookaview.cpp:1177
 #, kde-format
 msgid "Other..."
 msgstr "Alia..."
@@ -82,13 +82,13 @@ msgstr "Kopiante bildon al tondujo"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Presi Bildon"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -100,7 +100,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -372,7 +372,7 @@ msgstr "Kontrolu la elekton kaj agordojn de la OCR-motoro."
 msgid "OCR Setup Error"
 msgstr "OCR-Agorda Eraro"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
 #, kde-format
 msgid "Configure OCR..."
 msgstr "Agordi OCR..."
@@ -395,24 +395,24 @@ msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:264
+#: ../plugins/ocr/abstractocrengine.cpp:260
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr "OCR Provizoraj Dosieroj"
 
-#: ../plugins/ocr/abstractocrengine.cpp:435
+#: ../plugins/ocr/abstractocrengine.cpp:427
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr "Ne povas krei provizoran dosieron <filename>%1</filename>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:481
+#: ../plugins/ocr/abstractocrengine.cpp:473
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr "Ne povas konservi bildon al provizora dosiero <filename>%1</filename>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:509
+#: ../plugins/ocr/abstractocrengine.cpp:501
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -420,32 +420,32 @@ msgid ""
 "envar>."
 msgstr "La rulebla <command>%1</command> ne troveblas ĉe <envar>PATH</envar>."
 
-#: ../plugins/ocr/abstractocrengine.cpp:519
+#: ../plugins/ocr/abstractocrengine.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
 msgstr "La rulebla <filename>%1</filename> ne ekzistas aŭ ne estas uzebla."
 
-#: ../plugins/ocr/abstractocrengine.cpp:591
+#: ../plugins/ocr/abstractocrengine.cpp:583
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr "Komando <command>%1</command> paneis kun elira stato <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:596
+#: ../plugins/ocr/abstractocrengine.cpp:588
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr "Komando <command>%1</command> eliris kun stato <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:600
+#: ../plugins/ocr/abstractocrengine.cpp:592
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr "Rulado de la OCR-procezo malsukcesis."
 
-#: ../plugins/ocr/abstractocrengine.cpp:601
+#: ../plugins/ocr/abstractocrengine.cpp:593
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -455,18 +455,18 @@ msgstr ""
 "Pliaj informoj povas esti disponeblaj en ĝia <link url=\"%1\">norm-erara</"
 "link> protokoldosiero."
 
-#: ../plugins/ocr/abstractocrengine.cpp:604
+#: ../plugins/ocr/abstractocrengine.cpp:596
 #, kde-format
 msgid "OCR Command Failed"
 msgstr "OCR-Komando Malsukcesis"
 
-#: ../plugins/ocr/abstractocrengine.cpp:611
+#: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr "Prilaborado de la OCR-rezultoj malsukcesis."
 
-#: ../plugins/ocr/abstractocrengine.cpp:612
+#: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
 msgid "OCR Processing Failed"
 msgstr "OCR-traktado malsukcesis"
@@ -500,7 +500,7 @@ msgstr "La rulebla GOCR ne estas agordita aŭ ne havebla."
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:263
 #, kde-format
 msgid "Error"
 msgstr "Eraro"
@@ -511,7 +511,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr "Ne povas legi GOCR-rezultan dosieron <filename>%1</filename><nl/>%2"
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:299
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr "Nomo aŭ vojo de la plenumebla GOCR:"
@@ -696,9 +696,9 @@ msgstr "Plena Aranĝo Detekto"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:161
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:93
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:155
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:183
 #, kde-format
 msgid "(default)"
 msgstr "(defaŭlte)"
@@ -729,13 +729,13 @@ msgstr "Ne povas malfermi dosieron <filename>%1</filename>"
 msgid "Name or path of the OCRAD executable:"
 msgstr "Nomo aŭ vojo de la plenumebla OCRAD:"
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:78
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
 msgstr "La rulebla Tesseract ne estas agordita aŭ ne disponebla."
 
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
 #, kde-format
 msgid "Select a file if required..."
 msgstr "Elekti dosieron se necese..."
@@ -1023,7 +1023,7 @@ msgstr ""
 msgid "Error creating gallery"
 msgstr "Eraro dum kreado de galerio"
 
-#: galleryroot.cpp:164
+#: galleryroot.cpp:160
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1035,24 +1035,24 @@ msgstr ""
 "preferata nova loko nun estas <filename>%2</filename>.<nl/><nl/>Ĉu vi volas "
 "krei ĉu nova galerio ĉe la nova loko?"
 
-#: galleryroot.cpp:168
+#: galleryroot.cpp:164
 #, kde-format
 msgid "Create New Gallery"
 msgstr "Krei Novan Galerion"
 
-#: galleryroot.cpp:169
+#: galleryroot.cpp:165
 #, kde-format
 msgctxt "@action:button"
 msgid "Create New"
 msgstr "Krei Novan"
 
-#: galleryroot.cpp:170
+#: galleryroot.cpp:166
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
 msgstr "Daŭrigi Kun Malnova"
 
-#: galleryroot.cpp:183 galleryroot.cpp:197
+#: galleryroot.cpp:175 galleryroot.cpp:189
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1066,12 +1066,12 @@ msgstr ""
 "url=\"file:%2\"><filename>%2</filename></link>,<nl/>tiam vi povas fari tion "
 "simple kopiante aŭ movante la dosierojn."
 
-#: galleryroot.cpp:187
+#: galleryroot.cpp:179
 #, kde-format
 msgid "New Gallery Created"
 msgstr "Nova Galerio Kreita"
 
-#: galleryroot.cpp:201
+#: galleryroot.cpp:193
 #, kde-format
 msgid "Old Gallery Exists"
 msgstr "Malnova Galerio Ekzistas"
@@ -1118,13 +1118,13 @@ msgctxt "@title:group"
 msgid "Scaling"
 msgstr "Skalado"
 
-#: imgprintdialog.cpp:100
+#: imgprintdialog.cpp:93
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
 msgstr "Grandeco kiel sur ekrano"
 
-#: imgprintdialog.cpp:101
+#: imgprintdialog.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1134,12 +1134,12 @@ msgstr ""
 "<div>Presi je la sama grandeco kiel vidita sur ekrano, determinita de la "
 "ekrana distingivo.</div>"
 
-#: imgprintdialog.cpp:105
+#: imgprintdialog.cpp:98
 #, kde-format
 msgid "Screen resolution:"
 msgstr "Ekrana distingivo:"
 
-#: imgprintdialog.cpp:110
+#: imgprintdialog.cpp:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1147,13 +1147,13 @@ msgid ""
 msgstr ""
 "<div>Jen la nuna ekrandistingivo. Ĝi ne povas esti ŝanĝita ĉi tie.</div>"
 
-#: imgprintdialog.cpp:114
+#: imgprintdialog.cpp:107
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
 msgstr "Grandeco kiel skanita"
 
-#: imgprintdialog.cpp:115
+#: imgprintdialog.cpp:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1165,18 +1165,18 @@ msgstr ""
 "estas konservita kun la bildo kaj uzata se disponebla; se ĝi ne estas, ĝi "
 "povas esti enigita ĉi tie.</div>"
 
-#: imgprintdialog.cpp:119
+#: imgprintdialog.cpp:112
 #, kde-format
 msgid "Scan resolution:"
 msgstr "Skanado-distingivo:"
 
-#: imgprintdialog.cpp:124
+#: imgprintdialog.cpp:117
 #, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
 msgstr "dpi"
 
-#: imgprintdialog.cpp:125
+#: imgprintdialog.cpp:118
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1186,13 +1186,13 @@ msgstr ""
 "<div>Ĉi tiu estas la skana distingivo kiel konservita kun la bildo. Ĝi povas "
 "esti ŝanĝita se necese.</div>"
 
-#: imgprintdialog.cpp:132
+#: imgprintdialog.cpp:125
 #, kde-format
 msgctxt "@option:radio"
 msgid "Custom size"
 msgstr "Propra grandeco"
 
-#: imgprintdialog.cpp:133
+#: imgprintdialog.cpp:126
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1202,43 +1202,43 @@ msgstr ""
 "<div> Preso skalita al la specifita grandeco. La bildo estas centrita sur la "
 "papero.</div>"
 
-#: imgprintdialog.cpp:137
+#: imgprintdialog.cpp:130
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
 msgstr "Larĝo de bildo:"
 
-#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#: imgprintdialog.cpp:135 imgprintdialog.cpp:149
 #, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
 msgstr " mm"
 
-#: imgprintdialog.cpp:143
+#: imgprintdialog.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
 msgstr "<div>La larĝo je kiu la bildo estos presita.</div>"
 
-#: imgprintdialog.cpp:151
+#: imgprintdialog.cpp:144
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
 msgstr "Alteco de bildo:"
 
-#: imgprintdialog.cpp:157
+#: imgprintdialog.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
 msgstr "<div>La alteco je kiu la bildo estos presita.</div>"
 
-#: imgprintdialog.cpp:166
+#: imgprintdialog.cpp:159
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
 msgstr "Kongrui al paĝo"
 
-#: imgprintdialog.cpp:167
+#: imgprintdialog.cpp:160
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1248,19 +1248,19 @@ msgstr ""
 "<div>Presi uzante kiel eble plej multe de la disponebla spaco sur la papero. "
 "La proporcio povas esti konservita.</div>"
 
-#: imgprintdialog.cpp:178
+#: imgprintdialog.cpp:171
 #, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
 msgstr "Aliaj Elektebloj"
 
-#: imgprintdialog.cpp:182
+#: imgprintdialog.cpp:175
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
 msgstr "Konservi aspekto-proporcion"
 
-#: imgprintdialog.cpp:183
+#: imgprintdialog.cpp:176
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1270,13 +1270,13 @@ msgstr ""
 "<div>Alĝustigi la altecon aŭ larĝon por konservi la originalan bildformaton "
 "de la presita bildo.</div>"
 
-#: imgprintdialog.cpp:189
+#: imgprintdialog.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
 msgstr "Malalta distingivo (rapida malneta presado)"
 
-#: imgprintdialog.cpp:190
+#: imgprintdialog.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1286,31 +1286,31 @@ msgstr ""
 "<div>Presi je kiel eble plej malalta distingivo. Ĉi tio eble ne funkcias "
 "kiel celite ĉe ĉiuj presiloj.</div>"
 
-#: imgprintdialog.cpp:196
+#: imgprintdialog.cpp:189
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
 msgstr "Tranĉmarkoj:"
 
-#: imgprintdialog.cpp:200
+#: imgprintdialog.cpp:193
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
 msgstr "Neniu"
 
-#: imgprintdialog.cpp:201
+#: imgprintdialog.cpp:194
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
 msgstr "Por pluraj paĝoj"
 
-#: imgprintdialog.cpp:202
+#: imgprintdialog.cpp:195
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr "Ĉiam"
 
-#: imgprintdialog.cpp:203
+#: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1320,54 +1320,54 @@ msgstr ""
 "<div>Elekti ĉu tranĉo/kunigmarkoj estas presitaj. La markoj reduktos la "
 "disponeblan printeblan areon.</div>"
 
-#: imgprintdialog.cpp:214
+#: imgprintdialog.cpp:207
 #, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
 msgstr "Presa Aranĝo"
 
-#: imgprintdialog.cpp:219
+#: imgprintdialog.cpp:212
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
 msgstr "Grando de bildo:"
 
-#: imgprintdialog.cpp:222
+#: imgprintdialog.cpp:215
 #, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
 msgstr "%1 x %2 piks"
 
-#: imgprintdialog.cpp:227
+#: imgprintdialog.cpp:220
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
 msgstr "Disponebla presa areo:"
 
-#: imgprintdialog.cpp:234
+#: imgprintdialog.cpp:227
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
 msgstr "Bildopresa areo:"
 
-#: imgprintdialog.cpp:241
+#: imgprintdialog.cpp:234
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
 msgstr "Paĝoj bezonataj:"
 
-#: imgprintdialog.cpp:304
+#: imgprintdialog.cpp:297
 #, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
 msgstr "%1 dpi"
 
-#: imgprintdialog.cpp:321
+#: imgprintdialog.cpp:314
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
 msgstr "La skana distingivo devas esti specifita por grimpi al ĝi."
 
-#: imgprintdialog.cpp:326
+#: imgprintdialog.cpp:319
 #, kde-format
 msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
@@ -1376,19 +1376,19 @@ msgstr ""
 "Valida grandeco devas esti specifita por kutima skalo. Unu aŭ ambaŭ el la "
 "specifitaj dimensioj estas nul."
 
-#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#: imgprintdialog.cpp:397 imgprintdialog.cpp:401
 #, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
 msgstr "%1 x %2 mm"
 
-#: imgprintdialog.cpp:412
+#: imgprintdialog.cpp:405
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
 msgstr "%1"
 
-#: imgprintdialog.cpp:414
+#: imgprintdialog.cpp:407
 #, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
@@ -1486,7 +1486,7 @@ msgstr "Malbona parametro"
 msgid "Unknown status %1"
 msgstr "Nekonata stato %1"
 
-#: imgsaver.cpp:414
+#: imgsaver.cpp:409
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1498,47 +1498,47 @@ msgstr ""
 "originala devus esti aldonita?<nl/><nl/>Tio rezultigus la novan dosiernomon "
 "<filename>%1</filename>"
 
-#: imgsaver.cpp:417
+#: imgsaver.cpp:412
 #, kde-format
 msgid "Extension Missing"
 msgstr "Mankas etendo"
 
-#: imgsaver.cpp:418
+#: imgsaver.cpp:413
 #, kde-format
 msgid "Add Extension"
 msgstr "Aldoni Etendon"
 
-#: imgsaver.cpp:419
+#: imgsaver.cpp:414
 #, kde-format
 msgid "Do Not Add"
 msgstr "Ne aldoni"
 
-#: imgsaver.cpp:448
+#: imgsaver.cpp:439
 #, kde-format
 msgid "Target already exists"
 msgstr "Celo jam ekzistas"
 
-#: imgsaver.cpp:461
+#: imgsaver.cpp:452
 #, kde-format
 msgid "Unable to copy the file"
 msgstr "Ne eblas kopii la dosieron"
 
-#: imgsaver.cpp:462
+#: imgsaver.cpp:453
 #, kde-format
 msgid "Unable to rename the file"
 msgstr "Ne eblas renomi la dosieron"
 
-#: imgsaver.cpp:463
+#: imgsaver.cpp:454
 #, kde-format
 msgid "Error copying file"
 msgstr "Eraro dum kopiado de dosiero"
 
-#: imgsaver.cpp:464
+#: imgsaver.cpp:455
 #, kde-format
 msgid "Error renaming file"
 msgstr "Eraro renomante dosieron"
 
-#: imgsaver.cpp:465
+#: imgsaver.cpp:456
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -1549,167 +1549,167 @@ msgstr "%1 <filename>%3</filename><nl/>%2"
 msgid "KDE Scanning"
 msgstr "KDE-Skanado"
 
-#: kooka.cpp:140
+#: kooka.cpp:142
 #, kde-format
 msgid "Scale to Width"
 msgstr "Skali al Larĝo"
 
-#: kooka.cpp:151
+#: kooka.cpp:153
 #, kde-format
 msgid "Scale to Height"
 msgstr "Skali al Alteco"
 
-#: kooka.cpp:160
+#: kooka.cpp:162
 #, kde-format
 msgid "Original Size"
 msgstr "Originala Grandeco"
 
-#: kooka.cpp:166
+#: kooka.cpp:168
 #, kde-format
 msgid "Set Zoom..."
 msgstr "Agordi Zomon..."
 
-#: kooka.cpp:172
+#: kooka.cpp:174
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "Konservi Zom-Agordon"
 
-#: kooka.cpp:180
+#: kooka.cpp:182
 #, kde-format
 msgid "New Image From Selection"
 msgstr "Nova Bildo El Elekto"
 
-#: kooka.cpp:185
+#: kooka.cpp:187
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Speguli Vertikale"
 
-#: kooka.cpp:192
+#: kooka.cpp:194
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Speguli Horizontale"
 
-#: kooka.cpp:202
+#: kooka.cpp:204
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "Rotacii Maldekstrume"
 
-#: kooka.cpp:209
+#: kooka.cpp:211
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "Rotacii dekstrume"
 
-#: kooka.cpp:216
+#: kooka.cpp:218
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "Rotacii 180 Gradojn"
 
-#: kooka.cpp:225
+#: kooka.cpp:227
 #, kde-format
 msgid "New Folder..."
 msgstr "Nova dosierujo..."
 
-#: kooka.cpp:230
+#: kooka.cpp:232
 #, kde-format
 msgid "Open With"
 msgstr "Malfermi Per"
 
-#: kooka.cpp:236
+#: kooka.cpp:238
 #, kde-format
 msgid "Save Image..."
 msgstr "Konservi bildon..."
 
-#: kooka.cpp:243
+#: kooka.cpp:245
 #, kde-format
 msgid "Import Image..."
 msgstr "Importi bildon..."
 
-#: kooka.cpp:248 kooka.cpp:537
+#: kooka.cpp:250 kooka.cpp:539
 #, kde-format
 msgid "Delete Image"
 msgstr "Forigi Bildon"
 
-#: kooka.cpp:255 kooka.cpp:538
+#: kooka.cpp:257 kooka.cpp:540
 #, kde-format
 msgid "Rename Image"
 msgstr "Alinomi Bildon"
 
-#: kooka.cpp:261 kooka.cpp:536
+#: kooka.cpp:263 kooka.cpp:538
 #, kde-format
 msgid "Unload Image"
 msgstr "Malŝargi Bildon"
 
-#: kooka.cpp:268
+#: kooka.cpp:270
 #, kde-format
 msgid "Properties..."
 msgstr "Trajtoj..."
 
-#: kooka.cpp:277
+#: kooka.cpp:279
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "Elekti Skanilon..."
 
-#: kooka.cpp:281 kookaview.cpp:551
+#: kooka.cpp:283 kookaview.cpp:546
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Aldoni skanan aparaton..."
 
-#: kooka.cpp:287
+#: kooka.cpp:289
 #, kde-format
 msgid "Preview"
 msgstr "Antaŭrigardo"
 
-#: kooka.cpp:292
+#: kooka.cpp:294
 #, kde-format
 msgid "Start Scan"
 msgstr "Komenci Skanadon"
 
-#: kooka.cpp:297
+#: kooka.cpp:299
 #, kde-format
 msgid "Scan Presets..."
 msgstr "Skani Antaŭgordojn..."
 
-#: kooka.cpp:302
+#: kooka.cpp:304
 #, kde-format
 msgid "Auto Select"
 msgstr "Aŭtomata Elekto"
 
-#: kooka.cpp:310
+#: kooka.cpp:312
 #, kde-format
 msgid "OCR Image..."
 msgstr "OCR-bildo..."
 
-#: kooka.cpp:314
+#: kooka.cpp:316
 #, kde-format
 msgid "OCR Selection..."
 msgstr "OCR Elekto..."
 
-#: kooka.cpp:318
+#: kooka.cpp:320
 #, kde-format
 msgid "OCR File..."
 msgstr "OCR-dosiero..."
 
-#: kooka.cpp:322
+#: kooka.cpp:324
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "Konservi OCR-rezultan tekston..."
 
-#: kooka.cpp:327
+#: kooka.cpp:329
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "Literuma Kontrolo OCR-Rezulto..."
 
-#: kooka.cpp:524
+#: kooka.cpp:526
 #, kde-format
 msgid "Unload Folder"
 msgstr "Malŝargi Dosierujon"
 
-#: kooka.cpp:525
+#: kooka.cpp:527
 #, kde-format
 msgid "Delete Folder"
 msgstr "Forigi Dosierujon"
 
-#: kooka.cpp:526
+#: kooka.cpp:528
 #, kde-format
 msgid "Rename Folder"
 msgstr "Renomi dosierujon"
@@ -1764,7 +1764,7 @@ msgstr "Galerio & Bildetoj"
 msgid "Image Gallery and Thumbnail View"
 msgstr "Bilda Galerio kaj Bildeto-Vido"
 
-#: kookapref.cpp:61 kookaview.cpp:292
+#: kookapref.cpp:61 kookaview.cpp:277
 #, kde-format
 msgid "OCR"
 msgstr "OCR"
@@ -2125,42 +2125,42 @@ msgstr "Bildprezenta ilobreto"
 msgid "Scanning Toolbar"
 msgstr "Skanad-Ilobreto"
 
-#: kookaview.cpp:207
+#: kookaview.cpp:200
 #, kde-format
 msgid "Image View"
 msgstr "Bilda Vido"
 
-#: kookaview.cpp:246
-#, kde-format
-msgid "User specified"
-msgstr "Specifita per uzanto"
-
-#: kookaview.cpp:247
-#, kde-format
-msgid "on command line"
-msgstr "sur komandlinio"
-
-#: kookaview.cpp:267
+#: kookaview.cpp:250
 #, kde-format
 msgid "Scan Preview"
 msgstr "Skana Antaŭrigardo"
 
-#: kookaview.cpp:277
+#: kookaview.cpp:260
 #, kde-format
 msgid "OCR results will appear here"
 msgstr "OCR-rezultoj aperos ĉi tie"
 
-#: kookaview.cpp:286
+#: kookaview.cpp:271
 #, kde-format
 msgid "Scan"
 msgstr "Skani"
 
-#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
+#: kookaview.cpp:274 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "Galerio"
 
-#: kookaview.cpp:466
+#: kookaview.cpp:326
+#, kde-format
+msgid "User specified"
+msgstr "Specifita per uzanto"
+
+#: kookaview.cpp:327
+#, kde-format
+msgid "on command line"
+msgstr "sur komandlinio"
+
+#: kookaview.cpp:461
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2176,12 +2176,12 @@ msgstr ""
 ">libkookascan raportis eraron: <message>%2</message><nl/>SANE raportis "
 "eraron: <message>%1</message>"
 
-#: kookaview.cpp:521
+#: kookaview.cpp:516
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Aldoni Skan-Aparaton"
 
-#: kookaview.cpp:541
+#: kookaview.cpp:536
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2200,79 +2200,79 @@ msgstr ""
 "por enigi la fonan nomon kaj parametrojn, aŭ vidi tiun dialogon por pliaj "
 "informoj."
 
-#: kookaview.cpp:587
+#: kookaview.cpp:582
 #, kde-format
 msgid "No scanner connected"
 msgstr "Neniu skanilo konektita"
 
-#: kookaview.cpp:646
+#: kookaview.cpp:641
 #, kde-format
 msgid "No selection"
 msgstr "Neniu elekto"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:645
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "Galeria dosierujo %1"
 
-#: kookaview.cpp:650
+#: kookaview.cpp:645
 #, kde-format
 msgid "Gallery image %1"
 msgstr "Galeria bildo %1"
 
-#: kookaview.cpp:715
+#: kookaview.cpp:710
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Lanĉante tekstrekonon en la elektita regiono"
 
-#: kookaview.cpp:721
+#: kookaview.cpp:716
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "Komencante OCR sur la bildo"
 
-#: kookaview.cpp:728
+#: kookaview.cpp:723
 #, kde-format
 msgid "OCR File"
 msgstr "OCR-dosiero"
 
-#: kookaview.cpp:738
+#: kookaview.cpp:733
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "Ne povas ŝargi <filename>%1</filename> por OCR:<nl/>%2"
 
-#: kookaview.cpp:740
+#: kookaview.cpp:735
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "Ne povas legi OCR-dosieron"
 
-#: kookaview.cpp:744
+#: kookaview.cpp:739
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "Lanĉante OCR en dosiero <filename>%1</filename>"
 
-#: kookaview.cpp:760
+#: kookaview.cpp:755
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR finiĝis"
 
-#: kookaview.cpp:767
+#: kookaview.cpp:762
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "Ne ekzistas OCR-rezulta teksto por literumkontrolo."
 
-#: kookaview.cpp:768
+#: kookaview.cpp:763
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "OCR-Literumkontrolo ne ebla"
 
-#: kookaview.cpp:773
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OCR Literuma Kontrolo"
 
-#: kookaview.cpp:789
+#: kookaview.cpp:784
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2281,17 +2281,17 @@ msgstr ""
 "Neniu OCR-motoro estas agordita.\n"
 "Bonvolu elekti kaj agordi tian por fari OCR."
 
-#: kookaview.cpp:791
+#: kookaview.cpp:786
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR Ne Agordita"
 
-#: kookaview.cpp:800
+#: kookaview.cpp:795
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "Ne povas ŝargi OCR-aldonaĵon '%1'"
 
-#: kookaview.cpp:908
+#: kookaview.cpp:903
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2307,27 +2307,27 @@ msgstr ""
 ">libkookascan raportis eraron: <message>%2</message><nl/>SANE raportis "
 "eraron: <message>%1</message>"
 
-#: kookaview.cpp:958
+#: kookaview.cpp:953
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Krei novan bildon el la elekto"
 
-#: kookaview.cpp:967
+#: kookaview.cpp:962
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Ne povas transformi, bildo estas nurlegebla"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1015
 #, kde-format
 msgid "Loaded image %1"
 msgstr "Ŝargis bildon %1"
 
-#: kookaview.cpp:1021
+#: kookaview.cpp:1016
 #, kde-format
 msgid "Unloaded image"
 msgstr "Malŝargis bildon"
 
-#: kookaview.cpp:1038
+#: kookaview.cpp:1033
 #, kde-format
 msgid "Loading %1..."
 msgstr "Ŝargante %1..."
@@ -2915,32 +2915,32 @@ msgstr "Miniaturoj"
 msgid "Preview Size"
 msgstr "Grandeco de Antaŭrigardo"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:333
 #, kde-format
 msgid "Very Large"
 msgstr "Grandega"
 
-#: thumbview.cpp:341
+#: thumbview.cpp:334
 #, kde-format
 msgid "Large"
 msgstr "Granda"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:335
 #, kde-format
 msgid "Medium"
 msgstr "Meza"
 
-#: thumbview.cpp:343
+#: thumbview.cpp:336
 #, kde-format
 msgid "Small"
 msgstr "Malgranda"
 
-#: thumbview.cpp:344
+#: thumbview.cpp:337
 #, kde-format
 msgid "Very Small"
 msgstr "Tre malgranda"
 
-#: thumbview.cpp:345
+#: thumbview.cpp:338
 #, kde-format
 msgid "Tiny"
 msgstr "Eta"

@@ -26,8 +26,8 @@ set(ocrtesseract_SRCS
 
 kcoreaddons_add_plugin(ocrtesseract SOURCES ${ocrtesseract_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-target_link_libraries(ocrtesseract Qt${Q}::Core Qt${Q}::Gui)
-target_link_libraries(ocrtesseract KF${Q}::I18n KF${Q}::WidgetsAddons)
+target_link_libraries(ocrtesseract Qt6::Core Qt6::Gui)
+target_link_libraries(ocrtesseract KF6::I18n KF6::WidgetsAddons)
 target_link_libraries(ocrtesseract kookaocr kookascan)
 
 install(FILES tesseract.png DESTINATION ${PICS_INSTALL_DIR})

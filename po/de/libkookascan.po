@@ -1,18 +1,21 @@
-# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2012, 2013.
-# Burkhard Lück <lueck@hube-lueck.de>, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2021.
+# SPDX-FileCopyrightText: 2025 Alois Spitzbart <spitz234@hotmail.com>
+# SPDX-FileCopyrightText: 2011, 2012, 2013 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2025 Philipp Kiemle <l10n@prly.mozmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libkookascan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
-"PO-Revision-Date: 2021-05-18 05:12+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
+"PO-Revision-Date: 2025-07-10 18:53+0200\n"
+"Last-Translator: Philipp Kiemle <l10n@prly.mozmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -25,16 +28,14 @@ msgid "Your emails"
 msgstr "kde-i18n-de@kde.org"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|Alle Bilddateien"
+msgstr "Alle Bilddateien"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Alle Dateien"
+msgstr "Alle Dateien"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -48,23 +49,30 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Wenn Ihr Scanner nicht automatisch erkannt wurde, können Sie ihn hier "
+"einstellen. <interface>Scanner</interface> ist der Gerätename, festgelegt "
+"durch das SANE-Backend. Der <interface>Hersteller</interface>, "
+"<interface>Typ</interface> und die <interface>Beschreibung</interface> "
+"können verwendet werden, um den Scanner später zu identifizieren.<nl/><nl/"
+">Weitere Informationen über <link url=\"?1\">SANE-Backends</link>, die <link "
+"url=\"?2\">Gerätesuche</link>, <link url=\"?3\">HP-Scanner</link> oder <link "
+"url=\"?4\">wenn das Gerät nicht gefunden wurde</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Gerätename des Scanners:"
+msgstr "Scanner:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Benutzerdefiniert"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Hersteller:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -85,6 +93,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Scanner</interface> sollte ein Backend-Name sein (mit optionalen "
+"Parametern), der von SANE verstanden wird. Siehe <link url=\"man:/sane"
+"\">sane(7)</link> oder <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"für weitere Informationen über verfügbare Backends und das Format für "
+"Gerätenamen."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -97,6 +110,13 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Um die hier einzugebenden Informationen zu finden, versuchen Sie, das Gerät "
+"über den Befehl <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> (für Drucker mit SCSI-, USB-, oder Parallel-Schnittstelle) "
+"oder <link url=\"man:/scanimage\">scanimage(1)</link> mit der Option "
+"<icode>&#8209;L</icode> (für Netzwerkscanner) zu finden. Wenn der Scanner "
+"gefunden wurde, tragen Sie den Gerätenamen ein, der durch diese Befehle "
+"angezeigt wird."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -109,6 +129,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Für USB- oder Netzwerkscanner von HP, die <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link> verwenden, nutzen Sie den Befehl "
+"<command>hp&#8209;probe</command>, um das Gerät zu finden. Beispiel: "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> oder <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;net</icode>. Falls der Scanner durch HPLIP gefunden "
+"wurde, beachten Sie bitte, dass der dadurch angezeigte Gerätename <icode>hp:"
+"</icode> für SANE mit <icode>hpaio:</icode> ersetzt werden muss."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -118,6 +145,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Wenn diese Befehle Ihren Scanner nicht finden, könnte er nicht durch SANE "
+"unterstützt sein. Lesen Sie dazu die <link url=\"http://www.sane-project.org/"
+"sane-supported-devices.html\">Liste unterstützter Geräte</link> in der SANE-"
+"Dokumentation."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -244,47 +275,47 @@ msgstr "%1x%2 px, %3 bpp"
 msgid "Image Zoom"
 msgstr "Bildvergrößerung"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "Benutzerdefiniert:"
@@ -299,94 +330,94 @@ msgstr "(Unbekannt)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Diese Einstellung auf seinen Vorgabewert zurücksetzen, %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "PNM-Bilddateien (*.pnm, *.pbm, *.pgm, *.ppm)"
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "Kein Scanner ausgewählt"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Standard-Einstellung für den Programmstart"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr ""
 "Der Scanner<nl/><icode>%1</icode><nl/> erfordert eine Authentifizierung."
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Scanner-Authentifizierung"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "OK"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "Kein Gerät"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "Ungültiger Parameter"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "Das Gerät kann nicht geöffnet werden"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() fehlgeschlagen"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "Fehler beim Scannen"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "Leeres Bild"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "Nicht genügend Speicher"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "Erfordert das erneute Laden"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "Nicht aktiv"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "Nicht unterstützt"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Unbekannter Status: %1"
@@ -438,7 +469,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -452,19 +483,19 @@ msgstr ""
 "\n"
 "Wählen Sie aus, ob der Hintergrund des Vorschaubildes schwarz oder weiß ist."
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Automatische Hintergrunderkennung"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Weiß"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -478,7 +509,7 @@ msgstr "Unbekanntes Gerät „%1“"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE – Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
@@ -488,18 +519,17 @@ msgstr ""
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Bildformat erzwingen:"
+msgstr "TIFF-Bildformatbibliothek"
 
 #: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:159
 #, kde-format
@@ -622,48 +652,48 @@ msgstr ""
 "angegebene Bilddatei ein. Dies wird zum Testen des Speicherns von Bilder "
 "usw. verwendet."
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "Lesemodus:"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Standard (aus den Scan-Einstellungen)"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Schwarz-Weiß-Bitmap"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:415
 #, kde-format
 msgid "Grey scale"
 msgstr "Grauskala"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:416
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "Farbe"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:428
+#: scanparams.cpp:427
 #, kde-format
 msgid "Force image format:"
 msgstr "Bildformat erzwingen:"
 
-#: scanparams.cpp:481
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
-msgstr "Gamma-Tabelle bearbeiten ..."
+msgstr "Gamma-Tabelle bearbeiten …"
 
-#: scanparams.cpp:553
+#: scanparams.cpp:571
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -673,7 +703,7 @@ msgstr ""
 "<title>Es wurde kein Scanner ausgewählt</title><nl/><nl/>Wählen Sie ein "
 "Gerät zum Scannen aus."
 
-#: scanparams.cpp:573
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -688,32 +718,32 @@ msgid ""
 msgstr ""
 "<title>Es wurde kein Scanner gefunden oder der Zugriff darauf ist nicht "
 "möglich</title><nl/><nl/>Es gibt ein Problem bei Zugriff auf das Scan-Gerät "
-"mit der Bibliothek SANE (Scanner Access Now Easy). Möglicherweise ist Ihre "
-"SANE-Installation nicht vollständig oder nicht eingerichtet, um Ihren "
-"Scanner zu unterstützen.<nl/><nl/>Überprüfen Sie, ob SANE auf Ihrem System "
-"richtig installiert und eingerichtet ist und das der Gerätename des Scanners "
-"und dessen Einstellungen korrekt sind.<nl/><nl/>Auf der Webseite des SANE-"
+"mit der SANE-Bibliothek (Scanner Access Now Easy). Möglicherweise ist Ihre "
+"SANE-Installation fehlerhaft oder nicht eingerichtet, um Ihren Scanner zu "
+"unterstützen.<nl/><nl/>Überprüfen Sie, ob SANE auf Ihrem System richtig "
+"installiert und eingerichtet ist und ob der Gerätename des Scanners und "
+"dessen Einstellungen korrekt sind.<nl/><nl/>Auf der Webseite des SANE-"
 "Projekts <link url=\"http://www.sane-project.org\">www.sane-project.org</"
 "link> finden Sie weitere Informationen zur Installation und Einrichtung von "
 "SANE."
 
-#: scanparams.cpp:675
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "Scan mit 1-Bit-Farbtiefe kann nicht in Farbe ausgeführt werden"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "Scans mit 16-Bit-Farbtiefe werden nicht unterstützt"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr ""
 "Zum Testen oder für das virtuelle Scannen muss eine Datei eingegeben werden"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -723,7 +753,7 @@ msgstr ""
 "Die Testdatei oder virtuelle Datei <filename>%1</filename><nl/> wurde nicht "
 "gefunden oder ist nicht lesbar."
 
-#: scanparams.cpp:704
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -733,17 +763,17 @@ msgstr ""
 "SANE Debug kann nur PNM-Dateien lesen.<nl/>Diese Datei hat den Typ <icode>"
 "%1</icode>."
 
-#: scanparams.cpp:721
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Scannen in Bearbeitung"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:741
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Scannen in Bearbeitung<nl/><nl/>%1"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Es kann keine Vorschau im virtuellen Scanner-Modus erstellt werden"
@@ -771,6 +801,8 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Die Proxyeinstellungen des Systems verwenden, um auf Netzwerkscanner "
+"zuzugreifen"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -876,22 +908,22 @@ msgstr "Volle Größe"
 msgid "(No selection)"
 msgstr "(Keine Auswahl)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "Hochformat"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "Querformat"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "Einstellung der Ausrichtung der Standardgröße des Scan-Bereichs"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "Auswahl"

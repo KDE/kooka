@@ -70,11 +70,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 
     QButtonGroup *bg = new QButtonGroup(this);
     bg->setExclusive(true);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(bg, &QButtonGroup::idClicked, this, &ScanSizeSelector::slotPortraitLandscape);
-#else
-    connect(bg, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ScanSizeSelector::slotPortraitLandscape);
-#endif
 
     m_portraitRb = new QRadioButton(i18n("Portrait"), this);
     m_portraitRb->setEnabled(false);

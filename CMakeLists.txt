@@ -13,27 +13,12 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-# KDE CI sets this for Qt6 runners but not for Qt5.
-if (NOT DEFINED QT_MAJOR_VERSION)
-  set (QT_MAJOR_VERSION 5)
-endif ()
-set(Q ${QT_MAJOR_VERSION})
-
 project(kooka)
-set(VERSION "${Q}.90.0")
+set(VERSION "6.90.0")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
-if (Q EQUAL 6)
-  set(QT_MIN_VERSION "6.7.0")
-  set(KF_MIN_VERSION "6.1.0")
-else ()
-  if (Q EQUAL 5)
-    set(QT_MIN_VERSION "5.15.0")
-    set(KF_MIN_VERSION "5.104.0")
-  else ()
-    message(FATAL_ERROR "Expecting to build for either Qt5 or Qt6")
-  endif ()
-endif ()
+set(QT_MIN_VERSION "6.7.0")
+set(KF_MIN_VERSION "6.1.0")
 
 # ECM setup (Extra Cmake Modules)
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
@@ -58,7 +43,7 @@ option(INSTALL_BINARIES "Install the binaries and libraries, turn off for develo
 option(BUILD_TOOLS "Build the testing tools and null destination plugin" OFF)
 
 # Required Qt components to build this package
-find_package(Qt${Q} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
 # Rigourousness
 add_definitions("-DQT_USE_QSTRINGBUILDER")

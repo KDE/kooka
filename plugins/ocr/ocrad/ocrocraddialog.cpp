@@ -314,11 +314,7 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
             if (match.hasMatch())
             {
                 QString values = match.captured(1);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
                 result = values.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
-#else
-                result = values.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
-#endif
             } else {
                 qCWarning(OCR_LOG) << "cannot get values, no match in" << output;
             }

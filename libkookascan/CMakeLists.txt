@@ -15,7 +15,7 @@ project(libkookascan)
 
 ########### dependencies ###############
 
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config ConfigWidgets IconThemes KIO TextWidgets)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config ConfigWidgets IconThemes KIO TextWidgets)
 
 # libpaper (at least in Gentoo Linux) provides neither a
 # Find<package>.cmake nor a pkg-config file.
@@ -110,11 +110,11 @@ add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)
 target_link_libraries(kookascan
   dialogutil
-  KF${Q}::I18n
-  KF${Q}::ConfigCore KF${Q}::ConfigGui KF${Q}::ConfigWidgets
-  KF${Q}::KIOCore KF${Q}::KIOWidgets
-  KF${Q}::IconThemes
-  KF${Q}::TextWidgets
+  KF6::I18n
+  KF6::ConfigCore KF6::ConfigGui KF6::ConfigWidgets
+  KF6::KIOCore KF6::KIOWidgets
+  KF6::IconThemes
+  KF6::TextWidgets
 )
 
 if (HAVE_SANE)
@@ -127,7 +127,7 @@ if (HAVE_TIFF)
   target_link_libraries(kookascan ${TIFF_LIBRARIES})
 endif (HAVE_TIFF)
 
-set_target_properties(kookascan PROPERTIES VERSION ${VERSION} SOVERSION ${Q})
+set_target_properties(kookascan PROPERTIES VERSION ${VERSION} SOVERSION 6)
 
 ########### installation ###############
 

@@ -25,6 +25,6 @@ set(destinationgallery_SRCS
 
 kcoreaddons_add_plugin(destinationgallery SOURCES ${destinationgallery_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-target_link_libraries(destinationgallery Qt${Q}::Core Qt${Q}::Gui)
-target_link_libraries(destinationgallery KF${Q}::I18n KF${Q}::WidgetsAddons)
+target_link_libraries(destinationgallery Qt6::Core Qt6::Gui)
+target_link_libraries(destinationgallery KF6::I18n KF6::WidgetsAddons)
 target_link_libraries(destinationgallery kookadestination kookascan)

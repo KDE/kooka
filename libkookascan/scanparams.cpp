@@ -296,11 +296,7 @@ QWidget *ScanParams::createScannerParams()
         QButtonGroup *vbgGroup = new QButtonGroup(vbg);
         vbgGroup->addButton(rb1, 0);
         vbgGroup->addButton(rb2, 1);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         connect(vbgGroup, &QButtonGroup::idClicked, this, &ScanParams::slotVirtScanModeSelect);
-#else
-        connect(vbgGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ScanParams::slotVirtScanModeSelect);
-#endif
 
         l = new QLabel(i18n("Reading mode:"), frame);
         frame->addRow(l, vbg, nullptr, Qt::AlignTop);

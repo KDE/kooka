@@ -26,8 +26,8 @@ set(ocrocrad_SRCS
 
 kcoreaddons_add_plugin(ocrocrad SOURCES ${ocrocrad_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-target_link_libraries(ocrocrad Qt${Q}::Core Qt${Q}::Gui)
-target_link_libraries(ocrocrad KF${Q}::I18n KF${Q}::WidgetsAddons)
+target_link_libraries(ocrocrad Qt6::Core Qt6::Gui)
+target_link_libraries(ocrocrad KF6::I18n KF6::WidgetsAddons)
 target_link_libraries(ocrocrad kookaocr kookascan)
 
 install(FILES ocrad.png DESTINATION ${PICS_INSTALL_DIR})

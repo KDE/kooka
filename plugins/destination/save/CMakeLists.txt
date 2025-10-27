@@ -25,5 +25,5 @@ set(destinationsave_SRCS
 
 kcoreaddons_add_plugin(destinationsave SOURCES ${destinationsave_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-target_link_libraries(destinationsave Qt${Q}::Gui)
+target_link_libraries(destinationsave Qt6::Gui)
 target_link_libraries(destinationsave kookadestination kookascan)

@@ -2,22 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 Dependencies:
-- 'on': ['Linux/Qt5', 'FreeBSD/Qt5']
-  'require':
-    'frameworks/extra-cmake-modules': '@stable'
-    'frameworks/ki18n': '@stable'
-    'frameworks/kconfig': '@stable'
-    'frameworks/ktextwidgets': '@stable'
-    'frameworks/kio': '@stable'
-    'frameworks/kiconthemes': '@stable'
-    'frameworks/kdoctools': '@stable'
-    'frameworks/kwidgetsaddons': '@stable'
-    'frameworks/kservice': '@stable'
-    'frameworks/kxmlgui': '@stable'
-    'frameworks/purpose': '@stable'
-    'frameworks/sonnet': '@stable'
-
-- 'on': ['Linux/Qt6', 'FreeBSD/Qt6']
+- 'on': ['Linux', 'FreeBSD']
   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/ki18n': '@latest-kf6'
@@ -33,4 +18,4 @@ Dependencies:
     'frameworks/sonnet': '@latest-kf6'
 
 Options:
-  require-passing-tests-on: [ 'Linux/Qt5', 'FreeBSD/Qt5', 'Linux/Qt6', 'FreeBSD/Qt6' ]
+  require-passing-tests-on: [ 'Linux', 'FreeBSD' ]

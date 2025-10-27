@@ -82,11 +82,7 @@ FileTreeView::~FileTreeView()
 }
 
 // This is used when dragging and dropping out of the view to somewhere else.
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> &items) const
-#else
-QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
-#endif
 {
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
@@ -128,11 +124,7 @@ void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
 
     QList<QTreeWidgetItem *> items = selectedItems();
     m_currentBeforeDropItem = (items.count() > 0 ? items.first() : nullptr);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     setDropItem(itemAt(ev->position().toPoint()));
-#else
-    setDropItem(itemAt(ev->pos()));
-#endif
 }
 
 void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
@@ -142,11 +134,7 @@ void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
         return;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QTreeWidgetItem *item = itemAt(ev->position().toPoint());
-#else
-    QTreeWidgetItem *item = itemAt(ev->pos());
-#endif
     if (item == nullptr || item->isDisabled()) {   // over a valid item?
         // no, ignore drops on it
         setDropItem(nullptr);              // clear drop item

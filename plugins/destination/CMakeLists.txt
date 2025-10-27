@@ -18,10 +18,10 @@
 #									#
 #########################################################################
 
-find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsAddons)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsAddons)
 
-find_package(KF${Q}Purpose ${KF_MIN_VERSION})
-set_package_properties(KF${Q}Purpose PROPERTIES
+find_package(KF6Purpose ${KF_MIN_VERSION})
+set_package_properties(KF6Purpose PROPERTIES
   URL "https://invent.kde.org/frameworks/purpose"
   DESCRIPTION "A framework for services and actions integration"
   PURPOSE "Required for the Share Scan destination plugin"
@@ -48,9 +48,9 @@ set(kookadestination_SRCS
 
 add_definitions(-DLIBEXEC_DIR=\"${CMAKE_INSTALL_FULL_LIBEXECDIR}\")
 add_library(kookadestination SHARED ${kookadestination_SRCS})
-set_target_properties(kookadestination PROPERTIES VERSION ${VERSION} SOVERSION ${Q})
-target_link_libraries(kookadestination Qt${Q}::Core Qt${Q}::Widgets)
-target_link_libraries(kookadestination KF${Q}::I18n KF${Q}::WidgetsAddons)
+set_target_properties(kookadestination PROPERTIES VERSION ${VERSION} SOVERSION 6)
+target_link_libraries(kookadestination Qt6::Core Qt6::Widgets)
+target_link_libraries(kookadestination KF6::I18n KF6::WidgetsAddons)
 target_link_libraries(kookadestination kookascan kookacore)
 
 if (INSTALL_BINARIES)
@@ -70,9 +70,9 @@ add_subdirectory(print)
 add_subdirectory(save)
 add_subdirectory(multipage)
 
-if (KF${Q}Purpose_FOUND)
+if (KF6Purpose_FOUND)
   add_subdirectory(share)
-endif (KF${Q}Purpose_FOUND)
+endif (KF6Purpose_FOUND)
 
 if (BUILD_TOOLS)
   add_subdirectory(null)

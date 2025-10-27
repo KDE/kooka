@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-01 00:41+0000\n"
+"POT-Creation-Date: 2025-06-29 00:41+0000\n"
 "PO-Revision-Date: 2025-04-07 15:45+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -267,47 +267,47 @@ msgstr "%1x%2 像素，%3 bpp"
 msgid "Image Zoom"
 msgstr "圖片縮放"
 
-#: imgscaledialog.cpp:72
+#: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
 msgstr "25 %"
 
-#: imgscaledialog.cpp:79
+#: imgscaledialog.cpp:75
 #, kde-format
 msgid "50 %"
 msgstr "50 %"
 
-#: imgscaledialog.cpp:86
+#: imgscaledialog.cpp:82
 #, kde-format
 msgid "75 %"
 msgstr "75 %"
 
-#: imgscaledialog.cpp:93
+#: imgscaledialog.cpp:89
 #, kde-format
 msgid "&100 %"
 msgstr "&100 %"
 
-#: imgscaledialog.cpp:105
+#: imgscaledialog.cpp:101
 #, kde-format
 msgid "150 &%"
 msgstr "150 &%"
 
-#: imgscaledialog.cpp:112
+#: imgscaledialog.cpp:108
 #, kde-format
 msgid "200 %"
 msgstr "200 %"
 
-#: imgscaledialog.cpp:119
+#: imgscaledialog.cpp:115
 #, kde-format
 msgid "300 %"
 msgstr "300 %"
 
-#: imgscaledialog.cpp:126
+#: imgscaledialog.cpp:122
 #, kde-format
 msgid "400 %"
 msgstr "400 %"
 
-#: imgscaledialog.cpp:141
+#: imgscaledialog.cpp:137
 #, kde-format
 msgid "Custom:"
 msgstr "自訂："
@@ -322,93 +322,93 @@ msgstr "(未知)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "將此設定值重設為其標準值 %1"
 
-#: kscancontrols.cpp:426
+#: kscancontrols.cpp:422
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr "PNM 圖片檔 (*.pnm *.pbm *.pgm *.ppm)"
 
-#: kscandevice.cpp:279
+#: kscandevice.cpp:287
 #, kde-format
 msgid "No scanner selected"
 msgstr "未偵測到掃描器"
 
-#: kscandevice.cpp:1399
+#: kscandevice.cpp:1421
 #, kde-format
 msgid "Default startup configuration"
 msgstr "預設啟動配置"
 
-#: kscandevice.cpp:1499
+#: kscandevice.cpp:1521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "掃描器<nl/><icode>%1</icode><nl/>需要認證。"
 
-#: kscandevice.cpp:1500
+#: kscandevice.cpp:1522
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "掃描器認證"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1566
 #, kde-format
 msgid "OK"
 msgstr "確定"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1567
 #, kde-format
 msgid "No device"
 msgstr "無裝置"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1568
 #, kde-format
 msgid "Bad parameter"
 msgstr "錯誤參數"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1569
 #, kde-format
 msgid "Cannot open device"
 msgstr "無法開啟裝置"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1570
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() 失敗"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1571
 #, kde-format
 msgid "Error while scanning"
 msgstr "掃描時發生錯誤"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1572
 #, kde-format
 msgid "Empty picture"
 msgstr "空白圖片"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1573
 #, kde-format
 msgid "Out of memory"
 msgstr "記憶體不足"
 
-#: kscandevice.cpp:1552
+#: kscandevice.cpp:1574
 #, kde-format
 msgid "Needs reload"
 msgstr "需要重新載入"
 
-#: kscandevice.cpp:1553
+#: kscandevice.cpp:1575
 #, kde-format
 msgid "Cancelled"
 msgstr "已取消"
 
-#: kscandevice.cpp:1554
+#: kscandevice.cpp:1576
 #, kde-format
 msgid "Not active"
 msgstr "非作用中"
 
-#: kscandevice.cpp:1555
+#: kscandevice.cpp:1577
 #, kde-format
 msgid "Not supported"
 msgstr "未支援"
 
-#: kscandevice.cpp:1556
+#: kscandevice.cpp:1578
 #, kde-format
 msgid "Unknown status %1"
 msgstr "未知的狀態 %1"
@@ -460,7 +460,7 @@ msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2mm"
 
-#: previewer.cpp:340
+#: previewer.cpp:336
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -473,19 +473,19 @@ msgstr ""
 "\n"
 "請選擇預覽圖片的背景是黑色還是白色的。"
 
-#: previewer.cpp:341
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "自動偵測背景"
 
-#: previewer.cpp:342
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "白色"
 
-#: previewer.cpp:343
+#: previewer.cpp:339
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
@@ -637,47 +637,47 @@ msgid ""
 msgstr ""
 "不進行任何掃描或處理，只讀取指定的圖片檔。這個功能是用來測試圖片儲存等等的。"
 
-#: scanparams.cpp:296
+#: scanparams.cpp:292
 #, kde-format
 msgid "Reading mode:"
 msgstr "讀取模式："
 
-#: scanparams.cpp:414
+#: scanparams.cpp:413
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "預設（來自掃描設定）"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:414
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "黑白點陣圖"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:415
 #, kde-format
 msgid "Grey scale"
 msgstr "灰階"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:416
 #, kde-format
 msgid "Low colour"
 msgstr "低彩"
 
-#: scanparams.cpp:418
+#: scanparams.cpp:417
 #, kde-format
 msgid "High colour"
 msgstr "高彩"
 
-#: scanparams.cpp:428
+#: scanparams.cpp:427
 #, kde-format
 msgid "Force image format:"
 msgstr "強制使用圖片格式："
 
-#: scanparams.cpp:481
+#: scanparams.cpp:480
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "編輯 Gamma 表..."
 
-#: scanparams.cpp:553
+#: scanparams.cpp:571
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -685,7 +685,7 @@ msgid ""
 "perform scanning."
 msgstr "<title>未選取掃描器</title><nl/><nl/>要進行掃描請先選取掃描器裝置。"
 
-#: scanparams.cpp:573
+#: scanparams.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -704,22 +704,22 @@ msgstr ""
 "上並已正確設定。<nl/><nl/>請造訪 SANE 專案網站 (<link url=\"http://www.sane-"
 "project.org\">www.sane-project.org</link>) 來檢視 SANE 安裝與設定的更多資訊。"
 
-#: scanparams.cpp:675
+#: scanparams.cpp:693
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "位元深度為 1 的掃描無法有色彩"
 
-#: scanparams.cpp:678
+#: scanparams.cpp:696
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "不支援 16 位元深度的掃描"
 
-#: scanparams.cpp:688
+#: scanparams.cpp:706
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "需要輸入檔案才能進行測試或虛擬掃描"
 
-#: scanparams.cpp:694
+#: scanparams.cpp:712
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -727,7 +727,7 @@ msgid ""
 "not readable."
 msgstr "測試檔案或虛擬檔案 <filename>%1</filename><nl/>找不到或無法讀取。"
 
-#: scanparams.cpp:704
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -735,17 +735,17 @@ msgid ""
 "%1</icode>."
 msgstr "SANE 除錯只能讀取 PNM 檔案。<nl/>指定的檔案類型是 <icode>%1</icode>。"
 
-#: scanparams.cpp:721
+#: scanparams.cpp:740
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "掃描進行中"
 
-#: scanparams.cpp:722
+#: scanparams.cpp:741
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "掃描進行中<nl/><nl/>%1"
 
-#: scanparams.cpp:742
+#: scanparams.cpp:761
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "無法在虛擬掃描器模式中進行預覽"
@@ -869,22 +869,22 @@ msgstr "原始大小"
 msgid "(No selection)"
 msgstr "(無選取區域)"
 
-#: scansizeselector.cpp:143
+#: scansizeselector.cpp:139
 #, kde-format
 msgid "Portrait"
 msgstr "縱向"
 
-#: scansizeselector.cpp:148
+#: scansizeselector.cpp:144
 #, kde-format
 msgid "Landscape"
 msgstr "橫向"
 
-#: scansizeselector.cpp:159
+#: scansizeselector.cpp:155
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "選擇掃描區域預先設定大小的方向"
 
-#: scansizeselector.cpp:262
+#: scansizeselector.cpp:258
 #, kde-format
 msgid "Selection"
 msgstr "選取區"
