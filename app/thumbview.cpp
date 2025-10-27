@@ -79,7 +79,6 @@ ThumbView::ThumbView(QWidget *parent)
     qCDebug(KOOKA_LOG) << "Maximum preview file size is" << KookaSettings::previewMaximumSize();
 
     setUrl(GalleryRoot::root(), true);			// initial location
-    setPreviewWidget(nullptr);				// no preview at side
     setMode(KFile::File);				// implies single selection mode
     setInlinePreviewShown(true);			// show file previews
     setViewMode(KFile::Simple);				// simple icon view
