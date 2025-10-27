@@ -209,27 +209,55 @@ public:
      *
      * @return Save location
      **/
-    QUrl saveURL() const
-    {
-        return (mSaveUrl);
-    }
+    QUrl saveURL() const				{ return (mSaveUrl); }
 
     /**
      * Get the location where the previous image was saved to.
      *
      * @return Save location
      **/
-    QUrl lastURL() const
-    {
-        return (mLastUrl);
-    }
+    QUrl lastURL() const				{ return (mLastUrl); }
+
+    /**
+     * Set whether the saver should ask for a file name.
+     *
+     * @param ask @c true if a file name should be requested
+     *
+     * @note The default is taken from the application's "Ask for file
+     * name when saving" preference option.
+     **/
+    void setSaveAskFilename(bool on)			{ m_saveAskFilename = on; }
+
+    /**
+     * Set whether the saver should ask for a file format.
+     *
+     * @param ask @c true if a format should be requested
+     *
+     * @note The default is taken from the application's "Always use
+     * the Save Assistant" preference option.
+     **/
+    void setSaveAskFormat(bool on)			{ m_saveAskFormat = on; }
+
+    /**
+     * Get the file format that was used to save the image.
+     *
+     * @return the image format
+     **/
+    ImageFormat saveFormat() const			{ return (mSaveFormat); }
+
+    /**
+     * Set the file format that will be used to save the image.
+     *
+     * @param fmt The image format
+     **/
+    void setSaveFormat(const ImageFormat &fmt)		{ mSaveFormat = fmt; }
 
 private:
     QString createFilename();
     ImgSaver::ImageSaveStatus getFilenameAndFormat(ScanImage::ImageType type);
 
     QUrl m_saveDirectory;				// dir where the image should be saved
-    QByteArray mLastFormat;
+    QByteArray mRequestedFormat;
     QUrl mLastUrl;
 
     bool m_saveAskFormat;

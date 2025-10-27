@@ -45,15 +45,25 @@ public:
     explicit DestinationApplication(QObject *pnt, const QVariantList &args);
     ~DestinationApplication() override = default;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
 
     KLocalizedString scanDestinationString() override;
     void createGUI(ScanParamsPage *page) override;
     void saveSettings() const override;
+    void batchStart(const MultiScanOptions *opts) override;
+    void batchEnd(bool ok) override;
+    MultiScanOptions::Capabilities capabilities() const override;
+
+private:
+    void launchApplication();
 
 private:
     QComboBox *mAppsCombo;
     QComboBox *mFormatCombo;
+
+    QString mAppService;
+
+    QList<QUrl> mBatchFiles;
 };
 
 #endif							// DESTINATIONAPPLICATION_H

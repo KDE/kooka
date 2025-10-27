@@ -64,7 +64,7 @@ void ImageTransform::run()
     case ImageTransform::MirrorBoth:
     case ImageTransform::Rotate180:
         emit statusMessage(i18n("Rotate image 180 degrees"));
-        resultImg = mImage.mirrored(true, true);
+        resultImg = mImage.flipped(Qt::Horizontal|Qt::Vertical);
         break;
 
     case ImageTransform::Rotate270:
@@ -75,12 +75,12 @@ void ImageTransform::run()
 
     case ImageTransform::MirrorHorizontal:
         emit statusMessage(i18n("Mirror image horizontally"));
-        resultImg = mImage.mirrored(true, false);
+        resultImg = mImage.flipped(Qt::Horizontal);
         break;
 
     case ImageTransform::MirrorVertical:
         emit statusMessage(i18n("Mirror image vertically"));
-        resultImg = mImage.mirrored(false, true);
+        resultImg = mImage.flipped(Qt::Vertical);
         break;
 
     default:

@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2008-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *  Copyright (C) 2008-2025 Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -65,7 +65,10 @@ private:
     void newScanSize(int width, int height);
     void implementPortraitLandscape(const PaperSize *sp);
     void implementSizeSetting(const PaperSize *sp);
+    const PaperSize *findPaperSize(const QString &sizename);
 
+private:
+    const PaperSize *mSizes;
     int m_bedWidth, m_bedHeight;
 
     QRect m_customSize;
@@ -76,4 +79,4 @@ private:
     QRadioButton *m_landscapeRb;
 };
 
-#endif                          // SCANSIZESELECTOR_H
+#endif							// SCANSIZESELECTOR_H

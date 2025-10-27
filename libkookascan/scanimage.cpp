@@ -193,7 +193,7 @@ QString ScanImage::loadTiffDir(const QString &filename, int subno)
     if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0)) {
 							// Successfully read, now convert
         tmpImg = tmpImg.rgbSwapped();			// swap red and blue
-        tmpImg = tmpImg.mirrored();			// reverse (it's upside down)
+        tmpImg = tmpImg.flipped();			// reverse (it's upside down)
     } else {
         TIFFClose(tif);
         return (i18n("Failed to read TIFF image"));
@@ -293,4 +293,42 @@ ScanImage::ImageType ScanImage::imageType() const
     if (depth()>8) return (ScanImage::HighColour);		// high colour
     if (allGray()) return (ScanImage::Greyscale);		// grey scale
     return (ScanImage::LowColour);				// low (indexed) colour
+}
+
+
+// TODO: similar operation to app/imagetransform.cpp
+void ScanImage::transform(MultiScanOptions::Rotation rotateBy)
+{
+    QImage tmpImg;
+    QTransform m;
+
+    if (m_subImages>0)
+    {
+        qCWarning(LIBKOOKASCAN_LOG) << "Cannot transform with" << m_subImages << "subimages";
+        return;
+    }
+
+    switch (rotateBy)
+    {
+case MultiScanOptions::RotateNone:
+        return;						// nothing to do
+
+case MultiScanOptions::Rotate90:
+        m.rotate(+90);
+        // TODO: maybe we want Qt::SmoothTransformation here, but theoretically a
+        // rotation by multiples of 90 degrees should preserve all pixels unchanged.
+        tmpImg = transformed(m);
+        break;
+
+case MultiScanOptions::Rotate180:
+        tmpImg = flipped(Qt::Horizontal|Qt::Vertical);
+        break;
+
+case MultiScanOptions::Rotate270:
+        m.rotate(-90);
+        tmpImg = transformed(m);
+        break;
+    }
+
+    QImage::operator=(tmpImg);				// copy as our image
 }

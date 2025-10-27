@@ -99,8 +99,6 @@ set(kooka_SRCS
   galleryhistory.cpp
   kookagallery.cpp
   thumbview.cpp
-  kookaprint.cpp
-  imgprintdialog.cpp
   scanpresetsdialog.cpp
   newscanpresetdialog.cpp
   ocrresedit.cpp

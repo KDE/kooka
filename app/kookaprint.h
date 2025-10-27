@@ -37,7 +37,8 @@
 #include "kookacore_export.h"
 
 class QPainter;
-// For rigorousness, the image to be printed should be passed to us and
+
+// For rigorousness, any image to be printed should be passed to us and
 // stored as a ScanImage::Ptr (a QSharedPointer to a ScanImage).  Unfortunately,
 // having such a pointer as a member would need to include "scanimage.h", which
 // in turn means that the KCFG settings (which needs to include "kookaprint.h"
@@ -45,6 +46,8 @@ class QPainter;
 //
 // Since KookaPrint only uses the image for printing and does not need to copy
 // or modify it, it should be safe to store a pointer to the image here.
+
+
 class QImage;
 
 
@@ -69,9 +72,17 @@ public:
     };
 
     void recalculatePrintParameters();
-    void printImage();
 
-    void setImage(const QImage *img)			{ m_image = img; }
+    // The image passed to setBaseImage() is only used to calculate the print
+    // and scaling parameters.  Only the image or series of images passed to
+    // printImage() are actually printed;  it is assumed that they are the
+    // same size and resolution as the base image.
+    void setBaseImage(const QImage *img);
+
+    void startPrint();
+    void printImage(const QImage *img);
+    void endPrint();
+
     void setCopyMode(bool on);
     bool isCopyMode() const				{ return (m_copyMode); }
 
@@ -100,13 +111,21 @@ public:
     QSize imagePrintArea() const			{ return (QSize(qRound(mPrintWidthMm), qRound(mPrintHeightMm))); }
     QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
+    void setPdfMode(const QString &outputFile);
+    int totalPages() const				{ return (m_totalPages); }
+
 protected:
     void drawMarkerAroundPoint(QPainter *painter, const QPoint &p);
     void drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Corner dir);
     void drawCornerMarkers(QPainter *painter, const QRect &targetRect, int row, int col, int maxRows, int maxCols);
 
 private:
-    const QImage *m_image;
+    QSize m_baseSize;
+    int m_baseResX;
+    int m_baseResY;
+
+    QPainter *m_painter;
+    int m_totalPages;
 
     KookaPrint::ScaleOption m_scaleOption;
     KookaPrint::CutMarksOption m_cutsOption;
@@ -132,6 +151,7 @@ private:
     int mPrintResolution;				// printer resolution
 
     bool m_copyMode;
+    bool m_singlePageMode;
 };
 
 #endif							// KOOKAPRINT_H

@@ -68,7 +68,12 @@ add_subdirectory(application)
 add_subdirectory(clipboard)
 add_subdirectory(print)
 add_subdirectory(save)
+add_subdirectory(multipage)
 
 if (KF6Purpose_FOUND)
   add_subdirectory(share)
 endif (KF6Purpose_FOUND)
+
+if (BUILD_TOOLS)
+  add_subdirectory(null)
+endif (BUILD_TOOLS)

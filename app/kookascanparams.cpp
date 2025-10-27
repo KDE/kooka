@@ -45,6 +45,60 @@ KookaScanParams::KookaScanParams(QWidget *parent)
 {
     mNoScannerMessage = nullptr;
     mDestinationPlugin = nullptr;
+
+    connect(this, &ScanParams::deviceConnected, this, &KookaScanParams::slotDeviceConnected);
+    connect(this, &ScanParams::scanBatchStart, this, &KookaScanParams::slotScanBatchStart);
+    connect(this, &ScanParams::scanBatchEnd, this, &KookaScanParams::slotScanBatchEnd);
+}
+
+
+void KookaScanParams::slotDeviceConnected(KScanDevice *dev)
+{
+    if (dev==nullptr) return;				// no device to connect
+							// connect signals for LED indicator
+    connect(dev, &KScanDevice::sigScanStart,		this, [this]()	{ setLED(Qt::red); });
+    connect(dev, &KScanDevice::sigAcquireStart,		this, [this]()	{ setLED(Qt::green); });
+    connect(dev, &KScanDevice::sigScanFinished,		this, [this]()	{ setLED(Qt::red, KLed::Off); });
+    connect(dev, &KScanDevice::sigScanPauseStart,	this, [this]()	{ setLED(Qt::yellow); });
+    connect(dev, &KScanDevice::sigScanPauseEnd,		this, [this]()	{ setLED(Qt::green, KLed::Off); });
+
+    // Initially synchronise the multiple scan "Automatically generate
+    // file names" option with the application's "Ask for file name
+    // when saving" setting.
+    //
+    // Because this slot is called via a signal at the very beginning
+    // of ScanParams::connectDevice(), this setting will only take
+    // effect if there are no saved startup options for the scanner.
+    MultiScanOptions *opts = dev->multiScanOptions();
+    if (opts!=nullptr) opts->setFlags(MultiScanOptions::AutoGenerate, !KookaSettings::saverAskForFilename());
+
+    // Pass the current destination's capabilities to the scanner GUI.
+    if (mDestinationPlugin!=nullptr) setDestinationCapabilities(mDestinationPlugin->capabilities());
+}
+
+
+void KookaScanParams::setLED(const QColor &col, KLed::State state)
+{
+    KLed *led = operationLED();				// find the LED indicator
+    if (led==nullptr) return;				// no LED indicator present
+
+    led->setColor(col);					// requested colour
+    led->setState(state);				// requested state
+    qApp->processEvents();				// let the change show
+}
+
+
+void KookaScanParams::slotScanBatchStart(const MultiScanOptions *opts)
+{
+    setEnabled(false);
+    if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart(opts);
+}
+
+
+void KookaScanParams::slotScanBatchEnd(bool ok)
+{
+    if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchEnd(ok);
+    setEnabled(true);
 }
 
 
@@ -163,6 +217,9 @@ void KookaScanParams::slotDestinationSelected(int idx)
 
     mDestinationPlugin->setParentWidget(this);		// give it a widget for reference
     mDestinationPlugin->createGUI(mParamsPage);		// create the plugin's GUI
+
+    // Pass the new destination's capabilities to the scanner GUI.
+    if (mDestinationPlugin!=nullptr) setDestinationCapabilities(mDestinationPlugin->capabilities());
 }
 
 
@@ -170,7 +227,7 @@ void KookaScanParams::saveDestinationSettings()
 {
     qCDebug(KOOKA_LOG);
 
-    if (!hasScanDevice()) return;			// no scanner configured
+    if (scanDevice()==nullptr) return;			// no scanner configured
 
     AbstractDestination *currentPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->currentPlugin(PluginManager::DestinationPlugin));
     if (currentPlugin==nullptr) return;			// nothing to save

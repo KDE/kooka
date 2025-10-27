@@ -37,6 +37,7 @@
 #include "abstractplugin.h"
 #include "scanimage.h"
 #include "imageformat.h"
+#include "multiscanoptions.h"
 
 
 class QComboBox;
@@ -84,8 +85,10 @@ public:
      * save or send the image as required.
      *
      * @param img The image that has been scanned,
+     * @return @c true if the image was accepted, or @c false if it
+     * could not be accepted or the user cancelled.
      **/
-    virtual void imageScanned(ScanImage::Ptr img) = 0;
+    virtual bool imageScanned(ScanImage::Ptr img) = 0;
 
     /**
      * Get a description string for the scan destination.
@@ -136,6 +139,47 @@ public:
      **/
     virtual void saveSettings() const				{ }
 
+    /**
+     * Indicates the start of a batch scan.  Destinations that can batch
+     * multiple scans together may use this to start accumulating them.
+     *
+     * Destinations that override this must call the base implementation,
+     * which notes the multiple scan options for the batch.
+     *
+     * @param opts The multiple scan options to be used
+     *
+     * @see @c multiScanOptions()
+     **/
+    virtual void batchStart(const MultiScanOptions *opts)	{ mMultiOptions = opts; }
+
+    /**
+     * Indicates the end of a batch scan.
+     *
+     * @param ok @c true if the batch scan completed successfully
+     *
+     * The base class implementation does nothing.
+     **/
+    virtual void batchEnd(bool ok)				{ }
+
+    /**
+     * Specifies the capabilities that this destination provides.
+     *
+     * @return the destination capabilities
+     * @see @c MultiScanOptions::Capabilities
+     *
+     * The base class implementation returns a null value (indicating
+     * no special capabilities).
+     *
+     * As a general rule, if a destination implements batching (therefore
+     * including AcceptBatch in its capabilities) but processes each scan
+     * as it arrives (therefore does not implement @c endBatch() or does
+     * not process the accumulated scanned files there), then these
+     * capabilities should also include CannotCancel.  This capability
+     * does not affect scan or batch processing, but keeps the GUI consistent
+     * with what is possible.
+     **/
+    virtual MultiScanOptions::Capabilities capabilities() const	{ return (MultiScanOptions::Capabilities()); }
+
 protected:
     /**
      * Constructor.
@@ -167,6 +211,14 @@ protected:
     ImageFormat getSaveFormat(const QString &mimeName, ScanImage::Ptr img);
 
     /**
+     * Get the multiple scan options for the current batch.
+     *
+     * @return the scan options
+     * @see @c batchStart()
+     **/
+    const MultiScanOptions *multiScanOptions() const		{ return (mMultiOptions); }
+
+    /**
      * Save a temporary image for sending to a destination.
      *
      * @param fmt The image format to save in.
@@ -189,7 +241,7 @@ protected:
      * @note The relevant MIME type is stored in the @c data(Qt::UserRole)
      * of the combo box items, with a null string for "Other".
      **/
-    QComboBox *createFormatCombo(const QStringList &mimeTypes, const QString &configuredType);
+    QComboBox *createFormatCombo(const QStringList &mimeTypes, const QString &configuredType, bool includeOther = true);
 
     /**
      * Delete a file in the background, after a time delay.
@@ -198,9 +250,17 @@ protected:
      **/
     void delayedDelete(const QUrl &url);
 
+    /**
+     * Delete files in the background, after a time delay.
+     *
+     * @param urls The files to delete.
+     **/
+    void delayedDelete(const QList<QUrl> &urls);
+
 private:
     ScanGallery *mGallery;
     ImageFormat mLastUsedFormat;
+    const MultiScanOptions * mMultiOptions;
 };
 
 #endif							// ABSTRACTDESTINATION_H

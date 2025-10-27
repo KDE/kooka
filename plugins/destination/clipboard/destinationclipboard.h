@@ -42,9 +42,10 @@ public:
     explicit DestinationClipboard(QObject *pnt, const QVariantList &args);
     ~DestinationClipboard() override = default;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
 
     KLocalizedString scanDestinationString() override;
+    MultiScanOptions::Capabilities capabilities() const override;
 };
 
 #endif							// DESTINATIONCLIPBOARD_H

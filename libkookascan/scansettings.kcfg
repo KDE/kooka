@@ -5,6 +5,14 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="scannerrc"></kcfgfile>
 
+  <include>multiscanoptions.h</include>
+
+  <group name="Config">
+    <entry name="ConfigVersion" key="Version" type="Int">
+      <default>0</default>
+    </entry>
+  </group>
+
   <group name="Startup">
 
     <!-- Inversion between key/value and function/text -->
@@ -30,6 +38,10 @@
       <default>true</default>
     </entry>
 
+    <entry name="ShowMultiScanWarning" type="Bool">
+      <default>true</default>
+    </entry>
+
   </group>
 
   <group name="User Specified Scanners">
@@ -44,7 +56,7 @@
   </group>
 
   <!-- Only used as a template -->
-  <group name="Save Set">
+  <group name="Parameters SCANNERNAME">
     <entry name="SaveSetDesc" key="SetDesc" type="String">
     </entry>
     <entry name="SaveSetScanner" key="ScannerName" type="String">
@@ -52,7 +64,7 @@
   </group>
 
   <!-- Only used as a template, default/limit values and GUI strings -->
-  <group name="Scanner Name">
+  <group name="Options SCANNERNAME">
     <entry name="PreviewAutoselOn" key="doAutoselection" type="Bool">
       <default>false</default>
     </entry>
@@ -91,6 +103,36 @@
       </choices>
       <default>ScanSettings::BackgroundUnknown</default>
     </entry>
+
+    <entry name="MultiScan" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiRotationOdd" type="Int">
+      <default>MultiScanOptions::RotateNone</default>
+    </entry>
+    <entry name="multiRotationEven" type="Int">
+      <default>MultiScanOptions::RotateNone</default>
+    </entry>
+    <entry name="multiManualWait" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiDelayWait" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiFirstWait" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiBatchMultiple" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="multiAutoGenerate" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiScanDelay" type="Int">
+      <default>5</default>
+      <min>1</min>
+    </entry>
+
   </group>
 
   <group name="MainWindow">

@@ -52,15 +52,22 @@ public:
     explicit DestinationShare(QObject *pnt, const QVariantList &args);
     ~DestinationShare() override = default;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
     void createGUI(ScanParamsPage *page) override;
 
     KLocalizedString scanDestinationString() override;
     void saveSettings() const override;
+    MultiScanOptions::Capabilities capabilities() const override;
+
+    void batchStart(const MultiScanOptions *opts) override;
+    void batchEnd(bool ok) override;
 
 private slots:
     void slotUpdateShareCombo();
     void slotShareFinished(const QJsonObject &output, int error, const QString &errorMessage);
+
+private:
+    void launchShare();
 
 private:
     Purpose::AlternativesModel *mModel;
@@ -69,7 +76,10 @@ private:
     QComboBox *mShareCombo;
     QComboBox *mFormatCombo;
 
-    QUrl mSaveUrl;
+    QString mShareService;
+    QString mMimeName;
+
+    QList<QUrl> mSaveUrls;
 };
 
 #endif							// DESTINATIONSHARE_H

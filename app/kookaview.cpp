@@ -41,14 +41,11 @@
 #include <qicon.h>
 #include <qaction.h>
 #include <qmenu.h>
-#include <qprintdialog.h>
-#include <qprinter.h>
 #include <qfiledialog.h>
 
 #include <kapplicationtrader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kled.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kfileitem.h>
@@ -239,7 +236,6 @@ KookaView::KookaView(KMainWindow *parent)
     connect(mScanDevice, &KScanDevice::sigNewImage, this, &KookaView::slotNewImageScanned);
     connect(mScanDevice, &KScanDevice::sigNewPreview, this, &KookaView::slotNewPreview);
     connect(mScanDevice, &KScanDevice::sigScanStart, this, &KookaView::slotScanStart);
-    connect(mScanDevice, &KScanDevice::sigAcquireStart, this, &KookaView::slotAcquireStart);
     connect(mScanDevice, &KScanDevice::sigScanFinished, this, &KookaView::slotScanFinished);
 
     /** Scan Preview **/
@@ -667,32 +663,13 @@ void KookaView::print()
 
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
-    printer.setImage(img.data());
 
-    QPrintDialog d(&printer, this);
-    d.setWindowTitle(i18nc("@title:window", "Print Image"));
-    d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+    ImgPrintDialog d(img, &printer, this);
+    if (!d.exec()) return;
 
-    // TODO (investigate): even with the options set as above, the options below still
-    // appear in the print dialogue.  Is this as intended by Qt?
-    //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
-    //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
-
-    ImgPrintDialog imgTab(img, &printer);		// create tab for our options
-    d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
-
-    if (!d.exec()) return;				// open the dialogue
-    QString msg = imgTab.checkValid();			// check that settings are valid
-    if (!msg.isEmpty())					// if not, display error message
-    {
-        KMessageBox::error(this,
-                           i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
-                           i18nc("@title:window", "Cannot Print"));
-        return;
-    }
-
-    imgTab.updatePrintParameters();			// set final printer options
-    printer.printImage();				// print the image
+    printer.startPrint();				// start the print job
+    printer.printImage(img.data());			// print the image
+    printer.endPrint();					// finish the print job
 }
 
 
@@ -855,15 +832,6 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
         }
     }
 
-    mScanParams->setEnabled(false);			// disable GUI while scanning
-    KLed *led = mScanParams->operationLED();		// update the LED indicator
-    if (led!=nullptr)
-    {
-        led->setColor(Qt::red);				// scanner warming up
-        led->setState(KLed::On);
-        qApp->processEvents();				// let the change show
-    }
-
     // Set the destination string displayed in the "Scan in Progress" dialogue
     if (type!=ScanImage::Preview)
     {
@@ -872,24 +840,13 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
 }
 
 
-void KookaView::slotAcquireStart()
-{
-    if (mScanParams!=nullptr)
-    {
-        KLed *led = mScanParams->operationLED();	// update the LED indicator
-        if (led!=nullptr)
-        {
-            led->setColor(Qt::green);			// scanning active
-            qApp->processEvents();			// let the change show
-        }
-    }
-}
-
-
 void KookaView::slotNewImageScanned(ScanImage::Ptr img)
 {
     AbstractDestination *dest = (mScanParams!=nullptr) ? mScanParams->destinationPlugin() : nullptr;
-    if (dest!=nullptr) dest->imageScanned(img);
+    if (dest!=nullptr)
+    {
+        if (!dest->imageScanned(img)) mScanDevice->slotStopScanning();
+    }
     else qCWarning(KOOKA_LOG) << "No destination plugin";
 }
 
@@ -898,7 +855,8 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
 {
     qCDebug(KOOKA_LOG) << "Scan finished with status" << stat;
 
-    if (stat != KScanDevice::Ok && stat != KScanDevice::Cancelled) {
+    if (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled && stat!=KScanDevice::AdfEmpty)
+    {
         QString msg = xi18nc("@info",
                              "There was a problem during preview or scanning."
                              "<nl/>"
@@ -913,15 +871,6 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
                              KScanDevice::statusMessage(stat),
                              mScanDevice->scannerBackendName().constData());
         KMessageBox::error(mMainWindow, msg);
-    }
-
-    if (mScanParams != nullptr) {
-        mScanParams->setEnabled(true);
-        KLed *led = mScanParams->operationLED();
-        if (led != nullptr) {
-            led->setColor(Qt::green);
-            led->setState(KLed::Off);
-        }
     }
 }
 

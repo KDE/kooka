@@ -38,11 +38,14 @@
 #include <kpluginfactory.h>
 #include <kservice.h>
 #include <klocalizedstring.h>
+
 #include <kio/applicationlauncherjob.h>
+#include <kio/deletejob.h>
 #include <kio/jobuidelegatefactory.h>
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
+#include "multiscanoptions.h"
 #include "destination_logging.h"
 
 
@@ -56,35 +59,23 @@ DestinationApplication::DestinationApplication(QObject *pnt, const QVariantList 
 }
 
 
-void DestinationApplication::imageScanned(ScanImage::Ptr img)
+bool DestinationApplication::imageScanned(ScanImage::Ptr img)
 {
-    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType();
-    const QString appService = mAppsCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
-    qCDebug(DESTINATION_LOG) << "app" << appService << "mime" << mimeName;
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType() << "mime" << mimeName;
 
     ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
-    if (!fmt.isValid()) return;				// must have this now
+    if (!fmt.isValid()) return (false);			// must have this now
     const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
-    if (!saveUrl.isValid()) return;			// could not save image
+    if (!saveUrl.isValid()) return (false);		// could not save image
 
-    // Open the temporary file with the selected application service.
-    // If the service is "Other" (appService is empty), or if there is
-    // a problem finding the service, then leave 'service' as null and
-    // the ApplicationLauncherJob will prompt for an application.
-    // The temporary file will eventually be removed by KIO.
-    KService::Ptr service;
-    if (!appService.isEmpty())
-    {
-        service = KService::serviceByDesktopName(appService);
-        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << appService;
-    }
-
-    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
-    job->setUrls(QList<QUrl>() << saveUrl);
-    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
-    job->start();					// all done
+    // If not batching multiple files, then add the temporary file to
+    // the batch list as usual and then launch the application immediately.
+    // launchApplication() will remove the file from the batch list, ready
+    // to do the same for the next scan.
+    mBatchFiles.append(saveUrl);
+    if (!multiScanOptions()->flags().testFlag(MultiScanOptions::BatchMultiple)) launchApplication();
+    return (true);
 }
 
 
@@ -101,31 +92,14 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
 {
     // We do not yet know the eventual image format of the scanned image.
     // Therefore we would like, here in the GUI, to offer all of the known
-    // applications that can handle any image type.  However, it does not seem
-    // to be possible to express this in the trader query language;  according
-    // to https://techbase.kde.org/Development/Tutorials/Services/Traders a
-    // query such as
-    //
-    //   'image/' subin ServiceTypes
-    //
-    // should perform a substring match on all of the list entries.  However,
-    // this sort of query appears to return nothing.
-    //
-    // Instead we query all of the application service types and then examine
-    // their supported MIME types.  The criterion for including an application
-    // is that it supports an image MIME type (starting with "image/") which is
-    // also supported as a QImageWriter format (that is, a format that Kooka can
-    // save to).
-
-    const KService::List allServices = KApplicationTrader::query([](const KService::Ptr &)
-    {
-        return (true);
-    });
-    qCDebug(DESTINATION_LOG) << "have" << allServices.count() << "services";
+    // applications that can handle any image type.  So we query all of the
+    // application service types and then examine their supported MIME
+    // types.  The criterion for including an application is that it
+    // supports an image MIME type (starting with "image/") which is also
+    // supported as a QImageWriter format (that is, a format that Kooka
+    // can save to).
     const QList<QMimeType> *imageMimeTypes = ImageFormat::mimeTypes();
-
-    KService::List validServices;
-    for (const KService::Ptr &service : allServices)
+    const KService::List validServices = KApplicationTrader::query([&imageMimeTypes](const KService::Ptr &service)
     {
         // Okular is an odd case.  For whatever reason, the application does
         // not have just one desktop file listing all of the MIME types that
@@ -149,32 +123,31 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
         if (service->desktopEntryName()=="org.kde.okular")
         {
             qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by name";
-            validServices.append(service);
-            continue;
+            return (true);
         }
 
-        if (service->noDisplay()) continue;		// ignore hidden services
-        if (service->mimeTypes().isEmpty()) continue;	// ignore those with no MIME types
-        //qCDebug(DESTINATION_LOG) << "  " << service->mimeTypes();
-
-        for (const QString &mimeType : service->mimeTypes())
+        if (service->noDisplay()) return (false);		// ignore hidden services
+        if (service->mimeTypes().isEmpty()) return (false);	// ignore those with no MIME types
+        for (const QString &mimeType : service->mimeTypes())	// look at supported MIME types
         {
             if (!mimeType.startsWith("image/")) continue;
             for (const QMimeType &imt : *imageMimeTypes)
-            {						// supports a MIME type that we also do
-                if (imt.inherits(mimeType)) goto found;
+            {
+                if (imt.inherits(mimeType))		// supports a MIME type that we do also
+                {
+                    qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME";
+                    return (true);			// service accepted
+                }
             }
         }
-        continue;					// service not accepted
 
-found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME";
-        validServices.append(service);
-    }
+        return (false);					// service not accepted
+    });
 
     // Now all of the applications that accept file formats that can be
     // saved by Kooka are listed.  Fortunately the original trader query
     // returned them in priority order, so there is no need to sort them.
-    qCDebug(DESTINATION_LOG) << "have" << validServices.count() << "valid services";
+    qCDebug(DESTINATION_LOG) << "have" << validServices.count() << "services";
 
     mAppsCombo = new QComboBox;
 
@@ -203,4 +176,71 @@ void DestinationApplication::saveSettings() const
 {
     KookaSettings::setDestinationApplicationApp(mAppsCombo->currentData().toString());
     KookaSettings::setDestinationApplicationMime(mFormatCombo->currentData().toString());
+}
+
+
+void DestinationApplication::batchStart(const MultiScanOptions *opts)
+{
+    AbstractDestination::batchStart(opts);		// remember the options
+    mBatchFiles.clear();				// clear file list
+    mAppService = mAppsCombo->currentData().toString();	// service to open with
+    qCDebug(DESTINATION_LOG) << "destination app" << mAppService;
+}
+
+
+void DestinationApplication::batchEnd(bool ok)
+{
+    if (mBatchFiles.isEmpty()) return;			// no files to do
+    qCDebug(DESTINATION_LOG) << "have" << mBatchFiles.count() << "files, ok?" << ok;
+
+    if (!ok)						// problem while scanning
+    {
+        // Since we are not sending the files anywhere, they can be
+        // deleted immediately here.
+        KIO::DeleteJob *job = KIO::del(mBatchFiles);
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+        job->start();
+        return;
+    }
+
+    launchApplication();				// if there are any to do
+}
+
+
+void DestinationApplication::launchApplication()
+{
+    qCDebug(DESTINATION_LOG) << "have" << mBatchFiles.count() << "files";
+
+    // Open the temporary files with the selected application service.
+    // If the service is "Other" (mAppService is empty), or if there is
+    // a problem finding the service, then leave 'service' as NULL and
+    // the ApplicationLauncherJob will prompt for an application.
+    // The temporary files will eventually be removed by KIO.
+    //
+    // It does not matter here if there are multiple files in a batch and
+    // the application service can only accept a single file at a time, in
+    // this case KIO will launch the application once for each file.
+    KService::Ptr service;
+    if (!mAppService.isEmpty())
+    {
+        service = KService::serviceByDesktopName(mAppService);
+        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << mAppService;
+    }
+
+    // If not batching multiple scans, launchApplication() will be called as
+    // soon as each individual image is scanned.  Therefore we can assume here
+    // that all of the files in the list are to be batched in one job.
+    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls(mBatchFiles);
+    mBatchFiles.clear();				// no more to do
+
+    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+    job->start();					// ready to go
+}
+
+
+MultiScanOptions::Capabilities DestinationApplication::capabilities() const
+{
+    return (MultiScanOptions::AcceptBatch|MultiScanOptions::DefaultBatch);
 }

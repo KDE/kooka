@@ -15,7 +15,7 @@ project(libkookascan)
 
 ########### dependencies ###############
 
-find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config ConfigWidgets IconThemes KIO)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config ConfigWidgets IconThemes KIO TextWidgets)
 
 # libpaper (at least in Gentoo Linux) provides neither a
 # Find<package>.cmake nor a pkg-config file.
@@ -31,7 +31,7 @@ endif (LIBPAPER_LIB AND LIBPAPER_HDR)
 
 ############### Support for multi-page TIFF images ###############
 
-include(FindTIFF)
+find_package(TIFF)
 if (TIFF_FOUND)
   message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
   message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
@@ -93,6 +93,10 @@ set(kookascan_SRCS
   autoselectbar.cpp
   autoselectdialog.cpp
   scanicons.cpp
+  multiscanoptions.cpp
+  multiscandialog.cpp
+  continuescandialog.cpp
+  papersizes.cpp
 )
 kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 ecm_qt_declare_logging_category(kookascan_SRCS
@@ -110,6 +114,7 @@ target_link_libraries(kookascan
   KF6::ConfigCore KF6::ConfigGui KF6::ConfigWidgets
   KF6::KIOCore KF6::KIOWidgets
   KF6::IconThemes
+  KF6::TextWidgets
 )
 
 if (HAVE_SANE)

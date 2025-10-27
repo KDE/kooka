@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2003-2016 Klaas Freitag <freitag@suse.de>		*
+ *  Copyright (C) 2003-2024 Klaas Freitag <freitag@suse.de>		*
  *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
@@ -42,20 +42,80 @@
 #include <qlineedit.h>
 #include <qtimer.h>
 #include <qgridlayout.h>
+#include <qprintdialog.h>
 
 #include <QSignalBlocker>
 
 #include <klocalizedstring.h>
+#include <kmessagebox.h>
 
 #include "scanimage.h"
 
 #include "kookaprint.h"
-#include "kscandevice.h"
 #include "dialogbase.h"
 #include "kooka_logging.h"
 
 
+//////////////////////////////////////////////////////////////////////////
+//  ImgPrintDialog							//
+//									//
+//  This cannot be a subclass of QPrintDialog, because of the need to	//
+//  save the QPrinter's printer name and output format first.		//
+//////////////////////////////////////////////////////////////////////////
+
 ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt)
+{
+    prt->setBaseImage(img.data());			// use as reference image
+
+    // Initialising the QPrintDialog seems to not completely honour the
+    // current printer selection and PDF output setting.  Even if the
+    // underlying QPrinter had an outputFormat() of PDF selected, the
+    // printerName() being blank will cause QPrintDialog to select the
+    // system default printer and turn off the PDF output.  Therefore
+    // save the output format here and restore it after the dialogue has
+    // been created.
+    const QPrinter::OutputFormat fmt = prt->outputFormat();
+    const QString name = prt->printerName();
+    qCDebug(KOOKA_LOG) << "printer name" << name << "format" << fmt;
+
+    mDialog = new QPrintDialog(prt, pnt);
+    mDialog->setWindowTitle(i18nc("@title:window", "Print Image"));
+    mDialog->setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+    // TODO (investigate): even with the options set as above, the options below still
+    // appear in the print dialogue.  Is this as intended by Qt?
+    //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
+    //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
+
+    mImgTab = new ImgPrintTab(img, prt, mDialog);	// add tab for our options
+    mDialog->setOptionTabs(QList<QWidget *>() << mImgTab);
+
+    prt->setPrinterName(name);				// restore name and output format
+    prt->setOutputFormat(fmt);
+}
+
+
+bool ImgPrintDialog::exec()
+{
+    if (!mDialog->exec()) return (false);		// open the dialogue
+
+    QString msg = mImgTab->checkValid();		// check that settings are valid
+    if (!msg.isEmpty())					// if not, display error message
+    {
+        KMessageBox::error(mDialog,
+                           i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
+                           i18nc("@title:window", "Cannot Print"));
+        return (false);
+    }
+
+    mImgTab->updatePrintParameters();			// set final printer options
+    return (true);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//  ImgPrintTab								//
+//////////////////////////////////////////////////////////////////////////
+
+ImgPrintTab::ImgPrintTab(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt)
     : QWidget(pnt)
 {
     m_image = img;					// record the image
@@ -70,7 +130,7 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
     // The default button auto-repeat delay is set to 300
     // in qtbase/src/widgets/widgets/qabstractbutton.cpp
     mUpdateTimer->setInterval(320);			// longer than button auto-repeat
-    connect(mUpdateTimer, &QTimer::timeout, this, &ImgPrintDialog::updatePrintParameters);
+    connect(mUpdateTimer, &QTimer::timeout, this, &ImgPrintTab::updatePrintParameters);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -86,7 +146,7 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
     QGridLayout *gl = new QGridLayout(grp);
 
     m_scaleRadios = new QButtonGroup(this);
-    connect(m_scaleRadios, &QButtonGroup::idClicked, this, &ImgPrintDialog::slotScaleChanged);
+    connect(m_scaleRadios, &QButtonGroup::idClicked, this, &ImgPrintTab::slotScaleChanged);
     connect(m_scaleRadios, &QButtonGroup::idClicked, mUpdateTimer, QOverload<>::of(&QTimer::start));
 
     // Option 1: ScaleScreen
@@ -135,7 +195,7 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
     m_sizeW->setSuffix(i18nc("@item:intext abbreviation for 'millimetres'", " mm"));
     m_sizeW->setToolTip(i18nc("@info:tooltip", "<div>The width at which the image will be printed.</div>"));
     connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &ImgPrintDialog::slotCustomWidthChanged);
+            this, &ImgPrintTab::slotCustomWidthChanged);
     connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     l->setBuddy(m_sizeW);
@@ -149,7 +209,7 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
     m_sizeH->setSuffix(i18nc("@item:intext abbreviation for 'millimetres'", " mm"));
     m_sizeH->setToolTip(i18nc("@info:tooltip", "<div>The height at which the image will be printed.</div>"));
     connect(m_sizeH, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &ImgPrintDialog::slotCustomHeightChanged);
+            this, &ImgPrintTab::slotCustomHeightChanged);
     connect(m_sizeH, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     l->setBuddy(m_sizeH);
@@ -174,9 +234,12 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
     // Maintain Aspect option
     m_ratio = new QCheckBox(i18nc("@option:check", "Maintain aspect ratio"), this);
     m_ratio->setToolTip(i18nc("@info:tooltip", "<div>Adjust the height or width to maintain the original aspect ratio of the printed image.</div>"));
-    connect(m_ratio, &QCheckBox::toggled, this, &ImgPrintDialog::slotAdjustCustomSize);
+    connect(m_ratio, &QCheckBox::toggled, this, &ImgPrintTab::slotAdjustCustomSize);
     connect(m_ratio, &QCheckBox::toggled, mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     vbl->addWidget(m_ratio);
+
+    // TODO: need an option "Ignore print margins", default for copy mode
+    // so as to be able to get an actual size copy
 
     // Draft Print option
     m_psDraft = new QCheckBox(i18nc("@option:check", "Low resolution (fast draft print)"), this);
@@ -251,7 +314,7 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
 }
 
 
-void ImgPrintDialog::initOptions()
+void ImgPrintTab::initOptions()
 {
     KookaPrint::ScaleOption scale = mPrinter->scaleOption();
     if (mPrinter->isCopyMode())
@@ -306,7 +369,7 @@ void ImgPrintDialog::initOptions()
 }
 
 
-QString ImgPrintDialog::checkValid() const
+QString ImgPrintTab::checkValid() const
 {
     const int id = m_scaleRadios->checkedId();
     if (id==KookaPrint::ScaleScan && m_dpi->value()==0)
@@ -323,7 +386,7 @@ QString ImgPrintDialog::checkValid() const
 }
 
 
-void ImgPrintDialog::slotScaleChanged(int id)
+void ImgPrintTab::slotScaleChanged(int id)
 {
     m_dpi->setEnabled(id==KookaPrint::ScaleScan);
     m_ratio->setEnabled(id==KookaPrint::ScaleCustom || id==KookaPrint::ScaleFitPage);
@@ -333,13 +396,13 @@ void ImgPrintDialog::slotScaleChanged(int id)
 }
 
 
-void ImgPrintDialog::slotCustomWidthChanged(int val)
+void ImgPrintTab::slotCustomWidthChanged(int val)
 {
     slotAdjustCustomSize();
 }
 
 
-void ImgPrintDialog::slotCustomHeightChanged(int val)
+void ImgPrintTab::slotCustomHeightChanged(int val)
 {
     if (!m_ratio->isChecked()) return;			// only if maintaining aspect
 
@@ -348,7 +411,7 @@ void ImgPrintDialog::slotCustomHeightChanged(int val)
 }
 
 
-void ImgPrintDialog::slotAdjustCustomSize()
+void ImgPrintTab::slotAdjustCustomSize()
 {
     if (!m_ratio->isChecked()) return;			// only if maintaining aspect
 
@@ -358,7 +421,7 @@ void ImgPrintDialog::slotAdjustCustomSize()
 }
 
 
-void ImgPrintDialog::updatePrintParameters()
+void ImgPrintTab::updatePrintParameters()
 {
     // get options from GUI and update the printer
     const KookaPrint::ScaleOption scale = static_cast<KookaPrint::ScaleOption>(m_scaleRadios->checkedId());

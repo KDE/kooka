@@ -45,14 +45,18 @@ public:
     explicit DestinationPrint(QObject *pnt, const QVariantList &args);
     ~DestinationPrint() override;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
     void createGUI(ScanParamsPage *page) override;
+    void batchStart(const MultiScanOptions *opts) override;
+    void batchEnd(bool ok) override;
+    MultiScanOptions::Capabilities capabilities() const override;
 
     KLocalizedString scanDestinationString() override;
     void saveSettings() const override;
 
 private:
     KookaPrint *mPrinter;
+    bool mBatchFirst;
 
     QCheckBox *mImmediateCheck;
 };

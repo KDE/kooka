@@ -121,17 +121,17 @@ ScanPresetsDialog::ScanPresetsDialog(KScanDevice *scandev, QWidget *pnt)
 void ScanPresetsDialog::populateList()
 {
     mParamsList->clear();
-    mSets = KScanOptSet::readList();
+    mSets.clear();
 
-    for (KScanOptSet::StringMap::const_iterator it = mSets.constBegin(); it != mSets.constEnd(); ++it)
+    const QStringList allSets = KScanOptSet::listSavedSets();
+    for (const QString &setName : allSets)
     {
-        const QString &setName = it.key();
-        qCDebug(KOOKA_LOG) << "saveset" << setName;
-
+        qCDebug(KOOKA_LOG) << "set" << setName;
         KScanOptSet optSet(setName);
-        optSet.loadConfig();
-        const QByteArray scanMode = optSet.value(SANE_NAME_SCAN_MODE);
+        optSet.loadConfig(KScanOptSet::Preset);
 
+        mSets[setName] = optSet.getDescription();
+        const QByteArray scanMode = optSet.value(SANE_NAME_SCAN_MODE);
         mParamsList->addItem(new QListWidgetItem(ScanIcons::self()->icon(scanMode), setName));
     }
 }
@@ -169,13 +169,12 @@ void ScanPresetsDialog::slotLoad()
     qCDebug(KOOKA_LOG) << "set" << name;
 
     KScanOptSet optSet(name);
-    if (!optSet.loadConfig())
+    if (!mScanDevice->loadOptions(KScanOptSet::Preset, name))
     {
         qCWarning(KOOKA_LOG) << "Failed to load set" << name;
         return;
     }
 
-    mScanDevice->loadOptionSet(&optSet);
     mScanDevice->reloadAllOptions();
 }
 
@@ -223,9 +222,8 @@ void ScanPresetsDialog::slotSave()
 
     KScanOptSet optSet(newName);
     mScanDevice->getCurrentOptions(&optSet);
-
-    optSet.saveConfig(mScanDevice->scannerBackendName(), newDesc);
-    mSets[newName] = newDesc;
+    optSet.setDescription(newDesc);
+    optSet.saveConfig(KScanOptSet::Preset, mScanDevice->scannerBackendName());
 
     // TODO: why?
     mParamsList->setCurrentItem(nullptr);
@@ -261,14 +259,15 @@ void ScanPresetsDialog::slotEdit()
     qCDebug(KOOKA_LOG) << "new name" << newName << "desc" << newDesc;
 
     KScanOptSet optSet(oldName.toLocal8Bit());
-    if (!optSet.loadConfig()) {
+    if (!optSet.loadConfig(KScanOptSet::Preset)) {
         qCWarning(KOOKA_LOG) << "Failed to load set" << oldName;
         return;
     }
 
     KScanOptSet::deleteSet(oldName);			// do first, in case name not changed
     optSet.setSetName(newName);
-    optSet.saveConfig(mScanDevice->scannerBackendName(), newDesc);
+    optSet.setDescription(newDesc);
+    optSet.saveConfig(KScanOptSet::Preset, mScanDevice->scannerBackendName());
 
     mSets.remove(oldName);				// do first, ditto
     mSets[newName] = newDesc;

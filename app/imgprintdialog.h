@@ -32,8 +32,6 @@
 #ifndef IMGPRINTDIALOG_H
 #define IMGPRINTDIALOG_H
 
-#include <qmap.h>
-#include <qcheckbox.h>
 #include <qwidget.h>
 
 #include "scanimage.h"
@@ -47,17 +45,21 @@ class QComboBox;
 class QLineEdit;
 class QSpinBox;
 class QTimer;
+class QPrintDialog;
 
 class KookaPrint;
 
+//////////////////////////////////////////////////////////////////////////
+//  ImgPrintTab								//
+//////////////////////////////////////////////////////////////////////////
 
-class KOOKACORE_EXPORT ImgPrintDialog : public QWidget
+class KOOKACORE_EXPORT ImgPrintTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt = nullptr);
-    virtual ~ImgPrintDialog() = default;
+    explicit ImgPrintTab(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt = nullptr);
+    virtual ~ImgPrintTab() = default;
 
     QString checkValid() const;
 
@@ -94,6 +96,23 @@ private:
     ScanImage::Ptr m_image;
     QTimer *mUpdateTimer;
     KookaPrint *mPrinter;
+};
+
+//////////////////////////////////////////////////////////////////////////
+//  ImgPrintDialog							//
+//////////////////////////////////////////////////////////////////////////
+
+class KOOKACORE_EXPORT ImgPrintDialog
+{
+public:
+    explicit ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt = nullptr);
+    ~ImgPrintDialog() = default;
+
+    bool exec();
+
+private:
+    ImgPrintTab *mImgTab;
+    QPrintDialog *mDialog;
 };
 
 #endif							// IMGPRINTDIALOG_H

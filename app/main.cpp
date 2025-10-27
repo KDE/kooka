@@ -68,7 +68,7 @@ static const KLocalizedString addLicense =
               "commercial Qt development licence.\n");
 
 static const KLocalizedString copyright =
-    ki18n("(C) 2000-2018, the Kooka developers and contributors");
+    ki18n("(C) 2000-2024, the Kooka developers and contributors");
 
 
 int main(int argc, char *argv[])

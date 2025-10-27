@@ -68,9 +68,10 @@ extern "C"
 #include "kscancontrols.h"
 #include "scansizeselector.h"
 #include "kscanoption.h"
-#include "kscanoptset.h"
 #include "scandevices.h"
 #include "dialogbase.h"
+#include "multiscandialog.h"
+#include "scansettings.h"
 #include "libkookascan_logging.h"
 
 //  Debugging options
@@ -115,22 +116,19 @@ ScanParams::~ScanParams()
 
 bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
+    emit deviceConnected(newScanDevice);
+
     QGridLayout *lay = new QGridLayout(this);
     lay->setContentsMargins(0, 0, 0, 0);
 
-    if (newScanDevice == nullptr) {            // no scanner device
+    mSaneDevice = newScanDevice;			// note the connected device
+    mScanMode = ScanParams::NormalMode;			// assume so for now, anyway
+    if (newScanDevice == nullptr)			// no scanner deviceconnected
+    {
         qCDebug(LIBKOOKASCAN_LOG) << "No scan device, gallery=" << galleryMode;
-        mSaneDevice = nullptr;
         createNoScannerMsg(galleryMode);
         return (true);
     }
-
-    mSaneDevice = newScanDevice;
-    mScanMode = ScanParams::NormalMode;
-#if 0
-    // TOTO: port/update
-    adf = ADF_OFF;
-#endif
 
     QLabel *lab = new QLabel(this);
     lab->setPixmap(KIconLoader::global()->loadIcon(ScanDevices::self()->deviceIconName(newScanDevice->scannerBackendName()),
@@ -157,44 +155,55 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     lay->setRowMinimumHeight(4, DialogBase::verticalSpacing());
 
+    mMultipleMessage = new KMessageWidget(xi18nc("@info", "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"));
+    mMultipleMessage->setMessageType(KMessageWidget::Information);
+    mMultipleMessage->setIcon(QIcon::fromTheme("dialog-information"));
+    mMultipleMessage->setCloseButtonVisible(true);
+    mMultipleMessage->setWordWrap(true);
+
+    connect(mMultipleMessage, &KMessageWidget::linkActivated, [this]()
+    {
+        ScanSettings::setShowMultiScanWarning(false);
+        ScanSettings::self()->save();
+        mMultipleMessage->animatedHide();
+    });
+
+    lay->addWidget(mMultipleMessage, 4, 0, 1, -1);
+    mMultipleMessage->setVisible(false);
+
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
     pb->setToolTip(i18n("Start a preview scan and show the preview image"));
     pb->setMinimumWidth(100);
     connect(pb, &QPushButton::clicked, this, &ScanParams::slotAcquirePreview);
-    lay->addWidget(pb, 5, 0, 1, 2, Qt::AlignLeft);
+    lay->addWidget(pb, 6, 0, 1, 2, Qt::AlignLeft);
 
     pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
     pb->setToolTip(i18n("Start a scan and save the scanned image"));
     pb->setMinimumWidth(100);
     connect(pb, &QPushButton::clicked, this, &ScanParams::slotStartScan);
-    lay->addWidget(pb, 5, 2, 1, 2, Qt::AlignRight);
+    lay->addWidget(pb, 6, 2, 1, 2, Qt::AlignRight);
 
     lay->setRowStretch(3, 9);
     lay->setColumnStretch(2, 9);
 
-    // Load the startup options
-    //
-    // TODO: check whether the saved scanner options apply to the current scanner?
-    // They may be for a completely different one...
-    // Or update KScanDevice and here to save/load the startup options
-    // on a per-scanner basis.
-    qCDebug(LIBKOOKASCAN_LOG) << "looking for startup options";
-    KScanOptSet startupOptions(KScanOptSet::startupSetName());
-    if (startupOptions.loadConfig(mSaneDevice->scannerBackendName()))
-    {
-        qCDebug(LIBKOOKASCAN_LOG) << "loading startup options";
-        mSaneDevice->loadOptionSet(&startupOptions);
-    }
-    else qCDebug(LIBKOOKASCAN_LOG) << "no startup options to load";
+    // Load the startup options applicable to the current scanner
+    const bool startupOptionsLoaded = mSaneDevice->loadStartupConfig();
 
     // Reload all options, to take account of inactive ones
     mSaneDevice->reloadAllOptions();
 
     // Send the current settings to the previewer
-    initStartupArea(startupOptions.isEmpty());		// signal newCustomScanSize
+    initStartupArea(!startupOptionsLoaded);		// signal newCustomScanSize
     slotNewScanMode();					// signal scanModeChanged
     slotNewResolution(nullptr);				// signal scanResolutionChanged
+
+    // Now that we have loaded the startup settings, show the message
+    // if appropriate.
+    if (ScanSettings::showMultiScanWarning())
+    {
+        mMultipleMessage->setVisible(mSaneDevice->multiScanOptions()->flags() & MultiScanOptions::MultiScan);
+    }
 
     /* Initialise the progress dialog */
     mProgressDialog = new QProgressDialog(QString(), i18n("Stop"), 0, 100, nullptr);
@@ -375,20 +384,19 @@ QWidget *ScanParams::createScannerParams()
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
-    if (mSourceSelect != nullptr) {
+    if (mSourceSelect != nullptr)
+    {
         connect(mSourceSelect, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mSourceSelect->getLabel(frame, true);
         w = mSourceSelect->widget();
         frame->addRow(l, w);
 
-        //  TODO: enable the "Advanced" dialogue, because that
-        //  contains other ADF options.  They are not implemented at the moment
-        //  but they may be some day...
-        //QPushButton *pb = new QPushButton( i18n("Source && ADF Options..."), frame);
-        //connect(pb, &QAbstractButton::clicked, this, &ScanParams::slotSourceSelect);
-        //lay->addWidget(pb,row,2,1,-1,Qt::AlignRight);
-        //++row;
+        QPushButton *pb = new QPushButton(i18n("ADF && Multiple Scan Options..."), frame);
+        pb->setIcon(QIcon::fromTheme("document-multiple"));
+        pb->setToolTip(i18nc("@info:tootip", "Set ADF, rotation and destination options for scanning multiple pages"));
+        connect(pb, &QAbstractButton::clicked, this, &ScanParams::slotSourceSelect);
+        frame->addRow(nullptr, pb, nullptr, Qt::AlignRight);
     }
 
     // SANE testing options, for the "test" device
@@ -615,48 +623,45 @@ QWidget *ScanParams::messageScannerProblem()
 
 void ScanParams::slotSourceSelect()
 {
-#if 0
-// TODO: port/update
-    AdfBehaviour adf = ADF_OFF;
-
-    if (mSourceSelect == nullptr) {
-        return;    // no source selection GUI
-    }
-    if (!mSourceSelect->isValid()) {
-        return;    // no option on scanner
-    }
+    if (mSourceSelect==nullptr) return;			// no source selection GUI
+    if (!mSourceSelect->isValid()) return;		// no option on scanner
 
     const QByteArray &currSource = mSourceSelect->get();
-    //qCDebug(LIBKOOKASCAN_LOG) << "Current source is" << currSource;
 
-    QList<QByteArray> sources = mSourceSelect->getList();
-#ifdef DEBUG_ADF
-    if (!sources.contains("Automatic Document Feeder")) {
-        sources.append("Automatic Document Feeder");
+    MultiScanOptions *opts = mSaneDevice->multiScanOptions();
+    opts->setSource(currSource);
+
+    // The user must be aware of what they are doing, so hide
+    // the message now.
+    mMultipleMessage->setVisible(false);
+
+    // Update the "ADF available' flag in the options to reflect
+    // the current state.
+    opts->setFlags(MultiScanOptions::AdfAvailable, mSaneDevice->isAdfAvailable());
+    qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << qPrintable(opts->toString());
+
+    MultiScanDialog d(mSaneDevice, this);
+    d.setDestinationCapabilities(mDestinationCapabilities);
+    d.setOptions(*opts);
+    if (!d.exec()) return;
+
+    *opts = d.options();
+    qCDebug(LIBKOOKASCAN_LOG) << "new multi options" << qPrintable(opts->toString());
+
+    if (mSourceSelect!=nullptr)
+    {
+        // Update the source selection combo here with the updated option
+        // from the dialogue.  Need to ensure that everything showing
+        // and using that option is updated and notified.
+         mSourceSelect->set(opts->source());
+         mSourceSelect->redrawWidget();
+         slotOptionChanged(mSourceSelect);
     }
-#endif
 
-    // TODO: the 'sources' list has exactly the same options as the
-    // scan source combo (apart from the debugging hack above), so
-    // what's the point of repeating it in this dialogue?
-    ScanSourceDialog d(this, sources, adf);
-    d.slotSetSource(currSource);
-
-    if (d.exec() != QDialog::Accepted) {
-        return;
-    }
-
-    QString sel_source = d.getText();
-    adf = d.getAdfBehave();
-    //qCDebug(LIBKOOKASCAN_LOG) << "new source" << sel_source << "ADF" << adf;
-
-    /* set the selected Document source, the behavior is stored in a membervar */
-    mSourceSelect->set(sel_source.toLatin1());		// TODO: FIX in ScanSourceDialog, then here
-    mSourceSelect->apply();
-    mSourceSelect->reload();
-    mSourceSelect->redrawWidget();
-#endif
+    // No GUI update is needed for the other options, they will be
+    // taken from mMultiOptions when they are needed.
 }
+
 
 /* Slot which is called if the user switches in the gui between
  *  the SANE-Debug-Mode and the qt image reading
@@ -727,9 +732,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
         }
     }
 
-    if (vfp != nullptr) {
-        *vfp = virtfile;
-    }
+    if (vfp != nullptr) *vfp = virtfile;
     return (KScanDevice::Ok);
 }
 
@@ -752,14 +755,31 @@ void ScanParams::slotScanProgress(int value)
 /* Slot called to start acquiring a preview */
 void ScanParams::slotAcquirePreview()
 {
+    mMultipleMessage->setVisible(false);		// use should have taken note by now
 
     // TODO: should be able to preview in Virtual Scanner mode, it just means
     // that the preview image will be the same size as the final image (which
     // doesn't matter).
-
     if (mScanMode == ScanParams::VirtualScannerMode) {
         KMessageBox::error(this, i18n("Cannot preview in Virtual Scanner mode"));
         return;
+    }
+
+    // There is no need to tell the KScanDevice that this is a preview
+    // and therefore the multiple scan options should be ignored, because
+    // it works that out for itself.  However, warn the user if an ADF
+    // scan is being performed, for the reason indicated in the question.
+    if (mSaneDevice->isAdfScan())
+    {
+        if (KMessageBox::warningContinueCancel(this,
+                                               i18n("The scan source is set to the automatic document feeder.<br/>"
+                                                    "The preview may take the first sheet from the feeder.<br/>"
+                                                    "<br/>"
+                                                    "Are you sure you want to preview?"),
+                                               i18n("ADF Selected"),
+                                               KGuiItem(i18n("Preview"), QIcon::fromTheme("preview")),
+                                               KStandardGuiItem::cancel(),
+                                               "adfpreview")!=KMessageBox::Continue) return;
     }
 
     QString virtfile;
@@ -780,44 +800,44 @@ void ScanParams::slotAcquirePreview()
     mAreaSelect->selectCustomSize(QRect());		// reset selector to reflect that
 
     stat = mSaneDevice->acquirePreview(gp);
-    if (stat != KScanDevice::Ok) {
-        qCWarning(LIBKOOKASCAN_LOG) << "Error, preview status " << stat;
-    }
+    if (stat!=KScanDevice::Ok) qCWarning(LIBKOOKASCAN_LOG) << "Preview status" << stat;
 }
+
 
 /* Slot called to start scanning */
 void ScanParams::slotStartScan()
 {
+    mMultipleMessage->setVisible(false);		// use should have taken note by now
+
     QString virtfile;
     KScanDevice::Status stat = prepareScan(&virtfile);
-    if (stat != KScanDevice::Ok) {
-        return;
-    }
+    if (stat != KScanDevice::Ok) return;
+
+    // Pass the multiple scan options to be used for the scan to the
+    // destination plugin.  This also tells the plugin that a new batch
+    // is starting.
+    emit scanBatchStart(mSaneDevice->multiScanOptions());
 
     //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
-    if (mScanMode != ScanParams::VirtualScannerMode) {	// acquire via SANE
-#if 0
-// TODO: port/update
-        if (adf == ADF_OFF) {
-#endif
-            qCDebug(LIBKOOKASCAN_LOG) << "Start to acquire image";
-            stat = mSaneDevice->acquireScan();
-#if 0
-        } else {
-            //qCDebug(LIBKOOKASCAN_LOG) << "ADF Scan not yet implemented :-/";
-            // stat = performADFScan();
-        }
-#endif
-    } else {                    // acquire via Qt-IMGIO
+    if (mScanMode != ScanParams::VirtualScannerMode)	// acquire via SANE
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Start to acquire image";
+        stat = mSaneDevice->acquireScan();
+    }
+    else						// acquire via Qt-IMGIO
+    {
         qCDebug(LIBKOOKASCAN_LOG) << "Acquiring from virtual file";
         stat = mSaneDevice->acquireScan(virtfile);
     }
 
-    if (stat != KScanDevice::Ok) {
-        qCDebug(LIBKOOKASCAN_LOG) << "Error, scan status " << stat;
-    }
+    if (stat!=KScanDevice::Ok) qCDebug(LIBKOOKASCAN_LOG) << "Scan status" << stat;
+
+    if (stat==KScanDevice::AdfEmpty) stat = KScanDevice::Ok;
+    emit scanBatchEnd(stat==KScanDevice::Ok);		// indicate end of the batch
+    // TODO: emit with the actual status
 }
+
 
 bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
 {
@@ -1107,15 +1127,14 @@ void ScanParams::slotNewScanMode()
     }
 }
 
-KScanDevice::Status ScanParams::performADFScan()
+
+void ScanParams::setDestinationCapabilities(MultiScanOptions::Capabilities cap)
 {
-    KScanDevice::Status stat = KScanDevice::Ok;
-    bool          scan_on = true;
+    qCDebug(LIBKOOKASCAN_LOG) << cap;
+    mDestinationCapabilities = cap;
 
-    /* The scan source should be set to ADF by the SourceSelect-Dialog */
-
-    while (scan_on) {
-        scan_on = false;
-    }
-    return (stat);
+    // Update the "Can't Cancel" flag in the options to reflect whether
+    // the destination can do that.
+    MultiScanOptions *opts = mSaneDevice->multiScanOptions();
+    opts->setFlags(MultiScanOptions::CantCancel, (cap & MultiScanOptions::CannotCancel));
 }

@@ -58,10 +58,6 @@ public:
     QString currentImageFileName() const;
     ScanImage::Ptr getCurrImage(bool loadOnDemand = false);
 
-    QMenu *contextMenu() const
-    {
-        return m_contextMenu;
-    }
     void openRoots();
 
     void setAllowRename(bool on);
@@ -72,6 +68,9 @@ public:
     void saveHeaderState(int forIndex) const;
     void restoreHeaderState(int forIndex);
     QUrl saveURL() const;
+
+    QMenu *contextMenu() const				{ return (m_contextMenu); }
+    ImgSaver *imageSaver() const			{ return (mSaver); }
 
 public slots:
     void slotExportFile();

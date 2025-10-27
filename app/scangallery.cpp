@@ -833,8 +833,8 @@ bool ScanGallery::prepareToSave(ScanImage::ImageType type)
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==nullptr)					// into root if nothing is selected
     {
-        FileTreeBranch *branch = branches().at(0);	// there should be at least one
-        if (branch!=nullptr)
+        const FileTreeBranch *branch = branches().value(0);
+        if (branch!=nullptr)				// there should be at least one
         {
             // if user has created this????
             curr = findItemInBranch(branch, i18n("Incoming/"));
@@ -850,9 +850,10 @@ bool ScanGallery::prepareToSave(ScanImage::ImageType type)
     // Create the saver to use after the scan is complete
     QUrl dir(itemDirectory(curr));			// where new image will go
     mSaver = new ImgSaver(dir);				// create saver to use later
-    // Pass the initial image information to the saver
-    ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(type);
-    if (stat==ImgSaver::SaveStatusCanceled) return (false);
+
+    // Do not call setImageInfo() here, because the caller may wish to set
+    // saving options before prompting for a file name and/or format.  The
+    // caller must call setImageInfo() before saving.
 
     return (true);					// all ready to save
 }
@@ -872,9 +873,13 @@ QUrl ScanGallery::saveURL() const
 void ScanGallery::addImage(ScanImage::Ptr img)
 {
     if (img.isNull()) return;				// no image to add
-							// if not done already
-    if (mSaver==nullptr) prepareToSave(ScanImage::None);
-    if (mSaver==nullptr) return;			// should never happen
+
+    if (mSaver==nullptr)				// if no ImgSaver ready yet
+    {
+        prepareToSave(ScanImage::None);			// if not done already
+        if (mSaver==nullptr) return;			// should never happen
+        mSaver->setImageInfo(ScanImage::None);
+    }
 
     ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img);
 							// try to save the image

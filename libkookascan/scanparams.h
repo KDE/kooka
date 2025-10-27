@@ -37,7 +37,7 @@
 #include <qwidget.h>
 
 #include "kscandevice.h"
-//#include "scansourcedialog.h"
+
 
 class QProgressDialog;
 class QPushButton;
@@ -107,14 +107,6 @@ public:
      * @return @c true in all cases.
      **/
     bool connectDevice(KScanDevice *newScanDevice, bool galleryMode = false);
-
-    /**
-     * Get the operation "LED" widget.
-     *
-     * @return The widget, or @c nullptr if it has not been created yet.
-     * Do not delete this, it is owned by the @c ScanParams object.
-     **/
-    KLed *operationLED() const;
 
     /**
      * Set the scan destination to be displayed in the progress dialogue.
@@ -192,11 +184,27 @@ protected:
     virtual void createScanDestinationGUI(ScanParamsPage *frame)	{ }
 
     /**
-     * Check whether a scan device is present and configured.
+     * Get the scan device that is currently connected and configured.
      *
-     * @return @c true if there is a scan device.
+     * @return the scan device, or @c NULL if none is currently connected
      **/
-    bool hasScanDevice() const					{ return (mSaneDevice!=nullptr); }
+    KScanDevice *scanDevice() const					{ return (mSaneDevice); }
+
+    /**
+     * Get the operation "LED" widget.
+     *
+     * @return The widget, or @c NULL if it has not been created yet.
+     * Do not delete this, it is owned by the @c ScanParams object.
+     **/
+    KLed *operationLED() const;
+
+    /**
+     * Specify the capabilities that the scan destination provides.
+     *
+     * @param cap the destination capabilities
+     * @see @c MultiScanOptions::Capabilities
+     **/
+    void setDestinationCapabilities(MultiScanOptions::Capabilities cap);
 
 protected slots:
     /**
@@ -300,11 +308,32 @@ signals:
      **/
     void newCustomScanSize(const QRect &rect);
 
+    /**
+     * Indicates the start of a batch scan.
+     *
+     * @note Even if multiple page mode is in use, this and the next signal
+     * will only be emitted once at the start and end respectively.
+     **/
+    void scanBatchStart(const MultiScanOptions *opts);
+
+    /**
+     * Indicates the end of a batch scan.
+     *
+     * @param ok @c true if the batch scan completed successfully
+     **/
+    void scanBatchEnd(bool ok);
+
+    /**
+     * Indicates that a new scan device has been connected.
+     *
+     * @param dev The new device, or @c NULL if none is connected.
+     **/
+    void deviceConnected(KScanDevice *dev);
+
 private slots:
     void slotScanProgress(int value);
 
 private:
-
     enum ScanMode {                 // order fixed by GUI buttons
         SaneDebugMode = 0,
         VirtualScannerMode = 1,
@@ -312,7 +341,6 @@ private:
     };
 
     KScanDevice::Status prepareScan(QString *vfp);
-    KScanDevice::Status performADFScan();
 
     void createNoScannerMsg(bool galleryMode);
     void initStartupArea(bool dontRestore);
@@ -334,15 +362,17 @@ private:
     QProgressDialog *mProgressDialog;
     KLed *mLed;
 
-//    AdfBehaviour adf;
     ScanParams::ScanMode mScanMode;
     ScanSizeSelector *mAreaSelect;
+
+    MultiScanOptions::Capabilities mDestinationCapabilities;
 
     KScanOption *mResolutionBind;
     KScanOption *mSourceSelect;
 
     KMessageWidget *mProblemMessage;
     KMessageWidget *mNoScannerMessage;
+    KMessageWidget *mMultipleMessage;
 };
 
 #endif                          // SCANPARAMS_H

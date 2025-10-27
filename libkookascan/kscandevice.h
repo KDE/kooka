@@ -32,6 +32,8 @@
 #include <kconfigskeleton.h>
 
 #include "scanimage.h"
+#include "kscanoptset.h"
+#include "multiscanoptions.h"
 
 extern "C" {
 #include <sane/sane.h>
@@ -44,6 +46,8 @@ class KConfigSkeletonItem;
 
 class KScanOption;
 class KScanOptSet;
+class MultiScanOptions;
+
 
 /**
  * @short Access and control a scanner.
@@ -84,8 +88,12 @@ public:
         Reload,
         Cancelled,
         OptionNotActive,
-        NotSupported
+        NotSupported,
+        AdfNoDoc,					// empty for the first scan
+        AdfEmpty,					// empty for subsequent scans
+        NotSaved,					// not accepted by destination
     };
+    Q_ENUM(Status)
 
     /**
      * Construct a new scanner device object.
@@ -97,7 +105,7 @@ public:
     /**
      * Destructor.
      **/
-    ~KScanDevice();
+    virtual ~KScanDevice();
 
     /**
      * Open a scanner device.
@@ -138,10 +146,7 @@ public:
      * Check whether a scanner device is opened and connected: that is,
      * whether the @c openDevice() returned @c KScanDevice::Ok).
      **/
-    bool isScannerConnected() const
-    {
-        return (mScannerInitialised);
-    }
+    bool isScannerConnected() const			{ return (mScannerInitialised); }
 
     /**
      * Get the SANE scanner handle of the current scanner.
@@ -149,13 +154,10 @@ public:
      * @return The scanner handle, or @c nullptr if no scanner is
      * currently open.
      **/
-    SANE_Handle scannerHandle() const
-    {
-        return (mScannerHandle);
-    }
+    SANE_Handle scannerHandle() const			{ return (mScannerHandle); }
 
     /**
-     * Acquires a preview from the current scanner device.
+     * Acquire a preview from the current scanner device.
      * When the scan is complete, a result image will be sent by
      * @c sigNewPreview.
      *
@@ -163,20 +165,40 @@ public:
      * in greyscale regardless of any other settings.
      * @param dpi Resolution setting for the preview. If this is 0,
      * a suitable low resolution is selected.
-     * @return The status of the operation
+     * @return the status of the preview operation
      **/
     KScanDevice::Status acquirePreview(bool forceGray = false, int dpi = 0);
 
     /**
-     * Acquires a scan from the current scanner device.
+     * Delay or wait before a scan, if requested.
+     *
+     * @param isFirst If @c true, indicates that this is being called
+     * before the first scan of a batch.
+     * @return The user's selected action, which may be one of
+     * @c KScanDevice::Ok to continue scanning,
+     * @c KScanDevice::AdfEmpty to finish the batch,
+     * @c KScanDevice::Cancelled to cancel the batch.
+     **/
+    KScanDevice::Status delayWait(bool isFirst);
+
+    /**
+     * Acquire a scan from the current scanner device.
      * When the scan is complete, a result image will be sent by
      * @c sigNewImage.
      *
-     * @param filename File name to load, for virtual scanner test mode.
-     * If this is a null or empty string, a real scan is performed.
-     * @return The status of the operation
+     * @return the status of the scan operation
      **/
-    KScanDevice::Status acquireScan(const QString &filename = QString());
+    KScanDevice::Status acquireScan();
+
+    /**
+     * Acquire a virtual scan from the specified image.
+     * This operates in the same way as @c acquireScan(), but
+     * reads the image file to produce the scanned image.
+     *
+     * @param filename The image file to read
+     * @return the status of the scan operation
+     **/
+    KScanDevice::Status acquireScan(const QString &filename);
 
     /**
      * Load the last saved preview image for this device from the saved file.
@@ -242,13 +264,31 @@ public:
     void getCurrentOptions(KScanOptSet *optSet) const;
 
     /**
-     * Load a saved parameter set. All options that exist in the set
-     * and which the current scanner supports will be @c set()
-     * with the values from the @c KScanOptSet and @c apply()'ed.
+     * Load the specified saved parameter set.  All options that
+     * exist in the saved option set and which the scanner supports
+     * will be @c set() with the values from the saved @c KScanOptSet
+     * and @c apply()'ed.
      *
-     * @param optSet An option set with the options to be loaded
+     * @param setName The name of the saved parameter set.  The
+     * default is the current scanner device name.
+     * @param category The storage category.  The default is the
+     * scanner's saved parameter set.
+     * @return @c true if the set was loaded successfully
      **/
-    void loadOptionSet(const KScanOptSet *optSet);
+    bool loadOptions(KScanOptSet::Category category, const QString &setName = QString());
+
+    /**
+     * Save the specified saved parameter set.  All options that
+     * currently exist and have been applied (in other words, all
+     * actual options that the scanner supports) will be saved.
+     *
+     * @param setName The name of the parameter set to be saved.
+     * The default is the current scanner device name.
+     * @param category The storage category.  The default is the
+     * scanner's saved parameter set.
+     * @return @c true if the set was saved successfully
+     **/
+    bool saveOptions(KScanOptSet::Category category, const QString &setName = QString()) const;
 
     /**
      * Check whether the current scanner device supports an option.
@@ -345,14 +385,6 @@ public:
     void getCurrentFormat(int *format, int *depth);
 
     /**
-     * Access a group in the global scanner configuration file.
-     *
-     * @param groupName The group name
-     * @return the group
-     */
-    static KConfigGroup configGroup(const QString &groupName);
-
-    /**
      * Get the global default value for a scanner configuration setting.
      *
      * @param item The settings template item
@@ -375,7 +407,7 @@ public:
      **/
     template <class T> T getConfig(const KConfigSkeletonItem *item) const
     {
-        const KConfigGroup grp = configGroup(mScannerName);
+        const KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
         return (grp.readEntry(item->key(), getDefault<T>(item)));
     }
 
@@ -391,8 +423,7 @@ public:
     template <class T> void storeConfig(const KConfigSkeletonItem *item, const T &val)
     {
         if (mScannerName.isNull()) return;
-        //kDebug() << "Storing config" << key << "in group" << mScannerName;
-        KConfigGroup grp = configGroup(mScannerName);
+        KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
         grp.writeEntry(item->key(), val);
         grp.sync();
     }
@@ -471,7 +502,44 @@ public:
      * @param type the image type
      * @see sigScanStart()
      **/
-    void setTestFormat(ScanImage::ImageType type)	{ mTestFormat = type; }
+    void setTestFormat(ScanImage::ImageType type)		{ mTestFormat = type; }
+
+    /**
+     * Check whether the currently selected scan source is an ADF.
+     *
+     * @return @c true if an ADF is selected
+     **/
+    bool isAdfScan() const					{ return (mScanningAdf); }
+
+    /**
+     * Check whether the current scanner has an ADF available.
+     *
+     * @return @c true if an ADF is available
+     **/
+    bool isAdfAvailable();
+
+    /**
+     * Test whether the scan source setting identifies an ADF.
+     *
+     * @param val The option value
+     * @return @c true if the value identifies an ADF
+     **/
+    static bool matchesAdf(const QByteArray &val);
+
+    /**
+     * Access the ADF and multiple scan options to be used for scanning.
+     *
+     * @param opts The options to use
+     * @note It is acceptable to change the options via the pointer.
+     **/
+    MultiScanOptions *multiScanOptions()		{ return (&mMultiScanOptions); };
+
+    /**
+     * Load the saved scanner parameter set and multiple scan options.
+     *
+     * @return @c true if the options were loaded successfully
+     **/
+    bool loadStartupConfig();
 
 public slots:
     /**
@@ -541,7 +609,7 @@ signals:
      * an error or was cancelled, and after the @c sigNewImage or
      * the @c sigNewPreview.
      *
-     * @param stat Status of the scan
+     * @param stat status of the scan
      **/
     void sigScanFinished(KScanDevice::Status stat);
 
@@ -552,6 +620,16 @@ signals:
      * scanner device is still open and valid.
      **/
     void sigCloseDevice();
+
+    /**
+     * Indicate that a scan is about to pause.
+     **/
+    void sigScanPauseStart();
+
+    /**
+     * Indicate that a scan is about to continue after a pause.
+     **/
+    void sigScanPauseEnd();
 
 private slots:
     void doProcessABlock();
@@ -573,15 +651,27 @@ private:
      **/
     const QString previewFile() const;
 
+    /**
+     * Load a saved parameter set. All options that exist in the set
+     * and which the current scanner supports will be @c set()
+     * with the values from the @c KScanOptSet and @c apply()'ed.
+     *
+     * @param optSet An option set with the options to be loaded
+     **/
+    void loadOptionSet(const KScanOptSet *optSet);
+
     KScanDevice::Status findOptions();
     void showOptions();
     void loadOptionSetInternal(const KScanOptSet *optSet, bool prio);
     void applyAllOptions(bool prio);
 
+    ScanImage::ImageType getScanFormat(const SANE_Parameters *p);
     KScanDevice::Status createNewImage(const SANE_Parameters *p);
 
     KScanDevice::Status acquireData(bool isPreview);
-    void scanFinished(KScanDevice::Status status);
+    KScanDevice::Status startAcquire(ScanImage::ImageType fmt);
+    KScanDevice::Status scanFinished(KScanDevice::Status status, int scanCount = -1);
+    void updateAdfState(const KScanOption *so = nullptr);
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
@@ -590,8 +680,7 @@ private:
     void clearSavedAuth();
 
     /**
-     * Save the current option parameter set.
-     * Only active and GUI options are saved.
+     * Save the current scanner parameter set and multiple scan options.
      **/
     void saveStartupConfig();
 
@@ -604,7 +693,7 @@ private:
         ScanInProgress,
         ScanNextFrame,
         ScanStopNow,
-        ScanStopAdfFinished
+        ScanStopAdfEmpty
     };
 
     typedef QHash<QByteArray, KScanOption *> OptionHash;
@@ -616,6 +705,7 @@ private:
     QByteArray mScannerName;
     bool mScannerInitialised;
     SANE_Handle mScannerHandle;
+    MultiScanOptions mMultiScanOptions;
 
     KScanDevice::ScanningState mScanningState;
     SANE_Status mSaneStatus;
@@ -628,6 +718,8 @@ private:
     int mPixelX, mPixelY;
     bool mScanningPreview;
     QSocketNotifier *mSocketNotifier;
+    bool mScanningAdf;
+    int mScanCount;
 
     int mCurrScanResolutionX;
     int mCurrScanResolutionY;
