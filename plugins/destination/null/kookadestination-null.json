@@ -1,10 +1,8 @@
 {
     "KPlugin": {
         "Description": "Discard the scanned image",
-        "Description[x-test]": "xxDiscard the scanned imagexx",
         "Icon": "trash-empty",
         "License": "GPL",
-        "Name": "Discard Image",
-        "Name[x-test]": "xxDiscard Imagexx"
+        "Name": "Discard Image"
     }
 }

@@ -1,10 +1,8 @@
 {
     "KPlugin": {
         "Description": "Assemble scanned images into multiple pages",
-        "Description[x-test]": "xxAssemble scanned images into multiple pagesxx",
         "Icon": "document-replace",
         "License": "GPL",
-        "Name": "Multiple Pages",
-        "Name[x-test]": "xxMultiple Pagesxx"
+        "Name": "Multiple Pages"
     }
 }
