@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-29 00:41+0000\n"
+"POT-Creation-Date: 2025-10-29 00:41+0000\n"
 "PO-Revision-Date: 2024-12-10 01:01+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -24,12 +24,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde@peremen.name"
 
-#: ../plugins/destination/abstractdestination.cpp:86
+#: ../plugins/destination/abstractdestination.cpp:87
 #, kde-format
 msgid "Remember this format"
 msgstr "이 형식 기억하기"
 
-#: ../plugins/destination/abstractdestination.cpp:120
+#: ../plugins/destination/abstractdestination.cpp:121
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -39,107 +39,267 @@ msgstr ""
 "임시 그림 파일<nl/><filename>%1</filename>을(를) 저장할 수 없음<nl/><message>"
 "%2</message>"
 
-#: ../plugins/destination/abstractdestination.cpp:160
-#: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1177
+#: ../plugins/destination/abstractdestination.cpp:164
+#: ../plugins/destination/application/destinationapplication.cpp:163
+#: kookaview.cpp:1126
 #, kde-format
 msgid "Other..."
 msgstr "기타..."
 
-#: ../plugins/destination/application/destinationapplication.cpp:94
+#: ../plugins/destination/application/destinationapplication.cpp:85
 #, kde-format
 msgid "Sending to application"
 msgstr "앱으로 전송 중"
 
-#: ../plugins/destination/application/destinationapplication.cpp:96
+#: ../plugins/destination/application/destinationapplication.cpp:87
 #, kde-kuit-format
 msgid "Sending to <application>%1</application>"
 msgstr "<application>%1</application>(으)로 전송 중"
 
-#: ../plugins/destination/application/destinationapplication.cpp:192
+#: ../plugins/destination/application/destinationapplication.cpp:165
 #, kde-format
 msgid "Application:"
 msgstr "앱:"
 
-#: ../plugins/destination/application/destinationapplication.cpp:198
-#: ../plugins/destination/share/destinationshare.cpp:137
+#: ../plugins/destination/application/destinationapplication.cpp:171
+#: ../plugins/destination/share/destinationshare.cpp:99
 #, kde-format
 msgid "Image format:"
 msgstr "그림 형식:"
 
-#: ../plugins/destination/clipboard/destinationclipboard.cpp:61
+#: ../plugins/destination/clipboard/destinationclipboard.cpp:62
 #, kde-format
 msgid "Copying image to clipboard"
 msgstr "클립보드에 그림 복사하는 중"
 
-#: ../plugins/destination/gallery/destinationgallery.cpp:69
+#: ../plugins/destination/gallery/destinationgallery.cpp:105
 #, kde-kuit-format
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
-msgctxt "@title:window"
-msgid "Print Image"
-msgstr "그림 인쇄"
+msgid "Save Multipage"
+msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#: ../plugins/destination/multipage/destinationmultipage.cpp:115
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgctxt "@info"
+msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
+msgstr ""
+"그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
+
+#: ../plugins/destination/multipage/destinationmultipage.cpp:117
+#: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
+#, fuzzy, kde-format
+#| msgid "Cannot Save Image"
+msgid "Cannot Save File"
+msgstr "그림을 저장할 수 없음"
+
+#: ../plugins/destination/multipage/destinationmultipage.cpp:221
+#, fuzzy, kde-format
+#| msgid "File format:"
+msgid "Output format:"
+msgstr "파일 형식:"
+
+#: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
+msgid "Page Setup..."
+msgstr ""
+
+#: ../plugins/destination/multipage/destinationmultipage.cpp:225
+#, kde-format
+msgctxt "@info:tootip"
+msgid "Set page size and layout"
+msgstr ""
+
+#: ../plugins/destination/multipage/destinationmultipage.cpp:242
+#, fuzzy, kde-kuit-format
+#| msgid "Saving to <filename>%1</filename>"
+msgid "Saving page %1 to <filename>%2</filename>"
+msgstr "<filename>%1</filename>(으)로 저장"
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
+#, kde-format
+msgid "PDF Page Setup"
+msgstr ""
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
+#, fuzzy, kde-format
+#| msgid "Set Zoom..."
+msgid "Custom..."
+msgstr "크기 조정..."
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
+#, fuzzy, kde-format
+#| msgctxt "@label:textbox"
+#| msgid "Image size:"
+msgid "Page size:"
+msgstr "그림 크기:"
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
+#, fuzzy, kde-format
+#| msgctxt "@item:intext abbreviation for 'millimetres'"
+#| msgid " mm"
+msgctxt "unit suffix for millimetres"
+msgid " mm"
+msgstr " mm"
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:113
+#, kde-format
+msgctxt "centered 'x' separator for height/width"
+msgid "×"
+msgstr ""
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
+#, kde-format
+msgctxt "@option:radio paper orientation"
+msgid "Portrait"
+msgstr ""
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
+#, kde-format
+msgctxt "@option:radio paper orientation"
+msgid "Landscape"
+msgstr ""
+
+#: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "Print options"
+msgid "Orientation:"
+msgstr "인쇄 설정"
+
+#: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"Invalid print options were specified:\n"
-"\n"
-"%1"
+"Cannot locate the <command section=\"1\">tiffcp</command> command,<nl/"
+">ensure that it is available on <envvar>PATH</envvar>.<nl/><nl/>The command "
+"is part of the <application>libtiff</application> package,<nl/>but it may "
+"need to be installed separately."
 msgstr ""
-"잘못된 인쇄 옵션을 지정했습니다:\n"
-"\n"
-"%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
-msgctxt "@title:window"
-msgid "Cannot Print"
-msgstr "인쇄할 수 없음"
+msgid "Cannot find TIFF command"
+msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:106
+#: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgctxt "@info"
+msgid ""
+"Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
+msgstr ""
+"그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
+
+#: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgctxt "@info"
+msgid ""
+"Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
+"standard error for any message)"
+msgstr ""
+"그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
+
+#: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
+#, fuzzy, kde-format
+#| msgid "Cannot Save Image"
+msgid "Cannot Append Page"
+msgstr "그림을 저장할 수 없음"
+
+#: ../plugins/destination/null/destinationnull.cpp:65
+#, fuzzy, kde-format
+#| msgid "Saving image"
+msgid "Discarding image"
+msgstr "그림 저장"
+
+#: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
 msgid "Print immediately with same settings"
 msgstr "같은 설정으로 즉시 인쇄"
 
-#: ../plugins/destination/print/destinationprint.cpp:116
+#: ../plugins/destination/print/destinationprint.cpp:120
 #, kde-format
 msgid "Printing image"
 msgstr "그림 인쇄"
 
-#: ../plugins/destination/save/destinationsave.cpp:125
+#: ../plugins/destination/save/destinationsave.cpp:207
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>Automatically generating file names requires a template name.</"
+"para><para>The file name <filename>%1</filename> should either contain a "
+"sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
+"a sequence<nl/>of numeric digits before the file extension.</para>"
+msgstr ""
+
+#: ../plugins/destination/save/destinationsave.cpp:211
+#, kde-format
+msgid "Cannot Auto Generate"
+msgstr ""
+
+#: ../plugins/destination/save/destinationsave.cpp:253
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Cannot create temporary file <filename>%1</filename>"
+msgctxt "@info"
+msgid "Cannot access remote location <filename>%1</filename>"
+msgstr "임시 파일 <filename>%1</filename>을(를) 만들 수 없습니다"
+
+#: ../plugins/destination/save/destinationsave.cpp:255
+#: ../plugins/destination/save/destinationsave.cpp:390
+#: ../plugins/destination/save/destinationsave.cpp:525
+#, kde-format
+msgid "Cannot Save Image"
+msgstr "그림을 저장할 수 없음"
+
+#: ../plugins/destination/save/destinationsave.cpp:388
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
 "그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
 
-#: ../plugins/destination/save/destinationsave.cpp:127
-#: ../plugins/destination/save/destinationsave.cpp:230
-#, kde-format
-msgid "Cannot Save Image"
-msgstr "그림을 저장할 수 없음"
-
-#: ../plugins/destination/save/destinationsave.cpp:154
+#: ../plugins/destination/save/destinationsave.cpp:424
 #, kde-format
 msgid "Saving image"
 msgstr "그림 저장"
 
-#: ../plugins/destination/save/destinationsave.cpp:155
+#: ../plugins/destination/save/destinationsave.cpp:427
 #, kde-kuit-format
 msgid "Saving to <filename>%1</filename>"
 msgstr "<filename>%1</filename>(으)로 저장"
 
-#: ../plugins/destination/save/destinationsave.cpp:172 formatdialog.cpp:280
+#: ../plugins/destination/save/destinationsave.cpp:444 formatdialog.cpp:280
 #, kde-format
 msgid "Save Scan"
 msgstr "스캔 저장"
 
-#: ../plugins/destination/save/destinationsave.cpp:228
+#: ../plugins/destination/save/destinationsave.cpp:516
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
+#| "resource> is not supported."
+msgctxt "@info"
+msgid ""
+"Cannot save to <filename>%2</filename><nl/>Could not find an image format "
+"for the file name <filename>%1</filename>."
+msgstr ""
+"<filename>%2</filename>(으)로 저장할 수 없음<nl/><resource>%1</resource> 그"
+"림 형식은 지원하지 않습니다."
+
+#: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -149,32 +309,39 @@ msgstr ""
 "<filename>%2</filename>(으)로 저장할 수 없음<nl/><resource>%1</resource> 그"
 "림 형식은 지원하지 않습니다."
 
-#: ../plugins/destination/share/destinationshare.cpp:143
+#: ../plugins/destination/share/destinationshare.cpp:105
 #, kde-format
 msgid "Share to:"
 msgstr "다음으로 공유:"
 
-#: ../plugins/destination/share/destinationshare.cpp:151
+#: ../plugins/destination/share/destinationshare.cpp:113
 #, kde-kuit-format
 msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
-#: ../plugins/destination/share/destinationshare.cpp:217
-#, kde-kuit-format
+#: ../plugins/destination/share/destinationshare.cpp:269
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "The scan was shared to<nl/><link>%1</link>"
 msgctxt "@info"
-msgid "The scan was shared to<nl/><link>%1</link>"
-msgstr "스캔 결과를 다음으로 공유함:<nl/><link>%1</link>"
+msgid "The scan was shared to<nl/><link>%2</link>"
+msgid_plural "The scans were shared to<nl/><link>%2</link>"
+msgstr[0] "스캔 결과를 다음으로 공유함:<nl/><link>%1</link>"
 
-#: ../plugins/destination/share/destinationshare.cpp:218
+#: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
 msgid "Scan Shared"
 msgstr "스캔한 그림 공유"
 
-#: ../plugins/destination/share/destinationshare.cpp:227
-#, kde-kuit-format
+#: ../plugins/destination/share/destinationshare.cpp:282
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
 msgctxt "@info"
-msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
-msgstr "스캔한 그림을 공유할 수 없음<nl/><nl/><message>%1</message>"
+msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
+msgid_plural ""
+"Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
+msgstr[0] "스캔한 그림을 공유할 수 없음<nl/><nl/><message>%1</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -367,7 +534,7 @@ msgstr "OCR 엔진 선택과 설정을 확인하십시오."
 msgid "OCR Setup Error"
 msgstr "OCR 설정 오류"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:764
 #, kde-format
 msgid "Configure OCR..."
 msgstr "OCR 설정..."
@@ -1093,25 +1260,49 @@ msgstr "그림 상하 반전"
 msgid "Error updating image %1"
 msgstr "그림 %1 업데이트 오류"
 
-#: imgprintdialog.cpp:65
+#: imgprintdialog.cpp:82
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Image"
+msgstr "그림 인쇄"
+
+#: imgprintdialog.cpp:105
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Invalid print options were specified:\n"
+"\n"
+"%1"
+msgstr ""
+"잘못된 인쇄 옵션을 지정했습니다:\n"
+"\n"
+"%1"
+
+#: imgprintdialog.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Print"
+msgstr "인쇄할 수 없음"
+
+#: imgprintdialog.cpp:125
 #, kde-format
 msgctxt "@title:tab"
 msgid "Image"
 msgstr "그림"
 
-#: imgprintdialog.cpp:85
+#: imgprintdialog.cpp:145
 #, kde-format
 msgctxt "@title:group"
 msgid "Scaling"
 msgstr "크기 조정"
 
-#: imgprintdialog.cpp:93
+#: imgprintdialog.cpp:153
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
 msgstr "화면에 표시된 크기"
 
-#: imgprintdialog.cpp:94
+#: imgprintdialog.cpp:154
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1121,25 +1312,25 @@ msgstr ""
 "<div>화면의 해상도에 따라서 화면에 표시된 크기와 같은 크기로 인쇄합니다.</"
 "div>"
 
-#: imgprintdialog.cpp:98
+#: imgprintdialog.cpp:158
 #, kde-format
 msgid "Screen resolution:"
 msgstr "화면 해상도:"
 
-#: imgprintdialog.cpp:103
+#: imgprintdialog.cpp:163
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
 msgstr "<div>현재 화면 해상도입니다. 여기에서 변경할 수 없습니다.</div>"
 
-#: imgprintdialog.cpp:107
+#: imgprintdialog.cpp:167
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
 msgstr "스캔한 크기"
 
-#: imgprintdialog.cpp:108
+#: imgprintdialog.cpp:168
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1150,18 +1341,18 @@ msgstr ""
 "<div>스캔 해상도에서 계산한 크기로 인쇄합니다. 그림에 저장된 해상도를 사용하"
 "며, 해상도 정보가 없으면 여기에 입력할 수 있습니다.</div>"
 
-#: imgprintdialog.cpp:112
+#: imgprintdialog.cpp:172
 #, kde-format
 msgid "Scan resolution:"
 msgstr "스캔 해상도:"
 
-#: imgprintdialog.cpp:117
+#: imgprintdialog.cpp:177
 #, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
 msgstr " dpi"
 
-#: imgprintdialog.cpp:118
+#: imgprintdialog.cpp:178
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1171,13 +1362,13 @@ msgstr ""
 "<div>이 값은 그림에 저장된 스캔 해상도입니다. 필요한 경우 변경할 수 있습니다."
 "</div>"
 
-#: imgprintdialog.cpp:125
+#: imgprintdialog.cpp:185
 #, kde-format
 msgctxt "@option:radio"
 msgid "Custom size"
 msgstr "사용자 정의 크기"
 
-#: imgprintdialog.cpp:126
+#: imgprintdialog.cpp:186
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1185,43 +1376,43 @@ msgid ""
 "</div>"
 msgstr "<div>지정한 크기로 인쇄합니다. 그림은 종이 가운데에 위치합니다.</div>"
 
-#: imgprintdialog.cpp:130
+#: imgprintdialog.cpp:190
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
 msgstr "그림 너비:"
 
-#: imgprintdialog.cpp:135 imgprintdialog.cpp:149
+#: imgprintdialog.cpp:195 imgprintdialog.cpp:209
 #, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
 msgstr " mm"
 
-#: imgprintdialog.cpp:136
+#: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
 msgstr "<div>인쇄할 그림 너비입니다.</div>"
 
-#: imgprintdialog.cpp:144
+#: imgprintdialog.cpp:204
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
 msgstr "그림 높이:"
 
-#: imgprintdialog.cpp:150
+#: imgprintdialog.cpp:210
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
 msgstr "<div>인쇄할 그림 높이입니다.</div>"
 
-#: imgprintdialog.cpp:159
+#: imgprintdialog.cpp:219
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
 msgstr "쪽 맞춤"
 
-#: imgprintdialog.cpp:160
+#: imgprintdialog.cpp:220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1231,19 +1422,19 @@ msgstr ""
 "<div>종이에 사용할 수 있는 최대한의 크기로 인쇄합니다. 종횡비를 유지합니다.</"
 "div>"
 
-#: imgprintdialog.cpp:171
+#: imgprintdialog.cpp:231
 #, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
 msgstr "기타 옵션"
 
-#: imgprintdialog.cpp:175
+#: imgprintdialog.cpp:235
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
 msgstr "종횡비 유지"
 
-#: imgprintdialog.cpp:176
+#: imgprintdialog.cpp:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1252,13 +1443,13 @@ msgid ""
 msgstr ""
 "<div>크기를 조정할 때 인쇄한 그림과 원본 그림의 종횡비를 유지합니다.</div>"
 
-#: imgprintdialog.cpp:182
+#: imgprintdialog.cpp:245
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
 msgstr "저해상도 모드(빠른 초안 인쇄)"
 
-#: imgprintdialog.cpp:183
+#: imgprintdialog.cpp:246
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1268,31 +1459,31 @@ msgstr ""
 "<div>최대한 낮은 해상도로 인쇄합니다. 모든 프린터에서 의도한 대로 작동하지 않"
 "을 수도 있습니다.</div>"
 
-#: imgprintdialog.cpp:189
+#: imgprintdialog.cpp:252
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
 msgstr "절취선:"
 
-#: imgprintdialog.cpp:193
+#: imgprintdialog.cpp:256
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
 msgstr "없음"
 
-#: imgprintdialog.cpp:194
+#: imgprintdialog.cpp:257
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
 msgstr "여러 쪽"
 
-#: imgprintdialog.cpp:195
+#: imgprintdialog.cpp:258
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
 msgstr "항상"
 
-#: imgprintdialog.cpp:196
+#: imgprintdialog.cpp:259
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -1302,54 +1493,54 @@ msgstr ""
 "<div>절취선을 인쇄할지 여부입니다. 절취선을 표시하면 인쇄 가능 영역의 크기가 "
 "작아집니다.</div>"
 
-#: imgprintdialog.cpp:207
+#: imgprintdialog.cpp:270
 #, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
 msgstr "인쇄 레이아웃"
 
-#: imgprintdialog.cpp:212
+#: imgprintdialog.cpp:275
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
 msgstr "그림 크기:"
 
-#: imgprintdialog.cpp:215
+#: imgprintdialog.cpp:278
 #, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
 msgstr "%1 x %2픽셀"
 
-#: imgprintdialog.cpp:220
+#: imgprintdialog.cpp:283
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
 msgstr "사용 가능한 인쇄 영역:"
 
-#: imgprintdialog.cpp:227
+#: imgprintdialog.cpp:290
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
 msgstr "그림 인쇄 영역:"
 
-#: imgprintdialog.cpp:234
+#: imgprintdialog.cpp:297
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
 msgstr "필요한 쪽 수:"
 
-#: imgprintdialog.cpp:297
+#: imgprintdialog.cpp:360
 #, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
 msgstr "%1 dpi"
 
-#: imgprintdialog.cpp:314
+#: imgprintdialog.cpp:377
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
 msgstr "크기를 조정하려면 스캔 해상도를 지정해야 합니다."
 
-#: imgprintdialog.cpp:319
+#: imgprintdialog.cpp:382
 #, kde-format
 msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
@@ -1358,19 +1549,19 @@ msgstr ""
 "사용자 정의 크기 조절을 하려면 올바른 크기를 지정해야 합니다. 지정한 크기 중 "
 "하나가 0입니다."
 
-#: imgprintdialog.cpp:397 imgprintdialog.cpp:401
+#: imgprintdialog.cpp:460 imgprintdialog.cpp:464
 #, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
 msgstr "%1 x %2 mm"
 
-#: imgprintdialog.cpp:405
+#: imgprintdialog.cpp:468
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
 msgstr "%1"
 
-#: imgprintdialog.cpp:407
+#: imgprintdialog.cpp:470
 #, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
@@ -1388,87 +1579,87 @@ msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
 msgstr "디렉터리 <filename>%2</filename>을(를)<nl/>만들 수 없습니다.<nl/>%1"
 
-#: imgsaver.cpp:328
+#: imgsaver.cpp:331
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
 msgstr "인덱스 색상 그림(최대 8비트 색 농도)"
 
-#: imgsaver.cpp:332
+#: imgsaver.cpp:335
 #, kde-format
 msgid "gray scale image (up to 8 bit depth)"
 msgstr "회색조 그림(최대 8비트 색 농도)"
 
-#: imgsaver.cpp:336
+#: imgsaver.cpp:339
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
 msgstr "라인아트 그림(흑백, 1비트 농도)"
 
-#: imgsaver.cpp:340
+#: imgsaver.cpp:343
 #, kde-format
 msgid "high/true color image (more than 8 bit depth)"
 msgstr "하이컬러/트루컬러 그림(8비트 이상 색 농도)"
 
-#: imgsaver.cpp:344
+#: imgsaver.cpp:347
 #, kde-format
 msgid "unknown image type %1"
 msgstr "알 수 없는 그림 형식 %1"
 
-#: imgsaver.cpp:366
+#: imgsaver.cpp:369
 #, kde-format
 msgid "Save OK"
 msgstr "저장 완료"
 
-#: imgsaver.cpp:368
+#: imgsaver.cpp:371
 #, kde-format
 msgid "Permission denied"
 msgstr "권한 거부됨"
 
-#: imgsaver.cpp:370
+#: imgsaver.cpp:373
 #, kde-format
 msgid "Bad file name"
 msgstr "잘못된 파일 이름"
 
-#: imgsaver.cpp:372
+#: imgsaver.cpp:375
 #, kde-format
 msgid "No space left on device"
 msgstr "장치에 공간이 부족함"
 
-#: imgsaver.cpp:374
+#: imgsaver.cpp:377
 #, kde-format
 msgid "Cannot write image format '%1'"
 msgstr "그림 형식 '%1'(으)로 기록할 수 없음"
 
-#: imgsaver.cpp:376
+#: imgsaver.cpp:379
 #, kde-format
 msgid "Cannot write using protocol '%1'"
 msgstr "프로토콜 '%1'(으)로 기록할 수 없음"
 
-#: imgsaver.cpp:378
+#: imgsaver.cpp:381
 #, kde-format
 msgid "User cancelled saving"
 msgstr "사용자가 저장을 취소함"
 
-#: imgsaver.cpp:380
+#: imgsaver.cpp:383
 #, kde-format
 msgid "Cannot create directory"
 msgstr "디렉터리를 만들 수 없음"
 
-#: imgsaver.cpp:382
+#: imgsaver.cpp:385
 #, kde-format
 msgid "Save failed"
 msgstr "저장 실패"
 
-#: imgsaver.cpp:384
+#: imgsaver.cpp:387
 #, kde-format
 msgid "Bad parameter"
 msgstr "잘못된 인자"
 
-#: imgsaver.cpp:386
+#: imgsaver.cpp:389
 #, kde-format
 msgid "Unknown status %1"
 msgstr "알 수 없는 상태 %1"
 
-#: imgsaver.cpp:409
+#: imgsaver.cpp:412
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1479,47 +1670,47 @@ msgstr ""
 "지정한 파일 이름에 확장자가 없습니다.<nl/>자동으로 알맞는 확장자를 추가하시겠"
 "습니까?<nl/><nl/>이 경우 새 파일 이름은 <filename>%1</filename>입니다"
 
-#: imgsaver.cpp:412
+#: imgsaver.cpp:415
 #, kde-format
 msgid "Extension Missing"
 msgstr "확장자 없음"
 
-#: imgsaver.cpp:413
+#: imgsaver.cpp:416
 #, kde-format
 msgid "Add Extension"
 msgstr "확장자 추가"
 
-#: imgsaver.cpp:414
+#: imgsaver.cpp:417
 #, kde-format
 msgid "Do Not Add"
 msgstr "추가하지 않음"
 
-#: imgsaver.cpp:439
+#: imgsaver.cpp:442
 #, kde-format
 msgid "Target already exists"
 msgstr "대상이 이미 존재함"
 
-#: imgsaver.cpp:452
+#: imgsaver.cpp:455
 #, kde-format
 msgid "Unable to copy the file"
 msgstr "파일을 복사할 수 없음"
 
-#: imgsaver.cpp:453
+#: imgsaver.cpp:456
 #, kde-format
 msgid "Unable to rename the file"
 msgstr "파일의 이름을 바꿀 수 없음"
 
-#: imgsaver.cpp:454
+#: imgsaver.cpp:457
 #, kde-format
 msgid "Error copying file"
 msgstr "파일 복사 오류"
 
-#: imgsaver.cpp:455
+#: imgsaver.cpp:458
 #, kde-format
 msgid "Error renaming file"
 msgstr "파일 이름 바꾸기 오류"
 
-#: imgsaver.cpp:456
+#: imgsaver.cpp:459
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -1630,7 +1821,7 @@ msgstr "속성..."
 msgid "Select Scan Device..."
 msgstr "스캔 장치 선택..."
 
-#: kooka.cpp:283 kookaview.cpp:546
+#: kooka.cpp:283 kookaview.cpp:542
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "스캔 장치 추가..."
@@ -1745,12 +1936,12 @@ msgstr "갤러리와 섬네일"
 msgid "Image Gallery and Thumbnail View"
 msgstr "그림 갤러리와 섬네일 보기"
 
-#: kookapref.cpp:61 kookaview.cpp:277
+#: kookapref.cpp:61 kookaview.cpp:273
 #, kde-format
 msgid "OCR"
 msgstr "OCR"
 
-#: kookascanparams.cpp:68
+#: kookascanparams.cpp:122
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1764,18 +1955,18 @@ msgstr ""
 "스캔을 하려면 <link url=\"a:1\">스캐너 장치를 선택</link>하거나, 자동으로 감"
 "지된 스캐너가 없다면 <link url=\"a:2\">장치를 추가</link>할 수 있습니다."
 
-#: kookascanparams.cpp:114
+#: kookascanparams.cpp:168
 #, kde-format
 msgid "Scan &destination:"
 msgstr "스캔 대상(&D):"
 
-#: kookascanparams.cpp:150
+#: kookascanparams.cpp:204
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No destination selected"
 msgstr "대상을 선택하지 않았음"
 
-#: kookascanparams.cpp:160
+#: kookascanparams.cpp:214
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load plugin '%1'"
@@ -2102,42 +2293,42 @@ msgstr "그림 뷰어 도구 모음"
 msgid "Scanning Toolbar"
 msgstr "스캔 도구 모음"
 
-#: kookaview.cpp:200
+#: kookaview.cpp:197
 #, kde-format
 msgid "Image View"
 msgstr "그림 보기"
 
-#: kookaview.cpp:250
+#: kookaview.cpp:246
 #, kde-format
 msgid "Scan Preview"
 msgstr "미리 보기 스캔"
 
-#: kookaview.cpp:260
+#: kookaview.cpp:256
 #, kde-format
 msgid "OCR results will appear here"
 msgstr "OCR 결과가 여기에 표시됩니다"
 
-#: kookaview.cpp:271
+#: kookaview.cpp:267
 #, kde-format
 msgid "Scan"
 msgstr "스캔"
 
-#: kookaview.cpp:274 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:122
+#: kookaview.cpp:270 kookaview.cpp:556 kookaview.cpp:575 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "갤러리"
 
-#: kookaview.cpp:326
+#: kookaview.cpp:322
 #, kde-format
 msgid "User specified"
 msgstr "사용자 지정"
 
-#: kookaview.cpp:327
+#: kookaview.cpp:323
 #, kde-format
 msgid "on command line"
 msgstr "명령행에서"
 
-#: kookaview.cpp:461
+#: kookaview.cpp:457
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2152,12 +2343,12 @@ msgstr ""
 "스캐너 장치를 시도함: <icode>%3</icode><nl/>libkookascan 오류 메시지: "
 "<message>%2</message><nl/>SANE 오류 메시지: <message>%1</message>"
 
-#: kookaview.cpp:516
+#: kookaview.cpp:512
 #, kde-format
 msgid "Add Scan Device"
 msgstr "스캔 장치 추가"
 
-#: kookaview.cpp:536
+#: kookaview.cpp:532
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2174,79 +2365,79 @@ msgstr ""
 "지정하십시오. <interface>스캔 장치 추가</interface> 옵션을 사용하여 백엔드 이"
 "름과 인자를 입력할 수 있으며, 자세한 옵션은 해당 대화 상자를 참조하십시오."
 
-#: kookaview.cpp:582
+#: kookaview.cpp:578
 #, kde-format
 msgid "No scanner connected"
 msgstr "연결한 스캐너 없음"
 
-#: kookaview.cpp:641
+#: kookaview.cpp:637
 #, kde-format
 msgid "No selection"
 msgstr "선택 없음"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:641
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "갤러리 폴더 %1"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:641
 #, kde-format
 msgid "Gallery image %1"
 msgstr "갤러리 그림 %1"
 
-#: kookaview.cpp:710
+#: kookaview.cpp:687
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "선택 영역에 OCR 시작"
 
-#: kookaview.cpp:716
+#: kookaview.cpp:693
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "그림에 OCR 시작"
 
-#: kookaview.cpp:723
+#: kookaview.cpp:700
 #, kde-format
 msgid "OCR File"
 msgstr "파일에 OCR 실행"
 
-#: kookaview.cpp:733
+#: kookaview.cpp:710
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "파일 <filename>%1</filename>에서 OCR을 실행하려고 읽을 수 없음:<nl/>%2"
 
-#: kookaview.cpp:735
+#: kookaview.cpp:712
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "OCR 파일을 읽을 수 없음"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:716
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "파일 <filename>%1</filename>에서 OCR 시작 중"
 
-#: kookaview.cpp:755
+#: kookaview.cpp:732
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR 완료됨"
 
-#: kookaview.cpp:762
+#: kookaview.cpp:739
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "맞춤법 검사를 실행할 OCR 텍스트 결과가 없습니다."
 
-#: kookaview.cpp:763
+#: kookaview.cpp:740
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "OCR 맞춤법 검사를 사용할 수 없음"
 
-#: kookaview.cpp:768
+#: kookaview.cpp:745
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OCR 맞춤법 검사"
 
-#: kookaview.cpp:784
+#: kookaview.cpp:761
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2255,17 +2446,17 @@ msgstr ""
 "OCR 엔진을 선택하지 않았습니다.\n"
 "OCR 작업을 진행하려면 엔진을 선택하고 설정해야 합니다."
 
-#: kookaview.cpp:786
+#: kookaview.cpp:763
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR을 설정하지 않았음"
 
-#: kookaview.cpp:795
+#: kookaview.cpp:772
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "OCR 플러그인 '%1'을(를) 불러올 수 없음"
 
-#: kookaview.cpp:903
+#: kookaview.cpp:861
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2280,27 +2471,27 @@ msgstr ""
 "캐너 장치를 시도함: <icode>%3</icode><nl/>libkookascan 오류 메시지: <message>"
 "%2</message><nl/>SANE 오류 메시지: <message>%1</message>"
 
-#: kookaview.cpp:953
+#: kookaview.cpp:902
 #, kde-format
 msgid "Create new image from selection"
 msgstr "선택 영역에서 새로운 그림 생성"
 
-#: kookaview.cpp:962
+#: kookaview.cpp:911
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "변형할 수 없음, 그림이 읽기 전용임"
 
-#: kookaview.cpp:1015
+#: kookaview.cpp:964
 #, kde-format
 msgid "Loaded image %1"
 msgstr "그림 %1 불러옴"
 
-#: kookaview.cpp:1016
+#: kookaview.cpp:965
 #, kde-format
 msgid "Unloaded image"
 msgstr "그림 불러오기 해제됨"
 
-#: kookaview.cpp:1033
+#: kookaview.cpp:982
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 불러오는 중..."
@@ -2361,8 +2552,9 @@ msgstr ""
 "오.\n"
 
 #: main.cpp:71
-#, kde-format
-msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, fuzzy, kde-format
+#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+msgid "(C) 2000-2024, the Kooka developers and contributors"
 msgstr "(C) 2000-2018, the Kooka developers and contributors"
 
 #: main.cpp:82
@@ -2521,52 +2713,52 @@ msgstr ""
 msgid "Enable Messages/Questions"
 msgstr "메시지/질문 활성화"
 
-#: prefspages.cpp:152
+#: prefspages.cpp:153
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
 msgstr "이 설정을 적용하려면 %1을(를) 다시 시작해야 합니다."
 
-#: prefspages.cpp:235
+#: prefspages.cpp:236
 #, kde-format
 msgid "Image Gallery"
 msgstr "그림 갤러리"
 
-#: prefspages.cpp:249
+#: prefspages.cpp:250
 #, kde-format
 msgid "Not shown"
 msgstr "표시하지 않음"
 
-#: prefspages.cpp:250
+#: prefspages.cpp:251
 #, kde-format
 msgid "At top"
 msgstr "위에"
 
-#: prefspages.cpp:251
+#: prefspages.cpp:252
 #, kde-format
 msgid "At bottom"
 msgstr "아래에"
 
-#: prefspages.cpp:266
+#: prefspages.cpp:267
 #, kde-format
 msgid "Thumbnail View"
 msgstr "섬네일 보기"
 
-#: prefspages.cpp:380
+#: prefspages.cpp:381
 #, kde-format
 msgid "None"
 msgstr "없음"
 
-#: prefspages.cpp:392
+#: prefspages.cpp:393
 #, kde-format
 msgid "OCR Engine:"
 msgstr "OCR 엔진:"
 
-#: prefspages.cpp:398
+#: prefspages.cpp:399
 #, kde-format
 msgid "OCR Engine Settings..."
 msgstr "OCR 엔진 설정..."
 
-#: prefspages.cpp:444
+#: prefspages.cpp:445
 #, kde-format
 msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
@@ -2575,7 +2767,7 @@ msgstr ""
 "OCR 엔진을 선택하지 않았습니다. OCR 작업을 진행하려면 엔진을 선택하고 설정해"
 "야 합니다."
 
-#: prefspages.cpp:452
+#: prefspages.cpp:453
 #, kde-format
 msgid "Unknown engine '%1'."
 msgstr "알 수 없는 엔진 '%1'."
@@ -2682,34 +2874,34 @@ msgstr "그림 불러오기 오류"
 msgid "Incoming/"
 msgstr "가져옴/"
 
-#: scangallery.cpp:886
+#: scangallery.cpp:891
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr "그림 파일<nl/><filename>%2</filename>을(를) 저장할 수 없음<nl/>%1"
 
-#: scangallery.cpp:889
+#: scangallery.cpp:894
 #, kde-format
 msgid "Image Save Error"
 msgstr "그림 저장 오류"
 
-#: scangallery.cpp:967
+#: scangallery.cpp:972
 #, kde-format
 msgid "All Files (*)"
 msgstr "모든 파일 (*)"
 
-#: scangallery.cpp:970
+#: scangallery.cpp:975
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "그림 내보내기"
 
-#: scangallery.cpp:995
+#: scangallery.cpp:1000
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr "그림 파일을 갤러리로 가져오기"
 
-#: scangallery.cpp:1110
+#: scangallery.cpp:1115
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2719,7 +2911,7 @@ msgstr ""
 "다음 폴더와 포함된 모든 파일을 완전히 삭제하시겠습니까?<nl/><filename>%1</"
 "filename><nl/>이 작업은 취소할 수 없습니다."
 
-#: scangallery.cpp:1115
+#: scangallery.cpp:1120
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2729,40 +2921,40 @@ msgstr ""
 "다음 그림 파일을 완전히 삭제하시겠습니까?<nl/><filename>%1</filename><nl/>이 "
 "작업은 취소할 수 없습니다."
 
-#: scangallery.cpp:1122
+#: scangallery.cpp:1127
 #, kde-format
 msgid "Delete Gallery Item"
 msgstr "갤러리 항목 삭제"
 
-#: scangallery.cpp:1135
+#: scangallery.cpp:1140
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 "그림 파일이나 폴더<nl/><filename>%2</filename>을(를) 삭제할 수 없음<nl/>%1"
 
-#: scangallery.cpp:1138
+#: scangallery.cpp:1143
 #, kde-format
 msgid "File Delete Error"
 msgstr "파일 삭제 오류"
 
-#: scangallery.cpp:1170
+#: scangallery.cpp:1175
 #, kde-format
 msgid "New Folder"
 msgstr "새 폴더"
 
-#: scangallery.cpp:1171
+#: scangallery.cpp:1176
 #, kde-format
 msgid "Name for the new folder:"
 msgstr "새 폴더 이름:"
 
-#: scangallery.cpp:1194
+#: scangallery.cpp:1199
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr "폴더를 만들 수 없음:<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:1196
+#: scangallery.cpp:1201
 #, kde-format
 msgid "Folder Create Error"
 msgstr "폴더 생성 오류"
@@ -2817,19 +3009,19 @@ msgstr "선택한 스캔 사전 설정 모음의 이름이나 설명 편집"
 msgid "No preset set selected."
 msgstr "스캔 사전 설정 모음을 선택하지 않았습니다."
 
-#: scanpresetsdialog.cpp:212
+#: scanpresetsdialog.cpp:211
 #, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
 msgstr "%1, %2 dpi"
 
-#: scanpresetsdialog.cpp:289
+#: scanpresetsdialog.cpp:288
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
 msgstr "스캔 사전 설정 모음 <resource>%1</resource>을(를) 삭제하시겠습니까?"
 
-#: scanpresetsdialog.cpp:290
+#: scanpresetsdialog.cpp:289
 #, kde-format
 msgid "Delete Scan Preset Set"
 msgstr "스캔 사전 설정 모음 삭제"
@@ -2874,42 +3066,42 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr "스캔: %1"
 
-#: thumbview.cpp:98
+#: thumbview.cpp:97
 #, kde-format
 msgid "Thumbnails"
 msgstr "섬네일"
 
-#: thumbview.cpp:109
+#: thumbview.cpp:108
 #, kde-format
 msgid "Preview Size"
 msgstr "미리 보기 크기"
 
-#: thumbview.cpp:333
+#: thumbview.cpp:332
 #, kde-format
 msgid "Very Large"
 msgstr "매우 크게"
 
-#: thumbview.cpp:334
+#: thumbview.cpp:333
 #, kde-format
 msgid "Large"
 msgstr "크게"
 
-#: thumbview.cpp:335
+#: thumbview.cpp:334
 #, kde-format
 msgid "Medium"
 msgstr "중간"
 
-#: thumbview.cpp:336
+#: thumbview.cpp:335
 #, kde-format
 msgid "Small"
 msgstr "작게"
 
-#: thumbview.cpp:337
+#: thumbview.cpp:336
 #, kde-format
 msgid "Very Small"
 msgstr "매우 작게"
 
-#: thumbview.cpp:338
+#: thumbview.cpp:337
 #, kde-format
 msgid "Tiny"
 msgstr "가장 작게"
@@ -2991,9 +3183,6 @@ msgstr "가장 작게"
 
 #~ msgid "PhotoCopier"
 #~ msgstr "복사기"
-
-#~ msgid "Print options"
-#~ msgstr "인쇄 설정"
 
 #~ msgid "Copies: "
 #~ msgstr "복사 부수:"

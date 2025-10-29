@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-29 00:41+0000\n"
+"POT-Creation-Date: 2025-10-29 00:41+0000\n"
 "PO-Revision-Date: 2011-12-28 12:28-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -164,6 +164,115 @@ msgstr "Dubh"
 msgid "White"
 msgstr "Bán"
 
+#: continuescandialog.cpp:61
+#, kde-format
+msgid "First Page"
+msgstr ""
+
+#: continuescandialog.cpp:61
+#, kde-format
+msgid "Next Page"
+msgstr ""
+
+#: continuescandialog.cpp:63
+#, kde-format
+msgid "Start Scan"
+msgstr ""
+
+#: continuescandialog.cpp:72
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong=\"1\">Ready to scan the first page</emphasis>%1...<nl/><nl/"
+">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
+"scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
+msgstr ""
+
+#: continuescandialog.cpp:80
+#, kde-format
+msgid "Scan Next"
+msgstr ""
+
+#: continuescandialog.cpp:84
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1...<nl/><nl/"
+">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
+"scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
+msgstr ""
+
+#: continuescandialog.cpp:93
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1...<nl/><nl/"
+">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
+"scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
+"<interface>Cancel</interface> to cancel the entire scan."
+msgstr ""
+
+#: continuescandialog.cpp:107
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong=\"1\">Waiting to scan the first page</emphasis>%1...<nl/"
+"><nl/>Prepare the page and then wait, or use <interface>Start&nbsp;Scan</"
+"interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
+"cancel the scan."
+msgstr ""
+
+#: continuescandialog.cpp:115
+#, kde-format
+msgid "Scan Now"
+msgstr ""
+
+#: continuescandialog.cpp:119
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1...<nl/><nl/"
+">Prepare the next page and then wait, or use <interface>Scan&nbsp;Now</"
+"interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
+"end the scan batch."
+msgstr ""
+
+#: continuescandialog.cpp:128
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1...<nl/><nl/"
+">Prepare the next page and then wait, or use <interface>Scan&nbsp;Now</"
+"interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
+"end the scan batch or <interface>Cancel</interface> to cancel the entire "
+"scan."
+msgstr ""
+
+#: continuescandialog.cpp:142
+#, kde-format
+msgid "Pause"
+msgstr ""
+
+#: continuescandialog.cpp:162
+#, kde-format
+msgid "Finish"
+msgstr ""
+
+#: continuescandialog.cpp:235
+#, kde-format
+msgid " (%1 second)"
+msgid_plural " (%1 seconds)"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+
+#: continuescandialog.cpp:254
+#, kde-format
+msgid " (Paused)"
+msgstr ""
+
 #: deviceselector.cpp:58
 #, kde-format
 msgid "Select"
@@ -309,88 +418,99 @@ msgstr ""
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
 
-#: kscandevice.cpp:287
+#: kscandevice.cpp:296
 #, kde-format
 msgid "No scanner selected"
 msgstr "Níl scanóir roghnaithe agat"
 
-#: kscandevice.cpp:1421
-#, kde-format
-msgid "Default startup configuration"
-msgstr ""
-
-#: kscandevice.cpp:1521
+#: kscandevice.cpp:1938
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr ""
 
-#: kscandevice.cpp:1522
+#: kscandevice.cpp:1939
 #, kde-format
 msgid "Scanner Authentication"
 msgstr ""
 
-#: kscandevice.cpp:1566
+#: kscandevice.cpp:1983
 #, kde-format
 msgid "OK"
 msgstr "OK"
 
-#: kscandevice.cpp:1567
+#: kscandevice.cpp:1984
 #, kde-format
 msgid "No device"
 msgstr ""
 
-#: kscandevice.cpp:1568
+#: kscandevice.cpp:1985
 #, kde-format
 msgid "Bad parameter"
 msgstr ""
 
-#: kscandevice.cpp:1569
+#: kscandevice.cpp:1986
 #, kde-format
 msgid "Cannot open device"
 msgstr ""
 
-#: kscandevice.cpp:1570
+#: kscandevice.cpp:1987
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr ""
 
-#: kscandevice.cpp:1571
+#: kscandevice.cpp:1988
 #, kde-format
 msgid "Error while scanning"
 msgstr ""
 
-#: kscandevice.cpp:1572
+#: kscandevice.cpp:1989
 #, kde-format
 msgid "Empty picture"
 msgstr ""
 
-#: kscandevice.cpp:1573
+#: kscandevice.cpp:1990
 #, kde-format
 msgid "Out of memory"
 msgstr "Cuimhne ídithe"
 
-#: kscandevice.cpp:1574
+#: kscandevice.cpp:1991
 #, kde-format
 msgid "Needs reload"
 msgstr ""
 
-#: kscandevice.cpp:1575
+#: kscandevice.cpp:1992
 #, kde-format
 msgid "Cancelled"
 msgstr "Cealaithe"
 
-#: kscandevice.cpp:1576
+#: kscandevice.cpp:1993
 #, kde-format
 msgid "Not active"
 msgstr ""
 
-#: kscandevice.cpp:1577
+#: kscandevice.cpp:1994
 #, kde-format
 msgid "Not supported"
 msgstr "Gan tacaíocht"
 
-#: kscandevice.cpp:1578
+#: kscandevice.cpp:1995
+#, kde-format
+msgid "ADF no document loaded"
+msgstr ""
+
+#: kscandevice.cpp:1996
+#, kde-format
+msgid "ADF empty"
+msgstr ""
+
+#: kscandevice.cpp:1997
+#, fuzzy, kde-format
+#| msgid "Not supported"
+msgid "Not accepted"
+msgstr "Gan tacaíocht"
+
+#: kscandevice.cpp:1998
 #, kde-format
 msgid "Unknown status %1"
 msgstr ""
@@ -425,9 +545,205 @@ msgstr "%"
 msgid "µsec"
 msgstr ""
 
-#: kscanoptset.cpp:190
+#: multiscandialog.cpp:56
 #, kde-format
-msgid "No description"
+msgctxt "@item:inlistbox no rotation"
+msgid "None"
+msgstr ""
+
+#: multiscandialog.cpp:57
+#, kde-format
+msgctxt "@item:inlistbox rotation 90 degrees"
+msgid "90°"
+msgstr ""
+
+#: multiscandialog.cpp:58
+#, kde-format
+msgctxt "@item:inlistbox rotation 180 degrees"
+msgid "180°"
+msgstr ""
+
+#: multiscandialog.cpp:59
+#, kde-format
+msgctxt "@item:inlistbox rotation 270 degrees"
+msgid "270°"
+msgstr ""
+
+#: multiscandialog.cpp:71
+#, kde-format
+msgid "ADF & Multiple Scan Options"
+msgstr ""
+
+#: multiscandialog.cpp:87
+#, fuzzy, kde-format
+#| msgid "Scan Progress"
+msgid "Scan source:"
+msgstr "Dul Chun Cinn an Scanadh"
+
+#: multiscandialog.cpp:96
+#, fuzzy, kde-format
+#| msgid "Select Scan Device"
+msgctxt "@info:tooltip"
+msgid "Select the scan source"
+msgstr "Roghnaigh Gléas Scanta"
+
+#: multiscandialog.cpp:116
+#, kde-format
+msgid "Scan and ADF"
+msgstr ""
+
+#: multiscandialog.cpp:126
+#, kde-format
+msgid "Single scan"
+msgstr ""
+
+#: multiscandialog.cpp:127
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Perform a single scan from the selected source"
+msgstr ""
+
+#: multiscandialog.cpp:133
+#, kde-format
+msgid "Multiple scan"
+msgstr ""
+
+#: multiscandialog.cpp:134
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Perform multiple scans from the selected source"
+msgstr ""
+
+#: multiscandialog.cpp:144
+#, kde-format
+msgid "Scan until ADF is empty"
+msgstr ""
+
+#: multiscandialog.cpp:145
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Keep scanning until the automatic document feeder is empty"
+msgstr ""
+
+#: multiscandialog.cpp:151
+#, kde-format
+msgid "Wait until ready for next scan"
+msgstr ""
+
+#: multiscandialog.cpp:152
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Wait for confirmation between scans"
+msgstr ""
+
+#: multiscandialog.cpp:158
+#, kde-format
+msgid "Scan after waiting for"
+msgstr ""
+
+#: multiscandialog.cpp:159
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delay for a time between scans"
+msgstr ""
+
+#: multiscandialog.cpp:165
+#, kde-format
+msgctxt "Time unit"
+msgid " second"
+msgid_plural " seconds"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+
+#: multiscandialog.cpp:166
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set the delay time between scans"
+msgstr ""
+
+#: multiscandialog.cpp:171
+#, kde-format
+msgid "Wait or delay before the first scan"
+msgstr ""
+
+#: multiscandialog.cpp:172
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Wait for confirmation or delay for the set time before the first scan starts"
+msgstr ""
+
+#: multiscandialog.cpp:182
+#, fuzzy, kde-format
+#| msgid "Description:"
+msgid "Destination"
+msgstr "Cur Síos:"
+
+#: multiscandialog.cpp:188
+#, kde-format
+msgid "Process multiple scans as a batch"
+msgstr ""
+
+#: multiscandialog.cpp:190
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Set this option on to process multiple scans together in a batch, or turn it "
+"off to process them individually.<br/><br/>The effect of this option depends "
+"on the selected destination and its own settings. For example, sharing "
+"multiple scans by email, with this option on, will attach all of the scans "
+"to the same email message.  With this option off, they will each be attached "
+"to a separate message."
+msgstr ""
+
+#: multiscandialog.cpp:201
+#, kde-format
+msgid "Automatically generate file names"
+msgstr ""
+
+#: multiscandialog.cpp:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Set this option on to automatically generate a file name when possible, or "
+"turn it off to always ask for a name.<br/><br/>The effect of this option "
+"depends on the selected destination and its own settings. For example, when "
+"saving to the scan gallery or another location a file name will be requested "
+"for the first file of a multiple scan. From then on the file name will be "
+"automatically incremented to generate the next.<br/><br/>A numeric suffix, "
+"or '#' characters, for the first file name will be automatically incremented "
+"with the same number of digits as entered.  Any existing numbered file will "
+"be skipped and not overwritten."
+msgstr ""
+
+#: multiscandialog.cpp:222
+#, kde-format
+msgid "Rotation"
+msgstr ""
+
+#: multiscandialog.cpp:228
+#, kde-format
+msgid "Odd pages:"
+msgstr ""
+
+#: multiscandialog.cpp:232
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the rotation for odd scan pages. The first page is page 1."
+msgstr ""
+
+#: multiscandialog.cpp:237
+#, kde-format
+msgid "Even pages:"
+msgstr ""
+
+#: multiscandialog.cpp:241
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the rotation for even scan pages."
 msgstr ""
 
 #: previewer.cpp:243
@@ -476,32 +792,32 @@ msgstr "Dubh"
 msgid "Unknown device '%1'"
 msgstr ""
 
-#: scanglobal.cpp:136
+#: scanglobal.cpp:152
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
 msgstr ""
 
-#: scanglobal.cpp:137
+#: scanglobal.cpp:153
 #, kde-format
 msgid "Scanner access and driver library"
 msgstr ""
 
-#: scanglobal.cpp:144
+#: scanglobal.cpp:160
 #, kde-format
 msgid "LibTIFF"
 msgstr ""
 
-#: scanglobal.cpp:145
+#: scanglobal.cpp:161
 #, kde-format
 msgid "TIFF image format library"
 msgstr ""
 
-#: scanglobal.cpp:158
+#: scanglobal.cpp:174
 #, kde-format
 msgid "libpaper"
 msgstr ""
 
-#: scanglobal.cpp:159
+#: scanglobal.cpp:175
 #, kde-format
 msgid "Paper size configuration library"
 msgstr ""
@@ -537,63 +853,70 @@ msgstr ""
 msgid "TIFF not supported"
 msgstr "Gan tacaíocht"
 
-#: scanparams.cpp:141
+#: scanparams.cpp:139
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
 msgstr ""
 
-#: scanparams.cpp:161
+#: scanparams.cpp:158
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
+msgstr ""
+
+#: scanparams.cpp:175
 #, kde-format
 msgid "Pre&view"
 msgstr "Réamha&mharc"
 
-#: scanparams.cpp:162
+#: scanparams.cpp:176
 #, kde-format
 msgid "Start a preview scan and show the preview image"
 msgstr ""
 
-#: scanparams.cpp:167
+#: scanparams.cpp:181
 #, kde-format
 msgid "Star&t Scan"
 msgstr ""
 
-#: scanparams.cpp:168
+#: scanparams.cpp:182
 #, kde-format
 msgid "Start a scan and save the scanned image"
 msgstr ""
 
-#: scanparams.cpp:200
+#: scanparams.cpp:209
 #, kde-format
 msgid "Stop"
 msgstr "Stad"
 
-#: scanparams.cpp:204
+#: scanparams.cpp:213
 #, kde-format
 msgid "Scanning"
 msgstr "Á Scanadh"
 
-#: scanparams.cpp:247
+#: scanparams.cpp:256
 #, kde-format
 msgid "&Basic"
 msgstr "&Bunúsach"
 
-#: scanparams.cpp:248
+#: scanparams.cpp:257
 #, kde-format
 msgid "Other"
 msgstr "Eile"
 
-#: scanparams.cpp:249
+#: scanparams.cpp:258
 #, kde-format
 msgid "Advanced"
 msgstr "Casta"
 
-#: scanparams.cpp:275
+#: scanparams.cpp:284
 #, kde-format
 msgid "SANE Debug (from PNM image)"
 msgstr ""
 
-#: scanparams.cpp:276
+#: scanparams.cpp:285
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -602,12 +925,12 @@ msgid ""
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
 
-#: scanparams.cpp:278
+#: scanparams.cpp:287
 #, kde-format
 msgid "Virtual Scanner (any image format)"
 msgstr ""
 
-#: scanparams.cpp:279
+#: scanparams.cpp:288
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -615,49 +938,60 @@ msgid ""
 "image file. This is for testing the image saving, etc."
 msgstr ""
 
-#: scanparams.cpp:292
+#: scanparams.cpp:301
 #, kde-format
 msgid "Reading mode:"
 msgstr ""
 
-#: scanparams.cpp:413
+#: scanparams.cpp:395
+#, kde-format
+msgid "ADF && Multiple Scan Options..."
+msgstr ""
+
+#: scanparams.cpp:397
+#, kde-format
+msgctxt "@info:tootip"
+msgid "Set ADF, rotation and destination options for scanning multiple pages"
+msgstr ""
+
+#: scanparams.cpp:421
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:414
+#: scanparams.cpp:422
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:415
+#: scanparams.cpp:423
 #, fuzzy, kde-format
 #| msgid "Gray"
 msgid "Grey scale"
 msgstr "Liath"
 
-#: scanparams.cpp:416
+#: scanparams.cpp:424
 #, fuzzy, kde-format
 #| msgid "Colour"
 msgid "Low colour"
 msgstr "Dath"
 
-#: scanparams.cpp:417
+#: scanparams.cpp:425
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:427
+#: scanparams.cpp:435
 #, kde-format
 msgid "Force image format:"
 msgstr ""
 
-#: scanparams.cpp:480
+#: scanparams.cpp:488
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr ""
 
-#: scanparams.cpp:571
+#: scanparams.cpp:579
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -665,7 +999,7 @@ msgid ""
 "perform scanning."
 msgstr ""
 
-#: scanparams.cpp:591
+#: scanparams.cpp:599
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -679,22 +1013,22 @@ msgid ""
 "for more information on SANE installation and setup."
 msgstr ""
 
-#: scanparams.cpp:693
+#: scanparams.cpp:698
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:696
+#: scanparams.cpp:701
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:706
+#: scanparams.cpp:711
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr ""
 
-#: scanparams.cpp:712
+#: scanparams.cpp:717
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -702,7 +1036,7 @@ msgid ""
 "not readable."
 msgstr ""
 
-#: scanparams.cpp:723
+#: scanparams.cpp:728
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -710,32 +1044,52 @@ msgid ""
 "%1</icode>."
 msgstr ""
 
-#: scanparams.cpp:740
+#: scanparams.cpp:743
 #, fuzzy, kde-kuit-format
 #| msgid "Scan Progress"
 msgid "Scan in progress"
 msgstr "Dul Chun Cinn an Scanadh"
 
-#: scanparams.cpp:741
+#: scanparams.cpp:744
 #, fuzzy, kde-kuit-format
 #| msgid "Scan Progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Dul Chun Cinn an Scanadh"
 
-#: scanparams.cpp:761
+#: scanparams.cpp:764
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr ""
 
+#: scanparams.cpp:775
+#, kde-format
+msgid ""
+"The scan source is set to the automatic document feeder.<br/>The preview may "
+"take the first sheet from the feeder.<br/><br/>Are you sure you want to "
+"preview?"
+msgstr ""
+
+#: scanparams.cpp:779
+#, fuzzy, kde-format
+#| msgid "Select"
+msgid "ADF Selected"
+msgstr "Roghnaigh"
+
+#: scanparams.cpp:780
+#, fuzzy, kde-format
+#| msgid "Pre&view"
+msgid "Preview"
+msgstr "Réamha&mharc"
+
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
-#: scansettings.kcfg:12
+#: scansettings.kcfg:20
 #, fuzzy, kde-format
 #| msgid "&Query the network for scan devices"
 msgid "Query network for available scanners"
 msgstr "&Scrúdaigh an líonra le haghaidh gléasanna scanta"
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
-#: scansettings.kcfg:13
+#: scansettings.kcfg:21
 #, kde-format
 msgid ""
 "<div>Check this if you want a network query for available scanners.<br/><br/"
@@ -744,13 +1098,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
-#: scansettings.kcfg:18
+#: scansettings.kcfg:26
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
-#: scansettings.kcfg:19
+#: scansettings.kcfg:27
 #, kde-format
 msgid ""
 "<div>Check this if you want to use the standard system proxy settings to "
@@ -759,28 +1113,28 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:28
+#: scansettings.kcfg:36
 #, fuzzy, kde-format
 #| msgid "No scanner selected"
 msgid "Show the scanner selection dialog"
 msgstr "Níl scanóir roghnaithe agat"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:29
+#: scansettings.kcfg:37
 #, fuzzy, kde-format
 #| msgid "No scanner selected"
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr "Níl scanóir roghnaithe agat"
 
-#. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:61
+#. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Options SCANNERNAME)
+#: scansettings.kcfg:73
 #, fuzzy, kde-format
 #| msgid "Threshold:"
 msgid "Threshold:"
 msgstr "Tairseach:"
 
-#. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:62
+#. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Options SCANNERNAME)
+#: scansettings.kcfg:74
 #, kde-format
 msgid ""
 "<div>Threshold for auto-detection. All pixels lighter (on a black "
@@ -788,79 +1142,79 @@ msgid ""
 "part of the image.</div>"
 msgstr ""
 
-#. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:69
+#. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Options SCANNERNAME)
+#: scansettings.kcfg:81
 #, kde-format
 msgid "Dust size (pixels):"
 msgstr ""
 
-#. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:70
+#. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Options SCANNERNAME)
+#: scansettings.kcfg:82
 #, kde-format
 msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
 "ignored</div>"
 msgstr ""
 
-#. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:77
+#. i18n: ectx: label, entry (PreviewAutoselMargin), group (Options SCANNERNAME)
+#: scansettings.kcfg:89
 #, kde-format
 msgid "Add/subtract margin (mm):"
 msgstr ""
 
-#. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:78
+#. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Options SCANNERNAME)
+#: scansettings.kcfg:90
 #, kde-format
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
 msgstr ""
 
-#. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:85
+#. i18n: ectx: label, entry (PreviewAutoselBackground), group (Options SCANNERNAME)
+#: scansettings.kcfg:97
 #, fuzzy, kde-format
 #| msgid "Background:"
 msgid "Scanner background:"
 msgstr "Cúlra:"
 
-#. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:86
+#. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Options SCANNERNAME)
+#: scansettings.kcfg:98
 #, kde-format
 msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
 
-#: scansizeselector.cpp:119
+#: scansizeselector.cpp:57
 #, kde-format
 msgid "Set the size of the scanned area"
 msgstr ""
 
-#: scansizeselector.cpp:124
+#: scansizeselector.cpp:62
 #, kde-format
 msgid "Full size"
 msgstr "Lánmhéid"
 
-#: scansizeselector.cpp:125
+#: scansizeselector.cpp:63
 #, kde-format
 msgid "(No selection)"
 msgstr ""
 
-#: scansizeselector.cpp:139
+#: scansizeselector.cpp:75
 #, kde-format
 msgid "Portrait"
 msgstr "Portráid"
 
-#: scansizeselector.cpp:144
+#: scansizeselector.cpp:80
 #, kde-format
 msgid "Landscape"
 msgstr "Tírdhreach"
 
-#: scansizeselector.cpp:155
+#: scansizeselector.cpp:91
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr ""
 
-#: scansizeselector.cpp:258
+#: scansizeselector.cpp:197
 #, kde-format
 msgid "Selection"
 msgstr "Roghnú"
@@ -872,9 +1226,6 @@ msgstr "Roghnú"
 
 #~ msgid "ADF Scanning"
 #~ msgstr "Scanadh ADF"
-
-#~ msgid "Scan Progress"
-#~ msgstr "Dul Chun Cinn an Scanadh"
 
 #~ msgid "Scanning page %1"
 #~ msgstr "Leathanach %1 á scanadh"
