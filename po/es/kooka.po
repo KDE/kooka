@@ -1,17 +1,18 @@
-# translation of kooka.po to Español
-# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+# Spanish translations for kooka.po package.
+# Copyright (C) 2002-2025 This file is copyright:
+# This file is distributed under the same license as the kooka package.
 #
 # SPDX-FileCopyrightText: 2002, 2003, 2004 Miguel Revilla Rodríguez <yo@miguelrevilla.com>
 # SPDX-FileCopyrightText: 2004 Pablo de Vicente <p.devicente@wanadoo.es>
 # SPDX-FileCopyrightText: 2005, 2008 Santiago Fernandez Sancho <santi@kde-es.org>
-# SPDX-FileCopyrightText: 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2009 Miguel Angel Quesada Fernandez <kesadalive@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-10-15 00:58+0200\n"
+"PO-Revision-Date: 2025-10-29 12:22+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Pablo de Vicente <pvicentea@nexo.es>\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -52,7 +53,7 @@ msgstr ""
 #: kookaview.cpp:1126
 #, kde-format
 msgid "Other..."
-msgstr "Otro..."
+msgstr "Otro…"
 
 #: ../plugins/destination/application/destinationapplication.cpp:85
 #, kde-format
@@ -88,72 +89,61 @@ msgstr "<filename>%1</filename>"
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "Guardar multipágina"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"No se puede guardar la imagen en <filename>%1</filename><nl/><message>%2</"
+"No se puede guardar en el archivo <filename>%1</filename><nl/><message>%2</"
 "message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "No se puede guardar la imagen"
+msgstr "No se puede guardar el archivo"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "Formato de archivo:"
+msgstr "Formato de salida:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "Configuración de la página…"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "Definir el tamaño y el formato de la página"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "Guardando en <filename>%1</filename>"
+msgstr "Guardando página %1 en <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "Configuración de página PDF"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Ampliación..."
+msgstr "Personalizada…"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "Tamaño de la imagen:"
+msgstr "Tamaño de página:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " mm"
@@ -162,25 +152,24 @@ msgstr " mm"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "Retrato"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "Apaisado"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Print options"
+#, kde-format
 msgid "Orientation:"
-msgstr "Opciones de impresión"
+msgstr "Orientación:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -195,19 +184,16 @@ msgstr ""
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "No se ha podido encontrar la orden TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"No se puede guardar la imagen en <filename>%1</filename><nl/><message>%2</"
-"message>"
+"No se puede guardar la página en el archivo <filename>%1</filename><nl/"
+"><message>%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
 #, fuzzy, kde-kuit-format
@@ -223,16 +209,14 @@ msgstr ""
 "message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "No se puede guardar la imagen"
+msgstr "No se puede añadir la página"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "Guardando imagen"
+msgstr "Descartando imagen"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -469,7 +453,7 @@ msgstr "Usar una configuración ortográfica personalizada"
 #: ../plugins/ocr/abstractocrdialogue.cpp:293
 #, kde-format
 msgid "Custom Spell Configuration..."
-msgstr "Configuración ortográfica personalizada..."
+msgstr "Configuración ortográfica personalizada…"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:303
 #, kde-format
@@ -554,7 +538,7 @@ msgstr "Error de configuración del OCR"
 #: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:764
 #, kde-format
 msgid "Configure OCR..."
-msgstr "Configurar OCR..."
+msgstr "Configurar OCR…"
 
 #: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
@@ -670,7 +654,7 @@ msgstr "Ruta del ejecutable:"
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
 msgid "Enter or select the path..."
-msgstr "Introduzca o seleccione la ruta..."
+msgstr "Introduzca o seleccione la ruta…"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
@@ -928,7 +912,7 @@ msgstr "El ejecutable Tesseract no está configurado o no está disponible."
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
 #, kde-format
 msgid "Select a file if required..."
-msgstr "Seleccionar un archivo si es necesario..."
+msgstr "Seleccionar un archivo si es necesario…"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, kde-format
@@ -1193,7 +1177,7 @@ msgstr "Nombre de archivo:"
 #: formatdialog.cpp:398
 #, kde-format
 msgid "Select Format..."
-msgstr "Seleccione formato..."
+msgstr "Seleccione formato…"
 
 #: formatdialog.cpp:436
 #, kde-format
@@ -1792,7 +1776,7 @@ msgstr "Tamaño original"
 #: kooka.cpp:168
 #, kde-format
 msgid "Set Zoom..."
-msgstr "Ampliación..."
+msgstr "Ampliación…"
 
 #: kooka.cpp:174
 #, kde-format
@@ -1832,7 +1816,7 @@ msgstr "Rotar imagen 180 grados"
 #: kooka.cpp:227
 #, kde-format
 msgid "New Folder..."
-msgstr "Nueva carpeta..."
+msgstr "Nueva carpeta…"
 
 #: kooka.cpp:232
 #, kde-format
@@ -1842,12 +1826,12 @@ msgstr "Abrir con"
 #: kooka.cpp:238
 #, kde-format
 msgid "Save Image..."
-msgstr "Guardar imagen..."
+msgstr "Guardar imagen…"
 
 #: kooka.cpp:245
 #, kde-format
 msgid "Import Image..."
-msgstr "Importar imagen..."
+msgstr "Importar imagen…"
 
 #: kooka.cpp:250 kooka.cpp:539
 #, kde-format
@@ -1867,17 +1851,17 @@ msgstr "Enviar imagen"
 #: kooka.cpp:270
 #, kde-format
 msgid "Properties..."
-msgstr "Propiedades..."
+msgstr "Propiedades…"
 
 #: kooka.cpp:279
 #, kde-format
 msgid "Select Scan Device..."
-msgstr "Seleccionar el escáner..."
+msgstr "Seleccionar el escáner…"
 
 #: kooka.cpp:283 kookaview.cpp:542
 #, kde-format
 msgid "Add Scan Device..."
-msgstr "Añadir escáner..."
+msgstr "Añadir escáner…"
 
 #: kooka.cpp:289
 #, kde-format
@@ -1892,7 +1876,7 @@ msgstr "Iniciar escaneo"
 #: kooka.cpp:299
 #, kde-format
 msgid "Scan Presets..."
-msgstr "Preajustes de escaneo..."
+msgstr "Preajustes de escaneo…"
 
 #: kooka.cpp:304
 #, kde-format
@@ -1902,27 +1886,27 @@ msgstr "Seleccionar automáticamente"
 #: kooka.cpp:312
 #, kde-format
 msgid "OCR Image..."
-msgstr "OCR en imagen..."
+msgstr "OCR en imagen…"
 
 #: kooka.cpp:316
 #, kde-format
 msgid "OCR Selection..."
-msgstr "OCR en selección..."
+msgstr "OCR en selección…"
 
 #: kooka.cpp:320
 #, kde-format
 msgid "OCR File..."
-msgstr "Archivo OCR..."
+msgstr "Archivo OCR…"
 
 #: kooka.cpp:324
 #, kde-format
 msgid "Save OCR Result Text..."
-msgstr "Guardar texto resultante del OCR..."
+msgstr "Guardar texto resultante del OCR…"
 
 #: kooka.cpp:329
 #, kde-format
 msgid "Spell Check OCR Result..."
-msgstr "Resultado del corrector ortográfico del OCR..."
+msgstr "Resultado del corrector ortográfico del OCR…"
 
 #: kooka.cpp:526
 #, kde-format
@@ -2566,7 +2550,7 @@ msgstr "Imagen liberada"
 #: kookaview.cpp:982
 #, kde-format
 msgid "Loading %1..."
-msgstr "Cargando %1..."
+msgstr "Cargando %1…"
 
 #: main.cpp:45
 #, kde-format
@@ -2626,10 +2610,9 @@ msgstr ""
 "comercial de desarrollo de Qt.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "© 2000-2018, los desarrolladores y colaboradores de Kooka"
+msgstr "© 2000-2024, los desarrolladores y colaboradores de Kooka"
 
 #: main.cpp:82
 #, kde-format
@@ -2833,7 +2816,7 @@ msgstr "Motor OCR:"
 #: prefspages.cpp:399
 #, kde-format
 msgid "OCR Engine Settings..."
-msgstr "Preferencias del motor OCR..."
+msgstr "Preferencias del motor OCR…"
 
 #: prefspages.cpp:445
 #, kde-format
@@ -3070,7 +3053,7 @@ msgstr ""
 #: scanpresetsdialog.cpp:86
 #, kde-format
 msgid "Save..."
-msgstr "Guardar..."
+msgstr "Guardar…"
 
 #: scanpresetsdialog.cpp:88
 #, kde-format
@@ -3087,7 +3070,7 @@ msgstr "Borrar el conjunto de preajustes de escaneo seleccionado"
 #: scanpresetsdialog.cpp:98
 #, kde-format
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #: scanpresetsdialog.cpp:100
 #, kde-format
@@ -3198,642 +3181,3 @@ msgstr "Muy pequeña"
 #, kde-format
 msgid "Tiny"
 msgstr "Diminuta"
-
-#~ msgid "Current maintainer, KDE4 port"
-#~ msgstr "Encargado actual, adaptación a KDE4"
-
-#~ msgid "Before the scan starts"
-#~ msgstr "Antes de iniciar el escaneo"
-
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name before scanning starts."
-#~ "</div>"
-#~ msgstr ""
-#~ "<div>Marque esta opción si desea introducir el nombre de archivo antes de "
-#~ "comenzar a escanear.</div>"
-
-#~ msgid "After the scan is finished"
-#~ msgstr "Después de finalizar el escaneo"
-
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name after scanning has "
-#~ "finished.</div>"
-#~ msgstr ""
-#~ "<div>Marque esta opción si desea introducir el nombre de archivo después "
-#~ "de finalizar el escaneo.</div>"
-
-#~ msgid "Online service:"
-#~ msgstr "Servicio en línea:"
-
-#~ msgid "Helper command for the 'Export to Online Service' plugin"
-#~ msgstr "Orden auxiliar para el complemento «Exportar a servicio en línea»"
-
-#~ msgid "(C) 2021, the Kooka developers and contributors"
-#~ msgstr "© 2021, los desarrolladores y colaboradores de Kooka"
-
-#~ msgid "Kooka KIPI Helper"
-#~ msgstr "Aplicación auxiliar KIPI de Kooka"
-
-#~ msgid "List all of the available KIPI plugin actions"
-#~ msgstr "Listar todas las acciones disponibles de complementos KIPI"
-
-#~ msgid "The KIPI plugin action to export to"
-#~ msgstr "La acción de complemento KIPI a la que exportar"
-
-#~ msgid "action"
-#~ msgstr "acción"
-
-#~ msgid "URLs of the image files to export"
-#~ msgstr "URL de los archivos de imagen a exportar"
-
-#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
-#~ msgstr ""
-#~ "No se pueden indicar simultáneamente los modos listado («-l») y compartir "
-#~ "(«-s»)"
-
-#~ msgid "Arguments ignored in list ('-l') mode"
-#~ msgstr "Se ignoran los argumentos en el modo listado («-l»)"
-
-#~ msgid "Arguments missing for share ('-s') mode"
-#~ msgstr "Faltan argumentos para el modo compartir («-s»)"
-
-#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
-#~ msgstr "Se debe indicar uno de los modos listado («-l») o compartir («-s»)"
-
-#~ msgctxt "as added to action text"
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Argument '%1' is not a local file, ignored"
-#~ msgstr "El argumento «%1» no es un archivo local y se ha ignorado"
-
-#~ msgid "File '%1' not found or is unreadable, ignored"
-#~ msgstr ""
-#~ "El archivo «%1» no se ha encontrado o no se puede leer y se ha ignorado"
-
-#~ msgid "No usable files to share"
-#~ msgstr "No hay archivos que se puedan usar para compartir"
-
-#~ msgid "Unknown plugin action '%1'"
-#~ msgstr "Acción de complemento «%1» desconocida"
-
-#~ msgid "PhotoCopier"
-#~ msgstr "Fotocopiadora"
-
-#~ msgid "Copies: "
-#~ msgstr "Copias: "
-
-#~ msgid "Scanner Settings: %1"
-#~ msgstr "Preferencias del escáner: %1"
-
-#~ msgid "Scan size:"
-#~ msgstr "Tamaño del escaneo:"
-
-#~ msgid "Photocopy..."
-#~ msgstr "Fotocopiar..."
-
-#~ msgid "Loading non-local images is not yet implemented"
-#~ msgstr "La carga de imágenes remotas aún no ha sido implementada"
-
-#~ msgid "Image loading failed"
-#~ msgstr "Ha fallado la carga de la imagen"
-
-#~ msgid "Failed to open TIFF file"
-#~ msgstr "No se ha podido abrir el archivo TIFF"
-
-#~ msgid "Failed to read TIFF directory"
-#~ msgstr "No se ha podido leer el directorio TIFF"
-
-#~ msgid "Failed to read TIFF image"
-#~ msgstr "No se ha podido leer la imagen TIFF"
-
-#~ msgid "TIFF not supported"
-#~ msgstr "TIFF no está permitido"
-
-#~ msgid "Print %1"
-#~ msgstr "Imprimir %1"
-
-#~ msgid "OCR has not been performed yet, or the engine has been changed."
-#~ msgstr "Aún no se ha realizado el OCR, o se ha cambiado el motor."
-
-#~ msgid "unknown"
-#~ msgstr "desconocida"
-
-#~ msgid ""
-#~ "This version of Kooka is not compiled with KADMOS support.\n"
-#~ "Please select another OCR engine in the configuration dialog."
-#~ msgstr ""
-#~ "Esta versión de Kooka no se ha compilado con soporte lógico para KADMOS.\n"
-#~ "Por favor, seleccione otro motor OCR en el diálogo de configuración."
-
-#, fuzzy
-#~| msgid "No OCR engine is selected. Select and configure one to perform OCR."
-#~ msgid ""
-#~ "No OCR engine is configured.\n"
-#~ "Please select and configure one in the OCR configuration dialog."
-#~ msgstr ""
-#~ "No se ha seleccionado ningún motor OCR. Seleccione y configure uno para "
-#~ "realizar OCR."
-
-#~ msgid "GOCR"
-#~ msgstr "GOCR"
-
-#~ msgid "OCRAD"
-#~ msgstr "OCRAD"
-
-#~ msgid "Kadmos"
-#~ msgstr "Kadmos"
-
-#~ msgid ""
-#~ "The path to the GOCR binary is not configured or is not valid.\n"
-#~ "Please enter or check the path in the Kooka configuration."
-#~ msgstr ""
-#~ "La ruta del binario GOCR no está configurada o no es válida.\n"
-#~ "Por favor, introduzca o compruebe la ruta en la configuración de Kooka."
-
-#~ msgid "GOCR Software Not Found"
-#~ msgstr "No se ha encontrado el software GOCR"
-
-#~ msgid ""
-#~ "The path to the OCRAD binary is not configured or is not valid.\n"
-#~ "Please enter or check the path in the Kooka configuration."
-#~ msgstr ""
-#~ "La ruta del binario OCRAD no está configurada o no es válida.\n"
-#~ "Por favor, introduzca o compruebe la ruta en la configuración de Kooka."
-
-#~ msgid "OCRAD Binary Not Found"
-#~ msgstr "No se ha encontrado el binario de OCRAD"
-
-#, fuzzy
-#~| msgid ""
-#~| "<qt>Running the OCRAD process (<filename>%1</filename>) %2 with exit "
-#~| "status %3.<br>More information may be available in its <A HREF="
-#~| "\"%4\">standard output</A> or <A HREF=\"%5\">standard error</A> log "
-#~| "files."
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Running the OCRAD process (<filename>%1</filename>) %2 with exit status "
-#~ "%3.<nl/>More information may be available in its <link url="
-#~ "\"%4\">standard output</link> or <link url=\"%5\">standard error</link> "
-#~ "log files."
-#~ msgstr ""
-#~ "<qt>Ejecutando el proceso OCRAD (<filename>%1</filename>) %2 con el "
-#~ "estado de salida %3.<br>Puede existir más información disponible en los "
-#~ "archivos de registro de la <A HREF=\"%4\">salida estándar</A> o de la  <A "
-#~ "HREF=\"%5\">salida de error estándar</A>."
-
-#~ msgid "crashed"
-#~ msgstr "se ha detenido"
-
-#~ msgid "failed"
-#~ msgstr "ha fallado"
-
-#~ msgid "OCR Result Parse Problem"
-#~ msgstr "Problema al analizar el resultado del OCR"
-
-#~ msgid "Engine executable:"
-#~ msgstr "Ejecutable del motor:"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "The path <filename>%1</filename> is not a valid binary.<nl/>Check the "
-#~ "path and install the program if necessary."
-#~ msgstr ""
-#~ "La ruta no <filename>%1</filename> no apunta a un binario válido.<nl/"
-#~ ">Compruebe la ruta e instale el programa, si es necesario."
-
-#~ msgid "OCR Engine Not Found"
-#~ msgstr "Motor OCR no encontrado"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "The program <filename>%1</filename> exists, but is not executable.<nl/"
-#~ ">Check the path and permissions, and/or reinstall the program if "
-#~ "necessary."
-#~ msgstr ""
-#~ "El programa <filename>%1</filename> existe, pero no es ejecutable.<nl/"
-#~ ">Compruebe la ruta y los permisos. Reinstale el programa si es necesario."
-
-#~ msgid "OCR Engine Not Executable"
-#~ msgstr "Motor OCR no ejecutable"
-
-#~ msgid "Image Printing"
-#~ msgstr "Impresión de imágenes"
-
-#~ msgid "Screen scaling. That prints according to the screen resolution."
-#~ msgstr ""
-#~ "Escala de pantalla. Imprimir de acuerdo con la resolución de la pantalla."
-
-#~ msgid "Original size (calculate from scan resolution)"
-#~ msgstr "Tamaño original (según la resolución de escaneo)"
-
-#~ msgid ""
-#~ "Calculates the print size from the scan resolution. Enter the scan "
-#~ "resolution in the dialog field below."
-#~ msgstr ""
-#~ "Calcula el tamaño de impresión a partir de la resolución de escaneo. "
-#~ "Introduzca la resolución de escaneo en la casilla inferior."
-
-#~ msgid "Scale image to custom dimension"
-#~ msgstr "Redimensionar imagen a tamaña personalizado"
-
-#~ msgid "Scale image to fit to page"
-#~ msgstr "Escalar imagen para ajustar a la página"
-
-#~ msgid ""
-#~ "Printout uses maximum space on the selected pager. Aspect ratio is "
-#~ "maintained."
-#~ msgstr ""
-#~ "La impresión utiliza el máximo espacio posible en la página selecciona. "
-#~ "Se mantienen las proporciones."
-
-#~ msgid "Resolutions"
-#~ msgstr "Resoluciones"
-
-#~ msgid "Please specify a scan resolution larger than 0"
-#~ msgstr "Especifique una resolución de escaneo mayor que 0"
-
-#~ msgid ""
-#~ "For custom printing, a valid size should be specified.\n"
-#~ "At least one dimension is zero."
-#~ msgstr ""
-#~ "Para la impresión personalizada, hay que especificar un tamaño válido.\n"
-#~ "Al menos una de las dimensiones es cero."
-
-#~ msgid "Error creating directory"
-#~ msgstr "Error al crear directorio"
-
-#~ msgid ""
-#~ "<qt>The directory<br><filename>%1</filename><br> is not writable, please "
-#~ "check the permissions."
-#~ msgstr ""
-#~ "<qt>El directorio<br><filename>%1</filename><br> no permite escritura. "
-#~ "Por favor, compruebe los permisos."
-
-#~ msgid "Create Folder..."
-#~ msgstr "Crear carpeta..."
-
-#~ msgid "Use the global spell configuration"
-#~ msgstr "Usar la configuración ortográfica global"
-
-#~ msgid "<br>%1"
-#~ msgstr "<br>%1"
-
-#~ msgid "Load"
-#~ msgstr "Cargar"
-
-#~ msgid "Delete"
-#~ msgstr "Borrar"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "Query network for available scanners"
-#~ msgstr "Interrogar la red buscando escáneres disponibles"
-
-#~ msgid ""
-#~ "Check this if you want a network query for available scanners.\n"
-#~ "Note that this does not mean a query over the entire network but only the "
-#~ "stations configured for SANE."
-#~ msgstr ""
-#~ "Marque esto si desea enviar una petición de red para buscar escáneres.\n"
-#~ "Tenga en cuenta que esta petición no es para toda la red, sino para las "
-#~ "estaciones configuradas con SANE."
-
-#~ msgid "Show the scanner selection dialog"
-#~ msgstr "Mostrar el diálogo de selección de escáner"
-
-#, fuzzy
-#~| msgid "Mirroring image in both directions"
-#~ msgid "Mirroring image both directions"
-#~ msgstr "Volteando la imagen en ambas direcciones"
-
-#~ msgid "Save Error"
-#~ msgstr "Error al guardar"
-
-#, fuzzy
-#~| msgid "New Folder"
-#~ msgid "folder"
-#~ msgstr "Nueva carpeta"
-
-#, fuzzy
-#~| msgid "Image"
-#~ msgid "image"
-#~ msgstr "Imagen"
-
-#, fuzzy
-#~| msgid "Gallery"
-#~ msgid "Gallery %1 %2"
-#~ msgstr "Galería"
-
-#~ msgid ""
-#~ "The classifier files for KADMOS could not be found.\n"
-#~ "OCR with KADMOS will not be possible!\n"
-#~ "\n"
-#~ "Change the OCR engine in the preferences dialog."
-#~ msgstr ""
-#~ "No se encuentran los archivos de clasificación de KADMOS.\n"
-#~ "No es posible realizar OCR con KADMOS.\n"
-#~ "\n"
-#~ "Cambie el motor de OCR en el diálogo de preferencias."
-
-#~ msgid "Select the image sub-format"
-#~ msgstr "Seleccionar el sub-formato de imagen"
-
-#~ msgid "Do not ask again for the save format if it is defined."
-#~ msgstr ""
-#~ "No preguntar de nuevo por el formato de almacenamiento si está definido."
-
-#~ msgid ""
-#~ "The folder\n"
-#~ "%1\n"
-#~ " does not exist and could not be created;\n"
-#~ "please check the permissions."
-#~ msgstr ""
-#~ "La carpeta\n"
-#~ "%1\n"
-#~ " no existe y no se ha podido crear;\n"
-#~ "por favor, compruebe los permisos."
-
-#~ msgid "Enter filename:"
-#~ msgstr "Introduzca archivo:"
-
-#~ msgid "high (or true-) color image, not palleted"
-#~ msgstr "imagen de color real, sin paleta"
-
-#~ msgid " image save OK      "
-#~ msgstr " imagen guardada correctamente      "
-
-#~ msgid " bad filename       "
-#~ msgstr " nombre de archivo erróneo       "
-
-#~ msgid " unknown error      "
-#~ msgstr " error desconocido       "
-
-#~ msgid " parameter wrong    "
-#~ msgstr " parámetro erróneo    "
-
-#~ msgid "That would result in the new filename: %1"
-#~ msgstr "El nuevo nombre de archivo será: %1"
-
-#~ msgid "Format changes of images are currently not supported."
-#~ msgstr ""
-#~ "Los cambios de formato de imágenes no están soportados en este momento."
-
-#~ msgid "Wrong Extension Found"
-#~ msgstr "Se encontró una extensión errónea"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Stop the OCR Process"
-#~ msgstr "Detener el proceso OCR"
-
-#~ msgid "<b>Starting Optical Character Recognition with %1</b><p>"
-#~ msgstr "<b>Iniciando el reconocimiento óptico de caracteres con %1</b><p>"
-
-#~ msgid "Enable spell-checking for validation of the OCR result"
-#~ msgstr ""
-#~ "Activar la comprobación ortográfica para la validación de la salida del "
-#~ "OCR"
-
-#~ msgid "Spell-Check Options"
-#~ msgstr "Opciones de revisión ortográfica"
-
-#~ msgid ""
-#~ "GOCR is an Open Source project for optical character recognition.<P>The "
-#~ "author of gocr is <B>Joerg Schulenburg</B><BR>For more information about "
-#~ "gocr see <A HREF=http://jocr.sourceforge.net>http://jocr.sourceforge.net</"
-#~ "A>"
-#~ msgstr ""
-#~ "GOCR es un proyecto de código abierto de reconocimiento óptico de "
-#~ "caracteres.<P>El autor de gocr es<B>Joerg Schulenburg</B><BR> Para más "
-#~ "información acerca de gocr visite <A HREF=http://jocr.sourceforge."
-#~ "net>http://jocr.sourceforge.net</A>"
-
-#~ msgid "Using GOCR binary: "
-#~ msgstr "Usando binario GOCR: "
-
-#~ msgid "KADMOS OCR/ICR"
-#~ msgstr "KADMOS OCR/ICR"
-
-#~ msgid ""
-#~ "This version of Kooka was linked with the <I>KADMOS OCR/ICR engine</I>, a "
-#~ "commercial engine for optical character recognition.<P>Kadmos is a "
-#~ "product of <B>re Recognition AG</B><BR>For more information about Kadmos "
-#~ "OCR see <A HREF=http://www.rerecognition.com>http://www.rerecognition."
-#~ "com</A>"
-#~ msgstr ""
-#~ "Esta versión de Kooka está enlazada con el <I>Motor de OCR/ICR de KADMOS</"
-#~ "I>,  un motor comercial de reconocimiento óptico de caracteres.<P>Kadmos "
-#~ "es un producto de <B>re Recognition AG</B><BR>Para más información sobre "
-#~ "el OCR de Kadmos, visite <A HREF=http://www.rerecognition.com>http://www."
-#~ "rerecognition.com</A>"
-
-#~ msgid ""
-#~ "ocrad is a Free Software project for optical character recognition.<p>The "
-#~ "author of ocrad is <b>Antonio Diaz</b><br>For more information about "
-#~ "ocrad see <A HREF=\"http://www.gnu.org/software/ocrad/ocrad.html\">http://"
-#~ "www.gnu.org/software/ocrad/ocrad.html</A><p>Images should be scanned in "
-#~ "black/white mode for ocrad.<br>Best results are achieved if the "
-#~ "characters are at least 20 pixels high.<p>Problems arise, as usual, with "
-#~ "very bold or very light or broken characters, the same with merged "
-#~ "character groups."
-#~ msgstr ""
-#~ "ocrad en un proyecto de software libre para el reconocimiento óptico de "
-#~ "caracteres.<p>El autor de ocrad es <b>Antonio Díaz</b><br>Para más "
-#~ "información sobre ocrad visite <A HREF=\"http://www.gnu.org/software/"
-#~ "ocrad/ocrad.html\">http://www.gnu.org/software/ocrad/ocrad.html</A><p>Las "
-#~ "imágenes para ocrad deben ser exploradas en blanco y negro.<br>Se "
-#~ "consiguen mejores resultados si los caracteres tienen, al menos, 20 "
-#~ "píxeles de alto.<p>Como es natural, surgen problemas con caracteres muy "
-#~ "oscuros o muy claros, los mismo que con los que aparecen incompletos o "
-#~ "mezclados con otros."
-
-#~ msgid ""
-#~ "The path to the ocrad binary is not configured yet.\n"
-#~ "Please go to the Kooka configuration and enter the path manually."
-#~ msgstr ""
-#~ "Todavía no se ha configurado la ruta al binario ocrad.\n"
-#~ "Por favor, vaya a la configuración de Kooka e introduzca la ruta "
-#~ "manualmente."
-
-#~ msgid "Using ocrad binary: "
-#~ msgstr "Usando binario ocrad: "
-
-#~ msgid "Mirror Image &Both Directions"
-#~ msgstr "Voltear imagen en am&bas direcciones"
-
-#~ msgid "Open Image in &Graphic Application..."
-#~ msgstr "Abrir imagen en aplicación &gráfica..."
-
-#~ msgid "Enable All Warnings && Messages"
-#~ msgstr "Activar todas las advertencias y mensajes"
-
-#~ msgid "Save OCR Res&ult Text"
-#~ msgstr "Guardar texto res&ultante del OCR"
-
-#~ msgid "All messages and warnings will now be shown."
-#~ msgstr "A partir de ahora se mostrarán todas las advertencias y mensajes."
-
-#~ msgid "KADMOS engine"
-#~ msgstr "Motor KADMOS"
-
-#~ msgid "OCRAD engine"
-#~ msgstr "Motor OCRAD"
-
-#~ msgid "GOCR OCR"
-#~ msgstr "OCR GOCR"
-
-#~ msgid "OCRAD OCR"
-#~ msgstr "OCR OCRAD"
-
-#~ msgid "KADMOS OCR"
-#~ msgstr "OCR KADMOS"
-
-#~ msgid "The KADMOS OCR engine is available"
-#~ msgstr "El motor de OCR KADMOS está disponible"
-
-#~ msgid "The KADMOS OCR engine is not available in this version of Kooka"
-#~ msgstr "El motor de OCR KADMOS no está disponible en esta versión de Kooka"
-
-#~ msgid "Select the %1 binary to use:"
-#~ msgstr "Seleccione el binario %1 a utilizar:"
-
-#~ msgid ""
-#~ "Enter the path to %1, the optical-character-recognition command line tool."
-#~ msgstr ""
-#~ "Introduzca la ruta de %1, la herramienta de línea de órdenes para el "
-#~ "reconocimiento de caracteres."
-
-#~ msgid "Kooka Startup Preferences"
-#~ msgstr "Opciones de inicio de Kooka"
-
-#~ msgid ""
-#~ "Check this if you once checked 'do not show the scanner selection on "
-#~ "startup',\n"
-#~ "but you want to see it again."
-#~ msgstr ""
-#~ "Active esto si activó 'no mostrar la selección del escáner al arrancar',\n"
-#~ "pero quiere volver a verlo."
-
-#~ msgid "Configure Image Save Assistant"
-#~ msgstr "Configurar el asistente de almacenamiento de imágenes"
-
-#~ msgid "Thumbnail Gallery View"
-#~ msgstr "Hoja de contactos de la galería"
-
-#~ msgid ""
-#~ "Here you can configure the appearance of the thumbnail view of your scan "
-#~ "picture gallery."
-#~ msgstr ""
-#~ "Aquí puede configurar la apariencia de la hoja de contactos de la galería "
-#~ "de imágenes exploradas."
-
-#~ msgid "Thumbview Background"
-#~ msgstr "Fondo de la hoja de contactos"
-
-#~ msgid "Thumbnail Size"
-#~ msgstr "Tamaño de los contactos"
-
-#~ msgid "Thumbnail Frame"
-#~ msgstr "Marco de los contactos"
-
-#~ msgid "Thumbnail maximum &width:"
-#~ msgstr "&Ancho máximo de los contactos:"
-
-#~ msgid "Thumbnail maximum &height:"
-#~ msgstr "A&lto máximo de los contactos:"
-
-#~ msgid "Thumbnail &frame width:"
-#~ msgstr "Ancho del &marco de los contactos:"
-
-#~ msgid "Frame color &1: "
-#~ msgstr "Color del marco &1: "
-
-#~ msgid "Frame color &2: "
-#~ msgstr "Color del marco &2: "
-
-#~ msgid ""
-#~ "The OCR engine settings were changed.\n"
-#~ "Note that Kooka needs to be restarted to change the OCR engine."
-#~ msgstr ""
-#~ "Han cambiado las preferencias del motor OCR.\n"
-#~ "Kooka debe reiniciarse para cambiar el motor OCR."
-
-#~ msgid "OCR Engine Change"
-#~ msgstr "Cambio de motor OCR"
-
-#~ msgid "Image Viewer"
-#~ msgstr "Visor de imágenes"
-
-#~ msgid "Gallery:"
-#~ msgstr "Galería:"
-
-#~ msgid "OCR Result Text"
-#~ msgstr "Texto resultante del OCR"
-
-#~ msgid ""
-#~ "Could not start OCR-Process.\n"
-#~ "Probably there is already one running."
-#~ msgstr ""
-#~ "Imposible iniciar el proceso OCR.\n"
-#~ "Probablemente ya hay uno en ejecución."
-
-#~ msgid "Storing image changes"
-#~ msgstr "Almacenando cambios de la imagen"
-
-#~ msgid "Tool Views"
-#~ msgstr "Vistas de herramientas"
-
-#~ msgid "Show Image Viewer"
-#~ msgstr "Mostrar visor de imágenes"
-
-#~ msgid "Show Preview"
-#~ msgstr "Mostrar previsualización"
-
-#~ msgid "Show Thumbnail Window"
-#~ msgstr "Mostrar ventana de hoja de contactos"
-
-#~ msgid "Show Scan Parameters"
-#~ msgstr "Mostrar parámetros de exploración"
-
-#~ msgid "Kooka OCR Dictionary Check"
-#~ msgstr "Revisión de diccionar del OCR de Kooka"
-
-#~ msgid ""
-#~ "Spell-checking cannot be started on this system.\n"
-#~ "Please check the configuration"
-#~ msgstr ""
-#~ "No se puede iniciar la revisión ortográfica en este sistema.\n"
-#~ "Por favor, compruebe la configuración."
-
-#~ msgid "http://kooka.kde.org"
-#~ msgstr "http://kooka.kde.org"
-
-#~ msgid "Image Name"
-#~ msgstr "Nombre de la imagen"
-
-#~ msgid ""
-#~ "Cannot write this image format.\n"
-#~ "Image will not be saved."
-#~ msgstr ""
-#~ "No se puede escribir este formato de imagen.\n"
-#~ "La imagen no será guardada."
-
-#~ msgid ""
-#~ "Image file is write protected.\n"
-#~ "Image will not be saved."
-#~ msgstr ""
-#~ "El archivo de imagen está protegido contra escritura.\n"
-#~ "La imagen no será guardada."
-
-#~ msgid ""
-#~ "Cannot save the image, because the file is local.\n"
-#~ "Kooka will support other protocols later."
-#~ msgstr ""
-#~ "Imposible guardar la imagen, porque el archivo es local.\n"
-#~ "Kooka soportará otros protocolos en el futuro."
-
-#~ msgid "Canceled by user"
-#~ msgstr "Cancelado por el usuario"

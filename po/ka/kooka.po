@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-10-14 07:20+0200\n"
+"PO-Revision-Date: 2025-10-29 04:17+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -84,99 +84,85 @@ msgstr "<filename>%1</filename>"
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "მულტიგვერდის შენახვა"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr ""
-"გამოსახულების შენახვის შეცდომა ფაილში <filename>%1</filename><nl/><message>"
-"%2</message>"
+msgstr "ვერ შევინახე ფაილი <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "გამოსახულების შენახვა შეუძლებელია"
+msgstr "ფაილის შენახვის შეცდომა"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "ფაილის ფორმატი:"
+msgstr "გამოტანის ფორმატი:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "გვერდის მორგება..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "გვერდის ზომისა და განლაგების დაყენება"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "<filename>%1</filename>-ში შენახვა"
+msgstr "%1 გვერდის შენახვა ფაილში<filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "PDF გვერდის მორგება"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "გადიდების დაყენება..."
+msgstr "ხელით..."
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "Სურათის ზომა:"
+msgstr "გვერდის ზომა:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
-msgstr " მმ"
+msgstr "  მმ"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:113
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "პორტრეტი"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "ლანდშაფტი"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Segmentation mode:"
+#, kde-format
 msgid "Orientation:"
-msgstr "სეგმენტაციის რეჟიმი:"
+msgstr "ორიენტაცია:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -187,48 +173,44 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"ვერ ვიპოვე ბრძანება <command section=\"1\">tiffcp</command>,<nl/>დარწმუნდით, "
+"რომ ის ხელმისაწვდომია გარემოს ცვლადში<envvar>PATH</envvar>.<nl/><nl/>ბრძნება "
+"<application>libtiff</application> პაკეტის ნაწილია,<nl/>მაგრამ, შეიძლება, "
+"ცალკე დაყენება დაგჭირდეთ."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "ვერ ვიპოვე ბრძანება TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"გამოსახულების შენახვის შეცდომა ფაილში <filename>%1</filename><nl/><message>"
-"%2</message>"
+"გვერდის შენახვა შეუძლებელია ფაილში <filename>%1</filename><nl/><message>%2</"
+"message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"გამოსახულების შენახვის შეცდომა ფაილში <filename>%1</filename><nl/><message>"
-"%2</message>"
+"ვერ მივაწერე გვერდი ბოლოში ფაილს <filename>%1</filename>, სტატუსი %2<nl/"
+">(შეტყობინებებისთვის იხილეთ სტანდარტული შეცდომა)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "გამოსახულების შენახვა შეუძლებელია"
+msgstr "გვერდის ბოლოში მიწერა შეუძლებელია"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "გამოსახულების შენახვა"
+msgstr "გამოსახულების მოცილება"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -249,19 +231,21 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>ფაილის სახელების ავტომატურ გენერაციას შაბლონის სახელი სჭირდება.</"
+"para><para>ფაილის სახელი <filename>%1</filename> უნდა შეიცავდეს ან<nl/"
+">'<icode>#</icode>' სიმბოლოებს ადგილმჭერად, ან მთავრდებოდეს ციფრების "
+"მიმდევრობით<nl/>ფაილის გაფართოებამდე.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "ავტომატური გენერაცია შეუძლებელია"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "შეცდომა დროებითი ფაილის შექმნისას <filename>%1</filename>"
+msgstr "წვდომის შეცდომა დაშორებული მდებარეობისთვის <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -294,18 +278,14 @@ msgid "Save Scan"
 msgstr "სკანირების შენახვა"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"<filename>%2</filename><nl/>-ში შენახვის შეცდომა. გამოსახულების ფორმატი "
-"<resource>%1</resource> მხარდაჭერილი არაა."
+"ფაილში <filename>%2</filename> შენახვა შეუძლებელია<nl/>ვერ ვიპოვე "
+"გამოსახულების ფორმატი ფაილის სახელისთვის <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -328,14 +308,12 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "სკანირებული გამოსახულება გაზიარდა ბმულზე <nl/><link>%1</link>"
-msgstr[1] "სკანირებული გამოსახულება გაზიარდა ბმულზე <nl/><link>%1</link>"
+msgstr[0] "სკანირებული გამოსახულება გაზიარდა ბმულზე <nl/><link>%2</link>"
+msgstr[1] "სკანირებული გამოსახულებები გაზიარდა ბმულზე <nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -343,19 +321,15 @@ msgid "Scan Shared"
 msgstr "გაზიარებულის სკანირება"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
 msgstr[0] ""
-"დასკანირებული გამოსახულების <nl/><nl/><message>%1</message> გაზიარება "
-"შეუძლებელია"
+"ვერ გავაზიარე დასკანერებულია გამოსახულება <nl/><nl/><message>%2</message>"
 msgstr[1] ""
-"დასკანირებული გამოსახულების <nl/><nl/><message>%1</message> გაზიარება "
-"შეუძლებელია"
+"ვერ გავაზიარე %1 დასკანერებულია გამოსახულება <nl/><nl/><message>%2</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -2602,10 +2576,9 @@ msgstr ""
 "commercial Qt development licence.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, Kooka-ის პროგრამისტები და მოხალისეები"
+msgstr "(C) 2000-2024, Kooka-ის პროგრამისტები და მოხალისეები"
 
 #: main.cpp:82
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-09-25 13:15+0200\n"
+"PO-Revision-Date: 2025-10-29 04:38+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -192,18 +192,17 @@ msgstr "თეთრი"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "პირველი გვერდი"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "შემდეგი გვერდი"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "სკანირების &დასაწყისი"
+msgstr "სკანირების დაწყება"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -213,11 +212,15 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">მზად ვარ, დავასკანერო პირველი გვერდი</emphasis>%1..."
+"<nl/><nl/>მოამზადეთ გვერდი და დააჭირეთ ღილაკს <interface>სკანირების&nbsp;"
+"დაწყება</interface> მისი დასკანერებისთვის,<nl/>ან <interface>გაუქმებას</"
+"interface>, სკანირების გასაუქმებლად."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "შემდეგის სკანირება"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -227,6 +230,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">მზად ვარ შემდეგი გვერდის სკანირებისთვის: </emphasis>"
+"%1...<nl/><nl/>მოამზადეთ შემდეგი გვერდი და დააჭირეთ ღილაკს "
+"<interface>შემდეგის&nbsp;სკანირება</interface>,<nl/>ან "
+"<interface>დასრულებას</interface>, სკანირების პაკეტის დასასრულებლად."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -237,6 +244,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">მზად ვარ შემდეგი გვერდის სკანირებისთვის: </emphasis>"
+"%1...<nl/><nl/>მოამზადეთ შემდეგი გვერდი და დააჭირეთ ღილაკს "
+"<interface>შემდეგის&nbsp;სკანირება</interface>,<nl/>ან "
+"<interface>დასრულებას</interface> რომ დაასრულოთ პაკეტი, ან "
+"<interface>გაუქმებას</interface> რომ სკანირება გააუქმოთ."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -247,11 +259,16 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">ველოდები პირველი გვერდის სკანირებას</emphasis>%1..."
+"<nl/><nl/>მოამზადეთ გვერდი და დაელოდეთ, ან დააჭირეთ ღილაკს "
+"<interface>სკანირების&nbsp;დაწყება</interface> დაუყოვნებლივი "
+"სკანირებისთვის<nl/>,ან <interface>გაუქმებას</interface>, სკანირების "
+"გასაუქმებლად."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "ახლა სკანირება"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -262,6 +279,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">შემდეგი გვერდის სკანირების მოლოდინი</emphasis>%1..."
+"<nl/><nl/>მოამზადეთ შემდეგი გვერდი და დაელოდეთ, ან დააჭირეთ ღილაკს "
+"<interface>ახლა&nbsp;სკანირება</interface> დაუყოვნებლივი სკანირებისთვის<nl/"
+">ან <interface>დასრულებას</interface> სკანირების პაკეტის დასასრულებლად."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -273,28 +294,33 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">შემდეგი გვერდის სკანირების მოლოდინი</emphasis>%1..."
+"<nl/><nl/>მოამზადეთ შემდეგი გვერდი და დაელოდეთ, ან დააჭირეთ ღილაკს "
+"<interface>ახლა&nbsp;სკანირება</interface> დაუყოვნებლივი სკანირებისთვის<nl/"
+">ან <interface>დასრულებას</interface>, რომ დაასრულოთ პაკეტის სკანირება, ან "
+"<interface>გაუქმებას</interface> სკანირების მთლიანად გასაუქმებლად."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "შეჩერება"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "დასრულება"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%1 წამი)"
+msgstr[1] " (%1 წამი)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (შეჩერებულია)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -520,18 +546,17 @@ msgstr "მხარდაუჭერელია"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "დამში დოკუმენტი ჩატვირთული არაა"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "დამ ცარიელია"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "არააქტიური"
+msgstr "არ მიიღება"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -572,139 +597,139 @@ msgstr "µწმ"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "დამ და ბევრი სკანირების მორგება"
 
 #: multiscandialog.cpp:87
 #, kde-format
 msgid "Scan source:"
-msgstr ""
+msgstr "სკანირების წყარო:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "აირჩიეთ სკანერის მოწყობილობა"
+msgstr "აირჩიეთ სკანირების წყარო"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "სკანირება და დამ"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "ერთჯერადი სკანირება"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "ერთჯერადი სკანირება არჩეული წყაროდან"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "მრავალჯერადი სკანირება"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "მრავალჯერადი სკანირება არჩეული წყაროდან"
 
 #: multiscandialog.cpp:144
 #, kde-format
 msgid "Scan until ADF is empty"
-msgstr ""
+msgstr "სკანირება, სანამ დამ არ დაცარიელდება"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
 msgstr ""
+"სკანირების გაგრძელება, სანამ დოკუმენტის ავტომატური მიმწოდებელი არ "
+"დაცარიელდება"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "დალოდება შემდეგი სკანირებისთვის მზაობამდე"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "დადასტურების მოლოდინი სკანირებებს შორის"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "სკანირება მოლოდინის შემდეგ"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "დაყოვნება სკანირებებს შორის"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " წამი"
+msgstr[1] " წამი"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "დააყენეთ დაყოვნება სკანირებებს შორის"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "მოლოდინი ან დაყოვნება პირველ სკანირებამდე"
 
 #: multiscandialog.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
-msgstr ""
+msgstr "დადასტურების მოლოდინი ან დაყოვნება პირველი სკანირების დაწყებამდე"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "აღწერა:"
+msgstr "სამიზნე"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "ბევრი სკანირება პაკეტის სახით"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -717,11 +742,16 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"ჩართეთ ეს პარამეტრი ბევრი სკანირების ერთად, პაკეტის სახით შესასრულებლად, ან "
+"გამორთეთ, რომ ისინი ცალ-ცალკე დაამუშაოთ.<br/><br/>ამ პარამეტრის ეფექტი "
+"დამოკიდებულია არჩეულ სამიზნეზე და მის საკუთარ პარამეტრებზე. მაგალითად, ბევრი "
+"სკანირების ელფოსტით გაზიარება ამ პარამეტრით ყველა დასკანერებულია დოკუმენტს "
+"ერთ ელფოსტას მიაბამს.  თუ ეს გამორთულია, ისინი ცალ-ცალკედ გაიგზავნება."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "ფაილის სახელების ავტომატურად გენერირება"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -737,34 +767,44 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"დააყენეთ ეს პარამეტრი, რათა ავტომატურად შექმნათ ფაილის სახელი, როდესაც ეს "
+"შესაძლებელია, ან გამორთეთ, რათა ყოველთვის მოითხოვოთ სახელი.<br/><br/>ამ "
+"პარამეტრის ეფექტი დამოკიდებულია არჩეულ დანიშნულებაზე და საკუთარ "
+"პარამეტრებზე. მაგალითად, სკანირების გალერეაში ან სხვა ადგილას შენახვისას "
+"ფაილის სახელი მოითხოვება მრავალჯერადი სკანირების პირველი ფაილისთვის. მას "
+"შემდეგ ფაილის სახელი ავტომატურად გაიზრდება შემდეგის შესაქმნელად.<br/><br/"
+">პირველი ფაილის სახელისთვის რიცხვითი სუფიქსი, ანუ '#' სიმბოლოები, "
+"ავტომატურად გაიზრდება იმავე რაოდენობის ციფრებით, როგორც შეყვანილია.  "
+"ნებისმიერი არსებული დანომრილი ფაილი გამოტოვებული იქნება და არ გადაიწერება."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "შემობრუნება"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "კენტი გვერდები:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
 msgstr ""
+"აირჩიეთ შებრუნება კენტი დასკანერებულია გვერდებისთვის. პირველი გვერდია გვერდი "
+"1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "ლუწი გვერდები:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "სკანირებადი ადგილის პრესეტის ზომისთვის ორიენტაციის დაყენება"
+msgstr "აირჩიეთ შებრუნება ლუწი სკანირებული გვერდებისთვის."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -886,6 +926,7 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
+"მრავალსკანირების რეჟიმი ჩართულია.<nl/><link url=\"1\">აღარ მაჩვენო</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -974,13 +1015,15 @@ msgstr "წაკითხვის რეჟიმი:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "დამ && ბევრი გვერდის სკანირების მორგება..."
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"დააყენეთ დამ-ის, ბრუნვის და სამიზნის პარამეტრები ერთზე მეტი გვერდის "
+"სკანირებისას"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1107,18 +1150,19 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"სკანირების წყარო დაყენებულია დოკუმენტის ავტომატურ მიმწოდებელზე.<br/"
+">მინიატურამ შეიძლება, მომწოდებლის პირველი გვერდი აიღოს.<br/><br/>მართლა "
+"გნებავთ მინიატურა?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "აირჩიეთ"
+msgstr "არჩეულია დამ"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "&გადახედვა"
+msgstr "მინიატურა"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20

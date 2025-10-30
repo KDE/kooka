@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-01-11 17:15+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"PO-Revision-Date: 2025-10-29 17:20+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -193,18 +193,17 @@ msgstr "Beyaz"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "İlk Sayfa"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "Son Sayfa"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "&Taramayı Başlat"
+msgstr "Taramayı Başlat"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -214,11 +213,15 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">İlk sayfayı taramaya hazır</emphasis>%1…<nl/><nl/"
+">Sayfayı hazırlayın ve onu taramak için <interface>Taramayı&nbsp;Başlat</"
+"interface> düğmesini veya taramayı iptal etmek için<nl/><interface>İptal</"
+"interface> düğmesini kullanın."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "Sonrakini Tara"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -228,6 +231,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Sonraki sayfayı taramaya hazır</emphasis>%1…<nl/><nl/"
+">Sonraki sayfayı hazırlayın ve onu taramak için <interface>Sonrakini&nbsp;"
+"Tara</interface> düğmesine basın veya tarama işini bitirmek için<nl/"
+"><interface>Bitir</interface> düğmesini kullanın."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -238,6 +245,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">Sonraki sayfayı taramaya hazır</emphasis>%1…<nl/><nl/"
+">Sonraki sayfayı hazırlayın ve onu taramak için <interface>Sonrakini&nbsp;"
+"Tara</interface> düğmesine basın veya tarama işini bitirmek için<nl/"
+"><interface>Bitir</interface> düğmesini, taramayı iptal etmek içinse "
+"<interface>İptal</interface> düğmesini kullanın."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -248,11 +260,15 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">İlk sayfayı taramak için bekleniyor</emphasis>%1…<nl/"
+"><nl/>Sayfayı hazırlayın ve onu taramak için <interface>Taramayı&nbsp;"
+"Başlat</interface> düğmesini veya taramayı iptal etmek için<nl/"
+"><interface>İptal</interface> düğmesini kullanın."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "Şimdi Tara"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -263,6 +279,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Sonraki sayfayı taramak için bekleniyor</emphasis>%1…"
+"<nl/><nl/>Sonraki sayfayı hazırlayın ve onu taramak için "
+"<interface>Şimdi&nbsp;Tara</interface> düğmesine basın veya tarama işini "
+"bitirmek için<nl/><interface>Bitir</interface> düğmesini kullanın."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -274,28 +294,33 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">Sonraki sayfayı taramak için bekleniyor</emphasis>%1…"
+"<nl/><nl/>Sonraki sayfayı hazırlayın ve onu taramak için "
+"<interface>Şimdi&nbsp;Tara</interface> düğmesine basın veya tarama işini "
+"bitirmek için<nl/><interface>Bitir</interface> düğmesini, taramayı iptal "
+"etmek içinse <interface>İptal</interface> düğmesini kullanın."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Duraklat"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Bitir"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%1 saniye)"
+msgstr[1] " (%1 saniye)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (Duraklatıldı)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -521,18 +546,17 @@ msgstr "Desteklenmiyor"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "Besleyicide belge yok"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "Besleyici boş"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "Etkin değil"
+msgstr "Kabul edilmedi"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -573,123 +597,120 @@ msgstr "µsn"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "Yok"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "Besleyici ve Çoklu Tarama Seçenekleri"
 
 #: multiscandialog.cpp:87
-#, fuzzy, kde-format
-#| msgid "Scan Progress"
+#, kde-format
 msgid "Scan source:"
-msgstr "Tarama İlerlemesi"
+msgstr "Tarama kaynağı:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Tarama Aygıtını Seçin"
+msgstr "Tarama Kaynağını Seç"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "Tarama ve Besleyici"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "Tekli tarama"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "Seçili kaynaktan tek bir tarama gerçekleştir"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "Çoklu tarama"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "Seçili kaynaktan birden çok tarama gerçekleştir"
 
 #: multiscandialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Scan until ADF reports out of paper"
+#, kde-format
 msgid "Scan until ADF is empty"
-msgstr "ADF (OBB) kağıt sonu uyarısı yapana kadar tara"
+msgstr "Besleyici boşalana dek tara"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
-msgstr ""
+msgstr "Belge besleyicisi boşalana dek taramayı sürdür"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "Sonraki tarama için hazır olana dek bekle"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "Taramalar arasında onay için bekle"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "Şu kadar bekledikten sonra tara"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "Taramalar arasındaki gecikme"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " saniye"
+msgstr[1] " saniye"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "Taramalar arasındaki gecikme zamanını ayarla"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "İlk tarama öncesinde bekle veya geciktir"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -697,17 +718,17 @@ msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
 msgstr ""
+"İlk tarama başlamadan önce onay için bekle veya gecikme zamanını ayarla"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Açıklama:"
+msgstr "Hedef"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "Çoklu taramaları paket olarak işle"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -720,11 +741,16 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Birden fazla taramayı toplu olarak işlemek için bu seçeneği açın veya tek "
+"tek işlemek için kapatın.<br/><br/>Bu seçeneğin etkisi, seçilen hedefe ve "
+"kendi ayarlarına bağlıdır. Örneğin, bu seçenek açıkken birden fazla taramayı "
+"e-posta ile paylaşmak, tüm taramaları aynı e-posta iletisine ekler. Bu "
+"seçenek kapalıyken ise her biri ayrı bir iletiye eklenir."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "Dosya adlarını kendiliğinden üret"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -740,34 +766,43 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"Olabildiğince kendiliğinden bir dosya adı oluşturmak için bu seçeneği "
+"etkinleştirin veya her zaman bir ad sormak için devre dışı bırakın.<br/><br/"
+">Bu seçeneğin etkisi, seçilen hedefe ve kendi ayarlarına bağlıdır. Örneğin, "
+"tarama galerisine veya başka bir konuma kaydederken, çoklu taramanın ilk "
+"dosyası için bir dosya adı istenir. Bundan sonra, bir sonraki dosyayı "
+"oluşturmak için dosya adı kendiliğinden artırılır.<br/><br/>İlk dosya adı "
+"için bir sayısal sonek veya “#” karakteri, girilen basamak sayısıyla "
+"kendiliğinden artar. Var olan numaralandırılmış dosyalar atlanır ve üzerine "
+"yazılmaz."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "Döndürme"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "Tek sayfalar:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
 msgstr ""
+"Tek sayılı taranacak sayfalar için döndürmeyi seçin. İlk sayfa, sayfa 1’dir."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "Çift sayfalar:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "Taranan alanın ön ayar boyutu için bir yönelim seçin"
+msgstr "Çift taranacak sayfalar için döndürmeyi seç"
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -889,7 +924,7 @@ msgstr "<title>Tarayıcı&nbsp;Ayarları</title>"
 msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
-msgstr ""
+msgstr "Çoklu taramalar etkin.<nl/><link url=\"1\">Bir daha gösterme</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -976,13 +1011,15 @@ msgstr "Okuma kipi:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "Besleyici ve Çoklu Tarama Seçenekleri…"
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"Besleyiciyi, taranacak birden çok sayfa için döndürme ve hedef seçeneklerini "
+"ayarla"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1108,18 +1145,18 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"Tarama kaynağı besleyici olarak ayarlanmış.<br/>Önizleme, ilk yaprağı "
+"besleyiciden alabilir.<br/><br/>Önizlemek istediğinizden emin misiniz?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Seç"
+msgstr "ADF seçili"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "Ön&izleme"
+msgstr "Önizle"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20

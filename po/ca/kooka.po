@@ -1,9 +1,9 @@
 # Translation of kooka.po to Catalan
-# Copyright (C) 2002-2024 This_file_is_part_of_KDE
+# Copyright (C) 2002-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # SPDX-FileCopyrightText: 2004, 2005 Albert Astals Cid <aacid@kde.org>
 # SPDX-FileCopyrightText: 2014, 2017, 2018, 2020, 2022 Antoni Bella Pérez <antonibella5@yahoo.com>
 msgid ""
@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-10-14 09:01+0200\n"
+"PO-Revision-Date: 2025-10-29 10:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -88,72 +88,60 @@ msgstr "<filename>%1</filename>"
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "Desa en pàgines múltiples"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"No s'ha pogut desar la imatge a <filename>%1</filename><nl/><message>%2</"
-"message>"
+"No s'ha pogut al fitxer <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "No s'ha pogut desar la imatge"
+msgstr "No s'ha pogut desar el fitxer"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "Format del fitxer:"
+msgstr "Format de sortida:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "Configuració de pàgina..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "Estableix la mida i la disposició de les pàgines"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "S'està desant a <filename>%1</filename>"
+msgstr "La pàgina %1 s'està desant a <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "Configuració de pàgines PDF"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Estableix el zoom..."
+msgstr "Personalitzada..."
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "Mida de la imatge:"
+msgstr "Mida de la pàgina:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " mm"
@@ -162,25 +150,24 @@ msgstr " mm"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "Vertical"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "Apaïsada"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Segmentation mode:"
+#, kde-format
 msgid "Orientation:"
-msgstr "Mode de segmentació:"
+msgstr "Orientació:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -191,48 +178,44 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"No s'ha pogut trobar l'ordre <command section=\"1\">tiffcp</command>,<nl/"
+">assegureu-vos que estigui disponible al <envvar>PATH</envvar>.<nl/><nl/"
+">L'ordre és part del paquet <application>libtiff</application>,<nl/>però "
+"potser cal que s'instal·li per separat."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "No s'ha pogut trobar l'ordre TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"No s'ha pogut desar la imatge a <filename>%1</filename><nl/><message>%2</"
-"message>"
+"No s'ha pogut desar la pàgina al fitxer <filename>%1</filename><nl/><message>"
+"%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"No s'ha pogut desar la imatge a <filename>%1</filename><nl/><message>%2</"
-"message>"
+"No s'ha pogut afegir la pàgina al fitxer <filename>%1</filename>, estat "
+"%2<nl/>(vegeu la sortida d'error estàndard per si hi ha algun error)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "No s'ha pogut desar la imatge"
+msgstr "No s'ha pogut afegir la pàgina"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "S'està desant la imatge"
+msgstr "Es descarta la imatge"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -253,19 +236,22 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>La generació automàtica de noms de fitxer requereix un nom de "
+"plantilla.</para><para>El nom de fitxer <filename>%1</filename> hauria de "
+"contenir una seqüència<nl/>de caràcters «<icode>#</icode>» com a marcadors "
+"de posició, o acabar amb una seqüència<nl/>de dígits numèrics abans de "
+"l'extensió del fitxer.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "No s'ha pogut generar automàticament"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "No s'ha pogut crear el fitxer temporal <filename>%1</filename>"
+msgstr "No s'ha pogut accedir a la ubicació remota <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -298,18 +284,14 @@ msgid "Save Scan"
 msgstr "Desa l'escaneig"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"No s'ha pogut desar a <filename>%2</filename><nl/>No s'admet el format "
-"d'imatge <resource>%1</resource>."
+"No s'ha pogut desar a <filename>%2</filename><nl/>No s'ha pogut trobar un "
+"format d'imatge per al nom de fitxer <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -332,14 +314,12 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "L'escaneig s'ha compartit a <nl/><link>%1</link>"
-msgstr[1] "L'escaneig s'ha compartit a <nl/><link>%1</link>"
+msgstr[0] "L'escaneig s'ha compartit a <nl/><link>%2</link>"
+msgstr[1] "Els escaneigs s'han compartit a <nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -347,17 +327,16 @@ msgid "Scan Shared"
 msgstr "Escaneig compartit"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
 msgstr[0] ""
-"No s'ha pogut compartir la imatge escanejada<nl/><nl/><message>%1</message>"
+"No s'ha pogut compartir la imatge escanejada<nl/><nl/><message>%2</message>"
 msgstr[1] ""
-"No s'ha pogut compartir la imatge escanejada<nl/><nl/><message>%1</message>"
+"No s'han pogut compartir les %1 imatges escanejades<nl/><nl/><message>%2</"
+"message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -2622,10 +2601,9 @@ msgstr ""
 "llicència comercial de desenvolupament de les Qt.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, els desenvolupadors i col·laboradors del Kooka"
+msgstr "(C) 2000-2024, els desenvolupadors i col·laboradors del Kooka"
 
 #: main.cpp:82
 #, kde-format

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-05-17 07:11+0200\n"
+"PO-Revision-Date: 2025-10-29 07:37+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -189,16 +189,15 @@ msgstr "Bela"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "Prva stran"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "Naslednja stran"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
 msgstr "Začni sken"
 
@@ -210,11 +209,15 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Pripravljeno za skeniranje prve strani</emphasis>%1..."
+"<nl/><nl/>Pripravite stran in nato uporabite <interface>Začni skeniranje</"
+"interface> za skeniranje,<nl/>ali <interface>Prekliči</interface> za preklic "
+"skeniranja."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "Skeniraj naslednjo"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -224,6 +227,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Pripravljeno za skeniranje naslednje strani</emphasis>"
+"%1...<nl/><nl/>Pripravite naslednjo stran in nato uporabite "
+"<interface>Skeniraj naslednjo</interface> za njeno skeniranje,<nl/>ali "
+"<interface>Dokončaj</interface> za zaključek serije skeniranja."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -234,6 +241,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">Pripravljeno za skeniranje naslednje strani</emphasis>"
+"%1...<nl/><nl/>Pripravite naslednjo stran in nato uporabite "
+"<interface>Skeniraj naslednjo</interface> za skeniranje,<nl/>ali "
+"<interface>Dokončaj</interface> za zaključek serije skeniranja ali "
+"<interface>Prekliči</interface> za preklic celotnega skeniranja."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -244,11 +256,15 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Čakanje na skeniranje prve strani</emphasis>%1...<nl/"
+"><nl/>Pripravite stran in nato počakajte ali pa uporabite <interface>Začni "
+"sken</interface> za takojšnje skeniranje<nl/>ali <interface>Prekliči</"
+"interface> za preklic skeniranja."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "Skeniraj zdaj"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -259,6 +275,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Čakanje na sken naslednje strani</emphasis>%1...<nl/"
+"><nl/>Pripravite naslednjo stran in nato počakajte ali pa uporabite "
+"<interface>Skeniraj zdaj</interface> za takojšnje skeniranje<nl/>ali "
+"<interface>Dokončaj</interface> za zaključek serije skeniranja."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -270,30 +290,35 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">Čakanje na sken naslednje strani</emphasis>%1...<nl/"
+"><nl/>Pripravite naslednjo stran in nato počakajte ali pa uporabite "
+"<interface>Skeniraj zdaj</interface> za takojšnje skeniranje<nl/>ali "
+"<interface>Dokončaj</interface> za zaključek serije skeniranja ali "
+"<interface>Prekliči</interface> za preklic celotnega skeniranja."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Začasno ustavi"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Končaj"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " (%1 sekund)"
+msgstr[1] " (%1 sekunda)"
+msgstr[2] " (%1 sekundi)"
+msgstr[3] " (%1 sekunde)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr "(Začasno ustavljeno)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -519,18 +544,17 @@ msgstr "Ni podprto"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "Samodejni podajalnik dokumentov ni naložen"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "Samodejni podajalnik dokumentov prazen"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "Ni dejavno"
+msgstr "Ni sprejeto"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -571,125 +595,123 @@ msgstr "µsec"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "Nič"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "Samodejni podajalnik dokumentov in več možnosti skeniranja"
 
 #: multiscandialog.cpp:87
-#, fuzzy, kde-format
-#| msgid "Scan Progress"
+#, kde-format
 msgid "Scan source:"
-msgstr "Napredek skeniranja"
+msgstr "Vir skeniranja:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Izberi optični bralnik"
+msgstr "Izberi vir skeniranja"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "Skeniranje in samodejni podajalnik dokumentov"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "Enkratno skeniranje"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "Izvedi eno skeniranje iz izbranega vira"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "Večkratno skeniranje"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "Izvedite več skeniranj iz izbranega vira"
 
 #: multiscandialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Scan until ADF reports out of paper"
+#, kde-format
 msgid "Scan until ADF is empty"
-msgstr "Skeniraj, dokler ADF ne sporoči, da ni več papirja"
+msgstr "Skeniraj, dokler ni samodejni podajalnik dokumentov prazen"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
 msgstr ""
+"Nadaljuj s skeniranjem, dokler se samodejni podajalnik dokumentov ne izprazni"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "Počakaj, da boste pripravljeni na naslednje skeniranje"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "Počakaj na potrditev med skeni"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "Skeniraj po čakanju"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "Zakasnitev med skeniranji"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " sekund"
+msgstr[1] " sekunda"
+msgstr[2] " sekundi"
+msgstr[3] " sekunde"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "Nastavi čas zakasnitve med skeniranji"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "Počakaj ali zamakni pred prvim skeniranjem"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -697,17 +719,18 @@ msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
 msgstr ""
+"Počakaj na potrditev ali zamakni za nastavljeni čas pred začetkom prvega "
+"skeniranja"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Opis:"
+msgstr "Cilj"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "Obdelaj več skenov kot paket"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -720,11 +743,17 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Vklopite to možnost, če želite več skenov obdelati skupaj v paketu, ali pa "
+"jo izklopite, če jih želite obdelati posamično.<br/><br/>Učinek te možnosti "
+"je odvisen od izbranega cilja in njenih lastnih nastavitev. Če na primer "
+"delite več skenov po e-pošti, bodo vsi skeni priloženi istemu e-poštnemu "
+"sporočilu, če je ta možnost vklopljena. Če je ta možnost izklopljena, bo "
+"vsak sken priložen ločenemu sporočilu."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "Samodejno ustvari imena datotek"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -740,34 +769,42 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"Vklopite to možnost, če želite, da se ime datoteke samodejno ustvari, kadar "
+"je to mogoče, ali pa jo izklopite, če želite, da se ime vedno zahteva.<br/"
+"><br/>Učinek te možnosti je odvisen od izbranega cilja in njenih lastnih "
+"nastavitev. Na primer, pri shranjevanju v galerijo skenov ali na drugo "
+"lokacijo bo za prvo datoteko večkratnega skeniranja zahtevano ime datoteke. "
+"Od takrat naprej se bo ime datoteke samodejno povečevalo za ustvarjanje "
+"naslednje.<br/><br/>Številčna pripona ali znaki '#' za prvo ime datoteke se "
+"bodo samodejno povečevali z enakim številom števk, kot je bilo vneseno. Vse "
+"obstoječe oštevilčene datoteke bodo preskočene in ne bodo prepisane."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "Vrtenje"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "Lihe strani:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
-msgstr ""
+msgstr "Izberi vrtenje za lihe strani skeniranja. Prva stran je stran 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "Sode strani:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "Nastavite orientacijo prednastavljene velikosti skeniranega območja"
+msgstr "Izberi vrtenje za sode skenirane strani."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -888,7 +925,7 @@ msgstr "<title>Nastavitve optičnega bralnika</title>"
 msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
-msgstr ""
+msgstr "Več skeniranj je omogočeno.<nl/><link url=\"1\">Ne prikazuj več</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -975,13 +1012,15 @@ msgstr "Način branja:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "Samodejni podajalnik dokumentov in več možnosti skeniranja..."
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"Nastavitev možnosti samodejnega podajalnika dokumentov, vrtenja in cilja za "
+"skeniranje več strani"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1108,16 +1147,17 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"Vir skeniranja je nastavljen na samodejni podajalnik dokumentov.<br/"
+">Predogled lahko vzame prvi list iz podajalnika.<br/><br/>Ali ste "
+"prepričani, da želite predogled?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Izberi"
+msgstr "Izbran samodejni podajalnik dokumentov"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
 msgstr "Predogled"
 

@@ -6,13 +6,13 @@
 # Andriy Rysin <rysin@kde.org>, 2002, 2003, 2006.
 # Eugene Onischenko <oneugene@ukr.net>, 2003, 2004.
 # Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>, 2004, 2005, 2006, 2007.
-# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2024.
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-10-14 15:35+0300\n"
+"PO-Revision-Date: 2025-10-29 10:05+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -89,72 +89,61 @@ msgstr "<filename>%1</filename>"
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "Зберегти багатосторінковий документ"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Не вдалося зберегти зображення до <filename>%1</filename><nl/><message>%2</"
+"Не вдалося зберегти дані до файла <filename>%1</filename><nl/><message>%2</"
 "message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "Не вдалося зберегти зображення"
+msgstr "Не вдалося зберегти файл"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "Формат файлів:"
+msgstr "Формат виводу:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "Налаштування сторінки…"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "Встановити розмір та компонування сторінки"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "Зберігаємо до <filename>%1</filename>"
+msgstr "Зберігаємо сторінку %1 до <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "Параметри сторінки PDF"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Встановити масштаб…"
+msgstr "Нетипове…"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "Розмір зображення:"
+msgstr "Розмір сторінки:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " мм"
@@ -163,25 +152,24 @@ msgstr " мм"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "Книжкова"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "Альбомна"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Print options"
+#, kde-format
 msgid "Orientation:"
-msgstr "Параметри друку"
+msgstr "Орієнтація:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -192,48 +180,45 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"Не вдалося знайти програму <command section=\"1\">tiffcp</command>,<nl/"
+">переконайтеся, що ця програма зберігається у каталозі зі змінної "
+"<envvar>PATH</envvar>.<nl/><nl/>Команда є частиною пакунка "
+"<application>libtiff</application>,<nl/>але, можливо, її слід встановити "
+"окремо."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "Не вдалося знайти програму TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Не вдалося зберегти зображення до <filename>%1</filename><nl/><message>%2</"
-"message>"
+"Не вдалося зберегти сторінку до файла <filename>%1</filename><nl/><message>"
+"%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"Не вдалося зберегти зображення до <filename>%1</filename><nl/><message>%2</"
-"message>"
+"Не вдалося дописати сторінку до файла <filename>%1</filename>, стан %2<nl/"
+">(див. стандартне повідомлення про помилку щодо будь-якого повідомлення)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "Не вдалося зберегти зображення"
+msgstr "Не вдалося дописати сторінку"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "Збереження зображення"
+msgstr "Відкидаємо зображення"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -254,19 +239,21 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>Автоматичне створення назв файлів потребує шаблона назви.</"
+"para><para>Назва файла <filename>%1</filename> має або містити послідовність "
+"символів<nl/>«<icode>#</icode>» як замінник, або завершуватися "
+"послідовністю<nl/>цифр перед суфіксом назви файла.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "Не вдалося автоматично створити"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "Не вдалося створити тимчасовий файл <filename>%1</filename>"
+msgstr "Не вдалося отримати доступ до місця <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -299,18 +286,14 @@ msgid "Save Scan"
 msgstr "Збереження сканованого зображення"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"Не вдалося зберегти дані до <filename>%2</filename><nl/>Підтримки зображень "
-"у форматі <resource>%1</resource> не передбачено."
+"Не вдалося зберегти дані до <filename>%2</filename><nl/>Не вдалося знайти "
+"формат зображення для назви файла <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -333,16 +316,14 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "Скановане зображення було оприлюднено на<nl/><link>%1</link>"
-msgstr[1] "Скановане зображення було оприлюднено на<nl/><link>%1</link>"
-msgstr[2] "Скановане зображення було оприлюднено на<nl/><link>%1</link>"
-msgstr[3] "Скановане зображення було оприлюднено на<nl/><link>%1</link>"
+msgstr[0] "Скановані зображення було оприлюднено на<nl/><link>%2</link>"
+msgstr[1] "Скановані зображення було оприлюднено на<nl/><link>%2</link>"
+msgstr[2] "Скановані зображення було оприлюднено на<nl/><link>%2</link>"
+msgstr[3] "Скановане зображення було оприлюднено на<nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -350,26 +331,25 @@ msgid "Scan Shared"
 msgstr "Скановане зображення оприлюднено"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
 msgstr[0] ""
-"Не вдалося оприлюднити скановане зображення<nl/><nl/><message>%1</message>"
+"Не вдалося оприлюднити %1 скановане зображення<nl/><nl/><message>%2</message>"
 msgstr[1] ""
-"Не вдалося оприлюднити скановане зображення<nl/><nl/><message>%1</message>"
+"Не вдалося оприлюднити %1 сканованих зображення<nl/><nl/><message>%2</"
+"message>"
 msgstr[2] ""
-"Не вдалося оприлюднити скановане зображення<nl/><nl/><message>%1</message>"
+"Не вдалося оприлюднити %1 сканованих зображень<nl/><nl/><message>%2</message>"
 msgstr[3] ""
-"Не вдалося оприлюднити скановане зображення<nl/><nl/><message>%1</message>"
+"Не вдалося оприлюднити скановане зображення<nl/><nl/><message>%2</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
 msgid "Optical Character Recognition"
-msgstr "Оптичне Розпізнавання Знаків"
+msgstr "Оптичне розпізнавання тексту"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
@@ -2649,10 +2629,9 @@ msgstr ""
 "ліцензію на комерційну розробку з використанням бібліотек Qt.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "© Розробники Kooka, 2000–2018"
+msgstr "© Розробники Kooka, 2024"
 
 #: main.cpp:82
 #, kde-format
