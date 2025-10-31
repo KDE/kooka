@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-08-20 20:15+0400\n"
+"PO-Revision-Date: 2025-10-30 13:21+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -189,18 +189,17 @@ msgstr "أبيض"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "الصفحة الأولى"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "الصفحة التالية"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "ابدأ ال&مسح"
+msgstr "ابدأ المسح"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -210,11 +209,14 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">جاهز لمسح الصفحة الأولى</emphasis>%1...<nl/><nl/>جهز "
+"الصفحة واستخدم بعدها <interface>بدء المسح</interface> لمسحها،<nl/>أو "
+"<interface>إلغاء</interface> لإلغاء المسح."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "امسح التالية"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -224,6 +226,9 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">جاهز لمسح الصفحة التالية</emphasis>%1...<nl/><nl/>جهز "
+"الصفحة التالية واستخدم بعدها <interface>امسح التالي</interface> لمسحها،<nl/"
+">أو <interface>إنهاء</interface> لإنهاء دفعة المسح."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -234,6 +239,10 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">جاهز لمسح الصفحة التالية</emphasis>%1...<nl/><nl/>جهز "
+"الصفحة التالية واستخدم بعدها <interface>امسح التالي</interface> لمسحها،<nl/"
+">أو <interface>إنهاء</interface> لإنهاء دفعة المسح أو <interface>إلغاء</"
+"interface> لإلغاء المسح بأكمله."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -244,11 +253,14 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">انتظار لمسح الصفحة الأولى</emphasis>%1...<nl/><nl/"
+">جهز الصفحة ثم انتظر، أو استخدم <interface>بدء المسح</interface> لمسحها "
+"مباشرة<nl/>أو <interface>إلغاء</interface> لإلغاء المسح."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "امسح الآن"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -259,6 +271,9 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">انتظار لمسح الصفحة التالية</emphasis>%1...<nl/><nl/"
+">جهز الصفحة التالية ثم انتظر، أو استخدم <interface>امسح الآن</interface> "
+"لمسحها مباشرة<nl/>أو <interface>إنهاء</interface> لإنهاء دفعة المسح."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -270,32 +285,36 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">انتظار لمسح الصفحة التالية</emphasis>%1...<nl/><nl/"
+">جهز الصفحة التالية ثم انتظر، أو استخدم <interface>امسح الآن</interface> "
+"لمسحها مباشرة<nl/>أو <interface>إنهاء</interface> لإنهاء دفعة المسح أو "
+"<interface>إلغاء</interface> لإلغاء المسح بأكمله."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "ألبث"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "أنهِ"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] " (%1 ثانية)"
+msgstr[1] " (ثانية واحدة)"
+msgstr[2] " (ثانيتين)"
+msgstr[3] " (%1 ثواني)"
+msgstr[4] " (%1 ثانية)"
+msgstr[5] " (%1 ثانية)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (مُلبثة)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -521,18 +540,17 @@ msgstr "غير مدعوم"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "لا يوجد مستندات محملة في مغذي المستندات الآلي"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "مغذي المستندات الآلي فارغ"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "غير نشط"
+msgstr "غير مقبولة"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -573,143 +591,141 @@ msgstr "م.ث"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "لا شيء"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "خيارات الصفحات المتعددة ومغذي المستندات الآلي"
 
 #: multiscandialog.cpp:87
 #, kde-format
 msgid "Scan source:"
-msgstr ""
+msgstr "مصدر المسح:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "اختر جهاز المسح الضوئي"
+msgstr "اختر مصدر المسح الضوئي"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "المسح و مغذي المستندات الآلي"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "مسح مفرد"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "امسح صفحة واحدة من المصدر المحدد"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "مسح متعدد الصفحات"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "امسح صفحات متعددة من المصدر المحدد"
 
 #: multiscandialog.cpp:144
 #, kde-format
 msgid "Scan until ADF is empty"
-msgstr ""
+msgstr "امسح حتى يصير مغذي المستندات الآلي فارغًا"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
-msgstr ""
+msgstr "واصل المسح حتى يفرغ مغذي المستندات الآلي"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "انتظر حتى يكون جاهزًا للمسح التالي"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "انتظر التأكيد بين عمليات المسح"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "امسح بعد انتظار"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "التأخير بين عمليات المسح"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] " ثانية"
+msgstr[1] " ثانية"
+msgstr[2] " ثانيتين"
+msgstr[3] " ثواني"
+msgstr[4] " ثانية"
+msgstr[5] " ثانية"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "اضبط وقت التأخير بين عمليات المسح"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "الانتظار أو التأخير قبل المسح الأول"
 
 #: multiscandialog.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
-msgstr ""
+msgstr "انتظر التأكيد أو التأخير المضبوط قبل بدء المسح الأول"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "الوصف:"
+msgstr "المقصد"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "معالجة عدة عمليات مسح كدفعة"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -722,11 +738,16 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"شغل هذا الخيار لمعالجة عدة عمليات مسح معاً في دفعة، أو أوقفه لمعالجتها فردياً."
+"<br/><br/>يعتمد تأثير هذا الخيار على الوجهة المختارة وضبطها الخاص. على سبيل "
+"المثال، مشاركة عدة عمليات مسح بالبريد الإلكتروني، بتشغيل هذا الخيار، سيرفق "
+"كل عمليات المسح لرسالة البريد الإلكتروني ذاتها. وبتوقيف هذا الخيار، سترفق كل "
+"واحدة برسالة منفصلة."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "توليد أسماء ملفات آلياً"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -742,34 +763,39 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"شغل هذا الخيار لتوليد اسم ملف آلياً عند الإمكان، أو أوقفه للسؤال عن اسم دائماً."
+"<br/><br/>يعتمد تأثير هذا الخيار على الوجهة المختارة وضبطها الخاص. على سبيل "
+"المثال، عند الحفظ في معرض المسح أو موقع آخر سيطلب اسم ملف للملف الأول لعدة "
+"عمليات مسح. ومنذ ذلك الحين فصاعداً سيزاد اسم الملف آلياً لتوليد التالي.<br/"
+"><br/>لاحقة رقمية، أو علامات «#»، لاسم الملف الأول ستزاد آلياً بعدد الأرقام "
+"المدخلة ذاته. وسيتخطى أي ملف مرقم موجود ولن يدهس."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "التّدوير"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "الصفحات الفردية:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
-msgstr ""
+msgstr "اختر دوران لصفحات المسح الفردية. الصفحة الأولى هي الصفحة 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "الصفحات الزوجية:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "عيّن الاتجاه لحجم محدد مسبقًا للمنطقة الممسوحة ضوئيًا"
+msgstr "حدد الدوران لمسح الصفحات بشكل متساوي."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -890,7 +916,7 @@ msgstr "<title>إعدادات الماسح الضوئي</title>"
 msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
-msgstr ""
+msgstr "عدة عمليات مسح مشغلة.<nl/><link url=\"1\">لا تظهر ثانية</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -977,13 +1003,13 @@ msgstr "وضع القراءة:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "خيارات الصفحات المتعددة ومغذي المستندات الآلي..."
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
-msgstr ""
+msgstr "عين مغذي المستندات الآلي وخيارات الدوران والمقصد لمسح الصفحات المتعددة"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1108,18 +1134,18 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"ضُبط مصدر المسح الضوئي على مغذي الآلي للمستندات.<br/>قد تأخذ المعاينة الورقة "
+"الأولى من المغذي.<br/><br/>هل تريد المعاينة حقًا؟"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "اختر"
+msgstr "مغذي المستندات الآلي محدد"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "&عاين"
+msgstr "معاينة"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20

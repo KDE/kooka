@@ -1,16 +1,16 @@
 # Translation of libkookascan.po to Catalan (Valencian)
-# Copyright (C) 2012-2024 This_file_is_part_of_KDE
+# Copyright (C) 2012-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2012, 2014, 2016, 2018, 2020 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2020, 2021, 2024 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2020, 2021, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-05-17 09:47+0200\n"
+"PO-Revision-Date: 2025-10-29 11:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -136,7 +136,7 @@ msgstr ""
 "sourceforge.net/\">HPLIP</link>, proveu d'utilitzar l'ordre "
 "<command>hp&#8209;probe</command> per a localitzar-lo, per exemple "
 "<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> o <icode>hp&#8209;"
-"probe&nbsp;&#8209;b&nbsp;net</icode>. Cal tindre en compte que si l'HPLIP "
+"probe&nbsp;&#8209;b&nbsp;net</icode>. Cal tindre en compte que si HPLIP "
 "troba l'escàner, llavors el nom del dispositiu <icode>hp:</icode> que mostra "
 "ha de ser substituït per <icode>hpaio:</icode> en SANE."
 
@@ -195,18 +195,17 @@ msgstr "Blanc"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "Primera pàgina"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "Pàgina següent"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "&Inicia l'escaneig"
+msgstr "Inicia l'escaneig"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -216,11 +215,15 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">A punt per a escanejar la primera pàgina</emphasis> "
+"%1…<nl/><nl/>Prepareu la pàgina i després utilitzeu <interface>Inicia&nbsp;"
+"l'escaneig</interface> per escanejar-la,<nl/>o <interface>Cancel·la</"
+"interface> per a cancel·lar l'escaneig."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "Escaneja la següent"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -230,6 +233,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">A punt per a escanejar la pàgina següent</emphasis> "
+"%1…<nl/><nl/>Prepareu la pàgina següent i després utilitzeu "
+"<interface>Escaneja&nbsp;la&nbsp;següent</interface> per escanejar-la,<nl/>o "
+"<interface>Finalitza</interface> per a acabar el lot d'escaneig."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -240,6 +247,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">A punt per escanejar la pàgina següent</emphasis>%1…"
+"<nl/><nl/>Prepareu la pàgina següent i després utilitzeu "
+"<interface>Escaneja&nbsp;la&nbsp;següent</interface> per a escanejar-la,<nl/"
+">o <interface>Finalitza</interface> per a acabar el lot d'escaneig o "
+"<interface>Cancel·la</interface> per a cancel·lar tot l'escaneig."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -250,11 +262,16 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">S'està esperant a escanejar la primera pàgina</"
+"emphasis>%1…<nl/><nl/>Prepareu la pàgina i després espereu, o utilitzeu "
+"<interface>Inicia&nbsp;l'escaneig</interface> per escanejar-la "
+"immediatament<nl/>o <interface>Cancel·la</interface> per a cancel·lar "
+"l'escaneig."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "Escaneja ara"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -265,6 +282,11 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">S'està esperant a escanejar la pàgina següent</"
+"emphasis>%1…<nl/><nl/>Prepareu la pàgina següent i després espereu, o "
+"utilitzeu <interface>Escaneja&nbsp;ara</interface> per escanejar "
+"immediatament<nl/>o <interface>Finalitza</interface> per a acabar el lot "
+"d'escaneig."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -276,28 +298,34 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">S'està esperant a escanejar la pàgina següent</"
+"emphasis>%1…<nl/><nl/>Prepareu la pàgina següent i després espereu, o "
+"utilitzeu <interface>Escaneja&nbsp;ara</interface> per escanejar "
+"immediatament<nl/>o <interface>Finalitza</interface> per a acabar el lot "
+"d'escaneig o <interface>Cancel·la</interface> per a cancel·lar tot "
+"l'escaneig."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Finalitza"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%1 segon)"
+msgstr[1] " (%1 segons)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (En pausa)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -327,7 +355,7 @@ msgstr "Editeu la taula de gamma"
 #: gammadialog.cpp:61
 #, kde-format
 msgid "Brightness"
-msgstr "Brillantor"
+msgstr "Lluminositat"
 
 #: gammadialog.cpp:71
 #, kde-format
@@ -523,18 +551,17 @@ msgstr "No acceptat"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "No s'ha carregat cap document a l'ADF"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "ADF buit"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "No actiu"
+msgstr "No acceptat"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -575,121 +602,121 @@ msgstr "µs"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "Sense"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "Opcions de l'ADF i escaneig múltiple"
 
 #: multiscandialog.cpp:87
 #, kde-format
 msgid "Scan source:"
-msgstr ""
+msgstr "Origen de l'escaneig:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Trieu el dispositiu d'escaneig"
+msgstr "Trieu l'origen de l'escaneig"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "Escaneig i ADF"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "Escaneig individual"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "Efectua un escaneig individual des de l'origen seleccionat"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "Escaneig múltiple"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "Efectua escaneigs múltiples des de l'origen seleccionat"
 
 #: multiscandialog.cpp:144
 #, kde-format
 msgid "Scan until ADF is empty"
-msgstr ""
+msgstr "Escaneja fins que l'ADF estiga buit"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
 msgstr ""
+"Mantín l'escaneig fins que l'alimentador automàtic de documents estiga buit"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "Espereu fins que estiga a punt per a l'escaneig següent"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "Espera la confirmació entre escanejos"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "Escaneja després d'esperar"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "Retard d'un interval de temps entre escaneigs"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " segon"
+msgstr[1] " segons"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "Establix l'interval de retard entre els escaneigs"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "Espera o retard abans del primer escaneig"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -697,17 +724,18 @@ msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
 msgstr ""
+"Espera una confirmació o retard per a l'interval establit abans que comence "
+"el primer escaneig"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Descripció:"
+msgstr "Destinació"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "Processa diversos escaneigs com un lot"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -720,11 +748,18 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Marqueu esta opció per a processar diversos escaneigs junts en un lot, o "
+"desactiveu-la per a processar-les individualment.<br/><br/>L'efecte d'esta "
+"opció depén de la destinació seleccionada i la seua configuració. Per "
+"exemple, compartir múltiples escaneigs per correu electrònic, amb esta opció "
+"activada, adjuntarà tots els escaneigs al mateix missatge de correu "
+"electrònic.  Amb esta opció desactivada, cadascun s'adjuntarà a un missatge "
+"separat."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "Genera automàticament els noms de fitxer"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -740,34 +775,44 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"Marqueu esta opció per a generar automàticament un nom de fitxer quan siga "
+"possible, o desactiveu-la per a demanar sempre un nom.<br/><br/>L'efecte "
+"d'esta opció depén de la destinació seleccionada i de la seua configuració. "
+"Per exemple, en guardar a la galeria d'escaneig o a una altra ubicació, es "
+"demanarà un nom de fitxer per al primer fitxer d'un escaneig múltiple. A "
+"partir d'ací, el nom del fitxer s'incrementarà automàticament per a generar "
+"el següent.<br/><br/>Un sufix numèric o caràcters «#» al primer nom de "
+"fitxer incrementarà automàticament amb el mateix nombre de dígits que s'han "
+"introduït.  Qualsevol fitxer numerat existent s'ometrà i no se sobreescriurà."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "Gir"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "Pàgines senars:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
 msgstr ""
+"Tria el gir per a les pàgines d'escaneig senars. La primera pàgina és la "
+"pàgina 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "Pàgines parelles:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "Establix l'orientació d'una mida predefinida de la zona escanejada"
+msgstr "Tria el gir per a les pàgines d'escaneig parelles."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -890,6 +935,8 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
+"S'han activat diverses escaneigs.<nl/><link url=\"1\">No ho tornes a "
+"mostrar</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -950,7 +997,7 @@ msgid ""
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
 "Opera de la mateixa manera en què ho fa un escàner real (incloent-hi la zona "
-"d'exploració, processament de la imatge, etc.), però llig des del fitxer "
+"d'escaneig, processament de la imatge, etc.), però llig des del fitxer "
 "d'imatge especificat. Per a més informació, vegeu <link url=\"man:sane-"
 "pnm(5)\">sane-pnm(5)</link>."
 
@@ -966,7 +1013,7 @@ msgid ""
 "Do not perform any scanning or processing, but simply read the specified "
 "image file. This is for testing the image saving, etc."
 msgstr ""
-"No realitza cap mena d'exploració o de processament, si no senzillament llig "
+"No realitza cap mena d'escaneig o de processament, si no senzillament llig "
 "el fitxer d'imatge especificat. Açò és per a provar la guardada de la "
 "imatge, etc."
 
@@ -978,13 +1025,15 @@ msgstr "Mode de lectura:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "Opcions de l'ADF i escaneig múltiple…"
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"Establix les opcions de l'ADF, gir i destinació per a escanejar diverses "
+"pàgines"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1111,18 +1160,19 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"L'origen d'escaneig està configurat a l'alimentador automàtic de documents."
+"<br/>La vista prèvia pot capturar el primer full de l'alimentador.<br/><br/"
+">Segur que voleu la vista prèvia?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Tria"
+msgstr "ADF seleccionat"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "&Vista prèvia"
+msgstr "Vista prèvia"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
@@ -1276,9 +1326,3 @@ msgstr "Establix l'orientació d'una mida predefinida de la zona escanejada"
 #, kde-format
 msgid "Selection"
 msgstr "Selecció"
-
-#~ msgid "Default startup configuration"
-#~ msgstr "Configureu l'inici predeterminat"
-
-#~ msgid "No description"
-#~ msgstr "Sense descripció"

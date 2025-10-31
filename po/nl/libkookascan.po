@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-10-29 10:48+0100\n"
+"PO-Revision-Date: 2025-10-30 14:25+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -213,6 +213,10 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Gereed om de eerste pagina te scannen</emphasis>%1..."
+"<nl/><nl/>Prepareer de pagina en gebruik daarna <interface>Start&nbsp;Scan</"
+"interface> om het te scannen,<nl/>of <interface>Annuleren</interface> om de "
+"scan te annuleren."
 
 #: continuescandialog.cpp:80
 #, kde-format
@@ -227,6 +231,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Klaar om de volgende pagina te scannen</emphasis>%1..."
+"<nl/><nl/>Prepareer de volgende pagina en gebruik daarna "
+"<interface>Scan&nbsp;Volgende</interface> om deze te scannen,<nl/>of "
+"<interface>Beëindigen</interface> om de bulkscan te beëindigen."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -237,6 +245,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">Klaar om de eerste pagina te scannen</emphasis>%1..."
+"<nl/><nl/>Prepareer de pagina en gebruik daarna <interface>Scan&nbsp;"
+"Volgende</interface> om het te scannen,<nl/>of <interface>Beëindigen</"
+"interface> om de bulkscan te beëindigen or <interface>Annuleren</interface> "
+"om de gehele scan te annuleren."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -247,6 +260,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Wacht om te de eerste pagina te scannen</emphasis>"
+"%1...<nl/><nl/>Prepareer de pagina en wacht daarna of gebruik "
+"<interface>Start&nbsp;Scan</interface> om deze onmiddellijk te scannen<nl/"
+">of <interface>Annuleren</interface> om de scan te annuleren."
 
 #: continuescandialog.cpp:115
 #, kde-format
@@ -262,6 +279,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Wacht om de volgende pagina te scannen</emphasis>%1..."
+"<nl/><nl/>Prepareer de volgende pagina en wacht daarna of gebruik "
+"<interface>Scan&nbsp;Nu</interface> om deze onmiddellijk te scannen<nl/>of "
+"<interface>Beëindigen</interface> om de bulkscan te beëindigen."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -273,6 +294,11 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">Wacht om de volgende pagina te scannen</emphasis>%1..."
+"<nl/><nl/>Prepareer de volgende pagina en wacht daarna of gebruik "
+"<interface>Scan&nbsp;Nu</interface> om deze onmiddellijk te scannen<nl/>of "
+"<interface>Beëindigen</interface> om de bulkscan te beëindigen of "
+"<interface>Annuleren</interface> om de gehele scan te annuleren."
 
 #: continuescandialog.cpp:142
 #, kde-format
@@ -716,6 +742,12 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Zet deze optie aan om meerdere scans samen in bulk te verwerken of zet het "
+"uit om ze individueel te verwerken.<br/><br/>Het effect van deze optie hangt "
+"af van de geselecteerde bestemming en zijn eigen instellingen. Bijvoorbeeld, "
+"delen van meerdere scans door e-mail, met deze optie aan, zal alles van de "
+"scans aan hetzelfde e-mailbericht hechten. Met deze optie uit, zullen ze elk "
+"aan een separaat bericht worden gehecht."
 
 #: multiscandialog.cpp:201
 #, kde-format
@@ -736,6 +768,16 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"Zet deze optie aan om automatisch een bestandsnaam te genereren wanneer "
+"mogelijk of zet deze uit om altijd om een naam te vragen.<br/><br/>Het "
+"effect van deze optie hangt af van de geselecteerde bestemming en zijn eigen "
+"instellingen. Bijvoorbeeld, bij opslaan in de scangalerij of een andere "
+"locatie zal een bestandsnaam gevraagd worden voor het eerste bestand een "
+"meervoudige scan. Vanaf daar zal de bestandsnaam automatisch verhoogt worden "
+"om de volgende te genereren.<br/><br/>Een numeriek achtervoegsel of '#' "
+"tekens, voor de eerste bestandsnaam zal automatisch verhoogt worden met "
+"hetzelfde aantal ingevoerde cijfers.  Elk bestaand genummerd bestand zal "
+"overgeslagen en niet overschreven worden."
 
 #: multiscandialog.cpp:222
 #, kde-format
@@ -1112,6 +1154,9 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"De scanbron is ingesteld op de automatische document feeder.<br/>De preview "
+"kan genomen worden van het eerste vel uit de feeder.<br/><br/>Wilt u echt "
+"een preview?"
 
 #: scanparams.cpp:779
 #, kde-format

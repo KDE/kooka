@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-10-05 12:44+0300\n"
+"PO-Revision-Date: 2025-10-29 11:13+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -87,71 +87,59 @@ msgstr "<filename>%1</filename>"
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "שמירת ריבוי עמודים"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr ""
-"לא ניתן לשמור את התמונה אל <filename>%1</filename><nl/><message>%2</message>"
+msgstr "לא ניתן לשמור לקובץ <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "לא ניתן לשמור תמונה"
+msgstr "לא ניתן לשמור קובץ"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "תסדיר קובץ:"
+msgstr "תסדיר פלט:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "הגדרת עמוד…"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "הגדרת גודל ופריסת עמוד"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "נשמרת אל <filename>%1</filename>"
+msgstr "העמוד %1 נשמר אל <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "הגדרת עמוד PDF"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "הגדרת תקריב…"
+msgstr "התאמה אישית…"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "גודל תמונה:"
+msgstr "גודל עמוד:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " מ״מ"
@@ -160,25 +148,24 @@ msgstr " מ״מ"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "…"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "לאורך"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "לרוחב"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Segmentation mode:"
+#, kde-format
 msgid "Orientation:"
-msgstr "מצב חלוקה לקטעים:"
+msgstr "כיוון:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -189,46 +176,43 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"לא ניתן לאתר את הפקודה <command section=\"1\">tiffcp</command>,<nl/>נא לוודא "
+"שהיא זמינה ב־<envvar>PATH</envvar> (משתנה סביבה לנתיבי ברירת מחדל).<nl/><nl/"
+">הפקודה היא חלק מחבילת <application>libtiff</application>,<nl/>אך יכול להיות "
+"שיש להתקין אותה בנפרד."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "לא ניתן למצוא את פקודת TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"לא ניתן לשמור את התמונה אל <filename>%1</filename><nl/><message>%2</message>"
+"לא ניתן לשמור את הקובץ אל <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"לא ניתן לשמור את התמונה אל <filename>%1</filename><nl/><message>%2</message>"
+"לא ניתן להוסיף עמוד לקובץ <filename>%1</filename>, מצב %2<nl/>(בפלט השגיאות "
+"התקני יש הודעות בנושא הזה)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "לא ניתן לשמור תמונה"
+msgstr "לא ניתן להוסיף עמוד לסוף"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "התמונה נשמרת"
+msgstr "התמונה מסולקת"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -249,19 +233,20 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>יצירת שמות קבצים אוטומטית דורשת שם תבנית.</para><para>שם הקובץ "
+"<filename>%1</filename> אמור להכיל רצף של תווי<nl/>‚<icode>#</icode>’ כממלאי "
+"מקום או להסתיים ברצף של<nl/>ספרות לפני סיומת הקובץ.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "לא ניתן לייצר אוטומטית"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "לא ניתן ליצור את הקובץ הזמני <filename>%1</filename>"
+msgstr "לא ניתן לגשת למקום המרוחק <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -293,18 +278,14 @@ msgid "Save Scan"
 msgstr "שמירת הסריקה"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"לא ניתן לשמור אל <filename>%2</filename><nl/>תסדיר התמונה <resource>%1</"
-"resource> לא נתמך."
+"לא ניתן לשמור אל <filename>%2</filename><nl/>לא ניתן למצוא תסדיר תמונה לקובץ "
+"בשם <resource>%1</resource>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -327,16 +308,14 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "הסריקה שותפה אל<nl/><link>%1</link>"
-msgstr[1] "הסריקה שותפה אל<nl/><link>%1</link>"
-msgstr[2] "הסריקה שותפה אל<nl/><link>%1</link>"
-msgstr[3] "הסריקה שותפה אל<nl/><link>%1</link>"
+msgstr[0] "הסריקה שותפה אל<nl/><link>%2</link>"
+msgstr[1] "הסריקות שותפו אל<nl/><link>%2</link>"
+msgstr[2] "הסריקות שותפו אל<nl/><link>%2</link>"
+msgstr[3] "הסריקות שותפו אל<nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -344,17 +323,15 @@ msgid "Scan Shared"
 msgstr "הסריקה שותפה"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
-msgstr[0] "לא ניתן לשתף את התמונה שנסרקה <nl/><nl/><message>%1</message>"
-msgstr[1] "לא ניתן לשתף את התמונה שנסרקה <nl/><nl/><message>%1</message>"
-msgstr[2] "לא ניתן לשתף את התמונה שנסרקה <nl/><nl/><message>%1</message>"
-msgstr[3] "לא ניתן לשתף את התמונה שנסרקה <nl/><nl/><message>%1</message>"
+msgstr[0] "לא ניתן לשתף את התמונה שנסרקה<nl/><nl/><message>%2</message>"
+msgstr[1] "לא ניתן לשתף את שתי התמונות שנסרקו<nl/><nl/><message>%2</message>"
+msgstr[2] "לא ניתן לשתף את %1 התמונות שנסרקו<nl/><nl/><message>%2</message>"
+msgstr[3] "לא ניתן לשתף את %1 התמונות שנסרקו<nl/><nl/><message>%2</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -2560,10 +2537,9 @@ msgstr ""
 "לכן אם בחרת לעשות משהו כזה, חייב להיות לך רישיון פיתוח מסחרי של Qt.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, מפתחי ומתנדבי Kooka"
+msgstr "(C) 2000‏-2024, מפתחי ומתנדבי Kooka"
 
 #: main.cpp:82
 #, kde-format

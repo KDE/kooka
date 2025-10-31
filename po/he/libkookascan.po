@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-10-05 12:28+0300\n"
+"PO-Revision-Date: 2025-10-29 11:21+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -187,18 +187,17 @@ msgstr "לבן"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "העמוד הראשון"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "העמוד הבא"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "התחלת &סריקה"
+msgstr "התחלת סריקה"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -212,7 +211,7 @@ msgstr ""
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "הסריקה הבאה"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -246,7 +245,7 @@ msgstr ""
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "לסרוק כעת"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -272,26 +271,26 @@ msgstr ""
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "השהיה"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "סיום"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " (שנייה)"
+msgstr[1] " (שתי שניות)"
+msgstr[2] " (%1 שניות)"
+msgstr[3] " (%1 שניות)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (מושהית)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -517,18 +516,17 @@ msgstr "לא נתמך"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "לא נטענו מסמכים במזין המסמכים האוטומטי"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "מזין המסמכים האוטומטי ריק"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "לא פעיל"
+msgstr "לא התקבל"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -569,123 +567,122 @@ msgstr "מיקרו שנ׳"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "אפשרויות מזין מסמכים אוטומטי וריבוי סריקות"
 
 #: multiscandialog.cpp:87
 #, kde-format
 msgid "Scan source:"
-msgstr ""
+msgstr "מקור סריקה:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "בחירת התקן סריקה"
+msgstr "נא לבחור מקור סריקה"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "סריקה ומזין מסמכים אוטומטי"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "סריקה בודדת"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "ביצוע סריקה בודדת מהמקור הנבחר"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "ריבוי סריקות"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "ביצוע מספר סריקות מהמקור הנבחר"
 
 #: multiscandialog.cpp:144
 #, kde-format
 msgid "Scan until ADF is empty"
-msgstr ""
+msgstr "לסרוק עד שמזין המסמכים האוטומטי ריק"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
-msgstr ""
+msgstr "להמשיך לסרוק עד שמזין המסמכים האוטומי ריק"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "להמתין עד למוכנות לסריקה הבאה"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "להמתין לאישור בין הסריקות"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "לסרוק לאחר המתנה של"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "זמן ההמתנה בין סריקות"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " שנייה"
+msgstr[1] " שניות"
+msgstr[2] " שניות"
+msgstr[3] " שניות"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "הגדרת השהיה בין סריקות"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "להמתין להשהיה לפני הסריקה הראשונה"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -695,15 +692,14 @@ msgid ""
 msgstr ""
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "תיאור:"
+msgstr "יעד"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "עיבוד מספר סריקות במרוכז"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -720,7 +716,7 @@ msgstr ""
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "לייצר את שמות הקבצים אוטומטית"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -740,30 +736,29 @@ msgstr ""
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "הטיה"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "עמודים אי־זוגיים:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
-msgstr ""
+msgstr "נא לבחור את ההטיה לעמודים אי־זוגיים בסריקה. העמוד הראשון הוא 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "עמודים זוגיים:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "הגדרת כיוון לגודל ערכה של האזור הנסרק"
+msgstr "נא לבחור את ההטיה לעמודים זוגיים בסריקה."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -884,7 +879,7 @@ msgstr "<title>הגדרת&nbsp;סורק</title>"
 msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
-msgstr ""
+msgstr "ריבוי סריקות פעיל.<nl/><link url=\"1\">לא להציג שוב</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -970,13 +965,13 @@ msgstr "מצב קריאה:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "אפשרויות מזין מסמכים אוטומטי וריבוי סריקות…"
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
-msgstr ""
+msgstr "הגדרת אפשרויות מזין מסמכים אוטומטי, הטיה ויעד לסריקת מגוון עמודים"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1098,18 +1093,18 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"מקור הסריקה מוגדר למזין המסמכים האוטומטי.<br/>התצוגה המקדימה עשויה לקחת את "
+"הגיליון הראשון מהמזין.<br/><br/>להציג תצוגה מקדימה?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "בחירה"
+msgstr "נבחר מזין מסמכים אוטומטי"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "תצוגה מ&קדימה"
+msgstr "תצוגה מקדימה"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
