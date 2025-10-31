@@ -1,8 +1,26 @@
 {
     "KPlugin": {
         "Description": "Discard the scanned image",
+        "Description[ca]": "Descarta la imatge escanejada",
+        "Description[es]": "Descartar la imagen escaneada",
+        "Description[it]": "Scarta l'immagine scansionata",
+        "Description[ka]": "სკანირებული გამოსახულების მოცილება",
+        "Description[nl]": "De gescande afbeelding verwerpen",
+        "Description[pt_BR]": "Descartar a imagem escaneada",
+        "Description[sl]": "Zavrzi skenirano sliko",
+        "Description[tr]": "Taranan görseli atın",
+        "Description[uk]": "Відкинути скановане зображення",
         "Icon": "trash-empty",
         "License": "GPL",
-        "Name": "Discard Image"
+        "Name": "Discard Image",
+        "Name[ca]": "Descart d'imatge",
+        "Name[es]": "Descartar imagen",
+        "Name[it]": "Scarta immagine",
+        "Name[ka]": "გამოსახულების მოცილება",
+        "Name[nl]": "Afbeelding verwerpen",
+        "Name[pt_BR]": "Descartar imagem",
+        "Name[sl]": "Zavrzi sliko",
+        "Name[tr]": "Görseli At",
+        "Name[uk]": "Відкинути зображення"
     }
 }
