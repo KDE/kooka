@@ -1,8 +1,11 @@
 {
     "KPlugin": {
         "Description": "Discard the scanned image",
+        "Description[ar]": "أهمل الصورة الممسوحة ضوئيًا",
+        "Description[ca@valencia]": "Descarta la imatge escanejada",
         "Description[ca]": "Descarta la imatge escanejada",
         "Description[es]": "Descartar la imagen escaneada",
+        "Description[he]": "סילוק התמונה שנסרקה",
         "Description[it]": "Scarta l'immagine scansionata",
         "Description[ka]": "სკანირებული გამოსახულების მოცილება",
         "Description[nl]": "De gescande afbeelding verwerpen",
@@ -13,8 +16,11 @@
         "Icon": "trash-empty",
         "License": "GPL",
         "Name": "Discard Image",
+        "Name[ar]": "أهمِل الصورة",
+        "Name[ca@valencia]": "Descart d'imatge",
         "Name[ca]": "Descart d'imatge",
         "Name[es]": "Descartar imagen",
+        "Name[he]": "סילוק תמונה",
         "Name[it]": "Scarta immagine",
         "Name[ka]": "გამოსახულების მოცილება",
         "Name[nl]": "Afbeelding verwerpen",
