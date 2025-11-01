@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-10-29 11:21+0200\n"
+"PO-Revision-Date: 2025-10-31 09:41+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -207,6 +207,9 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">היישום מוכן לסריקת העמוד הראשון</emphasis>%1…<nl/><nl/"
+">יש להכין את העמוד ואז להשתמש ב<interface>התחלת&nbsp;סריקה</interface> כדי "
+"לסרוק אותו,<nl/>או על <interface>ביטול</interface> כדי לבטל את הסריקה."
 
 #: continuescandialog.cpp:80
 #, kde-format
@@ -221,6 +224,9 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">היישום מוכן לסריקת העמוד הבא</emphasis>%1…<nl/><nl/"
+">נא להכין את העמוד הבא ואז להשתמש ב<interface>סריקת&nbsp;הבא</interface> כדי "
+"לסרוק אותו,<nl/>או על <interface>סיום</interface> כדי לעצור את הסריקה במרוכז."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -231,6 +237,10 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">היישום מוכן לסריקת העמוד הבא</emphasis>%1…<nl/><nl/"
+">נא להכין את העמוד הבא ואז להשתמש ב<interface>סריקת&nbsp;הבא</interface> כדי "
+"לסרוק אותו,<nl/>או על <interface>סיום</interface> כדי לעצור את הסריקה במרוכז "
+"או על <interface>ביטול</interface> כדי לבטל את הסריקה כולה."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -241,6 +251,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">בהמתנה לסריקת העמוד הראשון</emphasis>%1…<nl/><nl/>יש "
+"להכין את העמוד ואז להמתין, או להשתמש ב<interface>התחלת&nbsp;סריקה</"
+"interface> כדי לסרוק אותו מיידית<nl/>או על <interface>ביטול</interface> כדי "
+"לבטל את הסריקה."
 
 #: continuescandialog.cpp:115
 #, kde-format
@@ -256,6 +270,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">בהמתנה לסריקת העמוד הבא</emphasis>%1…<nl/><nl/>נא "
+"להכין את העמוד הבא ולהמתין, או להשתמש ב<interface>סריקה&nbsp;כעת</interface> "
+"כדי לסרוק אותו מיידית<nl/>או על <interface>סיום</interface> כדי לסיים את "
+"הסריקה במרוכז."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -267,6 +285,10 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">בהמתנה לסריקת העמוד הבא</emphasis>%1…<nl/><nl/>נא "
+"להכין את העמוד הבא ולהמתין, או להשתמש ב<interface>סריקה&nbsp;כעת</interface> "
+"כדי לסרוק אותו מיידית<nl/>או על <interface>סיום</interface> כדי לסיים את "
+"הסריקה במרוכז או על <interface>ביטול</interface> כדי לבטל את הסריקה לחלוטין."
 
 #: continuescandialog.cpp:142
 #, kde-format
@@ -689,7 +711,7 @@ msgstr "להמתין להשהיה לפני הסריקה הראשונה"
 msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
-msgstr ""
+msgstr "להמתין לאישור או לעיכוב לזמן המוגדר לפני שהסריקה הראשונה מתחילה"
 
 #: multiscandialog.cpp:182
 #, kde-format
