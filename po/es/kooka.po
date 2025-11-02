@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-10-29 12:22+0100\n"
+"PO-Revision-Date: 2025-11-01 22:17+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -180,6 +180,10 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"No se ha podido encontrar la orden <command section=\"1\">tiffcp</command>."
+"<nl/>Asegúrese de que está disponible en su <envvar>PATH</envvar>.<nl/><nl/"
+">Esta orden es parte del paquete <application>libtiff</application>, aunque "
+"es posible que se deba instalar de forma independiente."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
@@ -196,17 +200,14 @@ msgstr ""
 "><message>%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"No se puede guardar la imagen en <filename>%1</filename><nl/><message>%2</"
-"message>"
+"No se puede añadir la página al archivo <filename>%1</filename>,<nl/>estado "
+"%2 (consulte los mensajes de la salida de error estándar)."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
 #, kde-format
@@ -237,19 +238,22 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>La generación automática de nombres de archivo necesita una plantilla."
+"</para><para>El archivo <filename>%1</filename> debe contener una "
+"secuencia<nl/>de caracteres «<icode>#</icode>» como parámetro, o terminar "
+"con una secuencia<nl/>de dígitos numéricos antes de la extensión de archivo."
+"</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "No se puede generar automáticamente"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "No se puede crear el archivo temporal <filename>%1</filename>"
+msgstr "No se puede acceder a la ubicación remota <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -282,18 +286,14 @@ msgid "Save Scan"
 msgstr "Guardar escaneo"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"No se puede guardar en <filename>%2</filename><nl/>El formato de imagen "
-"<resource>%1</resource> no está permitido."
+"No se puede guardar en <filename>%2</filename><nl/>No se ha encontrado un "
+"formato de imagen para el archivo <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -316,14 +316,12 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "La imagen escaneada se ha compartido en<nl/><link>%1</link>"
-msgstr[1] "La imagen escaneada se ha compartido en<nl/><link>%1</link>"
+msgstr[0] "La imagen escaneada se ha compartido en<nl/><link>%2</link>"
+msgstr[1] "La imagen escaneada se ha compartido en<nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -331,17 +329,16 @@ msgid "Scan Shared"
 msgstr "Escaneo compartido"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
 msgstr[0] ""
-"No se puede compartir la imagen escaneada<nl/><nl/><message>%1</message>"
+"No se puede compartir la imagen escaneada<nl/><nl/><message>%2</message>"
 msgstr[1] ""
-"No se puede compartir la imagen escaneada<nl/><nl/><message>%1</message>"
+"No se pueden compartir las %1 imágenes escaneadas<nl/><nl/><message>%2</"
+"message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
