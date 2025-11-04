@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2025-01-14 16:30+0100\n"
+"PO-Revision-Date: 2025-10-31 12:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 25.08.2\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -205,18 +205,17 @@ msgstr "Blanc"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "Première page"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "Page suivante"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "Démarrer la numérisa&tion"
+msgstr "Démarrer la numérisation"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -226,11 +225,15 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Prêt à numériser la première page</emphasis>%1...<nl/"
+"><nl/>Veuillez préparer la page puis sélectionner <interface>Démarrer la "
+"numérisation</interface> pour la numériser<nl/> ou <interface>Annuler</"
+"interface> pour annuler la numérisation."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "Numériser la page suivante"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -240,6 +243,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Prêt à numériser la page suivante</emphasis> %1...<nl/"
+"><nl/>Veuillez préparer la page suivante puis sélectionner "
+"<interface>Numériser la prochaine page</interface> pour la numériser<nl/>ou "
+"<interface>Terminer</interface> pour terminer le lot de numérisation."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -250,6 +257,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">Prêt à numériser la page suivante</emphasis> %1./"
+">Veuillez préparer la page suivant, puis utiliser <interface>Numériser la "
+"prochaine page</interface> pour la numériser<nl/>ou <interface>Terminer</"
+"interface> pour terminer le lot de numérisation ou <interface>Annuler</"
+"interface> pour annuler la totalité de la numérisation."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -260,11 +272,16 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">En attente de numérisation de la première page</"
+"emphasis>%1...<nl/><nl/>Veuillez préparer la page puis attendre ou utiliser "
+"<interface>Démarrer la numérisation</interface> pour la numériser "
+"immédiatement<nl/>ou <interface>Annuler</interface> pour annuler la "
+"numérisation."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "Numériser maintenant"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -275,6 +292,11 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">En attente de numérisation de la page suivante</"
+"emphasis>%1...<nl/><nl/>Veuillez préparer la page suivante puis attendre ou "
+"utiliser <interface>Numériser maintenant</interface> pour la numériser "
+"immédiatement<nl/>ou <interface>Terminer</interface> pour terminer le lot de "
+"numérisation."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -286,28 +308,34 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">En attente de numérisation de la page suivante</"
+"emphasis>%1...<nl/><nl/>Veuillez préparer la page suivante puis attendre ou "
+"utiliser <interface>Numériser maintenant</interface> pour la numériser "
+"immédiatement<nl/>ou <interface>Terminer</interface> pour terminer le lot de "
+"numérisation ou <interface>Annuler</interface> pour annuler la totalité de "
+"la numérisation."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Mettre en pause"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Terminer"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%1 seconde)"
+msgstr[1] " (%1 secondes)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (En pause)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -535,18 +563,17 @@ msgstr "Non pris en charge"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "Aucun document « ADF » chargé"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "ADF vide"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "Non actif"
+msgstr "Non accepté"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -587,123 +614,122 @@ msgstr "µsec"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90 °"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180 °"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270 °"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "Options ADF et de numérisation multiples"
 
 #: multiscandialog.cpp:87
-#, fuzzy, kde-format
-#| msgid "Scan Progress"
+#, kde-format
 msgid "Scan source:"
-msgstr "Progression de la numérisation"
+msgstr "Source de numérisation :"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Sélectionner un périphérique scanner"
+msgstr "Sélectionner la source de numérisation"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "Numérisation et ADF"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "Scan simple"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "Effectuer une seule numérisation à partir de la source sélectionnée."
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "Numérisation de pages multiples"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "Effectuer plusieurs numérisations à partir de la source sélectionnée"
 
 #: multiscandialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Scan until ADF reports out of paper"
+#, kde-format
 msgid "Scan until ADF is empty"
-msgstr "Numériser jusqu'à ce que ADF signale un manque de papier"
+msgstr "Numériser jusqu'à ce que ADF soit vide"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
 msgstr ""
+"Continuez la numérisation jusqu'à ce que le chargeur automatique de "
+"documents soit vide"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "Attendez d'être prêt pour la prochaine numérisation"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "Attendez la confirmation entre numérisations"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "Numériser après une attende de"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "Intervalle de temps entre numérisation"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " seconde"
+msgstr[1] " secondes"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "Définir l'intervalle de temps entre numérisations"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "Attendre ou retarder avant la première numérisation"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -711,17 +737,18 @@ msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
 msgstr ""
+"Attendez la confirmation ou retardez d'un temps défini avant le début de la "
+"première numérisation"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Description :"
+msgstr "Destination"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "Traiter plusieurs numérisations comme un lot"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -734,11 +761,18 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Activez cette option pour traiter plusieurs numérisations ensemble dau "
+"désactivez-la pour les traiter individuellement.<br/><br/>L'effet de cette "
+"option dépend de la destination sélectionnée et de ses propres paramètres. "
+"Par exemple, avec cette option activée, le partage de plusieurs "
+"numérisations par courriel insérera en pièce jointe toutes les numérisations "
+"dans le même message électronique.  Lorsque cette option est désactivée, ils "
+"seront chacun joint à un message distinct."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "Générer automatiquement des noms de fichiers"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -754,34 +788,46 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"Activez cette option pour générer automatiquement un nom de fichier lorsque "
+"cela est possible ou désactivez la pour toujours demander un nom. <br/><br/"
+">L’effet de cette option dépend de la destination sélectionnée et de ses "
+"propres paramètres. Par exemple, lors de l'enregistrement dans la galerie de "
+"numérisation ou un autre emplacement, un nom de fichier sera demandé pour le "
+"premier fichier d’une numérisation de pages multiples. À partir de là, le "
+"nom du fichier sera automatiquement incrémenté pour générer le suivant. <br/"
+"><br/>Pour le premier nom de fichier, un suffixe numérique ou des caractères "
+"« # » seront automatiquement incrémentés avec le même nombre de chiffres que "
+"celui saisi. Tout fichier numéroté existant sera être ignoré et ne sera pas "
+"écrasé."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "Rotation"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "Pages impaires :"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
 msgstr ""
+"Sélectionnez la rotation pour les pages impaires de numérisation. La "
+"première page est la page 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "Pages paires :"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "Définir l'orientation pour une taille prédéfinie de la zone scannée"
+msgstr "Définir l'orientation pour les pages numérisées paires."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -905,6 +951,8 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
+"Plusieurs numérisations sont activées.<nl/><link url=\"1\">Ne plus afficher</"
+"link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -991,13 +1039,15 @@ msgstr "Mode de lecture :"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "Options ADF et de numérisation multiples..."
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"Définir les options ADF, rotation et destination pour numériser plusieurs "
+"pages"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1129,18 +1179,19 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"La source de numérisation est définie comme le chargeur automatique de "
+"documents.<br/>L'aperçu peut prendre la première feuille du chargeur.<br/"
+"><br/>Voulez-vous vraiment avoir un aperçu ?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Sélectionner"
+msgstr "ADF sélectionné"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "Aper&çu"
+msgstr "Aperçu"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
