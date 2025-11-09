@@ -81,64 +81,59 @@ msgstr ""
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "保存多页"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr ""
+msgstr "无法保存到文件 <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot create directory"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "无法创建文件夹"
+msgstr "无法保存文件"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
 #, kde-format
 msgid "Output format:"
-msgstr ""
+msgstr "输出格式："
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "页面设置..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "设置页面大小和布局"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
 #, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr ""
+msgstr "保存页面 %1 到 <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "PDF 页面设置"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
 #, kde-format
 msgid "Custom..."
-msgstr ""
+msgstr "自定义..."
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "图像尺寸："
+msgstr "页面大小："
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " 毫米"
@@ -147,24 +142,24 @@ msgstr " 毫米"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "纵向"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "横向"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
 #, kde-format
 msgid "Orientation:"
-msgstr ""
+msgstr "方向："
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -175,18 +170,21 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"无法找到命令 <command section=\"1\">tiffcp</command>，<nl/>请确保该命令已包含"
+"在 <envvar>PATH</envvar>中。<nl/><nl/>该命令是 <application>libtiff</"
+"application> 软件包的一部分，<nl/>但可能需要单独安装。"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "找不到 TIFF 命令"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr ""
+msgstr "无法保存页面到文件 <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
 #, kde-kuit-format
@@ -195,11 +193,13 @@ msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
+"无法将页面附加到文件 <filename>%1</filename>，状态 %2<nl/> (有关消息请参阅标"
+"准错误输出)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
 #, kde-format
 msgid "Cannot Append Page"
-msgstr ""
+msgstr "无法附加页面"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
 #, kde-format
@@ -2353,10 +2353,9 @@ msgid ""
 msgstr ""
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, the Kooka developers and contributors"
+msgstr ""
 
 #: main.cpp:82
 #, kde-format
@@ -2371,7 +2370,7 @@ msgstr ""
 #: main.cpp:94
 #, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr ""
+msgstr "当前维护者，KDE4/KF6 移植版本"
 
 #: main.cpp:95
 #, kde-format

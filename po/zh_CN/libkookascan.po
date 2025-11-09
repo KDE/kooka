@@ -496,10 +496,9 @@ msgid "ADF empty"
 msgstr ""
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not supported"
+#, kde-format
 msgid "Not accepted"
-msgstr "不支持"
+msgstr ""
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -662,10 +661,9 @@ msgid ""
 msgstr ""
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "描述："
+msgstr ""
 
 #: multiscandialog.cpp:188
 #, kde-format
@@ -1048,16 +1046,14 @@ msgid ""
 msgstr ""
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "选择"
+msgstr ""
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "预览(&V)"
+msgstr ""
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
@@ -1191,6 +1187,3 @@ msgstr ""
 #, kde-format
 msgid "Selection"
 msgstr "已选项目"
-
-#~ msgid "No description"
-#~ msgstr "无描述"
