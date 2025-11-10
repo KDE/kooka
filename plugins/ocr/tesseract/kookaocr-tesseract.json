@@ -26,6 +26,7 @@
         "Description[sv]": "<emphasis>Tesseract</emphasis> är ett fritt program för optisk teckentydning, ursprungligen utvecklat på HP&nbsp;Labs och nu sponsrat av Google. Det stödjer flera språk och skrivtecken (inklusive text från höger till vänster) och analys av sidlayout.<nl/><nl/>De bästa resultaten uppnås om tecknen är minst 20&nbsp;bildpunkter höga. Problem kan uppstå med extremt skeva eller roterade bilder, eller om det finns mörka kanter.<nl/><nl/>Se <link url=\"https://github.com/tesseract-ocr/tesseract\">github.com/tesseract-ocr/tesseract</link> för mer information om Tesseract.",
         "Description[tr]": "<emphasis>Tesseract</emphasis>, ilk olarak HP Labs bünyesinde geliştirilen ve şu anda Google tarafından fonlanan ücretsiz ve açık kaynaklı bir optik karakter tanıma işletkesidir. Birden çok dili ve sağdan sola yazılanlar da içerilmek üzere birçok yazı sistemini ve sayfa yerleşimi çözümlemesini destekler.<nl/><nl/>En iyi sonucun alınabilmesi için karakterlerin en az 20 piksel yüksekliğinde olması gerekir. Pek yamuk veya döndürülmüş görsellerde veya çok kalın kenarlıklar varsa olağan olduğu üzere sorunlar ortaya çıkabilir.<nl/><nl/>Tesseract üzerine daha fazla bilgi için <link url=\"https://github.com/tesseract-ocr/tesseract\">github.com/tesseract-ocr/tesseract</link> adresine bakın.",
         "Description[uk]": "<emphasis>Tesseract</emphasis> — вільний рушій для розпізнавання тексту, початкову версію якого було створено у HP&nbsp;Labs. Зараз розробку спонсорує Google. Передбачено підтримку декількох мов та писемностей (зокрема писемностей із напрямком тексту справа ліворуч) та аналізу компонування сторінки.<nl/><nl/>Найкращі результат дає для сканованих символів, розмір яких перевищує 20&nbsp;пікселів у висоту. Проблемними можуть бути рядки тексту із значним нахилом або поворотом, а також сторінки із темними полями.<nl/><nl/>Щоб дізнатися більше про Tesseract, відвідайте сторінку <link url=\"https://github.com/tesseract-ocr/tesseract\">github.com/tesseract-ocr/tesseract</link>.",
+        "Description[zh_CN]": "<emphasis>Tesseract</emphasis>是一款开源OCR引擎，最初由惠普实验室开发，现由谷歌赞助支持。该引擎支持多语言文字识别（包括从右向左书写的文字），并具备页面布局分析功能。<nl/><nl/>当扫描字符高度不低于20像素时可获得最佳识别效果。但若图像存在严重倾斜、旋转或带有黑边等情况，则可能影响识别精度。<nl/><nl/>更多关于Tesseract的信息请参阅<link url=\"https://github.com/tesseract-ocr/tesseract\">github.com/tesseract-ocr/tesseract</link>。",
         "Description[zh_TW]": "<emphasis>Tesseract</emphasis> 是個自由的 OCR 引擎，它最初是由 HP&nbsp;Labs 開發，目前由 Google 所支持。它支援多種語言與書寫系統（包含從右到左的文字）以及頁面版面分析。<nl/><nl/>掃描的字元需要至少 20&nbsp;個像素高才能有最好的結果。圖片扭曲或旋轉太嚴重或是有黑色邊框時可能會有問題。<nl/><nl/>更多有關 Tesseract 的資訊請見 <link url=\"https://github.com/tesseract-ocr/tesseract\">github.com/tesseract-ocr/tesseract</link>。",
         "Icon": "tesseract",
         "License": "GPL",
@@ -60,6 +61,7 @@
         "Name[sv]": "Tesseract",
         "Name[tr]": "Tesseract",
         "Name[uk]": "Tesseract",
+        "Name[zh_CN]": "Tesseract",
         "Name[zh_TW]": "Tesseract"
     }
 }

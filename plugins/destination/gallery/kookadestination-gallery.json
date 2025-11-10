@@ -27,6 +27,7 @@
         "Description[sv]": "Spara den inlästa bilden i bildgalleriet",
         "Description[tr]": "Taranan görseli tarama galerisine kaydedin",
         "Description[uk]": "Зберегти скановане зображення у галереї сканування",
+        "Description[zh_CN]": "将扫描的图像保存到扫描画廊",
         "Description[zh_TW]": "將已掃描的圖片儲存到掃描歷史相簿中",
         "Icon": "image-x-generic",
         "License": "GPL",
@@ -59,6 +60,7 @@
         "Name[sv]": "Sök igenom galleri",
         "Name[tr]": "Galeriyi Tara",
         "Name[uk]": "Галерея сканування",
+        "Name[zh_CN]": "扫描画廊",
         "Name[zh_TW]": "掃描歷史相簿"
     }
 }

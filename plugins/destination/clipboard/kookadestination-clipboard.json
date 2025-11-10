@@ -27,6 +27,7 @@
         "Description[sv]": "Kopierar den inlästa bilden till klippbordet",
         "Description[tr]": "Taranan görseli panoya kopyalayın",
         "Description[uk]": "Копіювати скановане зображення до буфера",
+        "Description[zh_CN]": "将所选图像复制到剪贴板",
         "Description[zh_TW]": "將已掃描的圖片複製到剪貼簿",
         "Icon": "edit-copy",
         "License": "GPL",
@@ -61,6 +62,7 @@
         "Name[sv]": "Kopiera bild",
         "Name[tr]": "Görseli Kopyala",
         "Name[uk]": "Копіювання зображення",
+        "Name[zh_CN]": "复制图像",
         "Name[zh_TW]": "複製圖片"
     }
 }

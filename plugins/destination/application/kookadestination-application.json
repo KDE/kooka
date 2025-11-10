@@ -27,6 +27,7 @@
         "Description[sv]": "Öppna den inlästa bilden i ett program",
         "Description[tr]": "Taranan görseli bir uygulamada açın",
         "Description[uk]": "Відкрити скановане зображення у програмі",
+        "Description[zh_CN]": "在应用程序中打开扫描的图像",
         "Description[zh_TW]": "以應用程式開啟已掃描的圖片",
         "Icon": "system-run",
         "License": "GPL",
@@ -61,6 +62,7 @@
         "Name[sv]": "Program",
         "Name[tr]": "Uygulama",
         "Name[uk]": "Програма",
+        "Name[zh_CN]": "应用程序",
         "Name[zh_TW]": "應用程式"
     }
 }

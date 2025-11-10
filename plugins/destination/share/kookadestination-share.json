@@ -27,6 +27,7 @@
         "Description[sv]": "Dela den inlästa bilden",
         "Description[tr]": "Taranan görseli paylaşın",
         "Description[uk]": "Оприлюднення сканованого зображення",
+        "Description[zh_CN]": "分享扫描的图像",
         "Description[zh_TW]": "分享已掃描的圖片",
         "Icon": "document-share",
         "License": "GPL",
@@ -61,6 +62,7 @@
         "Name[sv]": "Dela bild",
         "Name[tr]": "Görseli Paylaş",
         "Name[uk]": "Оприлюднити зображення",
+        "Name[zh_CN]": "分享图像",
         "Name[zh_TW]": "分享圖片"
     }
 }

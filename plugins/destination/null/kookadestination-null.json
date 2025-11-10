@@ -14,6 +14,7 @@
         "Description[sl]": "Zavrzi skenirano sliko",
         "Description[tr]": "Taranan görseli atın",
         "Description[uk]": "Відкинути скановане зображення",
+        "Description[zh_CN]": "丢弃扫描的图像",
         "Icon": "trash-empty",
         "License": "GPL",
         "Name": "Discard Image",
@@ -29,6 +30,7 @@
         "Name[pt_BR]": "Descartar imagem",
         "Name[sl]": "Zavrzi sliko",
         "Name[tr]": "Görseli At",
-        "Name[uk]": "Відкинути зображення"
+        "Name[uk]": "Відкинути зображення",
+        "Name[zh_CN]": "放弃更改"
     }
 }

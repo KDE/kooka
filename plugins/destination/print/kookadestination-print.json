@@ -27,6 +27,7 @@
         "Description[sv]": "Skriv ut den inlästa bilden",
         "Description[tr]": "Taranan görseli yazdırın",
         "Description[uk]": "Надрукувати скановане зображення",
+        "Description[zh_CN]": "打印扫描的图像",
         "Description[zh_TW]": "列印已掃描的圖片",
         "Icon": "document-print",
         "License": "GPL",
@@ -61,6 +62,7 @@
         "Name[sv]": "Skriv ut bild",
         "Name[tr]": "Görseli Yazdır",
         "Name[uk]": "Друк зображення",
+        "Name[zh_CN]": "打印图像",
         "Name[zh_TW]": "列印圖片"
     }
 }
