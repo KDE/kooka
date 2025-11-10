@@ -6,14 +6,14 @@
 # Bergoglio Cristiano <bergoglio@tiscali.it>, 2012.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2012.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
-# SPDX-FileCopyrightText: 2018, 2019, 2020, 2021, 2022, 2024 Valter Mura <valtermura@gmail.com>
+# SPDX-FileCopyrightText: 2018, 2019, 2020, 2021, 2022, 2024, 2025 Valter Mura <valtermura@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-29 00:41+0000\n"
-"PO-Revision-Date: 2024-10-15 17:20+0200\n"
+"PO-Revision-Date: 2025-11-01 23:20+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -90,72 +90,61 @@ msgstr "<filename>%1</filename>"
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "Salva file a più pagine"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Impossibile salvare l'immagine in <filename>%1</filename><nl/><message>%2</"
+"Impossibile salvare nel file <filename>%1</filename><nl/><message>%2</"
 "message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "Impossibile salvare l'immagine"
+msgstr "Impossibile salvare il file"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "Formato del file:"
+msgstr "Formato di uscita:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "Impostazione pagina..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "Imposta la dimensione e l'aspetto delle pagine"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "Salvataggio in <filename>%1</filename>"
+msgstr "Salvataggio della pagina %1 in <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "Impostazione pagina PDF"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Imposta ingrandimento..."
+msgstr "Personalizzata..."
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "Dimensione immagine:"
+msgstr "Dimensione pagina:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " mm"
@@ -164,25 +153,24 @@ msgstr " mm"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "Verticale"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "Orizzontale"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Print options"
+#, kde-format
 msgid "Orientation:"
-msgstr "Opzioni di stampa"
+msgstr "Orientazione:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -193,48 +181,44 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"Impossibile trovare il comando <command section=\"1\">tiffcp</command>,<nl/"
+">accertati che sia disponibile in <envvar>PATH</envvar>.<nl/><nl/>Il comando "
+"è parte del pacchetto <application>libtiff</application>,<nl/>ma potrebbe "
+"dover essere installato separatamente."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "Impossibile trovare il comando TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Impossibile salvare l'immagine in <filename>%1</filename><nl/><message>%2</"
-"message>"
+"Impossibile salvare la pagina nel file <filename>%1</filename><nl/><message>"
+"%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"Impossibile salvare l'immagine in <filename>%1</filename><nl/><message>%2</"
-"message>"
+"Impossibile aggiungere la pagina al file <filename>%1</filename>, stato "
+"%2<nl/> (vedi l'errore standard per tutti i messaggi)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "Impossibile salvare l'immagine"
+msgstr "Impossibile aggiungere la pagina"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "Salvataggio dell'immagine"
+msgstr "Sto scartando l'immagine"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -255,19 +239,21 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>La generazione automatica dei nomi file richiede il nome di un modello."
+"</para><para>Il nome file <filename>%1</filename> o contiene una sequenza<nl/"
+">di caratteri '<icode>#</icode>' come segnaposto, oppure termina con una "
+"sequenza<nl/>di cifre numeriche prima dell'estensione del file.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "Impossibile generare automaticamente"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "Impossibile creare il file temporaneo <filename>%1</filename>"
+msgstr "Impossibile accedere alla posizione remota <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -300,18 +286,14 @@ msgid "Save Scan"
 msgstr "Salva scansione"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"Impossibile salvare in <filename>%2</filename><nl/>Il formato immagine "
-"<resource>%1</resource> non è supportato."
+"Impossibile salvare in <filename>%2</filename><nl/>Non è stato possibile "
+"trovare un formato immagine per il nome file <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -334,14 +316,12 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "La scansione è stata condivisa con <nl/><link>%1</link>"
-msgstr[1] "La scansione è stata condivisa con <nl/><link>%1</link>"
+msgstr[0] "La scansione è stata condivisa con<nl/><link>%2</link>"
+msgstr[1] "Le scansioni sono state condivise con<nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -349,17 +329,16 @@ msgid "Scan Shared"
 msgstr "Scansione condivisa"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
 msgstr[0] ""
-"Impossibile condividere l'immagine scansionata<nl/><nl/><message>%1</message>"
+"Impossibile condividere l'immagine scansionata<nl/><nl/><message>%2</message>"
 msgstr[1] ""
-"Impossibile condividere l'immagine scansionata<nl/><nl/><message>%1</message>"
+"Impossibile condividere le %1 immagini scansionate<nl/><nl/><message>%2</"
+"message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -2628,10 +2607,9 @@ msgstr ""
 "commercial Qt development licence.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, gli sviluppatori e i contributori di Kooka"
+msgstr "(C) 2000-2024, gli sviluppatori e i contributori di Kooka"
 
 #: main.cpp:82
 #, kde-format
