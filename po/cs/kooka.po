@@ -85,30 +85,26 @@ msgid "Save Multipage"
 msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr "Soubor výsledků GOCR nelze přečíst <filename>%1</filename><nl/>%2"
+msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot create directory"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "Nelze vytvořit adresář"
+msgstr "Nelze uložit soubor"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "Formát souboru:"
+msgstr "Formát výstupu:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "Nastavení stránky..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
@@ -117,10 +113,9 @@ msgid "Set page size and layout"
 msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "Ukládám do <filename>%1</filename>"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
@@ -128,26 +123,21 @@ msgid "PDF Page Setup"
 msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Nastavit zvětšení..."
+msgstr "Vlastní..."
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Image size:"
+#, kde-format
 msgid "Page size:"
-msgstr "Velikost obrázku:"
+msgstr "Velikost stránky:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@item:intext abbreviation for 'millimetres'"
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
-msgstr " mm"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:113
 #, kde-format
@@ -170,7 +160,7 @@ msgstr ""
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
 #, kde-format
 msgid "Orientation:"
-msgstr ""
+msgstr "Orientace:"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -188,13 +178,11 @@ msgid "Cannot find TIFF command"
 msgstr ""
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot save image to temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr "Nelze uložit obrázek do dočasného souboru <filename>%1</filename>"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
 #, kde-kuit-format
@@ -210,10 +198,9 @@ msgid "Cannot Append Page"
 msgstr ""
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "Ukládání obrázku"
+msgstr ""
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -241,12 +228,10 @@ msgid "Cannot Auto Generate"
 msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "Nelze vytvořit dočasný soubor <filename>%1</filename>"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -277,14 +262,12 @@ msgid "Save Scan"
 msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot save image to temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
-msgstr "Nelze uložit obrázek do dočasného souboru <filename>%1</filename>"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -2377,10 +2360,9 @@ msgid ""
 msgstr ""
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, Vývojáři a přispěvatelé Kooka"
+msgstr ""
 
 #: main.cpp:82
 #, kde-format
