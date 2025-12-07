@@ -217,7 +217,7 @@ msgid ""
 msgstr ""
 "<emphasis strong=\"1\">A punt per a escanejar la primera pàgina</emphasis> "
 "%1…<nl/><nl/>Prepareu la pàgina i després utilitzeu <interface>Inicia&nbsp;"
-"l'escaneig</interface> per escanejar-la,<nl/>o <interface>Cancel·la</"
+"l'escaneig</interface> per a escanejar-la,<nl/>o <interface>Cancel·la</"
 "interface> per a cancel·lar l'escaneig."
 
 #: continuescandialog.cpp:80
@@ -235,8 +235,8 @@ msgid ""
 msgstr ""
 "<emphasis strong=\"1\">A punt per a escanejar la pàgina següent</emphasis> "
 "%1…<nl/><nl/>Prepareu la pàgina següent i després utilitzeu "
-"<interface>Escaneja&nbsp;la&nbsp;següent</interface> per escanejar-la,<nl/>o "
-"<interface>Finalitza</interface> per a acabar el lot d'escaneig."
+"<interface>Escaneja&nbsp;la&nbsp;següent</interface> per a escanejar-la,<nl/"
+">o <interface>Finalitza</interface> per a acabar el lot d'escaneig."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -247,7 +247,7 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
-"<emphasis strong=\"1\">A punt per escanejar la pàgina següent</emphasis>%1…"
+"<emphasis strong=\"1\">A punt per a escanejar la pàgina següent</emphasis>%1…"
 "<nl/><nl/>Prepareu la pàgina següent i després utilitzeu "
 "<interface>Escaneja&nbsp;la&nbsp;següent</interface> per a escanejar-la,<nl/"
 ">o <interface>Finalitza</interface> per a acabar el lot d'escaneig o "
@@ -264,7 +264,7 @@ msgid ""
 msgstr ""
 "<emphasis strong=\"1\">S'està esperant a escanejar la primera pàgina</"
 "emphasis>%1…<nl/><nl/>Prepareu la pàgina i després espereu, o utilitzeu "
-"<interface>Inicia&nbsp;l'escaneig</interface> per escanejar-la "
+"<interface>Inicia&nbsp;l'escaneig</interface> per a escanejar-la "
 "immediatament<nl/>o <interface>Cancel·la</interface> per a cancel·lar "
 "l'escaneig."
 
@@ -284,7 +284,7 @@ msgid ""
 msgstr ""
 "<emphasis strong=\"1\">S'està esperant a escanejar la pàgina següent</"
 "emphasis>%1…<nl/><nl/>Prepareu la pàgina següent i després espereu, o "
-"utilitzeu <interface>Escaneja&nbsp;ara</interface> per escanejar "
+"utilitzeu <interface>Escaneja&nbsp;ara</interface> per a escanejar "
 "immediatament<nl/>o <interface>Finalitza</interface> per a acabar el lot "
 "d'escaneig."
 
@@ -300,7 +300,7 @@ msgid ""
 msgstr ""
 "<emphasis strong=\"1\">S'està esperant a escanejar la pàgina següent</"
 "emphasis>%1…<nl/><nl/>Prepareu la pàgina següent i després espereu, o "
-"utilitzeu <interface>Escaneja&nbsp;ara</interface> per escanejar "
+"utilitzeu <interface>Escaneja&nbsp;ara</interface> per a escanejar "
 "immediatament<nl/>o <interface>Finalitza</interface> per a acabar el lot "
 "d'escaneig o <interface>Cancel·la</interface> per a cancel·lar tot "
 "l'escaneig."
@@ -355,7 +355,7 @@ msgstr "Editeu la taula de gamma"
 #: gammadialog.cpp:61
 #, kde-format
 msgid "Brightness"
-msgstr "Lluminositat"
+msgstr "Brillantor"
 
 #: gammadialog.cpp:71
 #, kde-format
@@ -516,7 +516,7 @@ msgstr "sane_control_option() ha fallat"
 #: kscandevice.cpp:1988
 #, kde-format
 msgid "Error while scanning"
-msgstr "S'ha produït un error en escanejar"
+msgstr "S'ha produït un error mentre s'escanejava"
 
 #: kscandevice.cpp:1989
 #, kde-format
@@ -901,22 +901,22 @@ msgstr "La càrrega de les imatges no locals encara no està implementada"
 #: scanimage.cpp:128
 #, kde-format
 msgid "Image loading failed"
-msgstr "No s'ha pogut carregar la imatge"
+msgstr "Ha fallat mentre es carregava la imatge"
 
 #: scanimage.cpp:162
 #, kde-format
 msgid "Failed to open TIFF file"
-msgstr "No s'ha pogut obrir el fitxer TIFF"
+msgstr "Ha fallat mentre s'obria el fitxer TIFF"
 
 #: scanimage.cpp:169
 #, kde-format
 msgid "Failed to read TIFF directory"
-msgstr "No s'ha pogut llegir el directori TIFF"
+msgstr "Ha fallat mentre es llegia el directori TIFF"
 
 #: scanimage.cpp:199
 #, kde-format
 msgid "Failed to read TIFF image"
-msgstr "No s'ha pogut llegir la imatge TIFF"
+msgstr "Ha fallat mentre es llegia la imatge TIFF"
 
 #: scanimage.cpp:229
 #, kde-format
@@ -1094,14 +1094,14 @@ msgid ""
 "for more information on SANE installation and setup."
 msgstr ""
 "<title>No s'ha trobat cap escàner o no s'hi pot accedir</title><nl/><nl/>Ha "
-"succeït un problema en utilitzar la biblioteca SANE (Scanner Access Now "
-"Easy) per a accedir al dispositiu d'escaneig. Hi pot haver algun problema "
-"amb la instal·lació de SANE o no es pot configurar per a admetre este "
-"escàner.<nl/><nl/>Assegureu-vos que SANE està instal·lat correctament al "
-"sistema, així com si el nom i les opcions del dispositiu són correctes.<nl/"
-"><nl/>Veure la pàgina d'inici del projecte SANE (<link url=\"http://www.sane-"
-"project.org\">www.sane-project.org</link>) per a obtindre més informació "
-"sobre la instal·lació i configuració de SANE."
+"succeït un problema mentre s'utilitzava la biblioteca SANE (Scanner Access "
+"Now Easy) per a accedir al dispositiu d'escaneig. Hi pot haver algun "
+"problema amb la instal·lació de SANE o no es pot configurar per a admetre "
+"este escàner.<nl/><nl/>Assegureu-vos que SANE està instal·lat correctament "
+"al sistema, així com si el nom i les opcions del dispositiu són correctes."
+"<nl/><nl/>Veure la pàgina d'inici del projecte SANE (<link url=\"http://www."
+"sane-project.org\">www.sane-project.org</link>) per a obtindre més "
+"informació sobre la instal·lació i configuració de SANE."
 
 #: scanparams.cpp:698
 #, kde-format

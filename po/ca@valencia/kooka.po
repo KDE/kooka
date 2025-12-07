@@ -716,7 +716,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
 #, kde-format
 msgid "Installation Error"
-msgstr "S'ha produït un error en la instal·lació"
+msgstr "S'ha produït un error durant la instal·lació"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
 #, kde-format
@@ -1199,7 +1199,7 @@ msgstr ""
 #: galleryroot.cpp:112
 #, kde-format
 msgid "Error creating gallery"
-msgstr "S'ha produït un error en crear la galeria"
+msgstr "S'ha produït un error mentre es creava la galeria"
 
 #: galleryroot.cpp:160
 #, kde-kuit-format
@@ -1282,7 +1282,7 @@ msgstr "Emmiralla verticalment la imatge"
 #: imagetransform.cpp:94
 #, kde-format
 msgid "Error updating image %1"
-msgstr "S'ha produït un error durant l'actualització de la imatge %1"
+msgstr "S'ha produït un error mentre s'actualitzava la imatge %1"
 
 #: imgprintdialog.cpp:82
 #, kde-format
@@ -1733,12 +1733,12 @@ msgstr "No s'ha pogut canviar el nom del fitxer"
 #: imgsaver.cpp:457
 #, kde-format
 msgid "Error copying file"
-msgstr "S'ha produït un error en copiar el fitxer"
+msgstr "S'ha produït un error mentre es copiava el fitxer"
 
 #: imgsaver.cpp:458
 #, kde-format
 msgid "Error renaming file"
-msgstr "S'ha produït un error en canviar el nom del fitxer"
+msgstr "S'ha produït un error mentre es canviava el nom del fitxer"
 
 #: imgsaver.cpp:459
 #, kde-kuit-format
@@ -2743,7 +2743,7 @@ msgstr "<nl/>%1"
 #: ocrresedit.cpp:170
 #, kde-format
 msgid "Error saving OCR results"
-msgstr "S'ha produït un error en guardar els resultats d'OCR"
+msgstr "S'ha produït un error mentre es guardaven els resultats d'OCR"
 
 #: prefspages.cpp:78
 #, kde-format
@@ -2924,7 +2924,7 @@ msgstr "No s'ha pogut carregar la imatge <filename>%2</filename><nl/>%1"
 #: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
-msgstr "S'ha produït un error en carregar la imatge"
+msgstr "S'ha produït un error mentre es carregava la imatge"
 
 #: scangallery.cpp:840
 #, kde-format
@@ -2940,7 +2940,7 @@ msgstr "No s'ha pogut guardar la imatge<nl/><filename>%2</filename><nl/>%1"
 #: scangallery.cpp:894
 #, kde-format
 msgid "Image Save Error"
-msgstr "S'ha produït un error en guardar la imatge"
+msgstr "S'ha produït un error mentre es guardava la imatge"
 
 #: scangallery.cpp:972
 #, kde-format
@@ -2994,7 +2994,7 @@ msgstr ""
 #: scangallery.cpp:1143
 #, kde-format
 msgid "File Delete Error"
-msgstr "S'ha produït un error en suprimir un fitxer"
+msgstr "S'ha produït un error mentre se suprimia un fitxer"
 
 #: scangallery.cpp:1175
 #, kde-format
@@ -3015,7 +3015,7 @@ msgstr "No s'ha pogut crear la carpeta<nl/><filename>%2</filename><nl/>%1"
 #: scangallery.cpp:1201
 #, kde-format
 msgid "Folder Create Error"
-msgstr "S'ha produït un error en crear la carpeta"
+msgstr "S'ha produït un error mentre es creava la carpeta"
 
 #: scanpresetsdialog.cpp:63
 #, kde-format
