@@ -15,6 +15,7 @@
         "Description[tr]": "Taranan görselleri birden çok sayfada bir araya getirin",
         "Description[uk]": "Зібрати скановані зображення у багатосторінковий документ",
         "Description[zh_CN]": "将扫描图像集成到多个页面",
+        "Description[zh_TW]": "將已掃描的圖片組合成多個頁面",
         "Icon": "document-replace",
         "License": "GPL",
         "Name": "Multiple Pages",
@@ -31,6 +32,7 @@
         "Name[sl]": "Več strani",
         "Name[tr]": "Birden Çok Sayfa",
         "Name[uk]": "Декілька сторінок",
-        "Name[zh_CN]": "多页"
+        "Name[zh_CN]": "多页",
+        "Name[zh_TW]": "多個頁面"
     }
 }
