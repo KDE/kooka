@@ -1,14 +1,14 @@
 # KDE Finnish translation sprint participants:
 # Author: Artnay
 # Author: Lliehu
-# SPDX-FileCopyrightText: 2018, 2021, 2024 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2018, 2021, 2024, 2025 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2024-10-18 18:35+0300\n"
+"PO-Revision-Date: 2025-11-13 18:09+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -189,18 +189,17 @@ msgstr "Valkoinen"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "Ensimmäinen sivu"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "Seuraava sivu"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "&Aloita kuvanluku"
+msgstr "Aloita kuvanluku"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -210,11 +209,14 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Valmis lukemaan ensimmäisen sivun</emphasis> %1…<nl/"
+"><nl/>Valmistele sivu ja lue se <interface>Aloita&nbsp;kuvanluku</interface> "
+"-painikkeella tai<nl/>peru luku <interface>Peru</interface>-painikkeella."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "Lue seuraava"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -224,6 +226,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Valmis lukemaan seuraavan sivun</emphasis> %1…<nl/"
+"><nl/>Valmistele seuraava sivu ja lue se <interface>Lue&nbsp;seuraava</"
+"interface> -painikkeella<nl/>tai päätä erätyö <interface>Valmis</interface>-"
+"painikkeella."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -234,6 +240,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">Valmis lukemaan seuraavan sivun</emphasis> %1…<nl/"
+"><nl/>Valmistele seuraava sivu ja lue se <interface>Lue&nbsp;seuraava</"
+"interface> -painikkeella,<nl/>päätä erätyö <interface>Valmis</interface>-"
+"painikkeella tai peru koko kuvanluku<nl/><interface>Peru</interface>-"
+"painikkeella."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -244,11 +255,15 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Odotetaan ensimmäisen sivun lukemista</emphasis> %1…"
+"<nl/><nl/>Valmistele sivu ja odota tai lue se välittömästi "
+"<interface>Aloita&nbsp;kuvanluku</interface> -painikkeella<nl/>tai peru koko "
+"kuvanluku <interface>Peru</interface>-painikkeella."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "Lue nyt"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -259,6 +274,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Odotetaan seuraavan sivun lukemista</emphasis> %1…<nl/"
+"><nl/>Valmistele seuraava sivu ja odota tai lue se välittömästi "
+"<interface>Lue&nbsp;nyt</interface> -painikkeella<nl/>tai päätä erätyö "
+"<interface>Valmis</interface>-painikkeella."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -270,28 +289,33 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">Odotetaan ensimmäisen sivun lukemista</emphasis> %1…"
+"<nl/><nl/>Valmistele seuraava sivu ja odota tai lue se välittömästi "
+"<interface>Lue&nbsp;nyt</interface> -painikkeella,<nl/>päätä erätyö "
+"<interface>Valmis</interface>-painikkeella tai peru koko kuvanluku "
+"<interface>Peru</interface>-painikkeella."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Tauko"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Valmis"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%1 sekunti)"
+msgstr[1] " (%1 sekuntia)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (keskeytetty)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -517,18 +541,17 @@ msgstr "Ei tuettu"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "Automaattisyöttöön ei ole ladattu mitään"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "Automaattisyöttölaite on tyhjä"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "Ei aktiivinen"
+msgstr "Ei hyväksytty"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -569,123 +592,120 @@ msgstr "µs"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "Ei mitään"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "Automaattisyöttö- ja monen sivun lukuvalinnat"
 
 #: multiscandialog.cpp:87
-#, fuzzy, kde-format
-#| msgid "Scan Progress"
+#, kde-format
 msgid "Scan source:"
-msgstr "Kuvanluvun edistyminen"
+msgstr "Kuvanlukulähde:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Valitse kuvanlukulaite"
+msgstr "Valitse kuvanlukulähde"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "Lue ja automaattisyötä"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "Yksittäinen luku"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "Tee valitusta lähteestä yksittäinen kuvanluku"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "Useamman sivun luku"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "Tee valitusta lähteestä useampi kuvanluku"
 
 #: multiscandialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Scan until ADF reports out of paper"
+#, kde-format
 msgid "Scan until ADF is empty"
-msgstr "Lue kunnes ADF ilmoittaa paperin olevan lopussa"
+msgstr "Lue automaattisyöttö tyhjäksi"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
-msgstr ""
+msgstr "Jatka kuvanlukua, kunnes automaattisyöttölaite on tyhjä"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "Odota kunnes valmis seuraavaan kuvanlukuun"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "Odota vahvistusta kuvanlukujen välissä"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "Jatka lukemista ajassa"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "Aikaviive kuvanlukujen välissä"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " sekunti"
+msgstr[1] " sekuntia"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "Aseta aikaviive kuvanlukujen väliin"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "Odota tai viivästä ennen ensimmäistä kuvanlukua"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -693,17 +713,17 @@ msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
 msgstr ""
+"Odota vahvistusta tai viivytä sitä asetettu aika ennen ensimmäistä kuvanlukua"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Kuvaus:"
+msgstr "Kohde"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "Käsittele useampi kuvanluku eräajona"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -716,11 +736,16 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Käsittele useampi kuvanluku erätyönä valitsemalla tämä, tai poista valinta "
+"käytöstä ja käsittelet työt erikseen.<br/><br/>Valinnan vaikutus riippuu "
+"valitusta kohteesta asetuksineen. Esimerkiksi jaettaessa useampia "
+"kuvanlukuja sähköpostitse tämä asetus liittää kaikki luetut kuvat samaa "
+"sähköpostiviestiin. Ilman tätä valintaa kukin liitetään erilliseen viestiin."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "Luo tiedostonimet automaattisesti"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -736,34 +761,43 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"Valitsemalla tämän tiedostonimet luodaan automaattisesti, jos mahdollista. "
+"Ilman valintaa tiedostonimi aina kysytään.<br/><br/>Valinnan vaikutus "
+"riippuu valitusta kohteesta asetuksineen. Esimerkiksi tallennettaessa "
+"kuvanlukugalleriaan tai muuhun sijaintiin tiedostonimeä kysytään "
+"kuvanlukujoukon ensimmäiselle tiedostolle, minkä jälkeen nimen juoksevaa "
+"numeroa kasvatetaan automaattisesti kussakin kuvassa.<br/><br/>Ensimmäisen "
+"tiedostonimen numeerista päätettä (”#”-merkit) kasvatetaan automaattisesti "
+"samalla määrällä numeroita kuin annettiin. Olemassa olevat numeroidut "
+"tiedostot ohitetaan korvaamatta."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "Suunta"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "Parittomat sivut:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
 msgstr ""
+"Valitse parittomien luettujen sivujen suunta. Ensimmäinen sivu on sivu 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "Parilliset sivut:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "Aseta luetun alueen esiasetetun koon suunta"
+msgstr "Valitse parillisten luettujen sivujen suunta."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -885,6 +919,7 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
+"Useamman sivun luku on käytössä.<nl/><link url=\"1\">Älä näytä enää</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -971,13 +1006,15 @@ msgstr "Lukutila:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "Automaattisyöttö- ja monen sivun lukuvalinnat…"
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"Aseta automaattisyöttö-, suunta- ja kohdevalinnat useammille luettaville "
+"sivuille"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1103,18 +1140,19 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"Kuvanlukulähde on asetettu automaattisyöttölaitteeksi.<br/>Esikatselu "
+"saattaa ottaa laitteesta ensimmäisen arkin.<br/><br/>Haluatko varmasti "
+"esikatsella?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Valitse"
+msgstr "Automaattisyöttö valittu"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "&Esikatsele"
+msgstr "Esikatselu"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
