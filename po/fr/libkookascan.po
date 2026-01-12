@@ -4,16 +4,16 @@
 # Joëlle Cornavin <jcorn@free.fr>, 2012, 2013.
 # Vincent PINON <vincent.pinon@st.com>, 2013.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
-# SPDX-FileCopyrightText: 2020, 2021, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2020, 2021, 2024, 2025, 2026 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-10-31 12:59+0100\n"
+"PO-Revision-Date: 2026-01-10 19:22+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <French <kde-francophone@kde.org>>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.12.1\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -761,13 +761,13 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
-"Activez cette option pour traiter plusieurs numérisations ensemble dau "
-"désactivez-la pour les traiter individuellement.<br/><br/>L'effet de cette "
-"option dépend de la destination sélectionnée et de ses propres paramètres. "
-"Par exemple, avec cette option activée, le partage de plusieurs "
+"Activez cette option pour traiter plusieurs numérisations ensemble dans un "
+"lot ou désactivez-la pour les traiter individuellement.<br/><br/>L'effet de "
+"cette option dépend de la destination sélectionnée et de ses propres "
+"paramètres. Par exemple, avec cette option activée, le partage de plusieurs "
 "numérisations par courriel insérera en pièce jointe toutes les numérisations "
-"dans le même message électronique.  Lorsque cette option est désactivée, ils "
-"seront chacun joint à un message distinct."
+"dans le même courriel.  Lorsque cette option est désactivée, ils seront "
+"chacun joint à un message distinct."
 
 #: multiscandialog.cpp:201
 #, kde-format
@@ -790,10 +790,10 @@ msgid ""
 msgstr ""
 "Activez cette option pour générer automatiquement un nom de fichier lorsque "
 "cela est possible ou désactivez la pour toujours demander un nom. <br/><br/"
-">L’effet de cette option dépend de la destination sélectionnée et de ses "
+">L'effet de cette option dépend de la destination sélectionnée et de ses "
 "propres paramètres. Par exemple, lors de l'enregistrement dans la galerie de "
 "numérisation ou un autre emplacement, un nom de fichier sera demandé pour le "
-"premier fichier d’une numérisation de pages multiples. À partir de là, le "
+"premier fichier d'une numérisation de pages multiples. À partir de là, le "
 "nom du fichier sera automatiquement incrémenté pour générer le suivant. <br/"
 "><br/>Pour le premier nom de fichier, un suffixe numérique ou des caractères "
 "« # » seront automatiquement incrémentés avec le même nombre de chiffres que "
