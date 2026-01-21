@@ -1,14 +1,14 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kooka package.
 #
-# SPDX-FileCopyrightText: 2023, 2024, 2025 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2023, 2024, 2025, 2026 giovanni <g.sora@tiscali.it>
 # giovanni <g.sora@tiscali.it>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-04-16 11:37+0200\n"
+"PO-Revision-Date: 2026-01-20 18:38+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -195,18 +195,17 @@ msgstr "Blanco"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "Prime pagina"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "Pagina Proxime"
 
 #: continuescandialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Star&t Scan"
+#, kde-format
 msgid "Start Scan"
-msgstr "Ini&tia Scansion"
+msgstr "Initia Scansion"
 
 #: continuescandialog.cpp:72
 #, kde-kuit-format
@@ -216,11 +215,15 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Preste a scander le prime pagina</emphasis>%1...<nl/"
+"><nl/>Prepara le pagina e post usa <interface>Starta&nbsp;Scander</"
+"interface> per scander lo,<nl/>o <interface>Cancella</interface> per "
+"cancellar le scander."
 
 #: continuescandialog.cpp:80
 #, kde-format
 msgid "Scan Next"
-msgstr ""
+msgstr "Scande Proxime"
 
 #: continuescandialog.cpp:84
 #, kde-kuit-format
@@ -230,6 +233,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Preste a scander le proxime pagina</emphasis>%1...<nl/"
+"><nl/>Prepara le pagina e post usa <interface>Scande&nbsp;Proxime</"
+"interface> per scander lo,<nl/>o <interface>Termina</interface>  per "
+"terminar le batch de scander."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -240,6 +247,11 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">Preste a scander le proxime pagina</emphasis>%1...<nl/"
+"><nl/>Prepara le pagina e post usa <interface>Scande&nbsp;Proxime</"
+"interface> per scander lo,<nl/>o <interface>Termina</interface>  per "
+"terminar le batch de scander o <interface>Cancella</interface> per cancellar "
+"le integre scander."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -250,11 +262,15 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">Attendente a scander le prime pagina</emphasis>%1..."
+"<nl/><nl/>Prepara le pagina e post attende, o usa <interface>Starta&nbsp;"
+"Scander</interface> per scander lo imediatemente<nl/>o <interface>Cancella</"
+"interface> per cancellar le scander."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "Scande nunc"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -265,6 +281,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">Attendente a scander le proxime pagina</emphasis>%1..."
+"<nl/><nl/>Prepara le pagina e post attende, o usa <interface>Scande&nbsp;"
+"Nunc</interface> per scander lo immediatemente<nl/>o <interface>Termina</"
+"interface>  per terminar le batch de scander."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -276,28 +296,33 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">Attendente a scander le proxime pagina</emphasis>%1..."
+"<nl/><nl/>Prepara le pagina e post attende, o usa <interface>Scande&nbsp;"
+"Nunc</interface> per scander lo immediatemente<nl/>o <interface>Termina</"
+"interface>  per terminar le batch de scander o <interface>Cancella</"
+"interface> per cancellar le integre scande."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "Termina"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%1 secunda)"
+msgstr[1] " (%1 secundas)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (In pausa)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -523,18 +548,17 @@ msgstr "Non supportate"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "ADF nulle documento cargate"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "ADF vacue"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "Non active"
+msgstr "Non acceptate"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -575,121 +599,120 @@ msgstr "µsec"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "Necun"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "ADF & Optiones de scander multiple"
 
 #: multiscandialog.cpp:87
 #, kde-format
 msgid "Scan source:"
-msgstr ""
+msgstr "Fonte de scander:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Selectiona Dispositivo de Scander"
+msgstr "Selectiona le fonte de scander"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "Scander e ADF"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "Scander singule"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "Exeque un singule scander ab le fonte seligite"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "Scander multiple"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "Exeque multiple scander ab le fonte seligite"
 
 #: multiscandialog.cpp:144
 #, kde-format
 msgid "Scan until ADF is empty"
-msgstr ""
+msgstr "Scande usque ADF es vacue"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
-msgstr ""
+msgstr "MAntene scander usque le alimentator de documento automatic es vacue"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "Attende usque preste per proxime scander"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "Attende confirmation inter scander"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "Scande post attender"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "Retarda per un tempore inter scander"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " secunda"
+msgstr[1] " secundas"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "Assigna le tempore de retardo inter scander"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "Attende o retarda ante le prime scander"
 
 #: multiscandialog.cpp:172
 #, kde-format
@@ -697,17 +720,18 @@ msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
 msgstr ""
+"Attende confirmation o retardo per le tempore  assignate ante que le prime "
+"scander starta"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Description:"
+msgstr "Destination"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "Processa scander multiple como un batch"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -720,11 +744,18 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"Assigna iste option a active (on) per processar scander multiple "
+"conjunctemente in un batch,o pone lo a off per processar los individualmente."
+"<br/><br/>Le effecto de iste option depende deldestination seligite e  "
+"suproprie preferentias. Pro exemplo, compartir multiple scander per e-posta, "
+"con iste option a on, attachera tote le scander al mesme message de e-"
+"posta.  Con iste option a off, illos omne essera attachate a unmessage "
+"separate."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "Genera automaticamente nomines de file"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -744,30 +775,30 @@ msgstr ""
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "Rotation"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "Paginas dispare:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
 msgstr ""
+"Selige le rotarion per scander paginas impare. Le prime pagina ed pagina 1."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "Paginas pare:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "Assigna leorientation per un grandor de preselection del area scandite"
+msgstr "Selige le rotation per scander paginas pare."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -891,6 +922,8 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
+"Scander multiple es habilitate.<nl/><link url=\"1\">Non monstrar lo "
+"novemente</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -980,13 +1013,14 @@ msgstr "Modo de leger:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "ADF && Optiones de scander multiple..."
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
 msgstr ""
+"Assigna optiones de ADF, rotation e destination per scander multiple paginas"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1115,16 +1149,14 @@ msgid ""
 msgstr ""
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Selige"
+msgstr "ADF Seligite"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "&Vista preliminar"
+msgstr "Vista preliminar"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
@@ -1271,7 +1303,8 @@ msgstr "Orientation horizontal"
 #: scansizeselector.cpp:91
 #, kde-format
 msgid "Set the orientation for a preset size of the scanned area"
-msgstr "Assigna leorientation per un grandor de preselection del area scandite"
+msgstr ""
+"Assigna le orientation per un grandor de preselection del area scandite"
 
 #: scansizeselector.cpp:197
 #, kde-format
