@@ -99,7 +99,7 @@ int MultiScanOptions::delay() const
 
 QString MultiScanOptions::toString() const
 {
-    return (QString("[flags %1 src '%2' rot %3/%4 delay %5]").arg(mFlags, 4, 16, QLatin1Char('0'))
+    return (QString("[flags %1 src '%2' rot %3/%4 delay %5]").arg(mFlags.toInt(), 4, 16, QLatin1Char('0'))
                                                              .arg(mSource.constData())
                                                              .arg(mRotateOdd).arg(mRotateEven)
                                                              .arg(mDelay));
