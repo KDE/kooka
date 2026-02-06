@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-01-20 17:44+0100\n"
+"PO-Revision-Date: 2026-02-05 18:55+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -600,7 +600,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
-msgstr "Commando <command>%1</command> exiiva con stato <numid>%2</numid>"
+msgstr "Commando <command>%1</command> exiva con stato <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:592
 #, kde-kuit-format
