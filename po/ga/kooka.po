@@ -33,13 +33,12 @@ msgid "Remember this format"
 msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:121
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
 "%2</message>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:164
 #: ../plugins/destination/application/destinationapplication.cpp:163
@@ -65,10 +64,9 @@ msgstr ""
 
 #: ../plugins/destination/application/destinationapplication.cpp:171
 #: ../plugins/destination/share/destinationshare.cpp:99
-#, fuzzy, kde-format
-#| msgid "Image sub-format:"
+#, kde-format
 msgid "Image format:"
-msgstr "Fo-fhormáid na híomhá:"
+msgstr ""
 
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:62
 #, kde-format
@@ -76,10 +74,9 @@ msgid "Copying image to clipboard"
 msgstr ""
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:105
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' unreadable"
+#, kde-kuit-format
 msgid "<filename>%1</filename>"
-msgstr "Ní féidir '%1' a léamh"
+msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
@@ -87,24 +84,21 @@ msgid "Save Multipage"
 msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Save Image..."
+#, kde-format
 msgid "Cannot Save File"
-msgstr "Sábháil an Íomhá..."
+msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "Formáid:"
+msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
@@ -118,10 +112,9 @@ msgid "Set page size and layout"
 msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' unreadable"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "Ní féidir '%1' a léamh"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
@@ -129,24 +122,21 @@ msgid "PDF Page Setup"
 msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Socraigh Súmáil..."
+msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgid "Image View"
+#, kde-format
 msgid "Page size:"
-msgstr "Amharc Íomhánna"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
-msgstr " mm"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:113
 #, kde-format
@@ -167,10 +157,9 @@ msgid "Landscape"
 msgstr ""
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Print options"
+#, kde-format
 msgid "Orientation:"
-msgstr "Roghanna priontála"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
@@ -188,34 +177,29 @@ msgid "Cannot find TIFF command"
 msgstr ""
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Save Image..."
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "Sábháil an Íomhá..."
+msgstr ""
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "one image"
-#| msgid_plural "%1 images"
+#, kde-format
 msgid "Discarding image"
-msgstr "íomhá amháin"
+msgstr ""
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -223,10 +207,9 @@ msgid "Print immediately with same settings"
 msgstr ""
 
 #: ../plugins/destination/print/destinationprint.cpp:120
-#, fuzzy, kde-format
-#| msgid "Print %1"
+#, kde-format
 msgid "Printing image"
-msgstr "Priontáil %1"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:207
 #, kde-kuit-format
@@ -244,39 +227,33 @@ msgid "Cannot Auto Generate"
 msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
 #: ../plugins/destination/save/destinationsave.cpp:525
-#, fuzzy, kde-format
-#| msgid "Save Image..."
+#, kde-format
 msgid "Cannot Save Image"
-msgstr "Sábháil an Íomhá..."
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:388
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:424
-#, fuzzy, kde-format
-#| msgid "one image"
-#| msgid_plural "%1 images"
+#, kde-format
 msgid "Saving image"
-msgstr "íomhá amháin"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:427
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' unreadable"
+#, kde-kuit-format
 msgid "Saving to <filename>%1</filename>"
-msgstr "Ní féidir '%1' a léamh"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:444 formatdialog.cpp:280
 #, kde-format
@@ -284,13 +261,12 @@ msgid "Save Scan"
 msgstr "Sábháil an Scanadh"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -317,28 +293,20 @@ msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: ../plugins/destination/share/destinationshare.cpp:272
-#, fuzzy, kde-format
-#| msgid "Scan Parameters"
+#, kde-format
 msgid "Scan Shared"
-msgstr "Paraiméadair Scanta"
+msgstr ""
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
-msgstr[0] "Ní féidir comhad '%1' a oscailt"
-msgstr[1] "Ní féidir comhad '%1' a oscailt"
-msgstr[2] "Ní féidir comhad '%1' a oscailt"
-msgstr[3] "Ní féidir comhad '%1' a oscailt"
-msgstr[4] "Ní féidir comhad '%1' a oscailt"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -381,11 +349,10 @@ msgid "Executable:"
 msgstr "Comhad inrite:"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' unreadable"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename>"
-msgstr "Ní féidir '%1' a léamh"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
 #, kde-format
@@ -419,10 +386,9 @@ msgid "Source"
 msgstr "Foinse"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Engine Not Found"
+#, kde-format
 msgid "Source Image Information"
-msgstr "Inneall OCR Gan Aimsiú"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:265
 #, kde-format
@@ -430,10 +396,9 @@ msgid "OCR Engine"
 msgstr "Inneall OCR"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:266
-#, fuzzy, kde-format
-#| msgid "OCR Engine Not Found"
+#, kde-format
 msgid "OCR Engine Information"
-msgstr "Inneall OCR Gan Aimsiú"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:283
 #, kde-format
@@ -473,10 +438,9 @@ msgid "Spell Check"
 msgstr "Seiceáil Litrithe"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:333
-#, fuzzy, kde-format
-#| msgid "OCR Spell Check"
+#, kde-format
 msgid "OCR Result Spell Checking"
-msgstr "Seiceáil Litrithe OCR"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:343
 #, kde-format
@@ -509,10 +473,9 @@ msgid "Image: %1"
 msgstr "Íomhá: %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
-#, fuzzy, kde-format
-#| msgid "Selection: %1"
+#, kde-format
 msgid "Selection: %1"
-msgstr "Roghnú: %1"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:107
 #, kde-format
@@ -529,12 +492,10 @@ msgstr ""
 msgid "Check the OCR engine selection and settings."
 msgstr ""
 
-# Sábháil Earráid?
 #: ../plugins/ocr/abstractocrengine.cpp:122
-#, fuzzy, kde-format
-#| msgid "Save Error"
+#, kde-format
 msgid "OCR Setup Error"
-msgstr "Earráid le linn Sábhála"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:764
 #, kde-format
@@ -564,18 +525,16 @@ msgid "OCR Temporary Files"
 msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:427
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:473
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:501
 #, kde-kuit-format
@@ -586,11 +545,10 @@ msgid ""
 msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:511
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' does not exist"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
-msgstr "Níl comhad '%1' ann"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:583
 #, kde-kuit-format
@@ -606,11 +564,10 @@ msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:592
-#, fuzzy, kde-kuit-format
-#| msgid "The OCR process was stopped"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
-msgstr "Stopadh an próiseas OCR"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:593
 #, kde-kuit-format
@@ -626,29 +583,25 @@ msgid "OCR Command Failed"
 msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:603
-#, fuzzy, kde-kuit-format
-#| msgid "Error saving OCR results"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
-msgstr "Earráid agus torthaí OCR á sábháil"
+msgstr ""
 
 #: ../plugins/ocr/abstractocrengine.cpp:604
-#, fuzzy, kde-format
-#| msgid "OCR Post Processing"
+#, kde-format
 msgid "OCR Processing Failed"
-msgstr "Iar-Phróiseáil OCR"
+msgstr ""
 
 #: ../plugins/ocr/executablepathdialogue.cpp:45
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgid "Executable Path"
-msgstr "Comhad inrite:"
+msgstr ""
 
 #: ../plugins/ocr/executablepathdialogue.cpp:52
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgid "Executable path:"
-msgstr "Comhad inrite:"
+msgstr ""
 
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
@@ -676,11 +629,10 @@ msgid "Error"
 msgstr "Earráid"
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:159
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:299
 #, kde-format
@@ -863,27 +815,24 @@ msgstr "(réamhshocrú)"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' does not exist"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
-msgstr "Níl comhad '%1' ann"
+msgstr ""
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
-#, fuzzy, kde-kuit-format
-#| msgid "File '%1' unreadable"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
-msgstr "Ní féidir '%1' a léamh"
+msgstr ""
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
@@ -897,16 +846,14 @@ msgstr ""
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "Select Scan Device..."
+#, kde-format
 msgid "Select a file if required..."
-msgstr "Roghnaigh Gléas Scanta..."
+msgstr ""
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
-#, fuzzy, kde-format
-#| msgid " permission error   "
+#, kde-format
 msgid "HOCR parsing error, %1"
-msgstr " earráid sna ceadanna      "
+msgstr ""
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
@@ -1069,16 +1016,12 @@ msgid "Save Assistant"
 msgstr "Cúntóir Sábhála"
 
 #: formatdialog.cpp:306
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "<qt>Select a format to save the scanned image.<br>This is a <b>%1</b>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
-"<qt>Roghnaigh formáid a sábhálfar an íomhá scanta inti.<br>Is <b>%1</b> é "
-"seo."
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -1139,11 +1082,10 @@ msgid "Create New Gallery"
 msgstr "Cruthaigh Gailearaí Nua"
 
 #: galleryroot.cpp:165
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Cruthaigh Gailearaí Nua"
+msgstr ""
 
 #: galleryroot.cpp:166
 #, kde-format
@@ -1172,10 +1114,9 @@ msgid "Old Gallery Exists"
 msgstr ""
 
 #: imagetransform.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate image 90 degrees"
+#, kde-format
 msgid "Rotate image +90 degrees"
-msgstr "Rothlaigh an íomhá 90 céim"
+msgstr ""
 
 #: imagetransform.cpp:66
 #, kde-format
@@ -1188,29 +1129,25 @@ msgid "Rotate image -90 degrees"
 msgstr "Rothlaigh an íomhá -90 céim"
 
 #: imagetransform.cpp:77
-#, fuzzy, kde-format
-#| msgid "Mirroring image horizontally"
+#, kde-format
 msgid "Mirror image horizontally"
-msgstr "Íomhá á scáthánú go cothrománach"
+msgstr ""
 
 #: imagetransform.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mirroring image vertically"
+#, kde-format
 msgid "Mirror image vertically"
-msgstr "Íomhá á scáthánú go hingearach"
+msgstr ""
 
 #: imagetransform.cpp:94
-#, fuzzy, kde-format
-#| msgid "Updating image"
+#, kde-format
 msgid "Error updating image %1"
-msgstr "Íomhá á nuashonrú"
+msgstr ""
 
 #: imgprintdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Print %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
-msgstr "Priontáil %1"
+msgstr ""
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1228,11 +1165,10 @@ msgid "Cannot Print"
 msgstr ""
 
 #: imgprintdialog.cpp:125
-#, fuzzy, kde-format
-#| msgid "&Image"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Image"
-msgstr "&Íomhá"
+msgstr ""
 
 #: imgprintdialog.cpp:145
 #, kde-format
@@ -1255,10 +1191,9 @@ msgid ""
 msgstr ""
 
 #: imgprintdialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Resolutions"
+#, kde-format
 msgid "Screen resolution:"
-msgstr "Taifigh"
+msgstr ""
 
 #: imgprintdialog.cpp:163
 #, kde-format
@@ -1283,17 +1218,15 @@ msgid ""
 msgstr ""
 
 #: imgprintdialog.cpp:172
-#, fuzzy, kde-format
-#| msgid "Resolutions"
+#, kde-format
 msgid "Scan resolution:"
-msgstr "Taifigh"
+msgstr ""
 
 #: imgprintdialog.cpp:177
-#, fuzzy, kde-format
-#| msgid " dpi"
+#, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
-msgstr " pso"
+msgstr ""
 
 #: imgprintdialog.cpp:178
 #, kde-format
@@ -1318,18 +1251,16 @@ msgid ""
 msgstr ""
 
 #: imgprintdialog.cpp:190
-#, fuzzy, kde-format
-#| msgid "Image width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
-msgstr "Leithead na híomhá:"
+msgstr ""
 
 #: imgprintdialog.cpp:195 imgprintdialog.cpp:209
-#, fuzzy, kde-format
-#| msgid " mm"
+#, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
-msgstr " mm"
+msgstr ""
 
 #: imgprintdialog.cpp:196
 #, kde-format
@@ -1338,11 +1269,10 @@ msgid "<div>The width at which the image will be printed.</div>"
 msgstr ""
 
 #: imgprintdialog.cpp:204
-#, fuzzy, kde-format
-#| msgid "Image height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
-msgstr "Airde na híomhá:"
+msgstr ""
 
 #: imgprintdialog.cpp:210
 #, kde-format
@@ -1365,18 +1295,16 @@ msgid ""
 msgstr ""
 
 #: imgprintdialog.cpp:231
-#, fuzzy, kde-format
-#| msgid "General Options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
-msgstr "Roghanna Ginearálta"
+msgstr ""
 
 #: imgprintdialog.cpp:235
-#, fuzzy, kde-format
-#| msgid "Maintain aspect ratio"
+#, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
-msgstr "Coimeád an cóimheas treoíochta"
+msgstr ""
 
 #: imgprintdialog.cpp:236
 #, kde-format
@@ -1407,11 +1335,10 @@ msgid "Cut marks:"
 msgstr ""
 
 #: imgprintdialog.cpp:256
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
-msgstr "Neamhní"
+msgstr ""
 
 #: imgprintdialog.cpp:257
 #, kde-format
@@ -1434,25 +1361,22 @@ msgid ""
 msgstr ""
 
 #: imgprintdialog.cpp:270
-#, fuzzy, kde-format
-#| msgid "Print options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
-msgstr "Roghanna priontála"
+msgstr ""
 
 #: imgprintdialog.cpp:275
-#, fuzzy, kde-format
-#| msgid "Image View"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
-msgstr "Amharc Íomhánna"
+msgstr ""
 
 #: imgprintdialog.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1, %2 dpi"
+#, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr "%1, %2 pso"
+msgstr ""
 
 #: imgprintdialog.cpp:283
 #, kde-format
@@ -1461,11 +1385,10 @@ msgid "Available print area:"
 msgstr ""
 
 #: imgprintdialog.cpp:290
-#, fuzzy, kde-format
-#| msgid "Image Print Size"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr "Méid Phriontáil na hÍomhá"
+msgstr ""
 
 #: imgprintdialog.cpp:297
 #, kde-format
@@ -1474,11 +1397,10 @@ msgid "Pages required:"
 msgstr ""
 
 #: imgprintdialog.cpp:360
-#, fuzzy, kde-format
-#| msgid " dpi"
+#, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
-msgstr " pso"
+msgstr ""
 
 #: imgprintdialog.cpp:377
 #, kde-format
@@ -1493,11 +1415,10 @@ msgid ""
 msgstr ""
 
 #: imgprintdialog.cpp:460 imgprintdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid " %1 x %2"
+#, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
-msgstr "%1 × %2"
+msgstr ""
 
 #: imgprintdialog.cpp:468
 #, kde-format
@@ -1506,33 +1427,22 @@ msgid "%1"
 msgstr ""
 
 #: imgprintdialog.cpp:470
-#, fuzzy, kde-format
-#| msgid " %1 x %2"
+#, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
-msgstr "%1 × %2"
+msgstr ""
 
 #: imgsaver.cpp:66
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "<qt>The directory<br><filename>%1</filename><br> is not writable, please "
-#| "check the permissions."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
 msgstr ""
-"<qt>Níl comhadlann<br><filename>%1</filename><br> inscríofa; bí cinnte go "
-"bhfuil cead agat scríobh inti."
 
 #: imgsaver.cpp:77
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "<qt>The directory<br><filename>%1</filename><br> is not writable, please "
-#| "check the permissions."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
 msgstr ""
-"<qt>Níl comhadlann<br><filename>%1</filename><br> inscríofa; bí cinnte go "
-"bhfuil cead agat scríobh inti."
 
 #: imgsaver.cpp:331
 #, kde-format
@@ -1730,10 +1640,9 @@ msgid "Rotate 180 Degrees"
 msgstr "Rothlaigh 180 Céim"
 
 #: kooka.cpp:227
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "New Folder..."
-msgstr "Fillteán Nua"
+msgstr ""
 
 #: kooka.cpp:232
 #, kde-format
@@ -1791,10 +1700,9 @@ msgid "Start Scan"
 msgstr "Tosaigh Scanadh"
 
 #: kooka.cpp:299
-#, fuzzy, kde-format
-#| msgid "Scan Parameters..."
+#, kde-format
 msgid "Scan Presets..."
-msgstr "Paraiméadar Scanta..."
+msgstr ""
 
 #: kooka.cpp:304
 #, kde-format
@@ -1812,10 +1720,9 @@ msgid "OCR Selection..."
 msgstr "Roghnú OCR..."
 
 #: kooka.cpp:320
-#, fuzzy, kde-format
-#| msgid "OCR Image..."
+#, kde-format
 msgid "OCR File..."
-msgstr "Íomhá OCR..."
+msgstr ""
 
 #: kooka.cpp:324
 #, kde-format
@@ -1908,17 +1815,15 @@ msgid ""
 msgstr ""
 
 #: kookascanparams.cpp:168
-#, fuzzy, kde-format
-#| msgid "Resolutions"
+#, kde-format
 msgid "Scan &destination:"
-msgstr "Taifigh"
+msgstr ""
 
 #: kookascanparams.cpp:204
-#, fuzzy, kde-kuit-format
-#| msgid "No format selected."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No destination selected"
-msgstr "Níor roghnaíodh formáid ar bith."
+msgstr ""
 
 #: kookascanparams.cpp:214
 #, kde-kuit-format
@@ -2156,10 +2061,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
 #: kookasettings.kcfg:274
-#, fuzzy, kde-format
-#| msgid "Threshold"
+#, kde-format
 msgid "Threshold"
-msgstr "Tairseach"
+msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
 #: kookasettings.kcfg:296
@@ -2181,10 +2085,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
 #: kookasettings.kcfg:308
-#, fuzzy, kde-format
-#| msgid "OCR Engine:"
+#, kde-format
 msgid "Engine mode:"
-msgstr "Inneall OCR:"
+msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
 #: kookasettings.kcfg:312
@@ -2212,17 +2115,15 @@ msgstr "&Íomhá"
 
 #. i18n: ectx: Menu (settings)
 #: kookaui.rc:56
-#, fuzzy, kde-format
-#| msgid "S&ettings"
+#, kde-format
 msgid "&Settings"
-msgstr "&Socruithe"
+msgstr ""
 
 #. i18n: ectx: ToolBar (imageToolBar)
 #: kookaui.rc:67
-#, fuzzy, kde-format
-#| msgid "Image Viewer"
+#, kde-format
 msgid "Image Viewer Toolbar"
-msgstr "Amharcán Íomhánna"
+msgstr ""
 
 #. i18n: ectx: ToolBar (scanToolBar)
 #: kookaui.rc:84
@@ -2324,17 +2225,15 @@ msgid "Starting OCR on the image"
 msgstr "OCR á thosú ar an íomhá"
 
 #: kookaview.cpp:700
-#, fuzzy, kde-format
-#| msgid "OCR Engine"
+#, kde-format
 msgid "OCR File"
-msgstr "Inneall OCR"
+msgstr ""
 
 #: kookaview.cpp:710
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: kookaview.cpp:712
 #, kde-format
@@ -2342,11 +2241,10 @@ msgid "Cannot Read OCR File"
 msgstr ""
 
 #: kookaview.cpp:716
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot open file '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
-msgstr "Ní féidir comhad '%1' a oscailt"
+msgstr ""
 
 #: kookaview.cpp:732
 #, kde-format
@@ -2402,10 +2300,9 @@ msgid "Create new image from selection"
 msgstr "Cruthaigh íomhá nua ón roghnúchán"
 
 #: kookaview.cpp:911
-#, fuzzy, kde-format
-#| msgid "Cannot update image, it is read only"
+#, kde-format
 msgid "Cannot transform, image is read-only"
-msgstr "Ní féidir an íomhá a nuashonrú; tá sé inléite amháin"
+msgstr ""
 
 #: kookaview.cpp:964
 #, kde-format
@@ -2418,10 +2315,9 @@ msgid "Unloaded image"
 msgstr "Díluchtaíodh an íomhá"
 
 #: kookaview.cpp:982
-#, fuzzy, kde-format
-#| msgid "Loading %1"
+#, kde-format
 msgid "Loading %1..."
-msgstr "%1 Á Luchtú"
+msgstr ""
 
 #: main.cpp:45
 #, kde-format
@@ -2458,10 +2354,9 @@ msgid ""
 msgstr ""
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2010, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "© 2000-2010, Forbróirí agus Rannpháirtithe Kooka"
+msgstr ""
 
 #: main.cpp:82
 #, kde-format
@@ -2544,10 +2439,9 @@ msgid "device"
 msgstr ""
 
 #: newscanpresetdialog.cpp:53
-#, fuzzy, kde-format
-#| msgid "Edit Scan Parameters"
+#, kde-format
 msgid "Edit Scan Preset"
-msgstr "Cuir na Paraiméadair Scanta in Eagar"
+msgstr ""
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
@@ -2555,10 +2449,9 @@ msgid "Change the name and/or description of the scan preset."
 msgstr ""
 
 #: newscanpresetdialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Save Scan Parameters"
+#, kde-format
 msgid "Save Scan Preset"
-msgstr "Sábháil na Paraiméadair Scanta"
+msgstr ""
 
 #: newscanpresetdialog.cpp:59
 #, kde-format
@@ -2566,10 +2459,9 @@ msgid "Enter a name and description for the new scan preset."
 msgstr ""
 
 #: newscanpresetdialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "File name:"
+#, kde-format
 msgid "Preset name:"
-msgstr "Ainm comhaid:"
+msgstr ""
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
@@ -2577,16 +2469,14 @@ msgid "Description:"
 msgstr "Cur Síos:"
 
 #: ocrresedit.cpp:159
-#, fuzzy, kde-format
-#| msgid "Save OCR Result Text..."
+#, kde-format
 msgid "Save OCR Result Text"
-msgstr "Sábháil na Torthaí OCR..."
+msgstr ""
 
 #: ocrresedit.cpp:160
-#, fuzzy, kde-format
-#| msgid "All Files"
+#, kde-format
 msgid "Text File (*.txt)"
-msgstr "Gach Comhad"
+msgstr ""
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2653,10 +2543,9 @@ msgid "Thumbnail View"
 msgstr "Amharc Mionsamhlacha"
 
 #: prefspages.cpp:381
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgid "None"
-msgstr "Neamhní"
+msgstr ""
 
 #: prefspages.cpp:393
 #, kde-format
@@ -2664,10 +2553,9 @@ msgid "OCR Engine:"
 msgstr "Inneall OCR:"
 
 #: prefspages.cpp:399
-#, fuzzy, kde-format
-#| msgid "OCR Engine to Use"
+#, kde-format
 msgid "OCR Engine Settings..."
-msgstr "Inneall OCR le hÚsáid"
+msgstr ""
 
 #: prefspages.cpp:445
 #, kde-format
@@ -2677,10 +2565,9 @@ msgid ""
 msgstr ""
 
 #: prefspages.cpp:453
-#, fuzzy, kde-format
-#| msgid "Unknown engine %1."
+#, kde-format
 msgid "Unknown engine '%1'."
-msgstr "Inneall anaithnid %1."
+msgstr ""
 
 #: scangallery.cpp:97
 #, kde-format
@@ -2776,10 +2663,9 @@ msgid "On the Fly Conversion"
 msgstr "Tiontú Beo"
 
 #: scangallery.cpp:698
-#, fuzzy, kde-format
-#| msgid "Cannot write image format '%1'"
+#, kde-format
 msgid "Not a supported image format"
-msgstr "Ní féidir formáid íomhá '%1' a scríobh"
+msgstr ""
 
 #: scangallery.cpp:750
 #, kde-format
@@ -2808,24 +2694,21 @@ msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-# Sábháil Earráid?
 #: scangallery.cpp:894
 #, kde-format
 msgid "Image Save Error"
 msgstr ""
 
 #: scangallery.cpp:972
-#, fuzzy, kde-format
-#| msgid "All Files"
+#, kde-format
 msgid "All Files (*)"
-msgstr "Gach Comhad"
+msgstr ""
 
 #: scangallery.cpp:975
-#, fuzzy, kde-format
-#| msgid "Import Image..."
+#, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
-msgstr "Iompórtáil Íomhá..."
+msgstr ""
 
 #: scangallery.cpp:1000
 #, kde-format
@@ -2886,22 +2769,19 @@ msgid "Folder Create Error"
 msgstr ""
 
 #: scanpresetsdialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Scan Preview"
+#, kde-format
 msgid "Scan Presets"
-msgstr "Réamhamharc Scanta"
+msgstr ""
 
 #: scanpresetsdialog.cpp:76
-#, fuzzy, kde-format
-#| msgid "Save Scan Parameters"
+#, kde-format
 msgid "Saved scan preset sets:"
-msgstr "Sábháil na Paraiméadair Scanta"
+msgstr ""
 
 #: scanpresetsdialog.cpp:80
-#, fuzzy, kde-format
-#| msgid "Selection: %1"
+#, kde-format
 msgid "Select"
-msgstr "Roghnú: %1"
+msgstr ""
 
 #: scanpresetsdialog.cpp:82
 #, kde-format
@@ -2934,25 +2814,21 @@ msgid "Change the name or description of the selected scan preset set"
 msgstr ""
 
 #: scanpresetsdialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "No format selected."
+#, kde-format
 msgid "No preset set selected."
-msgstr "Níor roghnaíodh formáid ar bith."
+msgstr ""
 
 #: scanpresetsdialog.cpp:211
-#, fuzzy, kde-format
-#| msgid "%1, %2 dpi"
+#, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
-msgstr "%1, %2 pso"
+msgstr ""
 
 #: scanpresetsdialog.cpp:288
-#, fuzzy, kde-kuit-format
-#| msgid "<qt>Do you really want to delete the set '<b>%1</b>'?"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
 msgstr ""
-"<qt>An bhfuil tú cinnte gur mian leat an tacar '<b>%1</b>' a scriosadh?"
 
 #: scanpresetsdialog.cpp:289
 #, kde-format
@@ -2960,11 +2836,10 @@ msgid "Delete Scan Preset Set"
 msgstr ""
 
 #: statusbarmanager.cpp:52
-#, fuzzy, kde-format
-#| msgid "Ready"
+#, kde-format
 msgctxt "@info:status"
 msgid "Ready"
-msgstr "Réidh"
+msgstr ""
 
 #: statusbarmanager.cpp:59
 #, kde-format
@@ -2987,18 +2862,16 @@ msgid ""
 msgstr ""
 
 #: statusbarmanager.cpp:108
-#, fuzzy, kde-format
-#| msgid "Image: %1"
+#, kde-format
 msgctxt "@info:status"
 msgid "Image: %1"
-msgstr "Íomhá: %1"
+msgstr ""
 
 #: statusbarmanager.cpp:112
-#, fuzzy, kde-format
-#| msgid "Selection: %1"
+#, kde-format
 msgctxt "@info:status"
 msgid "Scan: %1"
-msgstr "Roghnú: %1"
+msgstr ""
 
 #: thumbview.cpp:97
 #, kde-format
@@ -3039,246 +2912,3 @@ msgstr "An-Bheag"
 #, kde-format
 msgid "Tiny"
 msgstr "An-bheag"
-
-#, fuzzy
-#~| msgid "(C) 2000-2010, the Kooka developers and contributors"
-#~ msgid "(C) 2021, the Kooka developers and contributors"
-#~ msgstr "© 2000-2010, Forbróirí agus Rannpháirtithe Kooka"
-
-#, fuzzy
-#~| msgid "Kooka Gallery"
-#~ msgid "Kooka KIPI Helper"
-#~ msgstr "Gailearaí Kooka"
-
-#, fuzzy
-#~| msgid "Save..."
-#~ msgctxt "as added to action text"
-#~ msgid "..."
-#~ msgstr "Sábháil..."
-
-#, fuzzy
-#~| msgid "Unknown engine %1."
-#~ msgid "Unknown plugin action '%1'"
-#~ msgstr "Inneall anaithnid %1."
-
-#~ msgid "PhotoCopier"
-#~ msgstr "Cóipire"
-
-#~ msgid "Copies: "
-#~ msgstr "Macasamhla: "
-
-#, fuzzy
-#~| msgid "Cannot create directory"
-#~ msgid "Failed to read TIFF directory"
-#~ msgstr "Ní féidir comhadlann a chruthú"
-
-#~ msgid "Print %1"
-#~ msgstr "Priontáil %1"
-
-#~ msgid "unknown"
-#~ msgstr "anaithnid"
-
-#~ msgid "GOCR"
-#~ msgstr "GOCR"
-
-#~ msgid "OCRAD"
-#~ msgstr "OCRAD"
-
-#~ msgid "Kadmos"
-#~ msgstr "Kadmos"
-
-#~ msgid ""
-#~ "The path to the GOCR binary is not configured or is not valid.\n"
-#~ "Please enter or check the path in the Kooka configuration."
-#~ msgstr ""
-#~ "Níl conair an chláir inrite GOCR cumraithe fós, nó níl sí bailí.\n"
-#~ "Cuir an chonair isteach, nó seiceáil an chumraíocht Kooka."
-
-#~ msgid "GOCR Software Not Found"
-#~ msgstr "Bogearraí GOCR Gan Aimsiú"
-
-#~ msgid ""
-#~ "The path to the OCRAD binary is not configured or is not valid.\n"
-#~ "Please enter or check the path in the Kooka configuration."
-#~ msgstr ""
-#~ "Níl conair an chláir inrite OCRAD cumraithe fós, nó níl sí bailí.\n"
-#~ "Cuir an chonair isteach, nó seiceáil an chumraíocht Kooka."
-
-#~ msgid "OCRAD Binary Not Found"
-#~ msgstr "Clár Inrite OCRAD Gan Aimsiú"
-
-#~ msgid "failed"
-#~ msgstr "teipthe"
-
-#~ msgid "OCR Engine Not Found"
-#~ msgstr "Inneall OCR Gan Aimsiú"
-
-#~ msgid "OCR Engine Not Executable"
-#~ msgstr "Ní féidir an t-inneall OCR a chur ar siúl"
-
-#~ msgid "Image Printing"
-#~ msgstr "Priontáil Íomhánna"
-
-#~ msgid "Create Folder..."
-#~ msgstr "Cruthaigh Fillteán..."
-
-#~ msgid "Load"
-#~ msgstr "Luchtaigh"
-
-#~ msgid "Delete"
-#~ msgstr "Scrios"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "Mirroring image both directions"
-#~ msgstr "Íomhá á scáthánú sa dá treo"
-
-#~ msgid "Select the image sub-format"
-#~ msgstr "Roghnaigh an fo-fhormáid íomhá"
-
-#~ msgid "Do not ask again for the save format if it is defined."
-#~ msgstr "Ná fiafraigh díom faoin fhormáid sábhála arís, má tá sé socraithe."
-
-#~ msgid ""
-#~ "The folder\n"
-#~ "%1\n"
-#~ " does not exist and could not be created;\n"
-#~ "please check the permissions."
-#~ msgstr ""
-#~ "Níl fillteán\n"
-#~ "%1\n"
-#~ " ann agus níorbh fhéidir é a chruthú;\n"
-#~ "bí cinnte go bhfuil cead agat."
-
-#~ msgid "Enter filename:"
-#~ msgstr "Iontráil ainm comhaid:"
-
-#~ msgid "high (or true-) color image, not palleted"
-#~ msgstr "íomhá ard-datha (nó fíordhatha), gan pailéadú"
-
-#~ msgid " image save OK      "
-#~ msgstr " sábháladh íomhá gan fadhb "
-
-#~ msgid " bad filename       "
-#~ msgstr " drochainm ar chomhad      "
-
-#~ msgid " unknown error      "
-#~ msgstr " earráid anaithnid      "
-
-#~ msgid " parameter wrong    "
-#~ msgstr " paraiméadar mícheart   "
-
-#~ msgid "Wrong Extension Found"
-#~ msgstr "Aimsíodh an Iarmhír Mhícheart"
-
-#~ msgid "Cancel"
-#~ msgstr "Cealaigh"
-
-#~ msgid "Stop the OCR Process"
-#~ msgstr "Stop an próiseas OCR"
-
-#~ msgid "<b>Starting Optical Character Recognition with %1</b><p>"
-#~ msgstr "<b>Tosaigh OCR (Aithint Optúil Carachtar) le %1</b><p>"
-
-#~ msgid "Spell-Check Options"
-#~ msgstr "Roghanna an Litreora"
-
-#~ msgid ""
-#~ "GOCR is an Open Source project for optical character recognition.<P>The "
-#~ "author of gocr is <B>Joerg Schulenburg</B><BR>For more information about "
-#~ "gocr see <A HREF=http://jocr.sourceforge.net>http://jocr.sourceforge.net</"
-#~ "A>"
-#~ msgstr ""
-#~ "Is éard atá i GOCR ná tionscadal saorbhogearra a dhéanann aithint optúil "
-#~ "carachtar.<P>Is é <B>Joerg Schulenburg</B> an t-údar de GOCR<BR>Chun "
-#~ "tuilleadh eolais a fháil maidir le GOCR, féach ar <A HREF=http://jocr."
-#~ "sourceforge.net>http://jocr.sourceforge.net</A>"
-
-#~ msgid "KADMOS OCR/ICR"
-#~ msgstr "OCR/ICR KADMOS"
-
-#~ msgid "Mirror Image &Both Directions"
-#~ msgstr "Scáthánaigh an Íomhá sa &Dá Treo"
-
-#~ msgid "Open Image in &Graphic Application..."
-#~ msgstr "Oscail an Íomhá i bhFeidhmchlár &Grafaice..."
-
-#~ msgid "Enable All Warnings && Messages"
-#~ msgstr "Cumasaigh Gach Rabhadh agus Gach Teachtaireacht"
-
-#~ msgid "All messages and warnings will now be shown."
-#~ msgstr "Taispeánfar gach teachtaireacht agus gach rabhadh amach anseo."
-
-#~ msgid "KADMOS engine"
-#~ msgstr "Inneall KADMOS"
-
-#~ msgid "OCRAD engine"
-#~ msgstr "Inneall OCRAD"
-
-#~ msgid "GOCR OCR"
-#~ msgstr "OCR GOCR"
-
-#~ msgid "OCRAD OCR"
-#~ msgstr "OCR OCRAD"
-
-#~ msgid "KADMOS OCR"
-#~ msgstr "OCR KADMOS"
-
-#~ msgid "The KADMOS OCR engine is available"
-#~ msgstr "Tá an t-inneall KADMOS le fáil"
-
-#~ msgid "The KADMOS OCR engine is not available in this version of Kooka"
-#~ msgstr "Níl an t-inneall OCR KADMOS le fáil sa leagan seo de Kooka"
-
-#~ msgid "Select the %1 binary to use:"
-#~ msgstr "Roghnaigh an clár dénártha %1 le húsáid:"
-
-#~ msgid "Kooka Startup Preferences"
-#~ msgstr "Sainroghanna Tosaithe Kooka"
-
-#~ msgid "Thumbnail Size"
-#~ msgstr "Méid na Mionsamhlacha"
-
-#~ msgid "Thumbnail Frame"
-#~ msgstr "Fráma Mionsamhla"
-
-#~ msgid "Frame color &1: "
-#~ msgstr "Dath an fhráma &1: "
-
-#~ msgid "Frame color &2: "
-#~ msgstr "Dath an fhráma &2: "
-
-#~ msgid "OCR Engine Change"
-#~ msgstr "Athrú an Innill OCR"
-
-#~ msgid "Gallery:"
-#~ msgstr "Gailearaí:"
-
-#~ msgid ""
-#~ "Could not start OCR-Process.\n"
-#~ "Probably there is already one running."
-#~ msgstr ""
-#~ "Níorbh fhéidir próiseas OCR a thosú.\n"
-#~ "Is dócha go bhfuil ceann ag rith cheana."
-
-#~ msgid "Tool Views"
-#~ msgstr "Amhairc Uirlisí"
-
-#~ msgid "Show Image Viewer"
-#~ msgstr "Taispeáin an tAmharcán Íomhánna"
-
-#~ msgid "Show Preview"
-#~ msgstr "Taispeáin Réamhamharc"
-
-#~ msgid "Show Scan Parameters"
-#~ msgstr "Taispeáin na Paraiméadair Scanta"
-
-#~ msgid "http://kooka.kde.org"
-#~ msgstr "http://kooka.kde.org"
-
-#~ msgid "Image Name"
-#~ msgstr "Ainm Íomhá"
-
-#~ msgid "Canceled by user"
-#~ msgstr "Cealaithe ag an úsáideoir"

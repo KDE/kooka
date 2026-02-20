@@ -28,16 +28,14 @@ msgid "Your emails"
 msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "*|Gach Comhad"
+msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Gach Comhad"
+msgstr ""
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -53,10 +51,9 @@ msgid ""
 msgstr ""
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Roghnaigh Gléas Scanta"
+msgstr ""
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
@@ -123,11 +120,10 @@ msgid ""
 msgstr ""
 
 #: autoselectbar.cpp:56
-#, fuzzy, kde-kuit-format
-#| msgid "Auto Select"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr "Roghnaigh go hUathoibríoch"
+msgstr ""
 
 #: autoselectbar.cpp:82
 #, kde-format
@@ -148,11 +144,10 @@ msgid "Advanced settings for auto-detection"
 msgstr ""
 
 #: autoselectdialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Auto Select"
+#, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr "Roghnaigh go hUathoibríoch"
+msgstr ""
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -264,9 +259,6 @@ msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: continuescandialog.cpp:254
 #, kde-format
@@ -505,10 +497,9 @@ msgid "ADF empty"
 msgstr ""
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not supported"
+#, kde-format
 msgid "Not accepted"
-msgstr "Gan tacaíocht"
+msgstr ""
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -575,17 +566,15 @@ msgid "ADF & Multiple Scan Options"
 msgstr ""
 
 #: multiscandialog.cpp:87
-#, fuzzy, kde-format
-#| msgid "Scan Progress"
+#, kde-format
 msgid "Scan source:"
-msgstr "Dul Chun Cinn an Scanadh"
+msgstr ""
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "Roghnaigh Gléas Scanta"
+msgstr ""
 
 #: multiscandialog.cpp:116
 #, kde-format
@@ -654,9 +643,6 @@ msgid " second"
 msgid_plural " seconds"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: multiscandialog.cpp:166
 #, kde-format
@@ -677,10 +663,9 @@ msgid ""
 msgstr ""
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "Cur Síos:"
+msgstr ""
 
 #: multiscandialog.cpp:188
 #, kde-format
@@ -774,18 +759,16 @@ msgid "Autodetection Background"
 msgstr ""
 
 #: previewer.cpp:338
-#, fuzzy, kde-format
-#| msgid "White"
+#, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
-msgstr "Bán"
+msgstr ""
 
 #: previewer.cpp:339
-#, fuzzy, kde-format
-#| msgid "Black"
+#, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
-msgstr "Dubh"
+msgstr ""
 
 #: scandevices.cpp:204
 #, kde-format
@@ -848,10 +831,9 @@ msgid "Failed to read TIFF image"
 msgstr ""
 
 #: scanimage.cpp:229
-#, fuzzy, kde-format
-#| msgid "Not supported"
+#, kde-format
 msgid "TIFF not supported"
-msgstr "Gan tacaíocht"
+msgstr ""
 
 #: scanparams.cpp:139
 #, kde-kuit-format
@@ -965,16 +947,14 @@ msgid "Black/white bitmap"
 msgstr ""
 
 #: scanparams.cpp:423
-#, fuzzy, kde-format
-#| msgid "Gray"
+#, kde-format
 msgid "Grey scale"
-msgstr "Liath"
+msgstr ""
 
 #: scanparams.cpp:424
-#, fuzzy, kde-format
-#| msgid "Colour"
+#, kde-format
 msgid "Low colour"
-msgstr "Dath"
+msgstr ""
 
 #: scanparams.cpp:425
 #, kde-format
@@ -1045,16 +1025,14 @@ msgid ""
 msgstr ""
 
 #: scanparams.cpp:743
-#, fuzzy, kde-kuit-format
-#| msgid "Scan Progress"
+#, kde-kuit-format
 msgid "Scan in progress"
-msgstr "Dul Chun Cinn an Scanadh"
+msgstr ""
 
 #: scanparams.cpp:744
-#, fuzzy, kde-kuit-format
-#| msgid "Scan Progress"
+#, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
-msgstr "Dul Chun Cinn an Scanadh"
+msgstr ""
 
 #: scanparams.cpp:764
 #, kde-format
@@ -1070,23 +1048,20 @@ msgid ""
 msgstr ""
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "Roghnaigh"
+msgstr ""
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "Réamha&mharc"
+msgstr ""
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
-#, fuzzy, kde-format
-#| msgid "&Query the network for scan devices"
+#, kde-format
 msgid "Query network for available scanners"
-msgstr "&Scrúdaigh an líonra le haghaidh gléasanna scanta"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:21
@@ -1114,24 +1089,21 @@ msgstr ""
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:36
-#, fuzzy, kde-format
-#| msgid "No scanner selected"
+#, kde-format
 msgid "Show the scanner selection dialog"
-msgstr "Níl scanóir roghnaithe agat"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:37
-#, fuzzy, kde-format
-#| msgid "No scanner selected"
+#, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
-msgstr "Níl scanóir roghnaithe agat"
+msgstr ""
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Options SCANNERNAME)
 #: scansettings.kcfg:73
-#, fuzzy, kde-format
-#| msgid "Threshold:"
+#, kde-format
 msgid "Threshold:"
-msgstr "Tairseach:"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Options SCANNERNAME)
 #: scansettings.kcfg:74
@@ -1171,10 +1143,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Options SCANNERNAME)
 #: scansettings.kcfg:97
-#, fuzzy, kde-format
-#| msgid "Background:"
+#, kde-format
 msgid "Scanner background:"
-msgstr "Cúlra:"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Options SCANNERNAME)
 #: scansettings.kcfg:98
@@ -1218,53 +1189,3 @@ msgstr ""
 #, kde-format
 msgid "Selection"
 msgstr "Roghnú"
-
-#, fuzzy
-#~| msgid "*|All Files"
-#~ msgid "All Files (*)"
-#~ msgstr "*|Gach Comhad"
-
-#~ msgid "ADF Scanning"
-#~ msgstr "Scanadh ADF"
-
-#~ msgid "Scanning page %1"
-#~ msgstr "Leathanach %1 á scanadh"
-
-#~ msgid "&Scanning"
-#~ msgstr "&Ag scanadh"
-
-#~ msgid "&Options"
-#~ msgstr "&Roghanna"
-
-#~ msgid "Startup Options"
-#~ msgstr "Roghanna Tosaigh"
-
-#~ msgid "&Query the network for scan devices"
-#~ msgstr "&Scrúdaigh an líonra le haghaidh gléasanna scanta"
-
-#~ msgid "Custom Gamma Tables"
-#~ msgstr "Táblaí Saincheaptha Gáma"
-
-#~ msgid "Scan only one sheet of ADF per click"
-#~ msgstr "Ná scan ach leathanach amháin ADF sa chlic"
-
-#~ msgid "Binary"
-#~ msgstr "Dénártha"
-
-#~ msgid "Gray"
-#~ msgstr "Liath"
-
-#~ msgid "Color"
-#~ msgstr "Dath"
-
-#~ msgid "Halftone"
-#~ msgstr "Leath-thon"
-
-#~ msgid "%1 x %2 mm"
-#~ msgstr "%1 × %2 mm"
-
-#~ msgid "Line art"
-#~ msgstr "Ealaín líneach"
-
-#~ msgid "Grey"
-#~ msgstr "Liath"
