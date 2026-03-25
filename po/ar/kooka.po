@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-02-24 22:56+0400\n"
+"PO-Revision-Date: 2026-03-24 11:08+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1253,7 +1253,7 @@ msgstr "اعكس الصورة أفقيا"
 #: imagetransform.cpp:82
 #, kde-format
 msgid "Mirror image vertically"
-msgstr "اعكس الصورة رأسيا"
+msgstr "اعكس الصورة عموديًا"
 
 #: imagetransform.cpp:94
 #, kde-format
@@ -1754,7 +1754,7 @@ msgstr "صورة جديدة من التحديد"
 #: kooka.cpp:187
 #, kde-format
 msgid "Mirror Vertically"
-msgstr "اعكس رأسيًّا"
+msgstr "اعكس عموديًّا"
 
 #: kooka.cpp:194
 #, kde-format
