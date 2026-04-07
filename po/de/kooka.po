@@ -952,8 +952,8 @@ msgid ""
 msgstr ""
 "<b>Bitmap Picture</b> ist ein weit verbreitetes Format für Bilder unter MS "
 "Windows. Es ist für Bilder mit Farben, Graustufen und für Strichzeichnungen "
-"geeignet.<p>Diese Format wird weithin unterstützt. Es wird aber nicht "
-"empfohlen, benutzen Sie statt dessen ein offenes Format."
+"geeignet.<p>Dieses Format wird weithin unterstützt. Es wird aber nicht "
+"empfohlen, verwenden Sie statt dessen ein offenes Format."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -995,8 +995,8 @@ msgstr ""
 "<b>PCX</b> ist ein verlustfrei komprimiertes Format, das häufig in "
 "Bildbearbeitungsprogrammen für PCs verwendet wird, obwohl es ziemlich alt "
 "und anspruchslos ist. Es ist für Farb- und Graustufenbilder geeignet."
-"<p>Dieses Format wird nicht empfohlen, benutzen Sie statt dessen ein offenes "
-"Format."
+"<p>Dieses Format wird nicht empfohlen, verwenden Sie statt dessen ein "
+"offenes Format."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -1005,9 +1005,10 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
-"<b>X Bitmap</b> wird vom X-Windows-System häufig für das Speichern von "
-"Rastergrafiken für Cursor oder Symbolen benutzt.<p>Wenn es nicht unbedingt "
-"nötig ist, sollten Sie statt dessen ein universelleres Format verwenden."
+"<b>X Bitmap</b> wird vom X-Window-System häufig für das Speichern von "
+"Rastergrafiken für den Mauszeiger oder Symbole verwendet.<p>Sofern es nicht "
+"für genannten Zweck benötigt wird, verwenden Sie statt dessen ein "
+"universelles Format."
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -1016,9 +1017,9 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
-"<b>X PixMap</b> wird vom X-Windows-System häufig für farbige Symbole und "
-"andere Bilder benutzt.<p>Wenn es nicht unbedingt nötig ist, sollten Sie "
-"statt dessen ein universelleres Format verwenden."
+"<b>X Pixmap</b> wird häufig vom X-Window-System für farbige Symbole und "
+"andere Bilder verwendet.<p>Sofern es nicht für genannten Zweck benötigt "
+"wird, verwenden Sie statt dessen ein universelles Format."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -1076,7 +1077,7 @@ msgid ""
 "is not recommended, use an open format instead."
 msgstr ""
 "<b>Truevision Targa</b> kann Echtfarbenbilder mit einem Alpha-Kanal "
-"speichern und wird vielfach für Animationen und Videos benutzt.<p>Dieses "
+"speichern und wird vielfach für Animationen und Videos verwendet.<p>Dieses "
 "Format wird nicht empfohlen, verwenden Sie statt dessen ein offenes Format."
 
 #: formatdialog.cpp:196
@@ -1088,9 +1089,9 @@ msgid ""
 "recommended, use an open format instead."
 msgstr ""
 "<b>Graphics Interchange Format</b> ist ein populäres aber patentiertes "
-"Format, das häufig für Web-Grafiken benutzt wird. Es verwendet eine "
-"verlustfreie Komprimierung mit bis zu 256 Farben und optional Transparenz."
-"<p> Aus legalen Gründen wird dieses Format nicht empfohlen, benutzen Sie "
+"Format, das häufig für Web-Grafiken verwendet wird. Es verwendet eine "
+"verlustfreie Komprimierung mit bis zu 256 Farben und optionaler Transparenz."
+"<p>Aus rechtlichen Gründen wird dieses Format nicht empfohlen, verwenden Sie "
 "statt dessen ein offenes Format."
 
 #: formatdialog.cpp:207
@@ -1105,10 +1106,10 @@ msgstr ""
 "<b>Tagged Image File Format</b> ist ein vielseitiges und erweiterbares "
 "Dateiformat, das umfassend durch Anwendungen zur Bildbearbeitung und zur "
 "Veröffentlichung unterstützt wird. Es unterstützt Index- und "
-"Echtfarbenbilder mit Alpha-Transparenz.<p>Wegen der vielen Varianten dieses "
-"Formats ergeben sich manchmal Kompatibilitätsprobleme. Wenn es nicht wegen "
-"der Benutzung in anderen Programmen nötig ist, sollten Sie statt dessen ein "
-"offenes Formt verwenden."
+"Echtfarbenbilder mit Alpha-Transparenz.<p>Aufgrund der vielen Varianten "
+"dieses Formats ergeben sich manchmal Kompatibilitätsprobleme. Sofern es "
+"nicht für die Verwendung in anderen Programmen benötigt wird, verwenden Sie "
+"statt dessen ein offenes Formt."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -1119,10 +1120,10 @@ msgid ""
 "unless specifically required for use with other applications use PNG instead."
 msgstr ""
 "<b>Multiple-image Network Graphics</b> ist abgeleitet vom PNG-Standard und "
-"ist für animierte Bilder gedacht. Es ist ein offenes Format, geeignet für "
+"ist für animierte Bilder gedacht. Es ist ein offenes Format und geeignet für "
 "alle Arten von Bildern.<p>Durch einen Scanner erzeugte Bilder sind nicht "
-"animiert. Wenn es nicht unbedingt für die Verwendung in anderen Programmen "
-"erforderlich ist, sollten Sie statt dessen das Format PNG benutzen."
+"animiert. Sofern es nicht für die Verwendung in anderen Programmen benötigt "
+"wird, verwenden Sie statt dessen das PNG-Format."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -1132,9 +1133,9 @@ msgid ""
 "specifically required, use an open format instead."
 msgstr ""
 "Das Bildformat <b>Silicon Graphics</b> der gleichnamigen Firma unterstützt "
-"24-Bit-Echtfarben mit optionaler verlustfreier Komprimierung.<p>Wenn es "
-"nicht besonders erforderlich ist, sollten Sie statt dessen ein offenes "
-"Format verwenden."
+"24-Bit-Echtfarben mit optionaler verlustfreier Komprimierung.<p>Sofern es "
+"nicht aus speziellen Gründen benötigt wird, verwenden Sie statt dessen ein "
+"offenes Format."
 
 #: formatdialog.cpp:241
 #, kde-format
