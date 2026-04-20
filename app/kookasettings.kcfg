@@ -180,15 +180,15 @@
 
 
   <group name="OcrSpellSettings">
-    <entry name="ocrSpellBackgroundCheck" key="backgroundCheck" type="bool">
+    <entry name="ocrSpellBackgroundCheck" key="backgroundCheck" type="Bool">
       <default>true</default>
     </entry>
 
-    <entry name="ocrSpellInteractiveCheck" key="interactiveCheck" type="bool">
+    <entry name="ocrSpellInteractiveCheck" key="interactiveCheck" type="Bool">
       <default>false</default>
     </entry>
 
-    <entry name="ocrSpellCustomSettings" key="customSettings" type="bool">
+    <entry name="ocrSpellCustomSettings" key="customSettings" type="Bool">
       <default>false</default>
     </entry>
 
