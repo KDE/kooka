@@ -709,7 +709,7 @@ msgstr "Chyba inštalácie"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
 #, kde-format
 msgid "Please classify the font type and language of the text on the image:"
-msgstr "Prosím, classify the font type and language of the text on the image:"
+msgstr "Prosím, klasifikujte typ písma a jazyk textu na obrázku:"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
 #, kde-format
