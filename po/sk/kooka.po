@@ -171,10 +171,10 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
-"Nie je možné locate the <command section=\"1\">tiffcp</command> command,<nl/"
-">ensure that it is available on <envvar>PATH</envvar>.<nl/><nl/>The command "
-"is part of the <application>libtiff</application> package,<nl/>but it may "
-"need to be installed separately."
+"Nedá sa nájsť príkaz <command section=\"1\">tiffcp</command>,<nl/>uistite "
+"sa, že je dostupný v premennej <envvar>PATH</envvar>.<nl/><nl/>Príkaz je "
+"súčasťou balíka <application>libtiff</application>,<nl/>ale možno ho treba "
+"nainštalovať samostatne."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
@@ -197,8 +197,8 @@ msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"Nie je možné append page to file <filename>%1</filename>, status %2<nl/>(see "
-"standard error for any message)"
+"Nie je možné pridať stranu do súboru <filename>%1</filename>, stav %2<nl/"
+">(pozrite štandardný chybový výstup pre prípadné správy)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
 #, kde-format
@@ -281,8 +281,8 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"Nie je možné save to <filename>%2</filename><nl/>Could not find an image "
-"format for the file name <filename>%1</filename>."
+"Nie je možné uložiť do <filename>%2</filename><nl/>Nepodarilo sa nájsť "
+"formát obrázku pre názov súboru <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -291,8 +291,8 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
 "resource> is not supported."
 msgstr ""
-"Nie je možné save to <filename>%2</filename><nl/>The image format <resource>"
-"%1</resource> is not supported."
+"Nie je možné uložiť do <filename>%2</filename><nl/>Formát obrázku <resource>"
+"%1</resource> nie je podporovaný."
 
 #: ../plugins/destination/share/destinationshare.cpp:105
 #, kde-format
@@ -649,7 +649,7 @@ msgstr "Automatické"
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
 #, kde-format
 msgid "The GOCR executable is not configured or is not available."
-msgstr "The GOCR executable is not configured or nie je dostupný."
+msgstr "Spustiteľný súbor GOCR nie je nakonfigurovaný alebo nie je dostupný."
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
@@ -824,7 +824,7 @@ msgstr "Pripojenie zlyhalo"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
 msgid "The OCRAD executable is not configured or is not available."
-msgstr "The OCRAD executable is not configured or nie je dostupný."
+msgstr "Spustiteľný súbor OCRAD nie je nakonfigurovaný alebo nie je dostupný."
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
@@ -885,7 +885,8 @@ msgstr "Názov alebo cesta k spustiteľnému súboru OCRAD:"
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:78
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
-msgstr "The Tesseract executable is not configured or nie je dostupný."
+msgstr ""
+"Spustiteľný súbor Tesseract nie je nakonfigurovaný alebo nie je dostupný."
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
@@ -1166,9 +1167,9 @@ msgid ""
 "gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
-"Nie je možné create the directory <filename>%1</filename><nl/>for the Kooka "
-"gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
-">will be used.<nl/><nl/>Check the document directory setting and permissions."
+"Nie je možné vytvoriť adresár <filename>%1</filename><nl/>pre galériu Kooka "
+"- %3..<nl/><nl/>Bude použitý váš adresár dokumentov <filename>%2</filename>."
+"<nl/><nl/>Skontrolujte nastavenie adresára dokumentov a oprávnenia."
 
 #: galleryroot.cpp:112
 #, kde-format
