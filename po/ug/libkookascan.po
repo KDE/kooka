@@ -8,36 +8,35 @@ msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2013-09-08 07:05+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-31 19:23-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "*|بارلىق ھۆججەتلەر"
+msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|بارلىق ھۆججەتلەر"
+msgstr "بارلىق ھۆججەت"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -66,12 +65,12 @@ msgstr ""
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "ياسىغۇچى:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
 msgid "Device type:"
-msgstr "ئۈسكۈنە تىپى:"
+msgstr "ئۈسكۈنە تۈرى:"
 
 #: adddevicedialog.cpp:90
 #, kde-format
@@ -122,11 +121,10 @@ msgid ""
 msgstr ""
 
 #: autoselectbar.cpp:56
-#, fuzzy, kde-kuit-format
-#| msgid "Auto Select"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr "ئۆزلۈكىدىن تاللا"
+msgstr ""
 
 #: autoselectbar.cpp:82
 #, kde-format
@@ -147,11 +145,10 @@ msgid "Advanced settings for auto-detection"
 msgstr ""
 
 #: autoselectdialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Auto Select"
+#, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr "ئۆزلۈكىدىن تاللا"
+msgstr ""
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -166,12 +163,12 @@ msgstr "ئاق"
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "First Page"
-msgstr ""
+msgstr "بىرىنچى بەت"
 
 #: continuescandialog.cpp:61
 #, kde-format
 msgid "Next Page"
-msgstr ""
+msgstr "كېيىنكى بەت"
 
 #: continuescandialog.cpp:63
 #, kde-format
@@ -250,12 +247,12 @@ msgstr ""
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "ۋاقىتلىق توختا"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "تامام"
 
 #: continuescandialog.cpp:235
 #, kde-format
@@ -301,7 +298,7 @@ msgstr "يورۇقلۇق"
 #: gammadialog.cpp:71
 #, kde-format
 msgid "Contrast"
-msgstr "ئاق-قارىلىقى"
+msgstr "سېلىشتۇرمىسى"
 
 #: gammadialog.cpp:81
 #, kde-format
@@ -326,12 +323,12 @@ msgstr "ئەسلى چوڭلۇقى"
 #: imagecanvas.cpp:787
 #, kde-format
 msgid "Fit Width"
-msgstr "كەڭلىككە ماسلاش"
+msgstr "كەڭلىككە سىغدۇر"
 
 #: imagecanvas.cpp:788
 #, kde-format
 msgid "Fit Height"
-msgstr ""
+msgstr "ئېگىزلىككە سىغدۇر"
 
 #: imagecanvas.cpp:789
 #, kde-format
@@ -341,7 +338,7 @@ msgstr ""
 #: imagecanvas.cpp:790
 #, kde-format
 msgid "Unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: imagecanvas.cpp:888
 #, kde-format
@@ -356,7 +353,7 @@ msgstr "سۈرەت كېڭەيت تارايت"
 #: imgscaledialog.cpp:68
 #, kde-format
 msgid "25 %"
-msgstr "25 %"
+msgstr ""
 
 #: imgscaledialog.cpp:75
 #, kde-format
@@ -432,7 +429,7 @@ msgstr ""
 #: kscandevice.cpp:1983
 #, kde-format
 msgid "OK"
-msgstr "تامام"
+msgstr "جەزملە"
 
 #: kscandevice.cpp:1984
 #, kde-format
@@ -500,10 +497,9 @@ msgid "ADF empty"
 msgstr ""
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "ئاكتىپ ئەمەس"
+msgstr ""
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -513,7 +509,7 @@ msgstr ""
 #: kscanoption.cpp:1027
 #, kde-format
 msgid "pixels"
-msgstr "چېكىت"
+msgstr "پىكسېل"
 
 #: kscanoption.cpp:1028
 #, kde-format
@@ -523,12 +519,12 @@ msgstr "بىتلار"
 #: kscanoption.cpp:1029
 #, kde-format
 msgid "mm"
-msgstr "mm"
+msgstr ""
 
 #: kscanoption.cpp:1030
 #, kde-format
 msgid "dpi"
-msgstr "dpi"
+msgstr ""
 
 #: kscanoption.cpp:1031
 #, kde-format
@@ -544,7 +540,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "يوق"
 
 #: multiscandialog.cpp:57
 #, kde-format
@@ -645,7 +641,7 @@ msgstr ""
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
+msgstr[0] " سېكۇنت"
 
 #: multiscandialog.cpp:166
 #, kde-format
@@ -666,10 +662,9 @@ msgid ""
 msgstr ""
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "چۈشەندۈرۈش:"
+msgstr "نىشان"
 
 #: multiscandialog.cpp:188
 #, kde-format
@@ -711,7 +706,7 @@ msgstr ""
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "ئايلاندۇر"
 
 #: multiscandialog.cpp:228
 #, kde-format
@@ -763,15 +758,13 @@ msgid "Autodetection Background"
 msgstr ""
 
 #: previewer.cpp:338
-#, fuzzy, kde-format
-#| msgid "White"
+#, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "ئاق"
 
 #: previewer.cpp:339
-#, fuzzy, kde-format
-#| msgid "Black"
+#, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "قارا"
@@ -837,10 +830,9 @@ msgid "Failed to read TIFF image"
 msgstr ""
 
 #: scanimage.cpp:229
-#, fuzzy, kde-format
-#| msgid "Not supported"
+#, kde-format
 msgid "TIFF not supported"
-msgstr "قوللىمايدۇ"
+msgstr ""
 
 #: scanparams.cpp:139
 #, kde-kuit-format
@@ -954,16 +946,14 @@ msgid "Black/white bitmap"
 msgstr ""
 
 #: scanparams.cpp:423
-#, fuzzy, kde-format
-#| msgid "Gray"
+#, kde-format
 msgid "Grey scale"
-msgstr "كۈلرەڭ"
+msgstr ""
 
 #: scanparams.cpp:424
-#, fuzzy, kde-format
-#| msgid "Colour"
+#, kde-format
 msgid "Low colour"
-msgstr "رەڭ"
+msgstr ""
 
 #: scanparams.cpp:425
 #, kde-format
@@ -1057,16 +1047,14 @@ msgid ""
 msgstr ""
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "تاللا"
+msgstr ""
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "ئالدىن كۆزەت(&V)"
+msgstr "ئالدىن كۆزەت"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
@@ -1112,8 +1100,7 @@ msgstr ""
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Options SCANNERNAME)
 #: scansettings.kcfg:73
-#, fuzzy, kde-format
-#| msgid "Threshold:"
+#, kde-format
 msgid "Threshold:"
 msgstr "بوسۇغا:"
 
@@ -1155,10 +1142,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Options SCANNERNAME)
 #: scansettings.kcfg:97
-#, fuzzy, kde-format
-#| msgid "Background:"
+#, kde-format
 msgid "Scanner background:"
-msgstr "تەگلىك:"
+msgstr ""
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Options SCANNERNAME)
 #: scansettings.kcfg:98
@@ -1186,12 +1172,12 @@ msgstr ""
 #: scansizeselector.cpp:75
 #, kde-format
 msgid "Portrait"
-msgstr "بوي يۆنىلىش"
+msgstr "بويىغا"
 
 #: scansizeselector.cpp:80
 #, kde-format
 msgid "Landscape"
-msgstr "توغرا يۆنىلىش"
+msgstr "توغرىسىغا"
 
 #: scansizeselector.cpp:91
 #, kde-format
@@ -1206,7 +1192,6 @@ msgstr "تاللاش"
 #~ msgid "No description"
 #~ msgstr "چۈشەندۈرۈش يوق"
 
-#, fuzzy
 #~| msgid "*|All Files"
 #~ msgid "All Files (*)"
 #~ msgstr "*|بارلىق ھۆججەتلەر"
