@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-04-26 22:50+0200\n"
+"PO-Revision-Date: 2026-06-06 14:09+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -203,6 +203,9 @@ msgid ""
 ">Prepare the page and then use <interface>Start&nbsp;Scan</interface> to "
 "scan it,<nl/>or <interface>Cancel</interface> to cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">첫 쪽을 스캔할 준비가 완료됨</emphasis>%1...<nl/><nl/>"
+"쪽을 준비한 다음 <interface>스캔&nbsp;시작</interface>을 사용하여 스캔하거나,"
+"<nl/><interface>취소</interface>를 사용하여 취소하십시오."
 
 #: continuescandialog.cpp:80
 #, kde-format
@@ -217,6 +220,10 @@ msgid ""
 ">Prepare the next page and then use <interface>Scan&nbsp;Next</interface> to "
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">다음 쪽을 스캔할 준비가 완료됨</emphasis>%1...<nl/"
+"><nl/>다음 쪽을 준비한 다음 <interface>다음&nbsp;스캔</interface>을 사용하여 "
+"스캔하거나,<nl/><interface>완료</interface>를 사용하여 일괄 작업을 종료하십시"
+"오."
 
 #: continuescandialog.cpp:93
 #, kde-kuit-format
@@ -227,6 +234,10 @@ msgid ""
 "scan it,<nl/>or <interface>Finish</interface> to end the scan batch or "
 "<interface>Cancel</interface> to cancel the entire scan."
 msgstr ""
+"<emphasis strong=\"1\">다음 쪽을 스캔할 준비가 완료됨</emphasis>%1...<nl/"
+"><nl/>다음 쪽을 준비한 다음 <interface>다음&nbsp;스캔</interface>을 사용하여 "
+"스캔하거나,<nl/><interface>완료</interface>를 사용하여 일괄 작업을 종료하거"
+"나, <interface>취소</interface>를 사용하여 전체 스캔을 종료하십시오."
 
 #: continuescandialog.cpp:107
 #, kde-kuit-format
@@ -237,11 +248,14 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Cancel</interface> to "
 "cancel the scan."
 msgstr ""
+"<emphasis strong=\"1\">첫 쪽 스캔을 기다리는 중</emphasis>%1...<nl/><nl/>쪽"
+"을 준비한 다음 기다리거나, <interface>스캔&nbsp;시작</interface>을 사용하여 "
+"즉시 스캔하거나,<nl/><interface>취소</interface>를 사용하여 취소하십시오."
 
 #: continuescandialog.cpp:115
 #, kde-format
 msgid "Scan Now"
-msgstr ""
+msgstr "지금 스캔"
 
 #: continuescandialog.cpp:119
 #, kde-kuit-format
@@ -252,6 +266,10 @@ msgid ""
 "interface> to scan it immediately<nl/>or <interface>Finish</interface> to "
 "end the scan batch."
 msgstr ""
+"<emphasis strong=\"1\">다음 쪽 스캔을 기다리는 중</emphasis>%1...<nl/><nl/>다"
+"음 쪽을 준비한 다음 <interface>다음&nbsp;스캔</interface>을 사용하여 즉시 스"
+"캔하거나, immediately<nl/><interface>완료</interface>를 사용하여 일괄 작업을 "
+"종료하십시오."
 
 #: continuescandialog.cpp:128
 #, kde-kuit-format
@@ -263,27 +281,31 @@ msgid ""
 "end the scan batch or <interface>Cancel</interface> to cancel the entire "
 "scan."
 msgstr ""
+"<emphasis strong=\"1\">다음 쪽 스캔을 기다리는 중</emphasis>%1...<nl/><nl/>다"
+"음 쪽을 준비한 다음 <interface>다음&nbsp;스캔</interface>을 사용하여 즉시 스"
+"캔하거나, immediately<nl/><interface>완료</interface>를 사용하여 일괄 작업을 "
+"종료하거나, <interface>취소</interface>를 사용하여 전체 스캔을 취소하십시오."
 
 #: continuescandialog.cpp:142
 #, kde-format
 msgid "Pause"
-msgstr ""
+msgstr "일시 정지"
 
 #: continuescandialog.cpp:162
 #, kde-format
 msgid "Finish"
-msgstr ""
+msgstr "완료"
 
 #: continuescandialog.cpp:235
 #, kde-format
 msgid " (%1 second)"
 msgid_plural " (%1 seconds)"
-msgstr[0] ""
+msgstr[0] " (%1초)"
 
 #: continuescandialog.cpp:254
 #, kde-format
 msgid " (Paused)"
-msgstr ""
+msgstr " (일시 정지됨)"
 
 #: deviceselector.cpp:58
 #, kde-format
@@ -509,18 +531,17 @@ msgstr "지원하지 않음"
 #: kscandevice.cpp:1995
 #, kde-format
 msgid "ADF no document loaded"
-msgstr ""
+msgstr "ADF에 급지된 문서가 없음"
 
 #: kscandevice.cpp:1996
 #, kde-format
 msgid "ADF empty"
-msgstr ""
+msgstr "ADF가 비어 있음"
 
 #: kscandevice.cpp:1997
-#, fuzzy, kde-format
-#| msgid "Not active"
+#, kde-format
 msgid "Not accepted"
-msgstr "활성 상태가 아님"
+msgstr "받아들여지지 않음"
 
 #: kscandevice.cpp:1998
 #, kde-format
@@ -561,140 +582,136 @@ msgstr "µsec"
 #, kde-format
 msgctxt "@item:inlistbox no rotation"
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 #: multiscandialog.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox rotation 90 degrees"
 msgid "90°"
-msgstr ""
+msgstr "90°"
 
 #: multiscandialog.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox rotation 180 degrees"
 msgid "180°"
-msgstr ""
+msgstr "180°"
 
 #: multiscandialog.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox rotation 270 degrees"
 msgid "270°"
-msgstr ""
+msgstr "270°"
 
 #: multiscandialog.cpp:71
 #, kde-format
 msgid "ADF & Multiple Scan Options"
-msgstr ""
+msgstr "ADF 및 다중 스캔 옵션"
 
 #: multiscandialog.cpp:87
-#, fuzzy, kde-format
-#| msgid "Scan Progress"
+#, kde-format
 msgid "Scan source:"
-msgstr "스캔 진행 상황"
+msgstr "스캔 원본:"
 
 #: multiscandialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the scan source"
-msgstr "스캔 장치 선택"
+msgstr "스캔 원본 선택"
 
 #: multiscandialog.cpp:116
 #, kde-format
 msgid "Scan and ADF"
-msgstr ""
+msgstr "스캔과 ADF"
 
 #: multiscandialog.cpp:126
 #, kde-format
 msgid "Single scan"
-msgstr ""
+msgstr "한 번 스캔"
 
 #: multiscandialog.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform a single scan from the selected source"
-msgstr ""
+msgstr "선택한 원본에서 스캔 작업을 한 번 수행"
 
 #: multiscandialog.cpp:133
 #, kde-format
 msgid "Multiple scan"
-msgstr ""
+msgstr "여러 번 스캔"
 
 #: multiscandialog.cpp:134
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform multiple scans from the selected source"
-msgstr ""
+msgstr "선택한 원본에서 여러 번 스캔 작업 수행"
 
 #: multiscandialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Scan until ADF reports out of paper"
+#, kde-format
 msgid "Scan until ADF is empty"
-msgstr "자동 급지 장치의 종이가 다 떨어질 때까지 스캔"
+msgstr "ADF가 비기 전까지 스캔"
 
 #: multiscandialog.cpp:145
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Keep scanning until the automatic document feeder is empty"
-msgstr ""
+msgstr "자동 급지 장치가 빌 때까지 계속 스캔"
 
 #: multiscandialog.cpp:151
 #, kde-format
 msgid "Wait until ready for next scan"
-msgstr ""
+msgstr "다음 스캔이 준비될 때까지 대기"
 
 #: multiscandialog.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Wait for confirmation between scans"
-msgstr ""
+msgstr "스캔 중간에 확인 대기"
 
 #: multiscandialog.cpp:158
 #, kde-format
 msgid "Scan after waiting for"
-msgstr ""
+msgstr "다음 시간 동안 기다리고 스캔"
 
 #: multiscandialog.cpp:159
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delay for a time between scans"
-msgstr ""
+msgstr "스캔 사이 지연 시간"
 
 #: multiscandialog.cpp:165
 #, kde-format
 msgctxt "Time unit"
 msgid " second"
 msgid_plural " seconds"
-msgstr[0] ""
+msgstr[0] "초"
 
 #: multiscandialog.cpp:166
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set the delay time between scans"
-msgstr ""
+msgstr "스캔 사이 지연 시간 설정"
 
 #: multiscandialog.cpp:171
 #, kde-format
 msgid "Wait or delay before the first scan"
-msgstr ""
+msgstr "첫 스캔 이전까지 기다리거나 지연"
 
 #: multiscandialog.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Wait for confirmation or delay for the set time before the first scan starts"
-msgstr ""
+msgstr "첫 스캔이 시작하기 전에 지정한 시간 동안 확인을 기다리거나 지연"
 
 #: multiscandialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Description:"
+#, kde-format
 msgid "Destination"
-msgstr "설명:"
+msgstr "대상"
 
 #: multiscandialog.cpp:188
 #, kde-format
 msgid "Process multiple scans as a batch"
-msgstr ""
+msgstr "여러 번 스캔을 일괄 작업으로 수행"
 
 #: multiscandialog.cpp:190
 #, kde-format
@@ -707,11 +724,16 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"이 옵션을 선택하면 여러 번 스캔 시 일괄 작업으로 처리하며, 이 옵션을 선택하"
+"지 않으면 각각을 개별로 처리합니다.<br/><br/>이 옵션의 작동 여부는 선택한 대"
+"상과 설정 값에 달려 있습니다. 예를 들어 여러 번 스캔한 결과를 이메일로 공유"
+"할 때, 이 옵션이 선택되어 있으면 모든 스캔 결과를 같은 이메일 메시지 내에 모"
+"두 포함합니다. 이 옵션을 선택하지 않으면 각각을 별개의 메시지로 작성합니다."
 
 #: multiscandialog.cpp:201
 #, kde-format
 msgid "Automatically generate file names"
-msgstr ""
+msgstr "자동으로 파일 이름 생성"
 
 #: multiscandialog.cpp:203
 #, kde-format
@@ -727,34 +749,41 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"이 옵션을 선택하면 사용 가능한 경우 파일 이름을 자동으로 생성하며, 이 옵션을 "
+"선택하지 않으면 매번 파일 이름을 물어 봅니다.<br/><br/>이 옵션의 작동 여부는 "
+"선택한 대상과 설정 값에 달려 있습니다. 예를 들어 스캔 갤러리를 저장하거나 다"
+"른 위치에 저장할 때에는 여러 번 스캔 시 첫 파일 이름을 물어 봅니다. 그 후 파"
+"일 이름은 자동으로 증가하는 형식으로 결정됩니다.<br/><br/>첫 파일 이름에 숫"
+"자 접미사나 '#' 문자열을 사용하면 그 다음 파일에서는 해당 부분이 자동으로 증"
+"가하며, 입력한 자릿수 길이로 표시됩니다. 이미 존재하는 파일은 건너뛰며 덮어쓰"
+"지 않습니다."
 
 #: multiscandialog.cpp:222
 #, kde-format
 msgid "Rotation"
-msgstr ""
+msgstr "회전"
 
 #: multiscandialog.cpp:228
 #, kde-format
 msgid "Odd pages:"
-msgstr ""
+msgstr "홀수 쪽:"
 
 #: multiscandialog.cpp:232
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for odd scan pages. The first page is page 1."
-msgstr ""
+msgstr "스캔한 홀수 쪽의 회전을 설정합니다. 첫 번째 스캔한 쪽은 1쪽입니다."
 
 #: multiscandialog.cpp:237
 #, kde-format
 msgid "Even pages:"
-msgstr ""
+msgstr "짝수 쪽:"
 
 #: multiscandialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Set the orientation for a preset size of the scanned area"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
-msgstr "미리 선택한 스캔 영역의 방향 설정"
+msgstr "스캔한 짝수 쪽의 회전을 설정합니다."
 
 #: previewer.cpp:243
 #, no-c-format, kde-format
@@ -876,6 +905,7 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
+"여러 번 스캔이 활성화되어 있습니다.<nl/><link url=\"1\">다시 보지 않기</link>"
 
 #: scanparams.cpp:175
 #, kde-format
@@ -962,13 +992,13 @@ msgstr "읽기 모드:"
 #: scanparams.cpp:395
 #, kde-format
 msgid "ADF && Multiple Scan Options..."
-msgstr ""
+msgstr "ADF와 여러 번 스캔 옵션..."
 
 #: scanparams.cpp:397
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set ADF, rotation and destination options for scanning multiple pages"
-msgstr ""
+msgstr "여러 쪽 스캔 시 ADF, 회전, 대상 옵션 선택"
 
 #: scanparams.cpp:421
 #, kde-format
@@ -1093,18 +1123,18 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
+"스캔 원본이 자동 급지 장치(ADF)로 설정되었습니다.<br/>미리 보려면 ADF에서 첫 "
+"장을 스캔해야 합니다.<br/><br/>계속 미리 보기를 진행하시겠습니까?"
 
 #: scanparams.cpp:779
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgid "ADF Selected"
-msgstr "선택"
+msgstr "ADF 선택됨"
 
 #: scanparams.cpp:780
-#, fuzzy, kde-format
-#| msgid "Pre&view"
+#, kde-format
 msgid "Preview"
-msgstr "미리 보기(&V)"
+msgstr "미리 보기"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20

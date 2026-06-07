@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-05-26 01:48+0200\n"
+"PO-Revision-Date: 2026-06-06 13:39+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -91,38 +91,35 @@ msgstr ""
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Save File"
-msgstr "그림을 저장할 수 없음"
+msgstr "파일을 저장할 수 없음"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "File format:"
+#, kde-format
 msgid "Output format:"
-msgstr "파일 형식:"
+msgstr "출력 형식:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "쪽 설정..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "쪽 크기와 레이아웃 설정"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "Saving to <filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "<filename>%1</filename>(으)로 저장"
+msgstr "%1쪽을 <filename>%2</filename>(으)로 저장하는 중"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "PDF 쪽 설정"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
 #, kde-format
@@ -145,19 +142,19 @@ msgstr " mm"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "세로"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "가로"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
 #, kde-format
@@ -173,46 +170,43 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"<command section=\"1\">tiffcp</command> 명령을 찾을 수 없습니다.<nl/"
+"><envvar>PATH</envvar>에서 지정한 경로에 있는지 확인하십시오.<nl/><nl/>이 명"
+"령은 <application>libtiff</application> 패키지의 일부이지만<nl/>별도로 설치해"
+"야 할 수도 있습니다."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "TIFF 명령을 찾을 수 없음"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
+"쪽을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
 msgstr ""
-"그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
+"<filename>%1</filename> 파일에 쪽을 덧붙일 수 없습니다. 상태: %2<nl/>(추가 메"
+"시지는 표준 오류를 참조하십시오)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Cannot Save Image"
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "그림을 저장할 수 없음"
+msgstr "쪽을 덧붙일 수 없음"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "Saving image"
+#, kde-format
 msgid "Discarding image"
-msgstr "그림 저장"
+msgstr "그림 무시 중"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
@@ -233,19 +227,21 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>파일 이름을 자동으로 생성하려면 템플릿을 지정해야 합니다.</"
+"para><para><filename>%1</filename> 파일 이름에는<nl/>자리 비움자를 나타내는 "
+"연속된 '<icode>#</icode>' 문자열이나<nl/>파일 확장자 이전에 숫자로 끝나야 합"
+"니다.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "자동으로 생성할 수 없음"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot create temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "임시 파일 <filename>%1</filename>을(를) 만들 수 없습니다"
+msgstr "<filename>%1</filename> 원격 위치에 접근할 수 없음"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
@@ -277,18 +273,14 @@ msgid "Save Scan"
 msgstr "스캔 저장"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
-#| "resource> is not supported."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
-"<filename>%2</filename>(으)로 저장할 수 없음<nl/><resource>%1</resource> 그"
-"림 형식은 지원하지 않습니다."
+"<filename>%2</filename> 파일로 저장할 수 없음<nl/><filename>%1</filename> 파"
+"일 이름의 그림 형식을 찾을 수 없습니다."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -311,13 +303,11 @@ msgid "<application>%1</application>"
 msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "The scan was shared to<nl/><link>%1</link>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] "스캔 결과를 다음으로 공유함:<nl/><link>%1</link>"
+msgstr[0] "스캔 결과를 다음으로 공유함:<nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
 #, kde-format
@@ -325,14 +315,12 @@ msgid "Scan Shared"
 msgstr "스캔한 그림 공유"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
-msgstr[0] "스캔한 그림을 공유할 수 없음<nl/><nl/><message>%1</message>"
+msgstr[0] "스캔한 그림 %1장을 공유할 수 없음<nl/><nl/><message>%2</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -2543,10 +2531,9 @@ msgstr ""
 "오.\n"
 
 #: main.cpp:71
-#, fuzzy, kde-format
-#| msgid "(C) 2000-2018, the Kooka developers and contributors"
+#, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr "(C) 2000-2018, the Kooka developers and contributors"
+msgstr "(C) 2000-2024, the Kooka developers and contributors"
 
 #: main.cpp:82
 #, kde-format
