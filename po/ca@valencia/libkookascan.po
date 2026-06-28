@@ -866,7 +866,7 @@ msgstr "Dispositiu desconegut «%1»"
 #: scanglobal.cpp:152
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr "SANE - Scanner Access Now Easy («Accés ara fàcil a l'escàner»)"
+msgstr "SANE – Scanner Access Now Easy («Accés ara fàcil a l'escàner»)"
 
 #: scanglobal.cpp:153
 #, kde-format
