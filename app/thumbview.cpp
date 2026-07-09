@@ -46,7 +46,6 @@
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <ktoggleaction.h>
-#include <kio_version.h>
 
 #include "galleryroot.h"
 #include "kookasettings.h"

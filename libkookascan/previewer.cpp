@@ -35,7 +35,6 @@
 #include <qtimer.h>
 #include <qlayout.h>
 
-#include <kwidgetsaddons_version.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 

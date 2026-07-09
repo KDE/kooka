@@ -31,8 +31,6 @@
 
 #include "kookaview.h"
 
-#include <kio_version.h>
-
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qsplitter.h>

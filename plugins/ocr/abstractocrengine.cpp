@@ -39,7 +39,6 @@
 #include <qtextdocument.h>
 #include <qtextcursor.h>
 
-#include <kwidgetsaddons_version.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>

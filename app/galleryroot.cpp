@@ -47,7 +47,6 @@
 #include <qdir.h>
 #include <qstandardpaths.h>
 
-#include <kwidgetsaddons_version.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>

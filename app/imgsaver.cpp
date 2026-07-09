@@ -36,7 +36,6 @@
 #include <qregularexpression.h>
 #include <qtemporaryfile.h>
 
-#include <kwidgetsaddons_version.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kconfigskeleton.h>
