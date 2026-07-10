@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kde 49i410\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-10 00:41+0000\n"
 "PO-Revision-Date: 2015-02-04 15:57+0000\n"
 "Last-Translator: Nermin Demir <nermin.demir95@gmail.com>\n"
 "Language-Team: Bosnian\n"
@@ -749,19 +749,19 @@ msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
 msgstr "<qt>Postavi orijentaciju na pretpodešenu veličinu skeniranog područja"
 
-#: previewer.cpp:243
+#: previewer.cpp:242
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
 msgstr "%1x%2mm, %3x%4pix"
 
-#: previewer.cpp:246
+#: previewer.cpp:245
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2mm"
 
-#: previewer.cpp:336
+#: previewer.cpp:335
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -774,19 +774,19 @@ msgstr ""
 "\n"
 "Molimo, izaberite da li je pozadina slike koja se pregleda crna ili bijela."
 
-#: previewer.cpp:337
+#: previewer.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Autodetekcija pozadine"
 
-#: previewer.cpp:338
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Bijela"
 
-#: previewer.cpp:339
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"

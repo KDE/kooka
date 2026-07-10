@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-10 00:41+0000\n"
 "PO-Revision-Date: 2011-10-04 22:32-0700\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -726,19 +726,19 @@ msgctxt "@info:tooltip"
 msgid "Select the rotation for even scan pages."
 msgstr ""
 
-#: previewer.cpp:243
+#: previewer.cpp:242
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
 msgstr ""
 
-#: previewer.cpp:246
+#: previewer.cpp:245
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr ""
 
-#: previewer.cpp:336
+#: previewer.cpp:335
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -747,19 +747,19 @@ msgid ""
 "Please select whether the background of the preview image is black or white."
 msgstr ""
 
-#: previewer.cpp:337
+#: previewer.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr ""
 
-#: previewer.cpp:338
+#: previewer.cpp:337
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr ""
 
-#: previewer.cpp:339
+#: previewer.cpp:338
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"

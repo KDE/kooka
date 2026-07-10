@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-07-10 00:41+0000\n"
 "PO-Revision-Date: 2026-03-24 11:08+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:164
 #: ../plugins/destination/application/destinationapplication.cpp:163
-#: kookaview.cpp:1126
+#: kookaview.cpp:1124
 #, kde-format
 msgid "Other..."
 msgstr "أخرى..."
@@ -508,37 +508,37 @@ msgstr "صورة: %1"
 msgid "Selection: %1"
 msgstr "المحدد: %1"
 
-#: ../plugins/ocr/abstractocrengine.cpp:107
+#: ../plugins/ocr/abstractocrengine.cpp:106
 #, kde-format
 msgid "OCR is already in progress"
 msgstr "التعرف الضوئي على المحارف OCR يجري حاليًا"
 
-#: ../plugins/ocr/abstractocrengine.cpp:119
+#: ../plugins/ocr/abstractocrengine.cpp:118
 #, kde-format
 msgid "OCR could not be started."
 msgstr "لا يمكن بدء التعرف الضوئي على المحارف"
 
-#: ../plugins/ocr/abstractocrengine.cpp:120
+#: ../plugins/ocr/abstractocrengine.cpp:119
 #, kde-format
 msgid "Check the OCR engine selection and settings."
 msgstr "تحقق من اختيار وإعدادات محرك التعرف الضوئي على المحارف."
 
-#: ../plugins/ocr/abstractocrengine.cpp:122
+#: ../plugins/ocr/abstractocrengine.cpp:121
 #, kde-format
 msgid "OCR Setup Error"
 msgstr "خطأ في إعداد التعرف الضوئي على المحارف"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:764
+#: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:762
 #, kde-format
 msgid "Configure OCR..."
 msgstr "اضبط التعرف الضوئي للمحارف..."
 
-#: ../plugins/ocr/abstractocrengine.cpp:181
+#: ../plugins/ocr/abstractocrengine.cpp:180
 #, kde-format
 msgid "The OCR process was stopped"
 msgstr "توقفت عملية التعرف الضوئي على المحارف"
 
-#: ../plugins/ocr/abstractocrengine.cpp:250
+#: ../plugins/ocr/abstractocrengine.cpp:249
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
@@ -546,30 +546,30 @@ msgstr ""
 "يُحتفظ بملفات التعرف الضوئي على المحارف المؤقتة التالية لتصحيح الأخطاء:<nl/"
 "><nl/>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:256
+#: ../plugins/ocr/abstractocrengine.cpp:255
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:260
+#: ../plugins/ocr/abstractocrengine.cpp:259
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr "ملفات التعرف الضوئي للمحارف المؤقتة"
 
-#: ../plugins/ocr/abstractocrengine.cpp:427
+#: ../plugins/ocr/abstractocrengine.cpp:426
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr "تعذّر إنشاء الملفّ المؤّقت <filename>%1</filename>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:473
+#: ../plugins/ocr/abstractocrengine.cpp:472
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr "تعذر حفظ الصورة في ملف مؤقت <filename>%1</filename>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:501
+#: ../plugins/ocr/abstractocrengine.cpp:500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -579,33 +579,33 @@ msgstr ""
 "تعذر العثور على الملف <command>%1</command> القابل للتنفيذ على <envar>PATH</"
 "envar>."
 
-#: ../plugins/ocr/abstractocrengine.cpp:511
+#: ../plugins/ocr/abstractocrengine.cpp:510
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
 msgstr ""
 "الملف القابل للتنفيذ <filename>%1</filename> غير موجود أو غير قابل للاستخدام."
 
-#: ../plugins/ocr/abstractocrengine.cpp:583
+#: ../plugins/ocr/abstractocrengine.cpp:582
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr "انهار الأمر <command>%1</command> بحالة <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:588
+#: ../plugins/ocr/abstractocrengine.cpp:587
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr "خرج الأمر <command>%1</command> بحالة <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:592
+#: ../plugins/ocr/abstractocrengine.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr "فشل تشغيل التعرف الضوئي على المحارف."
 
-#: ../plugins/ocr/abstractocrengine.cpp:593
+#: ../plugins/ocr/abstractocrengine.cpp:592
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -614,18 +614,18 @@ msgid ""
 msgstr ""
 "قد تتوفر معلومات إضافية في ملف سجل <link url=\"%1\">الخطأ القياسي</link>."
 
-#: ../plugins/ocr/abstractocrengine.cpp:596
+#: ../plugins/ocr/abstractocrengine.cpp:595
 #, kde-format
 msgid "OCR Command Failed"
 msgstr "فشل أمر التعرف الضوئي على المحارف"
 
-#: ../plugins/ocr/abstractocrengine.cpp:603
+#: ../plugins/ocr/abstractocrengine.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr "فشل في تحليل نتائج التعرف الضوئي على المحارف."
 
-#: ../plugins/ocr/abstractocrengine.cpp:604
+#: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-format
 msgid "OCR Processing Failed"
 msgstr "فشل التعرف على المحارف ضوئياً"
@@ -1160,7 +1160,7 @@ msgstr "لم يحدد تنسيق."
 msgid "No information is available for this format."
 msgstr "لا تتوفر معلومات حول هذا التنسيق."
 
-#: galleryroot.cpp:101
+#: galleryroot.cpp:100
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1172,12 +1172,12 @@ msgstr ""
 ">سيُستخدم مجلد المستندات <filename>%2</filename><nl/>.<nl/><nl/>تحقق من "
 "إعدادات مجلد المستندات والأذونات."
 
-#: galleryroot.cpp:112
+#: galleryroot.cpp:111
 #, kde-format
 msgid "Error creating gallery"
 msgstr "خطأ في إنشاء المعرض"
 
-#: galleryroot.cpp:160
+#: galleryroot.cpp:159
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1189,24 +1189,24 @@ msgstr ""
 "الآن هو <filename>%2</filename>.<nl/><nl/>هل تريد إنشاء معرض جديد في الموقع "
 "الجديد؟"
 
-#: galleryroot.cpp:164
+#: galleryroot.cpp:163
 #, kde-format
 msgid "Create New Gallery"
 msgstr "أنشئ معرضًا جديدًا"
 
-#: galleryroot.cpp:165
+#: galleryroot.cpp:164
 #, kde-format
 msgctxt "@action:button"
 msgid "Create New"
 msgstr "أنشئ جديدًا"
 
-#: galleryroot.cpp:166
+#: galleryroot.cpp:165
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
 msgstr "تابع على القديم"
 
-#: galleryroot.cpp:175 galleryroot.cpp:189
+#: galleryroot.cpp:174 galleryroot.cpp:188
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1220,12 +1220,12 @@ msgstr ""
 "%2\"><filename>%2</filename></link>،<nl/>فيمكنك القيام بذلك ببساطة عن طريق "
 "نسخ أو نقل الملفات."
 
-#: galleryroot.cpp:179
+#: galleryroot.cpp:178
 #, kde-format
 msgid "New Gallery Created"
 msgstr "أنشئت معرض جديد"
 
-#: galleryroot.cpp:193
+#: galleryroot.cpp:192
 #, kde-format
 msgid "Old Gallery Exists"
 msgstr "يوجد معرض قديم"
@@ -1567,99 +1567,99 @@ msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
 msgstr "%1 (%2 × %3)"
 
-#: imgsaver.cpp:66
+#: imgsaver.cpp:65
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
 msgstr "لم يتمكن من الوصول إلى الدليل <filename>%2</filename><nl/>%1"
 
-#: imgsaver.cpp:77
+#: imgsaver.cpp:76
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
 msgstr "لم يتمكن من إنشاء الدليل <filename>%2</filename><nl/>%1"
 
-#: imgsaver.cpp:331
+#: imgsaver.cpp:330
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
 msgstr "صورة ملونة مفهرسة (حتى عمق 8 بت)"
 
-#: imgsaver.cpp:335
+#: imgsaver.cpp:334
 #, kde-format
 msgid "gray scale image (up to 8 bit depth)"
 msgstr "صورة بتدرج الرمادي (حتى عمق 8 بت)"
 
-#: imgsaver.cpp:339
+#: imgsaver.cpp:338
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
 msgstr "صورة الرسم الخطي (أسود وأبيض، العمق 1 بت)"
 
-#: imgsaver.cpp:343
+#: imgsaver.cpp:342
 #, kde-format
 msgid "high/true color image (more than 8 bit depth)"
 msgstr "صورة ملونة عالية/حقيقية (عمق أكثر من 8 بت)"
 
-#: imgsaver.cpp:347
+#: imgsaver.cpp:346
 #, kde-format
 msgid "unknown image type %1"
 msgstr "نوع الصّورة مجهول %1"
 
-#: imgsaver.cpp:369
+#: imgsaver.cpp:368
 #, kde-format
 msgid "Save OK"
 msgstr "تم الحفظ"
 
-#: imgsaver.cpp:371
+#: imgsaver.cpp:370
 #, kde-format
 msgid "Permission denied"
 msgstr "طلب الإذن مرفوض"
 
-#: imgsaver.cpp:373
+#: imgsaver.cpp:372
 #, kde-format
 msgid "Bad file name"
 msgstr "اسم الملف سيء"
 
-#: imgsaver.cpp:375
+#: imgsaver.cpp:374
 #, kde-format
 msgid "No space left on device"
 msgstr "لا توجد مساحة على الجهاز"
 
-#: imgsaver.cpp:377
+#: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write image format '%1'"
 msgstr "لم أتمكن من كتابة تنسيق الصورة  '%1'"
 
-#: imgsaver.cpp:379
+#: imgsaver.cpp:378
 #, kde-format
 msgid "Cannot write using protocol '%1'"
 msgstr "لا يمكن الكتابة باستخدام الميفاق '%1'"
 
-#: imgsaver.cpp:381
+#: imgsaver.cpp:380
 #, kde-format
 msgid "User cancelled saving"
 msgstr "ألغى المستخدم الحفظ"
 
-#: imgsaver.cpp:383
+#: imgsaver.cpp:382
 #, kde-format
 msgid "Cannot create directory"
 msgstr "تعذّر إنشاء دليل"
 
-#: imgsaver.cpp:385
+#: imgsaver.cpp:384
 #, kde-format
 msgid "Save failed"
 msgstr "فشل الحفظ"
 
-#: imgsaver.cpp:387
+#: imgsaver.cpp:386
 #, kde-format
 msgid "Bad parameter"
 msgstr "مُعامِل سيء"
 
-#: imgsaver.cpp:389
+#: imgsaver.cpp:388
 #, kde-format
 msgid "Unknown status %1"
 msgstr "حالة مجهولة %1"
 
-#: imgsaver.cpp:412
+#: imgsaver.cpp:411
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1670,47 +1670,47 @@ msgstr ""
 "اسم الملف الذي قدمته لا يحتوي على امتداد ملف.<nl/>هل يجب إضافة الامتداد "
 "الأصلي؟<nl/><nl/>سيؤدي هذا إلى اسم الملف الجديد <filename>%1</filename>"
 
-#: imgsaver.cpp:415
+#: imgsaver.cpp:414
 #, kde-format
 msgid "Extension Missing"
 msgstr "الامتداد ناقص"
 
-#: imgsaver.cpp:416
+#: imgsaver.cpp:415
 #, kde-format
 msgid "Add Extension"
 msgstr "أضف امتداد"
 
-#: imgsaver.cpp:417
+#: imgsaver.cpp:416
 #, kde-format
 msgid "Do Not Add"
 msgstr "لا تضف"
 
-#: imgsaver.cpp:442
+#: imgsaver.cpp:441
 #, kde-format
 msgid "Target already exists"
 msgstr "الهدف موجود فعلًا"
 
-#: imgsaver.cpp:455
+#: imgsaver.cpp:454
 #, kde-format
 msgid "Unable to copy the file"
 msgstr "غير قادر على نسخ الملف"
 
-#: imgsaver.cpp:456
+#: imgsaver.cpp:455
 #, kde-format
 msgid "Unable to rename the file"
 msgstr "غير قادر على تغيير اسم الملف"
 
-#: imgsaver.cpp:457
+#: imgsaver.cpp:456
 #, kde-format
 msgid "Error copying file"
 msgstr "خطأ في نسخ ملف"
 
-#: imgsaver.cpp:458
+#: imgsaver.cpp:457
 #, kde-format
 msgid "Error renaming file"
 msgstr "خطا في تغيير اسم الملف"
 
-#: imgsaver.cpp:459
+#: imgsaver.cpp:458
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -1821,7 +1821,7 @@ msgstr "الخصائص..."
 msgid "Select Scan Device..."
 msgstr "اختر جهاز المسح الضوئي..."
 
-#: kooka.cpp:283 kookaview.cpp:542
+#: kooka.cpp:283 kookaview.cpp:540
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "اختر جهاز المسح الضوئي..."
@@ -1936,7 +1936,7 @@ msgstr "المعرض والمصغرات"
 msgid "Image Gallery and Thumbnail View"
 msgstr "معرض الصور وعرض المصغرات"
 
-#: kookapref.cpp:61 kookaview.cpp:273
+#: kookapref.cpp:61 kookaview.cpp:271
 #, kde-format
 msgid "OCR"
 msgstr "تعرف المحارف ضوئياً"
@@ -2296,42 +2296,42 @@ msgstr "شريط أدوات مستعرض الصور"
 msgid "Scanning Toolbar"
 msgstr "شريط أدوات المسح الضوئي"
 
-#: kookaview.cpp:197
+#: kookaview.cpp:195
 #, kde-format
 msgid "Image View"
 msgstr "عرض الصورة"
 
-#: kookaview.cpp:246
+#: kookaview.cpp:244
 #, kde-format
 msgid "Scan Preview"
 msgstr "معاينة المسح الضوئي"
 
-#: kookaview.cpp:256
+#: kookaview.cpp:254
 #, kde-format
 msgid "OCR results will appear here"
 msgstr "ستظهر نتائج التعرف الضوئي على المحارف هنا"
 
-#: kookaview.cpp:267
+#: kookaview.cpp:265
 #, kde-format
 msgid "Scan"
 msgstr "امسح"
 
-#: kookaview.cpp:270 kookaview.cpp:556 kookaview.cpp:575 scangallery.cpp:122
+#: kookaview.cpp:268 kookaview.cpp:554 kookaview.cpp:573 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "المعرض"
 
-#: kookaview.cpp:322
+#: kookaview.cpp:320
 #, kde-format
 msgid "User specified"
 msgstr "مخصص من قبل المستخدم"
 
-#: kookaview.cpp:323
+#: kookaview.cpp:321
 #, kde-format
 msgid "on command line"
 msgstr "على سطر الأوامر"
 
-#: kookaview.cpp:457
+#: kookaview.cpp:455
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2346,12 +2346,12 @@ msgstr ""
 "جهاز الماسح الضوئي: <icode>%3</icode><nl/>أبلغ libkookascan عن خطأ: <message>"
 "%2</message><nl/>أبلغ SANE عن خطأ: <message>%1</message>"
 
-#: kookaview.cpp:512
+#: kookaview.cpp:510
 #, kde-format
 msgid "Add Scan Device"
 msgstr "أضف جهاز المسح الضوئي"
 
-#: kookaview.cpp:532
+#: kookaview.cpp:530
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2369,79 +2369,79 @@ msgstr ""
 "<interface>إضافة جهاز مسح</interface> لإدخال اسم الواجهة الخلفية والمعلمات، "
 "أو راجع مربع الحوار هذا لمزيد من المعلومات."
 
-#: kookaview.cpp:578
+#: kookaview.cpp:576
 #, kde-format
 msgid "No scanner connected"
 msgstr "لا توجد ماسحة متصلة"
 
-#: kookaview.cpp:637
+#: kookaview.cpp:635
 #, kde-format
 msgid "No selection"
 msgstr "لا تحديد"
 
-#: kookaview.cpp:641
+#: kookaview.cpp:639
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "مجلد المعرض %1"
 
-#: kookaview.cpp:641
+#: kookaview.cpp:639
 #, kde-format
 msgid "Gallery image %1"
 msgstr "معرض الصور %1"
 
-#: kookaview.cpp:687
+#: kookaview.cpp:685
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "يبدأ تشغيل التعرف الضوئي على المحارف في المنطقة المحددة"
 
-#: kookaview.cpp:693
+#: kookaview.cpp:691
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "يبدأ التعرف الضوئي للصورة"
 
-#: kookaview.cpp:700
+#: kookaview.cpp:698
 #, kde-format
 msgid "OCR File"
 msgstr "ملف التعرف الضوئي"
 
-#: kookaview.cpp:710
+#: kookaview.cpp:708
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "لا يمكن تحميل <filename>%1</filename> للتعرف الضوئي على الحروف:<nl/>%2"
 
-#: kookaview.cpp:712
+#: kookaview.cpp:710
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "لا يمكن قراءة ملف التعرف الضوئي على المحارف"
 
-#: kookaview.cpp:716
+#: kookaview.cpp:714
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "بدء التعرف الضوئي على المحارف على الملف <filename>%1</filename>"
 
-#: kookaview.cpp:732
+#: kookaview.cpp:730
 #, kde-format
 msgid "OCR finished"
 msgstr "انتهى التعرف الضوئي"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:737
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "لا يوجد نص نتيجة التعرف الضوئي على المحارف لإجراء التدقيق الإملائي."
 
-#: kookaview.cpp:740
+#: kookaview.cpp:738
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "التدقيق الإملائي للتعرف الضوئي على المحارف غير ممكن"
 
-#: kookaview.cpp:745
+#: kookaview.cpp:743
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "التدقيق الإملائي للتعرف الضوئي"
 
-#: kookaview.cpp:761
+#: kookaview.cpp:759
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2450,17 +2450,17 @@ msgstr ""
 "لم يهيأ محرك التعرف الضوئي على الحروف.\n"
 "يُرجى تحديد محرك وضبطه من أجل إجراء عملية التعرف الضوئي على الحروف."
 
-#: kookaview.cpp:763
+#: kookaview.cpp:761
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "التعرف الضوئي على المحارف غير مضبوط "
 
-#: kookaview.cpp:772
+#: kookaview.cpp:770
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "لا يمكن تحميل ملحق التعرف الضوئي على المحارف '%1'"
 
-#: kookaview.cpp:861
+#: kookaview.cpp:859
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2475,27 +2475,27 @@ msgstr ""
 "استخدام جهاز الماسح الضوئي: <icode>%3</icode><nl/>أبلغت libkookascan عن خطأ: "
 "<message>%2</message><nl/>أبلغت SANE عن خطأ:<message>%1</message>"
 
-#: kookaview.cpp:902
+#: kookaview.cpp:900
 #, kde-format
 msgid "Create new image from selection"
 msgstr "أنشئ صورة جديدة من المنطقة المحددة"
 
-#: kookaview.cpp:911
+#: kookaview.cpp:909
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "لا يمكن التحويل، الصورة للقراءة فقط"
 
-#: kookaview.cpp:964
+#: kookaview.cpp:962
 #, kde-format
 msgid "Loaded image %1"
 msgstr "الصورة المحملة %1"
 
-#: kookaview.cpp:965
+#: kookaview.cpp:963
 #, kde-format
 msgid "Unloaded image"
 msgstr "صورة غير المحملة"
 
-#: kookaview.cpp:982
+#: kookaview.cpp:980
 #, kde-format
 msgid "Loading %1..."
 msgstr "يحمّل %1..."
@@ -3096,42 +3096,42 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr "امسح: %1"
 
-#: thumbview.cpp:97
+#: thumbview.cpp:96
 #, kde-format
 msgid "Thumbnails"
 msgstr "المصغرات"
 
-#: thumbview.cpp:108
+#: thumbview.cpp:107
 #, kde-format
 msgid "Preview Size"
 msgstr "حجم المعاينة"
 
-#: thumbview.cpp:332
+#: thumbview.cpp:331
 #, kde-format
 msgid "Very Large"
 msgstr "كبير جدًّا"
 
-#: thumbview.cpp:333
+#: thumbview.cpp:332
 #, kde-format
 msgid "Large"
 msgstr "كبير"
 
-#: thumbview.cpp:334
+#: thumbview.cpp:333
 #, kde-format
 msgid "Medium"
 msgstr "متوسط"
 
-#: thumbview.cpp:335
+#: thumbview.cpp:334
 #, kde-format
 msgid "Small"
 msgstr "صغير"
 
-#: thumbview.cpp:336
+#: thumbview.cpp:335
 #, kde-format
 msgid "Very Small"
 msgstr "صغير جدًا"
 
-#: thumbview.cpp:337
+#: thumbview.cpp:336
 #, kde-format
 msgid "Tiny"
 msgstr "ضئيل"
