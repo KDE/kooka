@@ -109,7 +109,7 @@
 >OCRAD</ulink
 > und die kommerzielle Bibliothek <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
 >KADMOS</ulink
-> benutzt werden. Um diese Funktion anwenden zu können, muss mindestens eins dieser Softwarepakete installiert werden. Nach dem die Zeichenerkennung beendet ist, wird automatisch die Rechtschreibprüfung für das Ergebnis der Erkennung gestartet. Der Text im Fenster <guilabel
+> verwendet werden. Um diese Funktion anwenden zu können, muss mindestens eins dieser Softwarepakete installiert werden. Nach dem die Zeichenerkennung beendet ist, wird automatisch die Rechtschreibprüfung für das Ergebnis der Erkennung gestartet. Der Text im Fenster <guilabel
 >OCR</guilabel
 > kann bearbeitet und als einfacher Text exportiert werden. </para>
 
@@ -154,7 +154,7 @@
 > des Anwendungsstarters wählen. Erstellen Sie eine Verknüpfung mit einem Scanner-Symbol auf der Arbeitsfläche, falls Sie das möchten.</para>
 
 <para
->Um &kooka; nur for optische Zeichenerkennung ohne einen angeschlossenen Scanner zu benutzen, starten Sie das Programm im Galeriemodus with <userinput
+>Um &kooka; nur for optische Zeichenerkennung ohne einen angeschlossenen Scanner zu verwenden, starten Sie das Programm im Galeriemodus with <userinput
 ><command
 >kooka</command
 > <option
@@ -718,7 +718,7 @@ Keep Zoom Setting Ctrl+Z
 </term>
 <listitem>
 <para
->Hben Sie mehrere Scanner, benutzen Sie diese Aktion, um einen Scanner auszuwählen und ein bestimmtes Gerät immer beim Programmstart zu verwenden.</para>
+>Hben Sie mehrere Scanner, verwenden Sie diese Aktion, um einen Scanner auszuwählen und ein bestimmtes Gerät immer beim Programmstart zu verwenden.</para>
 </listitem
 > 
 </varlistentry>
@@ -762,7 +762,7 @@ Keep Zoom Setting Ctrl+Z
 > 
 <listitem>
 <para
->Benutzen Sie den Knopf in diesem Abschnitt, um alle Nachrichten und Fragen wieder zu aktivieren,die durch Bestätigen von <guibutton
+>Verwenden Sie den Knopf in diesem Abschnitt, um alle Nachrichten und Fragen wieder zu aktivieren,die durch Bestätigen von <guibutton
 >Diese Nachfrage nicht mehr anzeigen</guibutton
 > abgeschaltet wurden.</para>
 </listitem
@@ -868,7 +868,7 @@ Keep Zoom Setting Ctrl+Z
 > &etc; bezeichnet.</para>
 
 <para
->Um ein Bild endgültig abzuspeichern, benutzen Sie <guimenuitem
+>Um ein Bild endgültig abzuspeichern, verwenden Sie <guimenuitem
 >Bild umbenennen</guimenuitem
 >. Geben Sie als Nächstes einen neuen Namen und eine passende Dateierweiterung für das gewählte Bildformat an. Falls Sie eine andere Endung angeben, erhalten Sie eine Nachricht, dass die Erweiterung nicht mit dem eingescannten Bildformat übereinstimmt. Obwohl Sie das Bild unter diesem Namen abspeichern können, wird es trotzdem das Originalformat behalten. Gegenwärtig ist eine Konvertierung <quote
 >On-the-fly</quote

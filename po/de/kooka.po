@@ -1066,7 +1066,7 @@ msgid ""
 "applications, or to use with (e.g.) TeX."
 msgstr ""
 "<b>Encapsulated PostScript</b> ist von der Seitenbeschreibungssprache "
-"PostScript&trade; abgeleitet. Benutzen Sie dieses Format für den Import in "
+"PostScript&trade; abgeleitet. Verwenden Sie dieses Format für den Import in "
 "andere Anwendungen, zum Beispiel mit TeX."
 
 #: formatdialog.cpp:186
@@ -1267,7 +1267,7 @@ msgid ""
 "may do so by simply copying or moving the files."
 msgstr ""
 "Kooka wird die neue Galerie <link url=\"file:%1\"><filename>%1</filename></"
-"link> benutzen.<nl/><nl/>Wenn Sie die Bilder aus Ihrer alten Galerie <link "
+"link> verwenden.<nl/><nl/>Wenn Sie die Bilder aus Ihrer alten Galerie <link "
 "url=\"file:%2\"><filename>%2</filename></link> hinzufügen möchten,<nl/"
 ">sollten Sie diese Dateien einfach kopieren oder verschieben."
 
@@ -2134,7 +2134,7 @@ msgid ""
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
 "<div>Aktivieren Sie diese Einstellung, wenn Einträge in der Galerie durch "
-"Klicken darauf umbenennen möchten. Ansonsten benutzen Sie die Aktion "
+"Klicken darauf umbenennen möchten. Ansonsten verwenden Sie die Aktion "
 "„Umbenennen“ im Menü.</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
@@ -2634,7 +2634,7 @@ msgstr ""
 " aufzunehmen.\n"
 "\n"
 "Beachten Sie, dass die Verlinkung gegen KADMOS nach den Bedingungen der\n"
-"Qt GPL-Lizenz nicht erlaubt ist. Dazu brauchen Sie eine kommerzielle Qt "
+"Qt GPL-Lizenz nicht erlaubt ist. Dazu benötigen Sie eine kommerzielle Qt "
 "Entwicklungslizenz.\n"
 
 #: main.cpp:71
@@ -2716,7 +2716,7 @@ msgstr "Galeriemodus – nicht mit dem Scannergerät verbinden"
 #: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr "SANE-Bezeichnung für das Gerät (z. B. umax:/dev/sg0)"
+msgstr "SANE-Bezeichnung für das Gerät (z. B. umax:/dev/sg0)"
 
 #: main.cpp:118
 #, kde-format
@@ -2794,7 +2794,7 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
-"Benutzen Sie diesen Knopf, um alle Nachrichten und Fragen wieder zu "
+"Verwenden Sie diesen Knopf, um alle Nachrichten und Fragen wieder zu "
 "aktivieren,\n"
 "die durch Bestätigen von „Diese Nachfrage nicht mehr anzeigen“ abgeschaltet "
 "wurden."
