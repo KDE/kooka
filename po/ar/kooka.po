@@ -340,27 +340,27 @@ msgstr[5] "لا يمكن مشاركة %1 صورة الممسوحة <nl/><nl/><me
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
 msgid "Optical Character Recognition"
-msgstr "تعرف المحارف ضوئياً"
+msgstr "تعرف المحارف ضوئيًا"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
 msgid "Start OCR"
-msgstr "ابدأ التعرف على المحارف ضوئياً"
+msgstr "ابدأ التعرف على المحارف ضوئيًا"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
 msgid "Start the Optical Character Recognition process"
-msgstr "ابدأ تشغيل إجراء التعرف على المحارف ضوئياً"
+msgstr "ابدأ تشغيل إجراء التعرف على المحارف ضوئيًا"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
 #, kde-format
 msgid "Stop OCR"
-msgstr "أوقف التعرف على المحارف ضوئياً"
+msgstr "أوقف التعرف على المحارف ضوئيًا"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
 #, kde-format
 msgid "Stop the Optical Character Recognition process"
-msgstr "أوقف إجراء التعرف على المحارف ضوئياً"
+msgstr "أوقف إجراء التعرف على المحارف ضوئيًا"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:146
 #, kde-format
@@ -370,7 +370,7 @@ msgstr "أعدد"
 #: ../plugins/ocr/abstractocrdialogue.cpp:149
 #, kde-format
 msgid "Optical Character Recognition using %1"
-msgstr "تعرف المحارف ضوئياً باستخدام  %1"
+msgstr "تعرف المحارف ضوئيًا باستخدام  %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:192
 #, kde-format
@@ -628,7 +628,7 @@ msgstr "فشل في تحليل نتائج التعرف الضوئي على ال�
 #: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-format
 msgid "OCR Processing Failed"
-msgstr "فشل التعرف على المحارف ضوئياً"
+msgstr "فشل التعرف على المحارف ضوئيًا"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:45
 #, kde-format
@@ -702,9 +702,9 @@ msgid ""
 "Change the OCR engine in the preferences dialog."
 msgstr ""
 "ملفات المصنف لـ KADMOS لا يمكن العثور عليها.\n"
-"لن يكون استعمال التعرف على المحارف ضوئياً بواسطة KADMOS ممكناً !\n"
+"لن يكون استعمال التعرف على المحارف ضوئيًا بواسطة KADMOS ممكنًا !\n"
 "\n"
-"غيّر محرك التعرف على المحارف ضوئياً في حوار التفضيلات."
+"غيّر محرك التعرف على المحارف ضوئيًا في حوار التفضيلات."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -745,7 +745,7 @@ msgstr "البلد"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
 #, kde-format
 msgid "OCR Modifier"
-msgstr "مُغير التعرف على المحارف ضوئياً"
+msgstr "مُغير التعرف على المحارف ضوئيًا"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
@@ -803,7 +803,7 @@ msgid ""
 "OCR with the KADMOS engine is not possible."
 msgstr ""
 "ملف الـمصنف الضروري للتعرف الضوئي على المحارف لا يمكن تحميله: %1،\n"
-"إن استعمال المحرك KADMOS للتعرف على المحارف ضوئياً غير ممكن."
+"إن استعمال المحرك KADMOS للتعرف على المحارف ضوئيًا غير ممكن."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
@@ -817,7 +817,7 @@ msgid ""
 "%1\n"
 "Please check the configuration."
 msgstr ""
-"لم أتمكن من بدء تشغيل النظام KADMOS للتعرف على المحارف ضوئياً:\n"
+"لم أتمكن من بدء تشغيل النظام KADMOS للتعرف على المحارف ضوئيًا:\n"
 "%1\n"
 "فضلًا تأكد من الضبط."
 
@@ -917,7 +917,7 @@ msgid ""
 msgstr ""
 "<b>صورة نقطية</b> تنسيق شائع الاستخدام للصور في أنظمة مايكروسوفت ويندوز. وهو "
 "مناسب للصور الملونة، والصور ذات التدرج الرمادي، وصور الخطوط.<p>هذا التنسيق "
-"مدعوم على نطاق واسع، ولكنه غير مُوصى به، لذا استخدم تنسيقًا مفتوح المصدر بدلاً "
+"مدعوم على نطاق واسع، ولكنه غير مُوصى به، لذا استخدم تنسيقًا مفتوح المصدر بدلًا "
 "منه."
 
 #: formatdialog.cpp:88
@@ -958,7 +958,7 @@ msgstr ""
 "<b>PCX</b> هو تنسيق مضغوط بلا فقدان للبيانات، تدعمه غالبًا تطبيقات تصوير "
 "الكمبيوتر، على الرغم من أنه قديم نوعًا ما وغير متطور. وهو مناسب للصور الملونة "
 "والصور ذات التدرجات الرمادية.<p>لا يُنصح باستخدام هذا التنسيق، استخدم تنسيقًا "
-"مفتوح المصدر بدلاً منه."
+"مفتوح المصدر بدلًا منه."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -968,7 +968,7 @@ msgid ""
 "format instead."
 msgstr ""
 "غالبًا ما يستخدم نظام نافذة X تنسيق <b>X Bitmap</b> لتخزين خرائط المؤشر "
-"والأيقونات.<p>ما لم يكن ذلك مطلوبًا لهذا الغرض، فاستخدم تنسيقًا عامًا بدلاً من "
+"والأيقونات.<p>ما لم يكن ذلك مطلوبًا لهذا الغرض، فاستخدم تنسيقًا عامًا بدلًا من "
 "ذلك."
 
 #: formatdialog.cpp:135
@@ -979,7 +979,7 @@ msgid ""
 "format instead."
 msgstr ""
 "غالبًا ما يستخدم نظام X Window تنسيق <b>X Pixmap</b> لأيقونات الألوان والصور "
-"الأخرى.<p>ما لم يكن ذلك مطلوبًا لهذا الغرض، استخدم تنسيقًا عامًا بدلاً من ذلك."
+"الأخرى.<p>ما لم يكن ذلك مطلوبًا لهذا الغرض، استخدم تنسيقًا عامًا بدلًا من ذلك."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -1024,7 +1024,7 @@ msgid ""
 "applications, or to use with (e.g.) TeX."
 msgstr ""
 "<b>Encapsulated PostScript</b> مشتق من لغة وصف الصفحات PostScript. استخدم "
-"هذا التنسيق للاستيراد إلى تطبيقات أخرى، أو للاستخدام مع TeX مثلاً."
+"هذا التنسيق للاستيراد إلى تطبيقات أخرى، أو للاستخدام مع TeX مثلًا."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -1035,7 +1035,7 @@ msgid ""
 msgstr ""
 "يمكن لـ <b>Truevision Targa</b> تخزين صور كاملة الألوان باستخدام قناة ألفا،"
 "ويستخدم على نطاق واسع في تطبيقات الرسوم المتحركة والفيديو.<p>هذا التنسيق لا "
-"ينصح بذلك، استخدم تنسيقًا مفتوحًا بدلاً من ذلك."
+"ينصح بذلك، استخدم تنسيقًا مفتوحًا بدلًا من ذلك."
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -1939,7 +1939,7 @@ msgstr "معرض الصور وعرض المصغرات"
 #: kookapref.cpp:61 kookaview.cpp:271
 #, kde-format
 msgid "OCR"
-msgstr "تعرف المحارف ضوئياً"
+msgstr "تعرف المحارف ضوئيًا"
 
 #: kookascanparams.cpp:122
 #, kde-kuit-format
@@ -1995,7 +1995,7 @@ msgstr ""
 #: kookasettings.kcfg:65
 #, kde-format
 msgid "Always use the Save Assistant"
-msgstr "استعمل مساعد حفظ دائماً"
+msgstr "استعمل مساعد حفظ دائمًا"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:66
@@ -2471,7 +2471,7 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 "حدثت مشكلة أثناء المعاينة أو المسح الضوئي.<nl/>تأكد من أن الماسح الضوئي لا "
-"يزال متصلاً وقيد التشغيل، <nl/>وأن الوسائط مُحمّلة عند الحاجة.<nl/><nl/>محاولة "
+"يزال متصلًا وقيد التشغيل، <nl/>وأن الوسائط مُحمّلة عند الحاجة.<nl/><nl/>محاولة "
 "استخدام جهاز الماسح الضوئي: <icode>%3</icode><nl/>أبلغت libkookascan عن خطأ: "
 "<message>%2</message><nl/>أبلغت SANE عن خطأ:<message>%1</message>"
 
@@ -2768,7 +2768,7 @@ msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
 "OCR."
 msgstr ""
-"لم يُحدد محرك التعرف الضوئي على المحارف. حدد محركاً واضبطه ليتمكن من إجراء "
+"لم يُحدد محرك التعرف الضوئي على المحارف. حدد محركًا واضبطه ليتمكن من إجراء "
 "التعرف الضوئي على المحارف."
 
 #: prefspages.cpp:453
@@ -2868,7 +2868,7 @@ msgid ""
 "yet possible. Converting 'on the fly' is planned for a future release.\n"
 "Kooka corrects the extension."
 msgstr ""
-"لقد أدخلت امتداد ملف يختلف من الموجود مسبقاً. و ذلك ليس ممكن حالياً. سيكون هذا "
+"لقد أدخلت امتداد ملف يختلف من الموجود مسبقًا. و ذلك ليس ممكن حاليًا. سيكون هذا "
 "ممكن في المستقبل القريب في إصدار جديد.\n"
 "يصحح كوكا الامتداد."
 
@@ -3017,7 +3017,7 @@ msgstr "احفظ..."
 #, kde-format
 msgid "Save the current scanner settings as a new scan preset set"
 msgstr ""
-"احفظ إعدادات الماسح الضوئي الحالية كمجموعة جديدة معدة مسبقاً للمسح الضوئي"
+"احفظ إعدادات الماسح الضوئي الحالية كمجموعة جديدة معدة مسبقًا للمسح الضوئي"
 
 #: scanpresetsdialog.cpp:94
 #, kde-format
@@ -3072,7 +3072,7 @@ msgstr "حجم الصورة المعروضة في المعرض"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The size of the selected area that will be scanned"
-msgstr "حجم المنطقة المحددة التي ستُمسح ضوئياً"
+msgstr "حجم المنطقة المحددة التي ستُمسح ضوئيًا"
 
 #: statusbarmanager.cpp:75
 #, kde-format
