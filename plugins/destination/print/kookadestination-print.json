@@ -1,7 +1,7 @@
 {
     "KPlugin": {
         "Description": "Print the scanned image",
-        "Description[ar]": "اطبع الصورة الممسوحة ضوئياً",
+        "Description[ar]": "اطبع الصورة الممسوحة ضوئيًا",
         "Description[ca@valencia]": "Imprimix la imatge escanejada",
         "Description[ca]": "Imprimeix la imatge escanejada",
         "Description[cs]": "Vytisknout skenovaný snímek",
