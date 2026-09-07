@@ -503,13 +503,13 @@ Save OCR Result Text... Ctrl+U
 > <guimenu
 >Imatge</guimenu
 > <guimenuitem
->Escala a l'alçada</guimenuitem
+>Escala a l'altura</guimenuitem
 > </menuchoice
 ></term
 > 
 <listitem>
 <para
->Escalarà proporcionalment la imatge fins a l'alçada de la pantalla.</para
+>Escalarà proporcionalment la imatge fins a l'altura de la pantalla.</para
 > 
 </listitem
 > 
