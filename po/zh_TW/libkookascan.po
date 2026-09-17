@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the kooka package.
 #
 # pan93412 <pan93412@gmail.com>, 2019.
-# SPDX-FileCopyrightText: 2024, 2025, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2024-2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-10 00:41+0000\n"
-"PO-Revision-Date: 2026-01-02 08:02+0900\n"
+"PO-Revision-Date: 2026-09-17 00:35+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 25.11.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -723,6 +723,10 @@ msgid ""
 "to the same email message.  With this option off, they will each be attached "
 "to a separate message."
 msgstr ""
+"啟用此選項來一次一起處理多重掃描，停用則會個別處理它們。<br/><br/>這個選項的"
+"影響依所選目的地與其設定而有所不同。舉例來說，透過電子郵件分享多重掃描時，如"
+"果啟用此選項則所有掃描皆會附加到同一個郵件裡，而停用時則會為每一個掃描建立一"
+"個新的郵件。"
 
 #: multiscandialog.cpp:201
 #, kde-format
@@ -743,6 +747,12 @@ msgid ""
 "with the same number of digits as entered.  Any existing numbered file will "
 "be skipped and not overwritten."
 msgstr ""
+"啟用此選項來儘量自動產生檔案名稱，停用則會總是詢問名稱。<br/><br/>這個選項的"
+"影響依所選目的地與其設定而有所不同。舉例來說，啟用時儲存多重掃描到掃描歷史相"
+"簿或別的位置時會為第一個檔案詢問檔名，然後其他的檔案便會使用自動遞增編號的檔"
+"案名稱。<br/><br/>輸入第一個檔名時如果以數字或是一個或多個 '#' 字元結尾，它便"
+"會自動遞增，並使用所輸入的位數。如果編號檔案已經存在，它們會被跳過而不會被覆"
+"寫。"
 
 #: multiscandialog.cpp:222
 #, kde-format
@@ -1172,7 +1182,7 @@ msgid ""
 "part of the image.</div>"
 msgstr ""
 "<div>自動偵測的閥值。所有比這個值更亮（背景為黑色時）或更暗（背景為白色時）的"
-"像素都會視為影像的一部分。</div>"
+"像素都會視為圖片的一部分。</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Options SCANNERNAME)
 #: scansettings.kcfg:81
