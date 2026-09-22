@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-10 00:41+0000\n"
-"PO-Revision-Date: 2026-09-17 03:11+0900\n"
+"PO-Revision-Date: 2026-09-21 21:32+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -890,6 +890,8 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>BMP</b> 是 Windows 常用的圖片格式。它可用於多彩、灰階或線稿圖（點陣圖）。"
+"<p>這個格式受廣泛支援但不建議使用，建議改為使用其他開放格式。"
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -897,6 +899,8 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>可攜式點陣圖</b>（Portable Bitmap，PBM）由 Netpbm 使用，是一個無壓縮的點陣"
+"圖格式。它只支援 1 位元深度。"
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -904,6 +908,8 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>可攜式灰度圖</b>（Portable Greymap，PGM）由 Netpbm 使用，是一個無壓縮的灰"
+"階圖片格式。它只支援 8 位元深度。"
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -911,6 +917,8 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>可攜式像素圖</b>（Portable Pixmap，PPM）由 Netpbm 使用，是一個無壓縮的全彩"
+"圖片格式。它只支援 24 位元深度。"
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -920,6 +928,9 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> 是一個無損壓縮格式，許多 PC 圖片應用程式有支援它，不過它頗舊且過於"
+"基本。它可用於多彩或灰階圖片。<p>這個格式不建議使用，建議改為使用其他開放格"
+"式。"
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -928,6 +939,8 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X 點陣圖</b>（X Bitmap，XBM）是 X 視窗系統常用來儲存游標與圖示點陣圖的格"
+"式。<p>除非因為是這個用途而需要使用，否則請改用其他通用格式。"
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -936,6 +949,8 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X 像素圖</b>（X Pixmap，XPM）是 X 視窗系統常為多彩圖示與其他圖片所用的格"
+"式。<p>除非因為是這個用途而需要使用，否則請改用其他通用格式。"
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -945,6 +960,8 @@ msgid ""
 "grayscale images, indexed or true color.<p>PNG is an open format which is "
 "widely supported."
 msgstr ""
+"<b>PNG</b>（可攜式網路圖形）是一個設計來可攜且可擴展的無損壓縮格式。它支援任"
+"何多彩或灰階圖片，不管是索引色還是真彩色。<p>PNG 是受廣泛支援的開放格式。"
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -954,6 +971,9 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
+"<b>JPEG</b> 是可用於真彩色或灰階圖片的有損壓縮格式。因為它是有損格式，所以不"
+"建議使用 JPEG 來進行資料封存，或是反覆載入與儲存。<p>JPEG 是受廣泛支援的開放"
+"格式。"
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -962,6 +982,8 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
+"<b>JPEG 2000</b> 設計為 JPEG 格式的後繼者，提供無損壓縮的選項，但目前仍不受廣"
+"泛支援。它可用於真彩色或灰階圖片。"
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -970,6 +992,9 @@ msgid ""
 "description language.  Use this format for importing into other "
 "applications, or to use with (e.g.) TeX."
 msgstr ""
+"<b>EPS</b>（Encapsulated PostScript，封裝式 PostScript）是一個延伸自 "
+"PostScript&trade; 頁面描述語言的格式。匯入到其他應用程式或在 TeX 等系統使用時"
+"可以使用此格式。"
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -978,6 +1003,8 @@ msgid ""
 "and is used extensively by animation and video applications.<p>This format "
 "is not recommended, use an open format instead."
 msgstr ""
+"<b>TGA</b>（Truevision Targa）支援包含 alpha 色版的全彩圖片，由非常多動畫與影"
+"片製作應用程式所使用。<p>這個格式不建議使用，建議改為使用其他開放格式。"
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -987,6 +1014,9 @@ msgid ""
 "colors and optional transparency.<p>For legal reasons this format is not "
 "recommended, use an open format instead."
 msgstr ""
+"<b>GIF</b>（圖形交換格式）是一個常用於網路圖形但受許多專利限制的格式。它使用"
+"無損壓縮，支援最多 256 個顏色，也可支援透明度。<p>由於法律因素，我們不建議使"
+"用此格式，建議改為使用其他開放格式。"
 
 #: formatdialog.cpp:207
 #, kde-format
@@ -997,6 +1027,10 @@ msgid ""
 "variations, there may sometimes be compatibility problems. Unless required "
 "for use with other applications, use an open format instead."
 msgstr ""
+"<p>TIFF<b>（帶標影像檔案格式）是功能強大且可延伸的檔案格式，受圖片與出版應用"
+"程式廣泛支援。它支援索引色與真彩圖片，也支援 alpha 透明度。</b>因為 TIFF 有許"
+"多變種，這有的時候會造成相容性問題。除非其他應用程式使用上有需要，不然建議使"
+"用其他的開放格式。"
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -1017,6 +1051,8 @@ msgid ""
 "bit true color images with optional lossless compression.<p>Unless "
 "specifically required, use an open format instead."
 msgstr ""
+"這是<b>視算科技</b> (SGI) 原生的檔案格式，支援 24 位元真彩圖片，可以使用無損"
+"壓縮。<p>除非有確切的需要，否則請使用其他的開放格式。"
 
 #: formatdialog.cpp:241
 #, kde-format
@@ -1025,6 +1061,8 @@ msgid ""
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
+"<b>無線點陣圖</b>（Wireless Bitmap，WBMP）是設計給 WAP 行動裝置使用的黑白點陣"
+"圖格式。它只支援黑白點陣圖。<p>除非有確切的需要，不然請使用其他通用的格式。"
 
 #: formatdialog.cpp:251
 #, kde-format
@@ -1035,6 +1073,9 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> 設計是真彩圖片用的開放格式，並可支援透明度。它受現代網路瀏覽器與"
+"圖形軟體廣泛支援。<p>WebP 支援多種壓縮方式，無損與有損的都有。有損壓縮模式不"
+"建議用來進行資料封存，或是反覆載入與儲存。"
 
 #: formatdialog.cpp:280
 #, kde-format
@@ -1089,6 +1130,9 @@ msgid ""
 "gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
+"無法為 Kooka 相簿 - %3<nl/>建立目錄 <filename>%1</filename>。<nl/><nl/>將會使"
+"用您的文件目錄 <filename>%2</filename>。<nl/><nl/>請檢查文件目錄的設定與權限"
+"是否正確。"
 
 #: galleryroot.cpp:111
 #, kde-format
@@ -2064,6 +2108,7 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
+"<div>間距超過此像素數則視為單字間距。預設是 0，代表自動偵測間距。</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -2432,6 +2477,15 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
+"這個程式以自由軟體基金會所發佈的 GPL v2 授權條款散佈。\n"
+"\n"
+"作為特別例外，我們授權將此程式與 reRecognition GmbH\n"
+"(http://www.rerecognition.com) 的 KADMOS OCR/ICR 引擎的任何版本進行連結，\n"
+"並散佈依此編譯成的執行檔，並且不在該執行檔對應的原始碼散佈當中包含 KADMOS\n"
+"的原始碼。\n"
+"\n"
+"請注意，Qt GPL 授權條款沒有這個例外而沒有允許與 KADMOS 連結，因此您會需要有\n"
+"Qt 商業開發授權才能運用這個例外。\n"
 
 #: main.cpp:71
 #, kde-format
