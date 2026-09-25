@@ -6,13 +6,14 @@
 # Andrey Cherepanov <sibskull@mail.ru>, 2001-2005.
 # Nickolai Shaforostoff <shafff@ukr.net>, 2004.
 # Alexander Potashev <aspotashev@gmail.com>, 2010.
+# SPDX-FileCopyrightText: 2026 Alexander Yavorskiy <kekcuha@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-10 00:41+0000\n"
-"PO-Revision-Date: 2010-08-29 03:04+0400\n"
-"Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
+"PO-Revision-Date: 2026-09-24 22:15+0200\n"
+"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +39,7 @@ msgstr "widgetII@mail.ru,sibskull@mail.ru"
 #: ../plugins/destination/abstractdestination.cpp:87
 #, kde-format
 msgid "Remember this format"
-msgstr ""
+msgstr "Запомнить этот формат"
 
 #: ../plugins/destination/abstractdestination.cpp:121
 #, kde-kuit-format
@@ -47,110 +48,104 @@ msgid ""
 "Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
 "%2</message>"
 msgstr ""
+"Не удалось сохранить временный файл изображения<nl/><filename>%1</"
+"filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/abstractdestination.cpp:164
 #: ../plugins/destination/application/destinationapplication.cpp:163
 #: kookaview.cpp:1124
 #, kde-format
 msgid "Other..."
-msgstr ""
+msgstr "Другое..."
 
 #: ../plugins/destination/application/destinationapplication.cpp:85
 #, kde-format
 msgid "Sending to application"
-msgstr ""
+msgstr "Передача в приложение"
 
 #: ../plugins/destination/application/destinationapplication.cpp:87
 #, kde-kuit-format
 msgid "Sending to <application>%1</application>"
-msgstr ""
+msgstr "Передача в <application>%1</application>"
 
 #: ../plugins/destination/application/destinationapplication.cpp:165
 #, kde-format
 msgid "Application:"
-msgstr ""
+msgstr "Приложение:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:171
 #: ../plugins/destination/share/destinationshare.cpp:99
-#, fuzzy, kde-format
-#| msgid "Image Information"
+#, kde-format
 msgid "Image format:"
-msgstr "Информация об изображении"
+msgstr "Формат изображения:"
 
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:62
 #, kde-format
 msgid "Copying image to clipboard"
-msgstr ""
+msgstr "Копирование изображения в буфер обмена"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:105
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgid "<filename>%1</filename>"
-msgstr "%1 не существует"
+msgstr "<filename>%1</filename>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:97
 #, kde-format
 msgid "Save Multipage"
-msgstr ""
+msgstr "Сохранение многостраничного документа"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr "%1 не существует"
+msgstr ""
+"Не удалось сохранить в файл <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:117
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:128
-#, fuzzy, kde-format
-#| msgid "&Save Image..."
+#, kde-format
 msgid "Cannot Save File"
-msgstr "&Сохранить..."
+msgstr "Не удалось сохранить файл"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:221
-#, fuzzy, kde-format
-#| msgid "Format"
+#, kde-format
 msgid "Output format:"
-msgstr "Формат"
+msgstr "Формат вывода:"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:223
 #, kde-format
 msgid "Page Setup..."
-msgstr ""
+msgstr "Параметры страницы..."
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:225
 #, kde-format
 msgctxt "@info:tootip"
 msgid "Set page size and layout"
-msgstr ""
+msgstr "Задание размера и разметки страницы"
 
 #: ../plugins/destination/multipage/destinationmultipage.cpp:242
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgid "Saving page %1 to <filename>%2</filename>"
-msgstr "%1 не существует"
+msgstr "Сохранение страницы %1 в <filename>%2</filename>"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:62
 #, kde-format
 msgid "PDF Page Setup"
-msgstr ""
+msgstr "Параметры страницы PDF"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:97
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Custom..."
-msgstr "Масштаб..."
+msgstr "Другой..."
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:99
-#, fuzzy, kde-format
-#| msgid "Image View"
+#, kde-format
 msgid "Page size:"
-msgstr "Просмотр изображений"
+msgstr "Размер страницы:"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:109
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:120
-#, fuzzy, kde-format
-#| msgid " mm"
+#, kde-format
 msgctxt "unit suffix for millimetres"
 msgid " mm"
 msgstr " мм"
@@ -159,25 +154,26 @@ msgstr " мм"
 #, kde-format
 msgctxt "centered 'x' separator for height/width"
 msgid "×"
-msgstr ""
+msgstr "×"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:136
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Portrait"
-msgstr ""
+msgstr "Книжная"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:140
 #, kde-format
 msgctxt "@option:radio paper orientation"
 msgid "Landscape"
-msgstr ""
+msgstr "Альбомная"
 
 #: ../plugins/destination/multipage/multipageoptionsdialog.cpp:145
 #, kde-format
 msgid "Orientation:"
-msgstr ""
+msgstr "Ориентация:"
 
+# BUGME: <envvar> is not a KUIT tag, it should be <envar> as used elsewhere --ayavorsky 2026-09-24
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:91
 #, kde-kuit-format
 msgctxt "@info"
@@ -187,52 +183,54 @@ msgid ""
 "is part of the <application>libtiff</application> package,<nl/>but it may "
 "need to be installed separately."
 msgstr ""
+"Не удалось найти команду <command section=\"1\">tiffcp</command>,<nl/"
+">убедитесь, что она доступна в <envvar>PATH</envvar>.<nl/><nl/>Команда "
+"входит в пакет <application>libtiff</application>,<nl/>но может требовать "
+"отдельной установки."
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:95
 #, kde-format
 msgid "Cannot find TIFF command"
-msgstr ""
+msgstr "Не удалось найти команду TIFF"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:126
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save page to file <filename>%1</filename><nl/><message>%2</message>"
-msgstr "%1 не существует"
+msgstr ""
+"Не удалось сохранить страницу в файл <filename>%1</filename><nl/><message>"
+"%2</message>"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:146
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot append page to file <filename>%1</filename>, status %2<nl/>(see "
 "standard error for any message)"
-msgstr "%1 не существует"
+msgstr ""
+"Не удалось добавить страницу в файл <filename>%1</filename>, код %2<nl/"
+">(сообщения см. в стандартном потоке ошибок)"
 
 #: ../plugins/destination/multipage/multipagetiffwriter.cpp:148
-#, fuzzy, kde-format
-#| msgid "&Save Image..."
+#, kde-format
 msgid "Cannot Append Page"
-msgstr "&Сохранить..."
+msgstr "Не удалось добавить страницу"
 
 #: ../plugins/destination/null/destinationnull.cpp:65
-#, fuzzy, kde-format
-#| msgid "one item"
-#| msgid_plural "%1 items"
+#, kde-format
 msgid "Discarding image"
-msgstr "%1 элемент"
+msgstr "Отбрасывание изображения"
 
 #: ../plugins/destination/print/destinationprint.cpp:110
 #, kde-format
 msgid "Print immediately with same settings"
-msgstr ""
+msgstr "Печатать сразу с теми же параметрами"
 
 #: ../plugins/destination/print/destinationprint.cpp:120
-#, fuzzy, kde-format
-#| msgid "Print %1"
+#, kde-format
 msgid "Printing image"
-msgstr "Печать %1"
+msgstr "Печать изображения"
 
 #: ../plugins/destination/save/destinationsave.cpp:207
 #, kde-kuit-format
@@ -243,52 +241,51 @@ msgid ""
 "sequence<nl/>of '<icode>#</icode>' characters as a placeholder, or end with "
 "a sequence<nl/>of numeric digits before the file extension.</para>"
 msgstr ""
+"<para>Для автоматического создания имён файлов нужен шаблон имени.</"
+"para><para>Имя файла <filename>%1</filename> должно либо содержать "
+"последовательность<nl/>символов «<icode>#</icode>» как место подстановки, "
+"либо оканчиваться<nl/>цифрами перед расширением.</para>"
 
 #: ../plugins/destination/save/destinationsave.cpp:211
 #, kde-format
 msgid "Cannot Auto Generate"
-msgstr ""
+msgstr "Автоматическое создание невозможно"
 
 #: ../plugins/destination/save/destinationsave.cpp:253
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot access remote location <filename>%1</filename>"
-msgstr "%1 не существует"
+msgstr "Нет доступа к удалённому расположению <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:255
 #: ../plugins/destination/save/destinationsave.cpp:390
 #: ../plugins/destination/save/destinationsave.cpp:525
-#, fuzzy, kde-format
-#| msgid "&Save Image..."
+#, kde-format
 msgid "Cannot Save Image"
-msgstr "&Сохранить..."
+msgstr "Не удалось сохранить изображение"
 
 #: ../plugins/destination/save/destinationsave.cpp:388
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
-msgstr "%1 не существует"
+msgstr ""
+"Не удалось сохранить изображение в <filename>%1</filename><nl/><message>%2</"
+"message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:424
-#, fuzzy, kde-format
-#| msgid "one item"
-#| msgid_plural "%1 items"
+#, kde-format
 msgid "Saving image"
-msgstr "%1 элемент"
+msgstr "Сохранение изображения"
 
 #: ../plugins/destination/save/destinationsave.cpp:427
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgid "Saving to <filename>%1</filename>"
-msgstr "%1 не существует"
+msgstr "Сохранение в <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:444 formatdialog.cpp:280
-#, fuzzy, kde-format
-#| msgid "Save &Scan Parameters"
+#, kde-format
 msgid "Save Scan"
-msgstr "&Сохранить параметры сканирования"
+msgstr "Сохранение результата сканирования"
 
 #: ../plugins/destination/save/destinationsave.cpp:516
 #, kde-kuit-format
@@ -297,6 +294,8 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>Could not find an image format "
 "for the file name <filename>%1</filename>."
 msgstr ""
+"Не удалось сохранить в <filename>%2</filename><nl/>Не найден формат "
+"изображения для имени файла <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:521
 #, kde-kuit-format
@@ -305,44 +304,52 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
 "resource> is not supported."
 msgstr ""
+"Не удалось сохранить в <filename>%2</filename><nl/>Формат изображения "
+"<resource>%1</resource> не поддерживается."
 
 #: ../plugins/destination/share/destinationshare.cpp:105
 #, kde-format
 msgid "Share to:"
-msgstr ""
+msgstr "Передать в:"
 
 #: ../plugins/destination/share/destinationshare.cpp:113
 #, kde-kuit-format
 msgid "<application>%1</application>"
-msgstr ""
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:269
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%2</link>"
 msgid_plural "The scans were shared to<nl/><link>%2</link>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Отсканированные изображения переданы в<nl/><link>%2</link>"
+msgstr[1] "Отсканированные изображения переданы в<nl/><link>%2</link>"
+msgstr[2] "Отсканированные изображения переданы в<nl/><link>%2</link>"
+msgstr[3] "Отсканированное изображение передано в<nl/><link>%2</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:272
-#, fuzzy, kde-format
-#| msgid "Scan Parameter"
+#, kde-format
 msgid "Scan Shared"
-msgstr "Параметр сканирования"
+msgstr "Результат сканирования передан"
 
 #: ../plugins/destination/share/destinationshare.cpp:282
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%2</message>"
 msgid_plural ""
 "Cannot share the %1 scanned images<nl/><nl/><message>%2</message>"
-msgstr[0] "%1 не существует"
-msgstr[1] "%1 не существует"
-msgstr[2] "%1 не существует"
-msgstr[3] "%1 не существует"
+msgstr[0] ""
+"Не удалось передать %1 отсканированное изображение<nl/><nl/><message>%2</"
+"message>"
+msgstr[1] ""
+"Не удалось передать %1 отсканированных изображения<nl/><nl/><message>%2</"
+"message>"
+msgstr[2] ""
+"Не удалось передать %1 отсканированных изображений<nl/><nl/><message>%2</"
+"message>"
+msgstr[3] ""
+"Не удалось передать отсканированное изображение<nl/><nl/><message>%2</"
+"message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -360,40 +367,35 @@ msgid "Start the Optical Character Recognition process"
 msgstr "Запустить процесс распознавания текста в изображении"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
-#, fuzzy, kde-format
-#| msgid "Start OCR"
+#, kde-format
 msgid "Stop OCR"
-msgstr "Распознать текст"
+msgstr "Остановить распознавание"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
-#, fuzzy, kde-format
-#| msgid "Start the Optical Character Recognition process"
+#, kde-format
 msgid "Stop the Optical Character Recognition process"
-msgstr "Запустить процесс распознавания текста в изображении"
+msgstr "Остановить процесс распознавания текста"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:146
-#, fuzzy, kde-format
-#| msgid "Startup"
+#, kde-format
 msgid "Setup"
-msgstr "Запуск"
+msgstr "Настройка"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:149
-#, fuzzy, kde-format
-#| msgid "Optical Character Recognition"
+#, kde-format
 msgid "Optical Character Recognition using %1"
-msgstr "Распознавание текста"
+msgstr "Распознавание текста средствами %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:192
 #, kde-format
 msgid "Executable:"
-msgstr ""
+msgstr "Исполняемый файл:"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename>"
-msgstr "%1 не существует"
+msgstr "<filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
 #, kde-format
@@ -401,91 +403,70 @@ msgid "Not found"
 msgstr "Программа не найдена"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:198
-#, fuzzy, kde-format
-#| msgid "Version: "
+#, kde-format
 msgid "Version:"
-msgstr "Версия: "
+msgstr "Версия:"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:201
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:201
 #, kde-format
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:233
-#, fuzzy, kde-format
-#| msgid "-no hint available-"
+#, kde-format
 msgid "No preview available"
-msgstr "-нет подсказки-"
+msgstr "Предварительный просмотр недоступен"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:242
-#, fuzzy, kde-format
-#| msgid "-no hint available-"
+#, kde-format
 msgid "No information available"
-msgstr "-нет подсказки-"
+msgstr "Сведения недоступны"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:245
 #, kde-format
 msgid "Source"
-msgstr ""
+msgstr "Источник"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:246
-#, fuzzy, kde-format
-#| msgid "Image Information"
+#, kde-format
 msgid "Source Image Information"
-msgstr "Информация об изображении"
+msgstr "Сведения об исходном изображении"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:265
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "OCR Engine"
-msgstr "движок GOCR"
+msgstr "Модуль распознавания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:266
-#, fuzzy, kde-format
-#| msgid "Image Information"
+#, kde-format
 msgid "OCR Engine Information"
-msgstr "Информация об изображении"
+msgstr "Сведения о модуле распознавания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:283
 #, kde-format
 msgid "Highlight misspelled words"
-msgstr ""
+msgstr "Выделять слова с ошибками"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:289
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "Please check the configuration."
+#, kde-format
 msgid "Use the system spell configuration"
-msgstr ""
-"\n"
-"Проверьте настройки"
+msgstr "Использовать системные параметры проверки правописания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:291
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "Please check the configuration."
+#, kde-format
 msgid "Use custom spell configuration"
-msgstr ""
-"\n"
-"Проверьте настройки"
+msgstr "Использовать собственные параметры проверки правописания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:293
-#, fuzzy, kde-format
-#| msgid ""
-#| "\n"
-#| "Please check the configuration."
+#, kde-format
 msgid "Custom Spell Configuration..."
-msgstr ""
-"\n"
-"Проверьте настройки"
+msgstr "Настроить проверку правописания..."
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:303
 #, kde-format
 msgid "Start interactive spell check"
-msgstr ""
+msgstr "Запустить интерактивную проверку правописания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:309
 #, kde-format
@@ -493,120 +474,114 @@ msgid ""
 "Custom spell settings above do not affect this spelling check, use the "
 "language setting in the dialog to change the dictionary language."
 msgstr ""
+"Заданные выше собственные параметры не влияют на эту проверку правописания; "
+"язык словаря меняется в самом диалоге."
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:332
-#, fuzzy, kde-format
-#| msgid "Spell-Check"
+#, kde-format
 msgid "Spell Check"
 msgstr "Проверка правописания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:333
-#, fuzzy, kde-format
-#| msgid "Spell-checking"
+#, kde-format
 msgid "OCR Result Spell Checking"
-msgstr "Проверка правописания"
+msgstr "Проверка правописания распознанного текста"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:343
 #, kde-format
 msgid "Retain temporary files"
-msgstr ""
+msgstr "Сохранять временные файлы"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:346
 #, kde-format
 msgid "Verbose message output"
-msgstr ""
+msgstr "Подробный вывод сообщений"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:351
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "Debugging"
-msgstr "движок GOCR"
+msgstr "Отладка"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:352
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "OCR Debugging"
-msgstr "движок GOCR"
+msgstr "Отладка распознавания"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:408
-#, fuzzy, kde-format
-#| msgid "%1 images"
+#, kde-format
 msgid "No image"
-msgstr "%1 изображений"
+msgstr "Нет изображения"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
-#, fuzzy, kde-format
-#| msgid "image %1"
+#, kde-format
 msgid "Image: %1"
-msgstr "изображение %1"
+msgstr "Изображение: %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
-#, fuzzy, kde-format
-#| msgid "Font Type Selection"
+#, kde-format
 msgid "Selection: %1"
-msgstr "Выбор шрифта"
+msgstr "Выделение: %1"
 
 #: ../plugins/ocr/abstractocrengine.cpp:106
 #, kde-format
 msgid "OCR is already in progress"
-msgstr ""
+msgstr "Распознавание уже выполняется"
 
 #: ../plugins/ocr/abstractocrengine.cpp:118
 #, kde-format
 msgid "OCR could not be started."
-msgstr ""
+msgstr "Не удалось запустить распознавание."
 
 #: ../plugins/ocr/abstractocrengine.cpp:119
-#, fuzzy, kde-format
-#| msgid "Show the scanner selection box on next startup"
+#, kde-format
 msgid "Check the OCR engine selection and settings."
-msgstr "Показать диалог выбора сканера при запуске"
+msgstr "Проверьте выбор модуля распознавания и его параметры."
 
 #: ../plugins/ocr/abstractocrengine.cpp:121
-#, fuzzy, kde-format
-#| msgid "Parse Problem"
+#, kde-format
 msgid "OCR Setup Error"
-msgstr "Ошибка обработки"
+msgstr "Ошибка настройки распознавания"
 
 #: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:762
 #, kde-format
 msgid "Configure OCR..."
-msgstr ""
+msgstr "Настроить распознавание..."
 
 #: ../plugins/ocr/abstractocrengine.cpp:180
-#, fuzzy, kde-format
-#| msgid "The OCR-process was stopped."
+#, kde-format
 msgid "The OCR process was stopped"
-msgstr "Процесс распознавания остановлен."
+msgstr "Процесс распознавания остановлен"
 
 #: ../plugins/ocr/abstractocrengine.cpp:249
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
 msgstr ""
+"Для отладки сохранены следующие временные файлы распознавания:<nl/><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:255
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
-msgstr ""
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:259
 #, kde-format
 msgid "OCR Temporary Files"
-msgstr ""
+msgstr "Временные файлы распознавания"
 
 #: ../plugins/ocr/abstractocrengine.cpp:426
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
-msgstr ""
+msgstr "Не удалось создать временный файл <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:472
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr ""
+"Не удалось сохранить изображение во временный файл <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:500
 #, kde-kuit-format
@@ -615,13 +590,15 @@ msgid ""
 "The executable <command>%1</command> could not be found on <envar>PATH</"
 "envar>."
 msgstr ""
+"Исполняемый файл <command>%1</command> не найден в <envar>PATH</envar>."
 
 #: ../plugins/ocr/abstractocrengine.cpp:510
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
-msgstr "%1 не существует"
+msgstr ""
+"Исполняемый файл <filename>%1</filename> не существует либо непригоден к "
+"использованию."
 
 #: ../plugins/ocr/abstractocrengine.cpp:582
 #, kde-kuit-format
@@ -629,19 +606,19 @@ msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr ""
+"Команда <command>%1</command> аварийно завершилась с кодом <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:587
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
-msgstr ""
+msgstr "Команда <command>%1</command> завершилась с кодом <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:591
-#, fuzzy, kde-kuit-format
-#| msgid "Parsing of the OCR Result File failed:"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
-msgstr "Ошибка обработки файла результата распознавания:"
+msgstr "Не удалось выполнить распознавание."
 
 #: ../plugins/ocr/abstractocrengine.cpp:592
 #, kde-kuit-format
@@ -650,70 +627,70 @@ msgid ""
 "More information may be available in its <link url=\"%1\">standard error</"
 "link> log file."
 msgstr ""
+"Подробности могут быть в её журнале <link url=\"%1\">стандартного потока "
+"ошибок</link>."
 
 #: ../plugins/ocr/abstractocrengine.cpp:595
 #, kde-format
 msgid "OCR Command Failed"
-msgstr ""
+msgstr "Сбой команды распознавания"
 
 #: ../plugins/ocr/abstractocrengine.cpp:602
-#, fuzzy, kde-kuit-format
-#| msgid "Parsing of the OCR Result File failed:"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
-msgstr "Ошибка обработки файла результата распознавания:"
+msgstr "Не удалось обработать результаты распознавания."
 
 #: ../plugins/ocr/abstractocrengine.cpp:603
-#, fuzzy, kde-format
-#| msgid "OCR Post Processing"
+#, kde-format
 msgid "OCR Processing Failed"
-msgstr "Завершающая обработка распознавания текста"
+msgstr "Сбой обработки распознавания"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:45
 #, kde-format
 msgid "Executable Path"
-msgstr ""
+msgstr "Путь к исполняемому файлу"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:52
 #, kde-format
 msgid "Executable path:"
-msgstr ""
+msgstr "Путь к исполняемому файлу:"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
 msgid "Enter or select the path..."
-msgstr ""
+msgstr "Введите или выберите путь..."
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:99
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "Автоматически"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
 #, kde-format
 msgid "The GOCR executable is not configured or is not available."
-msgstr ""
+msgstr "Исполняемый файл GOCR не настроен либо недоступен."
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:263
-#, fuzzy, kde-format
-#| msgid "Save Error"
+#, kde-format
 msgid "Error"
-msgstr "Ошибка сохранения"
+msgstr "Ошибка"
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:159
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr ""
+"Не удалось прочитать файл результата GOCR <filename>%1</filename><nl/>%2"
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:299
 #, kde-format
 msgid "Name or path of the GOCR executable:"
-msgstr ""
+msgstr "Имя или путь к исполняемому файлу GOCR:"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
@@ -734,22 +711,17 @@ msgstr "Европейские страны"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "The classifier files for KADMOS could not be found.\n"
-#| "OCR with KADMOS will not be possible!\n"
-#| "\n"
-#| "Change the OCR engine in the preferences dialog."
+#, kde-format
 msgid ""
 "The classifier files for KADMOS could not be found.\n"
 "OCR with KADMOS will not be possible.\n"
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
-"Файлы классификаторов KADMOS не найдены.\n"
-"Распознавание текста через KADMOS невозможно!\n"
+"Не удалось найти файлы классификаторов KADMOS.\n"
+"Распознавание средствами KADMOS невозможно.\n"
 "\n"
-"Измените движок распознавания в диалоге настроек."
+"Выберите другой модуль распознавания в диалоге настройки."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -821,11 +793,15 @@ msgid ""
 "www.rerecognition.com\">www.rerecognition.com</link> for more information on "
 "Kadmos.</para>"
 msgstr ""
+"<para><emphasis>Kadmos</emphasis> — коммерческая библиотека OCR/ICR, "
+"выпускаемая reRecognition&nbsp;AG.</para><para>%1</para><para>Подробнее о "
+"Kadmos — на <link url=\"http://www.rerecognition.com\">www.rerecognition."
+"com</link>.</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
 msgid "This version of Kooka is configured to use the Kadmos engine."
-msgstr ""
+msgstr "Эта сборка Kooka настроена на использование модуля Kadmos."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
 #, kde-format
@@ -834,6 +810,8 @@ msgid ""
 "need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
 "option."
 msgstr ""
+"Эта сборка Kooka не настроена на работу с Kadmos. Необходимо установить "
+"библиотеки Kadmos и пересобрать Kooka с параметром «--with-kadmos»."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
 #, kde-format
@@ -850,13 +828,15 @@ msgid "KADMOS Installation Problem"
 msgstr "Ошибка установки KADMOS"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
-#, fuzzy, kde-format
-#| msgid "The KADMOS OCR system could not be started:\n"
+#, kde-format
 msgid ""
 "The KADMOS OCR system could not be started:\n"
 "%1\n"
 "Please check the configuration."
-msgstr "Не удаётся запустить систему распознавания KADMOS:\n"
+msgstr ""
+"Не удалось запустить систему распознавания KADMOS:\n"
+"%1\n"
+"Проверьте настройку."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
@@ -866,7 +846,7 @@ msgstr "Ошибка KADMOS"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
 msgid "The OCRAD executable is not configured or is not available."
-msgstr ""
+msgstr "Исполняемый файл OCRAD не настроен либо недоступен."
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
@@ -874,10 +854,9 @@ msgid "No Layout Detection"
 msgstr "без обнаружения областей"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
-#, fuzzy, kde-format
-#| msgid "No Layout Detection"
+#, kde-format
 msgid "Layout Detection"
-msgstr "без обнаружения областей"
+msgstr "Определение разметки"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
 #, kde-format
@@ -897,59 +876,54 @@ msgstr "полное обнаружение областей"
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:183
 #, kde-format
 msgid "(default)"
-msgstr ""
+msgstr "(по умолчанию)"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
-msgstr "%1 не существует"
+msgstr "Файл <filename>%1</filename> не существует"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
-msgstr "%1 не существует"
+msgstr "Файл <filename>%1</filename> недоступен для чтения"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
-msgstr "%1 не существует"
+msgstr "Не удалось открыть файл <filename>%1</filename>"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
-msgstr ""
+msgstr "Имя или путь к исполняемому файлу OCRAD:"
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:78
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
-msgstr ""
+msgstr "Исполняемый файл Tesseract не настроен либо недоступен."
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:118
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Select a file if required..."
-msgstr "Выбор сканера"
+msgstr "При необходимости выберите файл..."
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
-#, fuzzy, kde-format
-#| msgid " permission error   "
+#, kde-format
 msgid "HOCR parsing error, %1"
-msgstr " ошибка доступа              "
+msgstr "Ошибка разбора HOCR: %1"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
-msgstr ""
+msgstr "Имя или путь к исполняемому файлу Tesseract:"
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -958,6 +932,10 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>Bitmap Picture</b> — широко распространённый формат изображений в MS "
+"Windows. Подходит для цветных изображений, изображений в оттенках серого и "
+"штриховых.<p>Формат поддерживается повсеместно, но пользоваться им не "
+"рекомендуется: лучше выбрать открытый формат."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -965,6 +943,9 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>Portable Bitmap</b>, применяемый в Netpbm, — формат без сжатия для "
+"штриховых (растровых) изображений. Поддерживается только глубина 1 бит на "
+"точку."
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -972,6 +953,8 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>Portable Greymap</b>, применяемый в Netpbm, — формат без сжатия для "
+"изображений в оттенках серого. Поддерживается только глубина 8 бит на точку."
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -979,6 +962,8 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>Portable Pixmap</b>, применяемый в Netpbm, — формат без сжатия для "
+"полноцветных изображений. Поддерживается только глубина 8 бит на точку."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -988,6 +973,9 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> — формат со сжатием без потерь, который часто поддерживается "
+"программами обработки изображений для ПК.<p>Формат не рекомендуется: лучше "
+"выбрать открытый формат."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -996,6 +984,9 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X Bitmap</b> часто применяется в системе X Window для хранения растровых "
+"изображений курсоров и значков.<p>Если изображение не предназначено именно "
+"для этого, выберите другой формат."
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -1004,6 +995,9 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X Pixmap</b> часто применяется в системе X Window для цветных значков и "
+"других изображений.<p>Если изображение не предназначено именно для этого, "
+"выберите другой формат."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -1013,6 +1007,10 @@ msgid ""
 "grayscale images, indexed or true color.<p>PNG is an open format which is "
 "widely supported."
 msgstr ""
+"<b>Portable Network Graphics</b> — формат со сжатием без потерь, "
+"разработанный как переносимый и расширяемый. Поддерживает полноцветные "
+"изображения, изображения в оттенках серого и штриховые, а также прозрачность."
+"<p>Этот формат рекомендуется для большинства случаев."
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -1022,6 +1020,10 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
+"<b>JPEG</b> — формат со сжатием, подходящий для полноцветных изображений и "
+"изображений в оттенках серого. Сжатие происходит с потерями, поэтому при "
+"высокой степени сжатия качество ухудшается.<p>Формат не рекомендуется для "
+"штриховых изображений и снимков экрана."
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -1030,6 +1032,8 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
+"<b>JPEG 2000</b> задумывался как обновление формата JPEG с возможностью "
+"сжатия без потерь. Формат поддерживается не столь широко, как JPEG."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -1038,6 +1042,9 @@ msgid ""
 "description language.  Use this format for importing into other "
 "applications, or to use with (e.g.) TeX."
 msgstr ""
+"<b>Encapsulated PostScript</b> происходит от языка описания страниц "
+"PostScript&trade;. Обычно применяется для вставки изображений в другие "
+"документы."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -1046,6 +1053,9 @@ msgid ""
 "and is used extensively by animation and video applications.<p>This format "
 "is not recommended, use an open format instead."
 msgstr ""
+"<b>Truevision Targa</b> позволяет хранить полноцветные изображения с альфа-"
+"каналом и широко применяется в обработке видео.<p>Формат не рекомендуется: "
+"лучше выбрать открытый формат."
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -1055,6 +1065,10 @@ msgid ""
 "colors and optional transparency.<p>For legal reasons this format is not "
 "recommended, use an open format instead."
 msgstr ""
+"<b>Graphics Interchange Format</b> — распространённый, но обременённый "
+"патентами формат, часто применяемый для изображений в Интернете. "
+"Поддерживает не более 256 цветов и сжатие без потерь.<p>Формат не "
+"рекомендуется: лучше выбрать открытый формат."
 
 #: formatdialog.cpp:207
 #, kde-format
@@ -1065,6 +1079,10 @@ msgid ""
 "variations, there may sometimes be compatibility problems. Unless required "
 "for use with other applications, use an open format instead."
 msgstr ""
+"<b>Tagged Image File Format</b> — гибкий и расширяемый формат, который "
+"широко поддерживается программами обработки изображений и издательскими "
+"системами. Позволяет применять разные виды сжатия.<p>Формат рекомендуется, "
+"если требуется сохранить изображение без потерь качества."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -1074,6 +1092,8 @@ msgid ""
 "types of images.<p>Images produced by a scanner will not be animated, so "
 "unless specifically required for use with other applications use PNG instead."
 msgstr ""
+"<b>Multiple-image Network Graphics</b> происходит от стандарта PNG и "
+"предназначен для анимации.<p>Формат поддерживается не слишком широко."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -1082,6 +1102,9 @@ msgid ""
 "bit true color images with optional lossless compression.<p>Unless "
 "specifically required, use an open format instead."
 msgstr ""
+"Это собственный формат изображений <b>Silicon Graphics</b>, поддерживающий "
+"полноцветные изображения с глубиной 24 бита и сжатие без потерь.<p>Формат не "
+"рекомендуется: лучше выбрать открытый формат."
 
 #: formatdialog.cpp:241
 #, kde-format
@@ -1090,6 +1113,9 @@ msgid ""
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
+"<b>Wireless Bitmap</b> — монохромный растровый формат, рассчитанный на "
+"мобильные устройства WAP. Поддерживает только глубину 1 бит на точку.<p>Если "
+"изображение не предназначено именно для этого, выберите другой формат."
 
 #: formatdialog.cpp:251
 #, kde-format
@@ -1100,59 +1126,54 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> задуман как открытый стандарт для полноцветных изображений с "
+"возможностью прозрачности, со сжатием как с потерями, так и без.<p>Формат "
+"поддерживается не слишком широко."
 
 #: formatdialog.cpp:280
-#, fuzzy, kde-format
-#| msgid "Kooka Save Assistant"
+#, kde-format
 msgid "Save Assistant"
-msgstr "Мастер сохранения изображения"
+msgstr "Мастер сохранения"
 
 #: formatdialog.cpp:306
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "<B>Save Assistant</B><P>Select an image format to save the scanned image."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
-"<B>Сохранить изображение</B><P>Выберите формат файла для сохранения "
-"сканированного изображения."
+"Выберите формат для сохранения отсканированного изображения.<nl/>Это "
+"<emphasis strong=\"1\">%1</emphasis>."
 
 #: formatdialog.cpp:316
-#, fuzzy, kde-format
-#| msgid "Format"
+#, kde-format
 msgid "File format:"
-msgstr "Формат"
+msgstr "Формат файла:"
 
 #: formatdialog.cpp:338
-#, fuzzy, kde-format
-#| msgid "Image Information"
+#, kde-format
 msgid "Image sub-format:"
-msgstr "Информация об изображении"
+msgstr "Подформат изображения:"
 
 #: formatdialog.cpp:384
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgid "File name:"
-msgstr "Имя файла"
+msgstr "Имя файла:"
 
 #: formatdialog.cpp:398
-#, fuzzy, kde-format
-#| msgid "Set Zoom..."
+#, kde-format
 msgid "Select Format..."
-msgstr "Масштаб..."
+msgstr "Выбрать формат..."
 
 #: formatdialog.cpp:436
-#, fuzzy, kde-format
-#| msgid "-No format selected-"
+#, kde-format
 msgid "No format selected."
-msgstr "-Формат не выбран-"
+msgstr "Формат не выбран."
 
 #: formatdialog.cpp:470
 #, kde-format
 msgid "No information is available for this format."
-msgstr ""
+msgstr "Сведений об этом формате нет."
 
 #: galleryroot.cpp:100
 #, kde-kuit-format
@@ -1162,11 +1183,14 @@ msgid ""
 "gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
+"Не удалось создать папку <filename>%1</filename><nl/>для галереи Kooka — %3.."
+"<nl/><nl/><nl/>Будет использована папка документов <filename>%2</filename>."
+"<nl/><nl/>Проверьте параметр папки документов и права доступа."
 
 #: galleryroot.cpp:111
 #, kde-format
 msgid "Error creating gallery"
-msgstr ""
+msgstr "Ошибка создания галереи"
 
 #: galleryroot.cpp:159
 #, kde-kuit-format
@@ -1176,25 +1200,26 @@ msgid ""
 "new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
 "a new gallery at the new location?"
 msgstr ""
+"Обнаружена старая галерея Kooka в <filename>%1</filename>.<nl/>Теперь "
+"предпочтительно новое расположение: <filename>%2</filename>.<nl/><nl/"
+">Создать новую галерею в новом расположении?"
 
 #: galleryroot.cpp:163
-#, fuzzy, kde-format
-#| msgid "Show Gallery"
+#, kde-format
 msgid "Create New Gallery"
-msgstr "Галерея"
+msgstr "Создание новой галереи"
 
 #: galleryroot.cpp:164
-#, fuzzy, kde-format
-#| msgid "Show Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Галерея"
+msgstr "Создать новую"
 
 #: galleryroot.cpp:165
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Продолжить со старой"
 
 #: galleryroot.cpp:174 galleryroot.cpp:188
 #, kde-kuit-format
@@ -1205,22 +1230,25 @@ msgid ""
 "gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
 "may do so by simply copying or moving the files."
 msgstr ""
+"Kooka будет использовать новую галерею <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>Чтобы добавить изображения из старой галереи "
+"<link url=\"file:%2\"><filename>%2</filename></link>,<nl/>достаточно "
+"скопировать или переместить файлы."
 
 #: galleryroot.cpp:178
 #, kde-format
 msgid "New Gallery Created"
-msgstr ""
+msgstr "Новая галерея создана"
 
 #: galleryroot.cpp:192
 #, kde-format
 msgid "Old Gallery Exists"
-msgstr ""
+msgstr "Существует старая галерея"
 
 #: imagetransform.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate image 90 degrees"
+#, kde-format
 msgid "Rotate image +90 degrees"
-msgstr "Повернуть на 90 градусов"
+msgstr "Повернуть изображение на +90 градусов"
 
 #: imagetransform.cpp:66
 #, kde-format
@@ -1233,28 +1261,25 @@ msgid "Rotate image -90 degrees"
 msgstr "Повернуть на -90 градусов"
 
 #: imagetransform.cpp:77
-#, fuzzy, kde-format
-#| msgid "Mirroring image horizontally"
+#, kde-format
 msgid "Mirror image horizontally"
-msgstr "Отразить горизонтально"
+msgstr "Отразить изображение по горизонтали"
 
 #: imagetransform.cpp:82
-#, fuzzy, kde-format
-#| msgid "Mirroring image vertically"
+#, kde-format
 msgid "Mirror image vertically"
-msgstr "Отразить вертикально"
+msgstr "Отразить изображение по вертикали"
 
 #: imagetransform.cpp:94
 #, kde-format
 msgid "Error updating image %1"
-msgstr ""
+msgstr "Ошибка при обновлении изображения %1"
 
 #: imgprintdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Print %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
-msgstr "Печать %1"
+msgstr "Печать изображения"
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1264,32 +1289,33 @@ msgid ""
 "\n"
 "%1"
 msgstr ""
+"Указаны недопустимые параметры печати:\n"
+"\n"
+"%1"
 
 #: imgprintdialog.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
-msgstr ""
+msgstr "Печать невозможна"
 
 #: imgprintdialog.cpp:125
-#, fuzzy, kde-format
-#| msgid "&Image"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Image"
-msgstr "&Изображение"
+msgstr "Изображение"
 
 #: imgprintdialog.cpp:145
 #, kde-format
 msgctxt "@title:group"
 msgid "Scaling"
-msgstr ""
+msgstr "Масштабирование"
 
 #: imgprintdialog.cpp:153
-#, fuzzy, kde-format
-#| msgid "Scale to same size as on screen"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
-msgstr "Такой же как на экране"
+msgstr "Размер как на экране"
 
 #: imgprintdialog.cpp:154
 #, kde-format
@@ -1298,25 +1324,26 @@ msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
 msgstr ""
+"<div>Печатать в том же размере, что виден на экране; размер определяется "
+"разрешением экрана.</div>"
 
 #: imgprintdialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Screen resolution: %1 dpi"
+#, kde-format
 msgid "Screen resolution:"
-msgstr "Разрешение экрана: %1 dpi"
+msgstr "Разрешение экрана:"
 
 #: imgprintdialog.cpp:163
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
-msgstr ""
+msgstr "<div>Текущее разрешение экрана. Изменить его здесь нельзя.</div>"
 
 #: imgprintdialog.cpp:167
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
-msgstr ""
+msgstr "Размер как при сканировании"
 
 #: imgprintdialog.cpp:168
 #, kde-format
@@ -1326,19 +1353,20 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
+"<div>Печатать в размере, определяемом разрешением сканирования. Разрешение "
+"сохраняется вместе с изображением и используется, если доступно; иначе его "
+"можно ввести здесь.</div>"
 
 #: imgprintdialog.cpp:172
-#, fuzzy, kde-format
-#| msgid "Scan resolution (dpi) "
+#, kde-format
 msgid "Scan resolution:"
-msgstr "Разрешение сканирования (dpi)"
+msgstr "Разрешение сканирования:"
 
 #: imgprintdialog.cpp:177
-#, fuzzy, kde-format
-#| msgid " dpi"
+#, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
-msgstr " dpi"
+msgstr " точек на дюйм"
 
 #: imgprintdialog.cpp:178
 #, kde-format
@@ -1347,37 +1375,33 @@ msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
 msgstr ""
+"<div>Разрешение сканирования, сохранённое вместе с изображением. При "
+"необходимости его можно изменить.</div>"
 
 #: imgprintdialog.cpp:185
-#, fuzzy, kde-format
-#| msgid "&Dust size"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Custom size"
-msgstr "Размер &соринок"
+msgstr "Особый размер"
 
 #: imgprintdialog.cpp:186
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the print size yourself in the dialog below. The image is centered on "
-#| "the paper."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
 msgstr ""
-"Установить собственный размер печатаемого изображения. Оно будет распечатано "
-"в центре страницы."
+"<div>Печатать с масштабированием до указанного размера. Изображение "
+"располагается по центру листа.</div>"
 
 #: imgprintdialog.cpp:190
-#, fuzzy, kde-format
-#| msgid "Image width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
-msgstr "Ширина:"
+msgstr "Ширина изображения:"
 
 #: imgprintdialog.cpp:195 imgprintdialog.cpp:209
-#, fuzzy, kde-format
-#| msgid " mm"
+#, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
 msgstr " мм"
@@ -1386,26 +1410,25 @@ msgstr " мм"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>Ширина, с которой будет напечатано изображение.</div>"
 
 #: imgprintdialog.cpp:204
-#, fuzzy, kde-format
-#| msgid "Image height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
-msgstr "Высота:"
+msgstr "Высота изображения:"
 
 #: imgprintdialog.cpp:210
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>Высота, с которой будет напечатано изображение.</div>"
 
 #: imgprintdialog.cpp:219
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
-msgstr ""
+msgstr "Уместить на странице"
 
 #: imgprintdialog.cpp:220
 #, kde-format
@@ -1414,20 +1437,20 @@ msgid ""
 "<div>Print using as much of the available space on the paper as possible. "
 "The aspect ratio can be maintained.</div>"
 msgstr ""
+"<div>Печатать, используя как можно больше свободного места на листе. "
+"Пропорции при этом можно сохранить.</div>"
 
 #: imgprintdialog.cpp:231
-#, fuzzy, kde-format
-#| msgid "Startup"
+#, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
-msgstr "Запуск"
+msgstr "Прочие параметры"
 
 #: imgprintdialog.cpp:235
-#, fuzzy, kde-format
-#| msgid "Maintain aspect ratio"
+#, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
-msgstr "Сохранять пропорции изображения"
+msgstr "Сохранять пропорции"
 
 #: imgprintdialog.cpp:236
 #, kde-format
@@ -1436,13 +1459,14 @@ msgid ""
 "<div>Adjust the height or width to maintain the original aspect ratio of the "
 "printed image.</div>"
 msgstr ""
+"<div>Подбирать высоту или ширину так, чтобы сохранить исходные пропорции "
+"печатаемого изображения.</div>"
 
 #: imgprintdialog.cpp:245
-#, fuzzy, kde-format
-#| msgid "Generate low resolution PostScript (fast draft print)"
+#, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr "Генерировать PostScript низкого разрешения (быстрые черновые принтеры)"
+msgstr "Низкое разрешение (быстрая черновая печать)"
 
 #: imgprintdialog.cpp:246
 #, kde-format
@@ -1451,30 +1475,32 @@ msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
 msgstr ""
+"<div>Печатать с наименьшим возможным разрешением. На некоторых принтерах это "
+"может работать не так, как ожидается.</div>"
 
 #: imgprintdialog.cpp:252
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
-msgstr ""
+msgstr "Метки обрезки:"
 
 #: imgprintdialog.cpp:256
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 #: imgprintdialog.cpp:257
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
-msgstr ""
+msgstr "Для нескольких страниц"
 
 #: imgprintdialog.cpp:258
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "Всегда"
 
 #: imgprintdialog.cpp:259
 #, kde-format
@@ -1483,58 +1509,57 @@ msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
 msgstr ""
+"<div>Укажите, печатать ли метки обрезки и склейки. Метки уменьшают доступную "
+"область печати.</div>"
 
 #: imgprintdialog.cpp:270
-#, fuzzy, kde-format
-#| msgid "Print %1"
+#, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
-msgstr "Печать %1"
+msgstr "Разметка печати"
 
 #: imgprintdialog.cpp:275
-#, fuzzy, kde-format
-#| msgid "Image View"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
-msgstr "Просмотр изображений"
+msgstr "Размер изображения:"
 
 #: imgprintdialog.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr "%1 x %2"
+msgstr "%1 × %2 пикс."
 
 #: imgprintdialog.cpp:283
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
-msgstr ""
+msgstr "Доступная область печати:"
 
 #: imgprintdialog.cpp:290
-#, fuzzy, kde-format
-#| msgid "Image Print Size"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr "Размер печатаемого изображения"
+msgstr "Область печати изображения:"
 
 #: imgprintdialog.cpp:297
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
-msgstr ""
+msgstr "Требуется страниц:"
 
 #: imgprintdialog.cpp:360
-#, fuzzy, kde-format
-#| msgid " dpi"
+#, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
-msgstr " dpi"
+msgstr "%1 точек на дюйм"
 
 #: imgprintdialog.cpp:377
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
 msgstr ""
+"Для масштабирования по разрешению сканирования это разрешение необходимо "
+"указать."
 
 #: imgprintdialog.cpp:382
 #, kde-format
@@ -1542,68 +1567,48 @@ msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
 "specified dimensions is zero."
 msgstr ""
+"Для особого масштабирования нужно указать допустимый размер: одно или оба "
+"указанных значения равны нулю."
 
 #: imgprintdialog.cpp:460 imgprintdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
-msgstr "%1 x %2"
+msgstr "%1 × %2 мм"
 
 #: imgprintdialog.cpp:468
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: imgprintdialog.cpp:470
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
-msgstr "%1 x %2"
+msgstr "%1 (%2 × %3)"
 
 #: imgsaver.cpp:65
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The directory\n"
-#| "%1\n"
-#| " is not writeable;\n"
-#| "please check the permissions."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
-msgstr ""
-"Папка\n"
-"%1\n"
-" недоступна для записи.\n"
-"Проверьте права доступа."
+msgstr "Не удалось обратиться к папке<nl/><filename>%2</filename>.<nl/>%1"
 
 #: imgsaver.cpp:76
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The directory\n"
-#| "%1\n"
-#| " is not writeable;\n"
-#| "please check the permissions."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
-msgstr ""
-"Папка\n"
-"%1\n"
-" недоступна для записи.\n"
-"Проверьте права доступа."
+msgstr "Не удалось создать папку<nl/><filename>%2</filename>.<nl/>%1"
 
 #: imgsaver.cpp:330
-#, fuzzy, kde-format
-#| msgid "palleted color image (16 or 24 bit depth)"
+#, kde-format
 msgid "indexed color image (up to 8 bit depth)"
-msgstr "цветное изображение с палитрой (глубина цвета 16 или 24 бита)"
+msgstr "цветное изображение с палитрой (глубина до 8 бит)"
 
 #: imgsaver.cpp:334
-#, fuzzy, kde-format
-#| msgid "palleted gray scale image (16 bit depth)"
+#, kde-format
 msgid "gray scale image (up to 8 bit depth)"
-msgstr "изображение с палитрой оттенков серого (глубина цвета 16 битов)"
+msgstr "изображение в оттенках серого (глубина до 8 бит)"
 
 #: imgsaver.cpp:338
 #, kde-format
@@ -1611,92 +1616,80 @@ msgid "lineart image (black and white, 1 bit depth)"
 msgstr "иллюстрация (черно-белое, 1-битовое изображение)"
 
 #: imgsaver.cpp:342
-#, fuzzy, kde-format
-#| msgid "palleted color image (16 or 24 bit depth)"
+#, kde-format
 msgid "high/true color image (more than 8 bit depth)"
-msgstr "цветное изображение с палитрой (глубина цвета 16 или 24 бита)"
+msgstr "полноцветное изображение (глубина более 8 бит)"
 
 #: imgsaver.cpp:346
-#, fuzzy, kde-format
-#| msgid "Unknown image type"
+#, kde-format
 msgid "unknown image type %1"
-msgstr "Неизвестный тип изображения"
+msgstr "неизвестный тип изображения %1"
 
 #: imgsaver.cpp:368
 #, kde-format
 msgid "Save OK"
-msgstr ""
+msgstr "Сохранение выполнено"
 
 #: imgsaver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Permission denied on file %1."
+#, kde-format
 msgid "Permission denied"
-msgstr "Ошибка доступа к файлу %1"
+msgstr "Отказано в доступе"
 
 #: imgsaver.cpp:372
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgid "Bad file name"
-msgstr "Имя файла"
+msgstr "Недопустимое имя файла"
 
 #: imgsaver.cpp:374
-#, fuzzy, kde-format
-#| msgid " no space on device "
+#, kde-format
 msgid "No space left on device"
-msgstr " недостаточно места на диске "
+msgstr "На устройстве не осталось места"
 
 #: imgsaver.cpp:376
-#, fuzzy, kde-format
-#| msgid " could not write image format "
+#, kde-format
 msgid "Cannot write image format '%1'"
-msgstr " не удаётся сохранить изображение в этом формате "
+msgstr "Не удалось записать изображение в формате «%1»"
 
 #: imgsaver.cpp:378
-#, fuzzy, kde-format
-#| msgid " can not write file using that protocol "
+#, kde-format
 msgid "Cannot write using protocol '%1'"
-msgstr " не удаётся сохранить файл через этот протокол "
+msgstr "Не удалось записать по протоколу «%1»"
 
 #: imgsaver.cpp:380
-#, fuzzy, kde-format
-#| msgid " user canceled saving "
+#, kde-format
 msgid "User cancelled saving"
-msgstr " сохранение прервано пользователем "
+msgstr "Сохранение отменено пользователем"
 
 #: imgsaver.cpp:382
 #, kde-format
 msgid "Cannot create directory"
-msgstr ""
+msgstr "Не удалось создать папку"
 
 #: imgsaver.cpp:384
 #, kde-format
 msgid "Save failed"
-msgstr ""
+msgstr "Не удалось сохранить"
 
 #: imgsaver.cpp:386
-#, fuzzy, kde-format
-#| msgid "Scan Parameter"
+#, kde-format
 msgid "Bad parameter"
-msgstr "Параметр сканирования"
+msgstr "Недопустимый параметр"
 
 #: imgsaver.cpp:388
 #, kde-format
 msgid "Unknown status %1"
-msgstr ""
+msgstr "Неизвестное состояние %1"
 
 #: imgsaver.cpp:411
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The filename you supplied has no file extension.\n"
-#| "Should the correct one be added automatically? "
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "The file name you supplied has no file extension.<nl/>Should the original "
 "one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
 "filename>"
 msgstr ""
-"Указанное имя файла не содержит расширения.\n"
-"Добавить расширения к имени файла?"
+"У введённого имени файла нет расширения.<nl/>Добавить исходное расширение?"
+"<nl/><nl/>Тогда имя файла будет таким: <filename>%1</filename>"
 
 #: imgsaver.cpp:414
 #, kde-format
@@ -1716,33 +1709,33 @@ msgstr "Не добавлять"
 #: imgsaver.cpp:441
 #, kde-format
 msgid "Target already exists"
-msgstr ""
+msgstr "Файл назначения уже существует"
 
 #: imgsaver.cpp:454
 #, kde-format
 msgid "Unable to copy the file"
-msgstr ""
+msgstr "Не удалось скопировать файл"
 
 #: imgsaver.cpp:455
 #, kde-format
 msgid "Unable to rename the file"
-msgstr ""
+msgstr "Не удалось переименовать файл"
 
 #: imgsaver.cpp:456
 #, kde-format
 msgid "Error copying file"
-msgstr ""
+msgstr "Ошибка при копировании файла"
 
 #: imgsaver.cpp:457
 #, kde-format
 msgid "Error renaming file"
-msgstr ""
+msgstr "Ошибка при переименовании файла"
 
 #: imgsaver.cpp:458
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
-msgstr ""
+msgstr "%1 <filename>%3</filename><nl/>%2"
 
 #: kooka.cpp:106
 #, kde-format
@@ -1750,22 +1743,19 @@ msgid "KDE Scanning"
 msgstr "Сканирование изображений в KDE"
 
 #: kooka.cpp:142
-#, fuzzy, kde-format
-#| msgid "Scale to W&idth"
+#, kde-format
 msgid "Scale to Width"
-msgstr "Масштабировать по &ширине"
+msgstr "Уместить по ширине"
 
 #: kooka.cpp:153
-#, fuzzy, kde-format
-#| msgid "Scale to &Height"
+#, kde-format
 msgid "Scale to Height"
-msgstr "Масштабировать по в&ысоте"
+msgstr "Уместить по высоте"
 
 #: kooka.cpp:162
-#, fuzzy, kde-format
-#| msgid "Original &Size"
+#, kde-format
 msgid "Original Size"
-msgstr "&Оригинальный размер"
+msgstr "Исходный размер"
 
 #: kooka.cpp:168
 #, kde-format
@@ -1773,182 +1763,154 @@ msgid "Set Zoom..."
 msgstr "Масштаб..."
 
 #: kooka.cpp:174
-#, fuzzy, kde-format
-#| msgid "Keep &Zoom Setting"
+#, kde-format
 msgid "Keep Zoom Setting"
-msgstr "Сохранять &масштаб"
+msgstr "Сохранять масштаб"
 
 #: kooka.cpp:182
-#, fuzzy, kde-format
-#| msgid "Create From Selectio&n"
+#, kde-format
 msgid "New Image From Selection"
-msgstr "Создать из вы&деления"
+msgstr "Создать изображение из выделения"
 
 #: kooka.cpp:187
-#, fuzzy, kde-format
-#| msgid "Mirror Image &Vertically"
+#, kde-format
 msgid "Mirror Vertically"
-msgstr "Отразить изображение &вертикально"
+msgstr "Отразить по вертикали"
 
 #: kooka.cpp:194
-#, fuzzy, kde-format
-#| msgid "&Mirror Image Horizontally"
+#, kde-format
 msgid "Mirror Horizontally"
-msgstr "Отразить изображение &горизонтально"
+msgstr "Отразить по горизонтали"
 
 #: kooka.cpp:204
-#, fuzzy, kde-format
-#| msgid "Rotate Image Counter-Clock&wise"
+#, kde-format
 msgid "Rotate Counter-Clockwise"
-msgstr "Повернуть п&ротив часовой стрелки"
+msgstr "Повернуть против часовой стрелки"
 
 #: kooka.cpp:211
-#, fuzzy, kde-format
-#| msgid "&Rotate Image Clockwise"
+#, kde-format
 msgid "Rotate Clockwise"
-msgstr "&Повернуть по часовой стрелке"
+msgstr "Повернуть по часовой стрелке"
 
 #: kooka.cpp:218
-#, fuzzy, kde-format
-#| msgid "Rotate Image 180 &Degrees"
+#, kde-format
 msgid "Rotate 180 Degrees"
-msgstr "Повернуть на &180 градусов"
+msgstr "Повернуть на 180 градусов"
 
 #: kooka.cpp:227
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "New Folder..."
-msgstr "Новая папка"
+msgstr "Создать папку..."
 
 #: kooka.cpp:232
 #, kde-format
 msgid "Open With"
-msgstr ""
+msgstr "Открыть с помощью"
 
 #: kooka.cpp:238
-#, fuzzy, kde-format
-#| msgid "&Save Image..."
+#, kde-format
 msgid "Save Image..."
-msgstr "&Сохранить..."
+msgstr "Сохранить изображение..."
 
 #: kooka.cpp:245
-#, fuzzy, kde-format
-#| msgid "&Import Image..."
+#, kde-format
 msgid "Import Image..."
-msgstr "&Импорт..."
+msgstr "Импортировать изображение..."
 
 #: kooka.cpp:250 kooka.cpp:539
-#, fuzzy, kde-format
-#| msgid "&Delete Image"
+#, kde-format
 msgid "Delete Image"
-msgstr "&Удалить из галереи"
+msgstr "Удалить изображение"
 
 #: kooka.cpp:257 kooka.cpp:540
-#, fuzzy, kde-format
-#| msgid "&Delete Image"
+#, kde-format
 msgid "Rename Image"
-msgstr "&Удалить из галереи"
+msgstr "Переименовать изображение"
 
 #: kooka.cpp:263 kooka.cpp:538
-#, fuzzy, kde-format
-#| msgid "&Unload Image"
+#, kde-format
 msgid "Unload Image"
-msgstr "&Закрыть изображение"
+msgstr "Выгрузить изображение"
 
 #: kooka.cpp:270
 #, kde-format
 msgid "Properties..."
-msgstr ""
+msgstr "Свойства..."
 
 #: kooka.cpp:279
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Select Scan Device..."
-msgstr "Выбор сканера"
+msgstr "Выбрать устройство сканирования..."
 
 #: kooka.cpp:283 kookaview.cpp:540
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Add Scan Device..."
-msgstr "Выбор сканера"
+msgstr "Добавить устройство сканирования..."
 
 #: kooka.cpp:289
-#, fuzzy, kde-format
-#| msgid "Scan Preview"
+#, kde-format
 msgid "Preview"
-msgstr "Сканированное изображение"
+msgstr "Предварительный просмотр"
 
 #: kooka.cpp:294
-#, fuzzy, kde-format
-#| msgid "Start OCR"
+#, kde-format
 msgid "Start Scan"
-msgstr "Распознать текст"
+msgstr "Начать сканирование"
 
 #: kooka.cpp:299
-#, fuzzy, kde-format
-#| msgid "Scan Parameter"
+#, kde-format
 msgid "Scan Presets..."
-msgstr "Параметр сканирования"
+msgstr "Профили сканирования..."
 
 #: kooka.cpp:304
-#, fuzzy, kde-format
-#| msgid "Font Type Selection"
+#, kde-format
 msgid "Auto Select"
-msgstr "Выбор шрифта"
+msgstr "Автовыделение"
 
 #: kooka.cpp:312
-#, fuzzy, kde-format
-#| msgid "&OCR Image..."
+#, kde-format
 msgid "OCR Image..."
-msgstr "Распознать текст из всего &изображения..."
+msgstr "Распознать текст в изображении..."
 
 #: kooka.cpp:316
-#, fuzzy, kde-format
-#| msgid "O&CR on Selection..."
+#, kde-format
 msgid "OCR Selection..."
-msgstr "Распознать текст из &выделения..."
+msgstr "Распознать текст в выделении..."
 
 #: kooka.cpp:320
-#, fuzzy, kde-format
-#| msgid "&OCR Image..."
+#, kde-format
 msgid "OCR File..."
-msgstr "Распознать текст из всего &изображения..."
+msgstr "Распознать текст в файле..."
 
 #: kooka.cpp:324
-#, fuzzy, kde-format
-#| msgid "Save OCR Result Text"
+#, kde-format
 msgid "Save OCR Result Text..."
-msgstr "Сохранить результат распознавания"
+msgstr "Сохранить распознанный текст..."
 
 #: kooka.cpp:329
-#, fuzzy, kde-format
-#| msgid "Show OCR Results"
+#, kde-format
 msgid "Spell Check OCR Result..."
-msgstr "Результаты распознавания"
+msgstr "Проверить правописание распознанного текста..."
 
 #: kooka.cpp:526
-#, fuzzy, kde-format
-#| msgid "&Unload Image"
+#, kde-format
 msgid "Unload Folder"
-msgstr "&Закрыть изображение"
+msgstr "Выгрузить папку"
 
 #: kooka.cpp:527
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "Delete Folder"
-msgstr "Новая папка"
+msgstr "Удалить папку"
 
 #: kooka.cpp:528
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "Rename Folder"
-msgstr "Новая папка"
+msgstr "Переименовать папку"
 
 #: kookagallery.cpp:56
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "Folder:"
-msgstr "Новая папка"
+msgstr "Папка:"
 
 #: kookapref.cpp:55
 #, kde-format
@@ -1958,12 +1920,12 @@ msgstr "Настройки"
 #: kookapref.cpp:57
 #, kde-format
 msgid "General"
-msgstr ""
+msgstr "Общие"
 
 #: kookapref.cpp:57
 #, kde-format
 msgid "General Options"
-msgstr ""
+msgstr "Общие параметры"
 
 #: kookapref.cpp:58
 #, kde-format
@@ -1971,10 +1933,9 @@ msgid "Startup"
 msgstr "Запуск"
 
 #: kookapref.cpp:58
-#, fuzzy, kde-format
-#| msgid "Startup"
+#, kde-format
 msgid "Startup Options"
-msgstr "Запуск"
+msgstr "Параметры запуска"
 
 #: kookapref.cpp:59
 #, kde-format
@@ -1982,22 +1943,19 @@ msgid "Image Saving"
 msgstr "Сохранение изображений"
 
 #: kookapref.cpp:59
-#, fuzzy, kde-format
-#| msgid "Image Saving"
+#, kde-format
 msgid "Image Saving Options"
-msgstr "Сохранение изображений"
+msgstr "Параметры сохранения изображений"
 
 #: kookapref.cpp:60
-#, fuzzy, kde-format
-#| msgid "Thumbnails"
+#, kde-format
 msgid "Gallery & Thumbnails"
-msgstr "Миниатюры"
+msgstr "Галерея и миниатюры"
 
 #: kookapref.cpp:60
-#, fuzzy, kde-format
-#| msgid "Thumbnail View"
+#, kde-format
 msgid "Image Gallery and Thumbnail View"
-msgstr "Просмотр уменьшенных копий"
+msgstr "Галерея изображений и просмотр миниатюр"
 
 #: kookapref.cpp:61 kookaview.cpp:271
 #, kde-format
@@ -2013,94 +1971,85 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
+"<title>Режим галереи — сканер не выбран</title><nl/><nl/>В этом режиме можно "
+"просматривать изображения из галереи, изменять их и распознавать в них текст."
+"<nl/><nl/>Чтобы сканировать, <link url=\"a:1\">выберите устройство "
+"сканирования</link>, а если сканер не определяется автоматически — <link url="
+"\"a:2\">добавьте устройство</link>."
 
 #: kookascanparams.cpp:168
-#, fuzzy, kde-format
-#| msgid "Scan resolution (dpi) "
+#, kde-format
 msgid "Scan &destination:"
-msgstr "Разрешение сканирования (dpi)"
+msgstr "&Назначение сканирования:"
 
 #: kookascanparams.cpp:204
-#, fuzzy, kde-kuit-format
-#| msgid "-No format selected-"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No destination selected"
-msgstr "-Формат не выбран-"
+msgstr "Назначение не выбрано"
 
 #: kookascanparams.cpp:214
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load plugin '%1'"
-msgstr ""
+msgstr "Не удалось загрузить модуль «%1»"
 
 #. i18n: ectx: label, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:50
-#, fuzzy, kde-format
-#| msgid "Load the last image into the viewer on startup"
+#, kde-format
 msgid "Load the last selected image into the viewer"
-msgstr "Загрузить последний открытый рисунок при запуске"
+msgstr "Загружать последнее выбранное изображение в средство просмотра"
 
 #. i18n: ectx: tooltip, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:51
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this if you want Kooka to load the last selected image into the "
-#| "viewer on startup.\n"
-#| "If your images are large, that might slow down Kooka's start."
+#, kde-format
 msgid ""
 "<div>Check this if you want Kooka to load the last selected image into the "
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
-"При выборе этой опции программа при запуске загрузит последнее открытое "
-"изображение.\n"
-"Если это размер этого изображения большой, это может замедлить запуск "
-"программы."
+"<div>Включите, если при запуске Kooka должна загружать в средство просмотра "
+"последнее выбранное изображение.<br/><br/>Если изображения велики, запуск "
+"Kooka может замедлиться.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
-#, fuzzy, kde-format
-#| msgid "Always display image save assistant"
+#, kde-format
 msgid "Always use the Save Assistant"
-msgstr "Всегда использовать мастера сохранения изображения"
+msgstr "Всегда использовать мастер сохранения"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:66
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this if you want to see the image save assistant even if there is a "
-#| "default format for the image type."
+#, kde-format
 msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
-"Включите эту опцию, если хотите всегда использовать мастера сохранения "
-"изображения даже при сохранении файла в формате по умолчанию."
+"<div>Включите, если мастер сохранения изображений должен использоваться "
+"всегда, даже когда для этого типа изображений задан формат по умолчанию.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving file"
+#, kde-format
 msgid "Ask for file name when saving"
 msgstr "Запрашивать имя файла при сохранении"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this if you want to enter a filename when an image has been scanned."
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
-"Включите этот флажок чтобы указывать каждый раз имя файла для сканируемого "
-"изображения."
+"<div>Включите, если при сканировании изображения имя файла нужно вводить "
+"всегда.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
 #, kde-format
 msgid "Only show recommended formats for this image type"
-msgstr ""
+msgstr "Показывать только рекомендуемые форматы для этого типа изображений"
 
 #. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:78
@@ -2109,12 +2058,15 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
+"<div>Включите, чтобы показывались только рекомендуемые форматы для этого "
+"типа сканирования. Отключите, чтобы показывались все подходящие форматы.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:91
 #, kde-format
 msgid "Always use this save format for this image type"
-msgstr ""
+msgstr "Всегда использовать этот формат для данного типа изображений"
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:92
@@ -2123,12 +2075,14 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
+"<div>Включите, чтобы запомнить выбранный формат для этого типа "
+"отсканированных изображений и больше не спрашивать о нём.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:125
 #, kde-format
 msgid "Allow click-to-rename"
-msgstr ""
+msgstr "Разрешить переименование щелчком"
 
 #. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:126
@@ -2137,13 +2091,14 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
+"<div>Включите, чтобы элементы галереи можно было переименовывать щелчком по "
+"ним (иначе используется пункт меню «Переименовать»).</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:131
-#, fuzzy, kde-format
-#| msgid "Show Recent Gallery Folders"
+#, kde-format
 msgid "Show recent folders:"
-msgstr "Последние галереи"
+msgstr "Показывать недавние папки:"
 
 #. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:132
@@ -2152,216 +2107,182 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
+"<div>Укажите, показывать ли список недавно использованных папок галереи и "
+"где именно.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
-#, fuzzy, kde-format
-#| msgid "Select background image:"
+#, kde-format
 msgid "Use a custom background image"
-msgstr "Выберете фоновое изображение:"
+msgstr "Использовать собственное фоновое изображение"
 
 #. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:153
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
 msgstr ""
+"<div>Задать собственное фоновое изображение для просмотра миниатюр.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Image:"
-msgstr "Изображение"
+msgstr "Изображение:"
 
 #. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>Фоновое изображение для просмотра миниатюр.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:165
-#, fuzzy, kde-format
-#| msgid "Scan Preview"
+#, kde-format
 msgid "Preview size:"
-msgstr "Сканированное изображение"
+msgstr "Размер миниатюр:"
 
 #. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:166
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>Размер миниатюр по умолчанию.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
-#, fuzzy, kde-format
-#| msgid "&Dust size"
+#, kde-format
 msgid "Dust size:"
-msgstr "Размер &соринок"
+msgstr "Размер соринок:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "Clusters smaller than this value\n"
-#| "will be considered to be dust and \n"
-#| "removed from the image.\n"
-#| "\n"
-#| "Default is 10"
+#, kde-format
 msgid ""
 "<div>Clusters smaller than this size will be considered to be noise, and "
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
-"Объекты, меньше этого значения\n"
-"рассматриваются как соринки \n"
-"и удаляются из изображения.\n"
-"\n"
-"Значение по умолчанию 10"
+"<div>Скопления меньше этого размера считаются шумом и не учитываются. 0 — не "
+"искать соринки, -1 — искать автоматически. Значение по умолчанию — 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
-#, fuzzy, kde-format
-#| msgid "&Gray level"
+#, kde-format
 msgid "Gray level:"
-msgstr "&Уровень серого"
+msgstr "Уровень серого:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:212
-#, fuzzy, kde-format
-#| msgid ""
-#| "The numeric value gray pixels are \n"
-#| "considered to be black.\n"
-#| "\n"
-#| "Default is 160"
+#, kde-format
 msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
-"Числовое значение, при котором серые точки \n"
-"рассматриваются как чёрные.\n"
-"\n"
-"По умолчанию - 160"
+"<div>Пороговое значение, ниже которого серые точки считаются чёрными. 0 — "
+"определять уровень серого автоматически. Значение по умолчанию — 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
-#, fuzzy, kde-format
-#| msgid "&Space width"
+#, kde-format
 msgid "Space width:"
-msgstr "&Межсимвольный интервал"
+msgstr "Ширина пробела:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "Spacing between characters.\n"
-#| "\n"
-#| "Default is 0 what means autodetection"
+#, kde-format
 msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
-"Интервал между символами.\n"
-"\n"
-"По умолчанию - 0, что означает автоопределение"
+"<div>Наименьший промежуток в пикселах, считающийся пробелом между словами. "
+"Значение по умолчанию — 0, то есть определять пробелы автоматически.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
 #, kde-format
 msgid "Certainty:"
-msgstr ""
+msgstr "Достоверность:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "The numeric value gray pixels are \n"
-#| "considered to be black.\n"
-#| "\n"
-#| "Default is 160"
+#, kde-format
 msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
-"Числовое значение, при котором серые точки \n"
-"рассматриваются как чёрные.\n"
-"\n"
-"По умолчанию - 160"
+"<div>Пороговая достоверность распознавания: символы с меньшей достоверностью "
+"считаются нераспознанными. Значение по умолчанию — 95.</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:238
-#, fuzzy, kde-format
-#| msgid "OCRAD layout analysis mode: "
+#, kde-format
 msgid "Layout analysis mode:"
-msgstr "Режим анализа расположения OCRAD:"
+msgstr "Режим анализа разметки:"
 
 #. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
 #: kookasettings.kcfg:251
 #, kde-format
 msgid "Character set:"
-msgstr ""
+msgstr "Набор символов:"
 
 #. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
 #: kookasettings.kcfg:255
-#, fuzzy, kde-format
-#| msgid "&File"
+#, kde-format
 msgid "Filter:"
-msgstr "&Файл"
+msgstr "Фильтр:"
 
 #. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
 #: kookasettings.kcfg:259
 #, kde-format
 msgid "Transform:"
-msgstr ""
+msgstr "Преобразование:"
 
 #. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
 #: kookasettings.kcfg:263
 #, kde-format
 msgid "Invert input"
-msgstr ""
+msgstr "Инвертировать входные данные"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
 #: kookasettings.kcfg:268
 #, kde-format
 msgid "Set threshold"
-msgstr ""
+msgstr "Задать порог"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
 #: kookasettings.kcfg:274
 #, kde-format
 msgid "Threshold"
-msgstr ""
+msgstr "Порог"
 
 #. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
 #: kookasettings.kcfg:296
 #, kde-format
 msgid "Language:"
-msgstr ""
+msgstr "Язык:"
 
 #. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
 #: kookasettings.kcfg:300
 #, kde-format
 msgid "User word list:"
-msgstr ""
+msgstr "Пользовательский список слов:"
 
 #. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
 #: kookasettings.kcfg:304
 #, kde-format
 msgid "User patterns:"
-msgstr ""
+msgstr "Пользовательские шаблоны:"
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
 #: kookasettings.kcfg:308
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "Engine mode:"
-msgstr "движок GOCR"
+msgstr "Режим модуля:"
 
 #. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
 #: kookasettings.kcfg:312
 #, kde-format
 msgid "Segmentation mode:"
-msgstr ""
+msgstr "Режим сегментации:"
 
 #. i18n: ectx: Menu (file)
 #: kookaui.rc:5
@@ -2373,7 +2294,7 @@ msgstr "&Файл"
 #: kookaui.rc:22
 #, kde-format
 msgid "S&can"
-msgstr ""
+msgstr "&Сканирование"
 
 #. i18n: ectx: Menu (imgCanvas)
 #: kookaui.rc:40
@@ -2383,8 +2304,7 @@ msgstr "&Изображение"
 
 #. i18n: ectx: Menu (settings)
 #: kookaui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "&Settings"
 msgstr "&Настройка"
 
@@ -2398,7 +2318,7 @@ msgstr "Панель инструментов просмотра изображ�
 #: kookaui.rc:84
 #, kde-format
 msgid "Scanning Toolbar"
-msgstr ""
+msgstr "Панель сканирования"
 
 #: kookaview.cpp:195
 #, kde-format
@@ -2413,12 +2333,12 @@ msgstr "Сканированное изображение"
 #: kookaview.cpp:254
 #, kde-format
 msgid "OCR results will appear here"
-msgstr ""
+msgstr "Здесь появится результат распознавания"
 
 #: kookaview.cpp:265
 #, kde-format
 msgid "Scan"
-msgstr ""
+msgstr "Сканировать"
 
 #: kookaview.cpp:268 kookaview.cpp:554 kookaview.cpp:573 scangallery.cpp:122
 #, kde-format
@@ -2428,12 +2348,12 @@ msgstr "Галерея"
 #: kookaview.cpp:320
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Указано пользователем"
 
 #: kookaview.cpp:321
 #, kde-format
 msgid "on command line"
-msgstr ""
+msgstr "из командной строки"
 
 #: kookaview.cpp:455
 #, kde-kuit-format
@@ -2445,12 +2365,15 @@ msgid ""
 "icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
 "reported error: <message>%1</message>"
 msgstr ""
+"При обращении к устройству сканирования возникла ошибка.<nl/><nl/>Убедитесь, "
+"что сканер подключён и включён, а поддержка SANE для него настроена "
+"правильно.<nl/><nl/>Использовалось устройство: <icode>%3</icode><nl/>Ошибка "
+"libkookascan: <message>%2</message><nl/>Ошибка SANE: <message>%1</message>"
 
 #: kookaview.cpp:510
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Add Scan Device"
-msgstr "Выбор сканера"
+msgstr "Добавление устройства сканирования"
 
 #: kookaview.cpp:530
 #, kde-kuit-format
@@ -2463,29 +2386,33 @@ msgid ""
 "to use. Use the <interface>Add Scan Device</interface> option to enter the "
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
+"Устройства сканирования недоступны.<nl/><nl/>Если сканер относится к типу, "
+"определяемому SANE автоматически, убедитесь, что он подключён, включён и "
+"правильно настроен.<nl/><nl/>Если SANE не определяет сканер автоматически (в "
+"том числе некоторые сетевые сканеры), устройство нужно указать вручную. "
+"Воспользуйтесь пунктом <interface>Добавить устройство сканирования</"
+"interface>, чтобы ввести имя модуля и его параметры; подробности — в том же "
+"диалоге."
 
 #: kookaview.cpp:576
 #, kde-format
 msgid "No scanner connected"
-msgstr ""
+msgstr "Сканер не подключён"
 
 #: kookaview.cpp:635
-#, fuzzy, kde-format
-#| msgid "Font Type Selection"
+#, kde-format
 msgid "No selection"
-msgstr "Выбор шрифта"
+msgstr "Нет выделения"
 
 #: kookaview.cpp:639
-#, fuzzy, kde-format
-#| msgid "Gallery Folders"
+#, kde-format
 msgid "Gallery folder %1"
-msgstr "Галереи"
+msgstr "Папка галереи %1"
 
 #: kookaview.cpp:639
-#, fuzzy, kde-format
-#| msgid "Loading %1"
+#, kde-format
 msgid "Gallery image %1"
-msgstr "Загрузка %1"
+msgstr "Изображение галереи %1"
 
 #: kookaview.cpp:685
 #, kde-format
@@ -2493,79 +2420,70 @@ msgid "Starting OCR on selection"
 msgstr "Распознавание текста из выделения"
 
 #: kookaview.cpp:691
-#, fuzzy, kde-format
-#| msgid "Starting OCR on the entire image"
+#, kde-format
 msgid "Starting OCR on the image"
-msgstr "Распознавание текста из всего изображения"
+msgstr "Запуск распознавания текста в изображении"
 
 #: kookaview.cpp:698
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "OCR File"
-msgstr "движок GOCR"
+msgstr "Распознавание текста в файле"
 
 #: kookaview.cpp:708
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
-msgstr "%1 не существует"
+msgstr "Не удалось загрузить <filename>%1</filename> для распознавания:<nl/>%2"
 
 #: kookaview.cpp:710
 #, kde-format
 msgid "Cannot Read OCR File"
-msgstr ""
+msgstr "Не удалось прочитать файл для распознавания"
 
 #: kookaview.cpp:714
-#, fuzzy, kde-kuit-format
-#| msgid "The orf %1 does not exist."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
-msgstr "%1 не существует"
+msgstr "Запуск распознавания текста в файле <filename>%1</filename>"
 
 #: kookaview.cpp:730
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "OCR finished"
-msgstr "движок GOCR"
+msgstr "Распознавание завершено"
 
 #: kookaview.cpp:737
 #, kde-format
 msgid "There is no OCR result text to spell check."
-msgstr ""
+msgstr "Нет распознанного текста для проверки правописания."
 
 #: kookaview.cpp:738
 #, kde-format
 msgid "OCR Spell Check not possible"
-msgstr ""
+msgstr "Проверка правописания невозможна"
 
 #: kookaview.cpp:743
-#, fuzzy, kde-format
-#| msgid "Spell-Check"
+#, kde-format
 msgid "OCR Spell Check"
-msgstr "Проверка правописания"
+msgstr "Проверка правописания распознанного текста"
 
 #: kookaview.cpp:759
-#, fuzzy, kde-format
-#| msgid ""
-#| "This version of Kooka was not compiled with KADMOS support.\n"
-#| "Please select another OCR engine in Kooka's options dialog."
+#, kde-format
 msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
-"Данная версия Kooka не собрана с поддержкой KADMOS.\n"
-"Укажите другой движок распознавания в диалоге настройки Kooka."
+"Не настроен ни один модуль распознавания.\n"
+"Чтобы выполнять распознавание, выберите и настройте модуль."
 
 #: kookaview.cpp:761
 #, kde-format
 msgid "OCR Not Configured"
-msgstr ""
+msgstr "Распознавание не настроено"
 
 #: kookaview.cpp:770
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr ""
+msgstr "Не удалось загрузить модуль распознавания «%1»"
 
 #: kookaview.cpp:859
 #, kde-kuit-format
@@ -2577,6 +2495,11 @@ msgid ""
 ">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
 "<message>%1</message>"
 msgstr ""
+"При предварительном просмотре или сканировании возникла ошибка.<nl/"
+">Убедитесь, что сканер по-прежнему подключён и включён,<nl/>а носитель "
+"загружен, если это требуется.<nl/><nl/>Использовалось устройство: <icode>%3</"
+"icode><nl/>Ошибка libkookascan: <message>%2</message><nl/>Ошибка SANE: "
+"<message>%1</message>"
 
 #: kookaview.cpp:900
 #, kde-format
@@ -2584,32 +2507,29 @@ msgid "Create new image from selection"
 msgstr "Создать новое изображение из выделения"
 
 #: kookaview.cpp:909
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot transform, image is read-only"
-msgstr "Не удаётся сохранить изображение, файл защищён от записи!"
+msgstr "Преобразование невозможно: изображение доступно только для чтения"
 
 #: kookaview.cpp:962
-#, fuzzy, kde-format
-#| msgid "Loading %1"
+#, kde-format
 msgid "Loaded image %1"
-msgstr "Загрузка %1"
+msgstr "Загружено изображение %1"
 
 #: kookaview.cpp:963
-#, fuzzy, kde-format
-#| msgid "&Unload Image"
+#, kde-format
 msgid "Unloaded image"
-msgstr "&Закрыть изображение"
+msgstr "Изображение выгружено"
 
 #: kookaview.cpp:980
-#, fuzzy, kde-format
-#| msgid "Loading %1"
+#, kde-format
 msgid "Loading %1..."
-msgstr "Загрузка %1"
+msgstr "Загрузка %1..."
 
 #: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
-msgstr ""
+msgstr "Сканирование, галерея изображений и распознавание текста"
 
 #: main.cpp:48
 #, kde-format
@@ -2623,6 +2543,14 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"Kooka обращается к сканерам через библиотеку <a href=\"http://www.sane-"
+"project.org/\">SANE</a>.\n"
+"\n"
+"Kooka позволяет сканировать, сохранять и просматривать изображения в любом "
+"формате, поддерживаемом KDE, а также распознавать текст с помощью программ с "
+"открытым исходным кодом <a href=\"http://jocr.sourceforge.net/\">GOCR</a> и "
+"<a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> либо "
+"коммерческой библиотеки <a href=\"http://www.rerecognition.com/\">KADMOS</a>."
 
 #: main.cpp:58
 #, kde-format
@@ -2639,11 +2567,22 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
+"Эта программа распространяется на условиях GPL v2, опубликованной\n"
+"Free Software Foundation.\n"
+"\n"
+"В виде особого исключения разрешается связывать эту программу\n"
+"с любой версией модуля OCR/ICR KADMOS компании reRecognition GmbH\n"
+"(http://www.rerecognition.com) и распространять полученный исполняемый\n"
+"файл без включения исходного кода KADMOS в состав дистрибутива.\n"
+"\n"
+"Учтите, что связывание с KADMOS не допускается условиями лицензии\n"
+"Qt GPL, поэтому для этого потребуется коммерческая лицензия\n"
+"на разработку с Qt.\n"
 
 #: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2024, the Kooka developers and contributors"
-msgstr ""
+msgstr "© Разработчики и участники Kooka, 2000—2024"
 
 #: main.cpp:82
 #, kde-format
@@ -2653,64 +2592,62 @@ msgstr "Kooka"
 #: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
-msgstr ""
+msgstr "Jonathan Marten"
 
 #: main.cpp:94
 #, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr ""
+msgstr "Текущий сопровождающий, перенос на KDE4/KF6"
 
 #: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
-msgstr ""
+msgstr "Montel Laurent"
 
 #: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
-msgstr ""
+msgstr "Первоначальный перенос на KF5"
 
 #: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
-msgstr ""
+msgstr "Klaas Freitag"
 
 #: main.cpp:96
-#, fuzzy, kde-format
-#| msgid "developer"
+#, kde-format
 msgid "Developer"
-msgstr "разработчик"
+msgstr "Разработчик"
 
 #: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
-msgstr ""
+msgstr "Mat Colton"
 
 #: main.cpp:97
-#, fuzzy, kde-format
-#| msgid "graphics, web"
+#, kde-format
 msgid "Graphics, web"
-msgstr "графика,Web"
+msgstr "Графика, веб-сайт"
 
 #: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
-msgstr ""
+msgstr "Ivan Shvedunov"
 
 #: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
-msgstr ""
+msgstr "Первоначальное приложение kscan"
 
 #: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
-msgstr ""
+msgstr "Alex Kempshall"
 
 #: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
-msgstr ""
+msgstr "Возможность фотокопирования"
 
 #: main.cpp:115
 #, kde-format
@@ -2718,48 +2655,44 @@ msgid "Gallery mode - do not connect to scanner"
 msgstr "Режим галереи без подключения к сканеру"
 
 #: main.cpp:118
-#, fuzzy, kde-format
-#| msgid "The SANE compatible device specification (e.g. umax:/dev/sg0)"
+#, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr "Совместимая с SANE спецификация устройства (например, umax:/dev/sg0)"
+msgstr "Описание устройства SANE (например, «umax:/dev/sg0»)"
 
 #: main.cpp:118
 #, kde-format
 msgid "device"
-msgstr ""
+msgstr "устройство"
 
 #: newscanpresetdialog.cpp:53
-#, fuzzy, kde-format
-#| msgid "&Load Scan Parameters"
+#, kde-format
 msgid "Edit Scan Preset"
-msgstr "&Загрузить параметры сканирования"
+msgstr "Изменение профиля сканирования"
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
 msgid "Change the name and/or description of the scan preset."
-msgstr ""
+msgstr "Измените название и (или) описание профиля сканирования."
 
 #: newscanpresetdialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Save &Scan Parameters"
+#, kde-format
 msgid "Save Scan Preset"
-msgstr "&Сохранить параметры сканирования"
+msgstr "Сохранение профиля сканирования"
 
 #: newscanpresetdialog.cpp:59
 #, kde-format
 msgid "Enter a name and description for the new scan preset."
-msgstr ""
+msgstr "Введите название и описание нового профиля сканирования."
 
 #: newscanpresetdialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Filename"
+#, kde-format
 msgid "Preset name:"
-msgstr "Имя файла"
+msgstr "Название профиля:"
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
 msgid "Description:"
-msgstr ""
+msgstr "Описание:"
 
 #: ocrresedit.cpp:159
 #, kde-format
@@ -2767,33 +2700,33 @@ msgid "Save OCR Result Text"
 msgstr "Сохранить результат распознавания"
 
 #: ocrresedit.cpp:160
-#, fuzzy, kde-format
-#| msgid "All Files"
+#, kde-format
 msgid "Text File (*.txt)"
-msgstr "Все файлы"
+msgstr "Текстовый файл (*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
 msgstr ""
+"Не удалось сохранить файл результатов распознавания<nl/><filename>%1</"
+"filename>"
 
 #: ocrresedit.cpp:168
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<nl/>%1"
-msgstr ""
+msgstr "<nl/>%1"
 
 #: ocrresedit.cpp:170
-#, fuzzy, kde-format
-#| msgid "Show OCR Results"
+#, kde-format
 msgid "Error saving OCR results"
-msgstr "Результаты распознавания"
+msgstr "Ошибка сохранения результатов распознавания"
 
 #: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
-msgstr ""
+msgstr "Скрытые сообщения"
 
 #: prefspages.cpp:82
 #, kde-format
@@ -2801,38 +2734,38 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
+"Эта кнопка возвращает показ всех сообщений и вопросов,\n"
+"скрытых установкой флажка «Больше не спрашивать»."
 
 #: prefspages.cpp:85
 #, kde-format
 msgid "Enable Messages/Questions"
-msgstr ""
+msgstr "Включить сообщения и вопросы"
 
 #: prefspages.cpp:153
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "Чтобы эти параметры вступили в силу, необходимо перезапустить %1."
 
 #: prefspages.cpp:236
-#, fuzzy, kde-format
-#| msgid "Gallery"
+#, kde-format
 msgid "Image Gallery"
-msgstr "Галерея"
+msgstr "Галерея изображений"
 
 #: prefspages.cpp:250
-#, fuzzy, kde-format
-#| msgid "Not found"
+#, kde-format
 msgid "Not shown"
-msgstr "Программа не найдена"
+msgstr "Не показывать"
 
 #: prefspages.cpp:251
 #, kde-format
 msgid "At top"
-msgstr ""
+msgstr "Сверху"
 
 #: prefspages.cpp:252
 #, kde-format
 msgid "At bottom"
-msgstr ""
+msgstr "Снизу"
 
 #: prefspages.cpp:267
 #, kde-format
@@ -2842,42 +2775,36 @@ msgstr "Просмотр уменьшенных копий"
 #: prefspages.cpp:381
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 #: prefspages.cpp:393
-#, fuzzy, kde-format
-#| msgid "GOCR engine"
+#, kde-format
 msgid "OCR Engine:"
-msgstr "движок GOCR"
+msgstr "Модуль распознавания:"
 
 #: prefspages.cpp:399
-#, fuzzy, kde-format
-#| msgid "OCR Engine to Use"
+#, kde-format
 msgid "OCR Engine Settings..."
-msgstr "Использовать движок OCR"
+msgstr "Параметры модуля распознавания..."
 
 #: prefspages.cpp:445
-#, fuzzy, kde-format
-#| msgid ""
-#| "This version of Kooka was not compiled with KADMOS support.\n"
-#| "Please select another OCR engine in Kooka's options dialog."
+#, kde-format
 msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
 "OCR."
 msgstr ""
-"Данная версия Kooka не собрана с поддержкой KADMOS.\n"
-"Укажите другой движок распознавания в диалоге настройки Kooka."
+"Модуль распознавания не выбран. Чтобы выполнять распознавание, выберите и "
+"настройте модуль."
 
 #: prefspages.cpp:453
-#, fuzzy, kde-format
-#| msgid "Unknown image type"
+#, kde-format
 msgid "Unknown engine '%1'."
-msgstr "Неизвестный тип изображения"
+msgstr "Неизвестный модуль «%1»."
 
 #: scangallery.cpp:97
 #, kde-format
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #: scangallery.cpp:98
 #, kde-format
@@ -2897,67 +2824,57 @@ msgstr "Галерея"
 #: scangallery.cpp:374
 #, kde-format
 msgid "empty"
-msgstr ""
+msgstr "пусто"
 
 #: scangallery.cpp:377
-#, fuzzy, kde-format
-#| msgid "one item"
-#| msgid_plural "%1 items"
+#, kde-format
 msgid "one image"
 msgid_plural "%1 images"
-msgstr[0] "%1 элемент"
-msgstr[1] "%1 элемента"
-msgstr[2] "%1 элементов"
-msgstr[3] "%1 элемент"
+msgstr[0] "%1 изображение"
+msgstr[1] "%1 изображения"
+msgstr[2] "%1 изображений"
+msgstr[3] "одно изображение"
 
 #: scangallery.cpp:379
-#, fuzzy, kde-format
-#| msgid "one item"
-#| msgid_plural "%1 items"
+#, kde-format
 msgid "one file"
 msgid_plural "%1 files"
-msgstr[0] "%1 элемент"
-msgstr[1] "%1 элемента"
-msgstr[2] "%1 элементов"
-msgstr[3] "%1 элемент"
+msgstr[0] "%1 файл"
+msgstr[1] "%1 файла"
+msgstr[2] "%1 файлов"
+msgstr[3] "один файл"
 
 #: scangallery.cpp:385
-#, fuzzy, kde-format
-#| msgid "one item"
-#| msgid_plural "%1 items"
+#, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
-msgstr[0] "%1 элемент"
-msgstr[1] "%1 элемента"
-msgstr[2] "%1 элементов"
-msgstr[3] "%1 элемент"
+msgstr[0] "%1 файл, "
+msgstr[1] "%1 файла, "
+msgstr[2] "%1 файлов, "
+msgstr[3] "один файл, "
 
 #: scangallery.cpp:387
-#, fuzzy, kde-format
-#| msgid "one item"
-#| msgid_plural "%1 items"
+#, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
-msgstr[0] "%1 элемент"
-msgstr[1] "%1 элемента"
-msgstr[2] "%1 элементов"
-msgstr[3] "%1 элемент"
+msgstr[0] "%1 изображение, "
+msgstr[1] "%1 изображения, "
+msgstr[2] "%1 изображений, "
+msgstr[3] "одно изображение, "
 
 #: scangallery.cpp:390
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
-msgstr[0] "Новая папка"
-msgstr[1] "Новая папка"
-msgstr[2] "Новая папка"
-msgstr[3] "Новая папка"
+msgstr[0] "%1 папка"
+msgstr[1] "%1 папки"
+msgstr[2] "%1 папок"
+msgstr[3] "1 папка"
 
 #: scangallery.cpp:445
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgid " %1 x %2"
-msgstr "%1 x %2"
+msgstr " %1 × %2"
 
 #: scangallery.cpp:600
 #, kde-format
@@ -2977,10 +2894,9 @@ msgid "On the Fly Conversion"
 msgstr "Преобразование формата"
 
 #: scangallery.cpp:698
-#, fuzzy, kde-format
-#| msgid "Available image formats:"
+#, kde-format
 msgid "Not a supported image format"
-msgstr "Доступные форматы файлов:"
+msgstr "Формат изображения не поддерживается"
 
 #: scangallery.cpp:750
 #, kde-format
@@ -2991,13 +2907,12 @@ msgstr "Доп.изображение %1"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "Не удалось загрузить изображение <filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:778
-#, fuzzy, kde-format
-#| msgid "Save Error"
+#, kde-format
 msgid "Image Load Error"
-msgstr "Ошибка сохранения"
+msgstr "Ошибка загрузки изображения"
 
 #: scangallery.cpp:840
 #, kde-format
@@ -3008,26 +2923,23 @@ msgstr "Входящие/"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "Не удалось сохранить изображение<nl/><filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:894
-#, fuzzy, kde-format
-#| msgid "Save Error"
+#, kde-format
 msgid "Image Save Error"
-msgstr "Ошибка сохранения"
+msgstr "Ошибка сохранения изображения"
 
 #: scangallery.cpp:972
-#, fuzzy, kde-format
-#| msgid "All Files"
+#, kde-format
 msgid "All Files (*)"
-msgstr "Все файлы"
+msgstr "Все файлы (*)"
 
 #: scangallery.cpp:975
-#, fuzzy, kde-format
-#| msgid "&Import Image..."
+#, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
-msgstr "&Импорт..."
+msgstr "Экспорт изображения"
 
 #: scangallery.cpp:1000
 #, kde-format
@@ -3035,41 +2947,41 @@ msgid "Import Image File to Gallery"
 msgstr "Импорт файла изображения в галерею"
 
 #: scangallery.cpp:1115
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Do you really want to permanently delete the folder<nl/><filename>%1</"
 "filename><nl/>and all of its contents? It cannot be restored."
 msgstr ""
-"Вы хотите удалить изображение из галереи?\n"
-"После этого оно не может быть восстановлено!"
+"Удалить безвозвратно папку<nl/><filename>%1</filename><nl/>и всё её "
+"содержимое? Восстановить их будет невозможно."
 
 #: scangallery.cpp:1120
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Do you really want to permanently delete the image<nl/><filename>%1</"
 "filename>?<nl/>It cannot be restored."
 msgstr ""
-"Вы хотите удалить изображение из галереи?\n"
-"После этого оно не может быть восстановлено!"
+"Удалить безвозвратно изображение<nl/><filename>%1</filename>?<nl/"
+">Восстановить его будет невозможно."
 
 #: scangallery.cpp:1127
-#, fuzzy, kde-format
-#| msgid "Delete Collection Item"
+#, kde-format
 msgid "Delete Gallery Item"
-msgstr "Удалить элемент подшивки"
+msgstr "Удаление элемента галереи"
 
 #: scangallery.cpp:1140
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
+"Не удалось удалить изображение или папку<nl/><filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:1143
 #, kde-format
 msgid "File Delete Error"
-msgstr ""
+msgstr "Ошибка удаления файла"
 
 #: scangallery.cpp:1175
 #, kde-format
@@ -3077,118 +2989,105 @@ msgid "New Folder"
 msgstr "Новая папка"
 
 #: scangallery.cpp:1176
-#, fuzzy, kde-format
-#| msgid "Please enter a name for the new folder:"
+#, kde-format
 msgid "Name for the new folder:"
-msgstr "Введите имя новой папки:"
+msgstr "Название новой папки:"
 
 #: scangallery.cpp:1199
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "Не удалось создать папку<nl/><filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:1201
 #, kde-format
 msgid "Folder Create Error"
-msgstr ""
+msgstr "Ошибка создания папки"
 
 #: scanpresetsdialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Scan Preview"
+#, kde-format
 msgid "Scan Presets"
-msgstr "Сканированное изображение"
+msgstr "Профили сканирования"
 
 #: scanpresetsdialog.cpp:76
-#, fuzzy, kde-format
-#| msgid "Save &Scan Parameters"
+#, kde-format
 msgid "Saved scan preset sets:"
-msgstr "&Сохранить параметры сканирования"
+msgstr "Сохранённые наборы профилей:"
 
 #: scanpresetsdialog.cpp:80
-#, fuzzy, kde-format
-#| msgid "Font Type Selection"
+#, kde-format
 msgid "Select"
-msgstr "Выбор шрифта"
+msgstr "Выбрать"
 
 #: scanpresetsdialog.cpp:82
 #, kde-format
 msgid "Load the selected scan preset set to use as scanner settings"
-msgstr ""
+msgstr "Загрузить выбранный набор профилей в качестве параметров сканера"
 
 #: scanpresetsdialog.cpp:86
-#, fuzzy, kde-format
-#| msgid "&Save Image..."
+#, kde-format
 msgid "Save..."
-msgstr "&Сохранить..."
+msgstr "Сохранить..."
 
 #: scanpresetsdialog.cpp:88
 #, kde-format
 msgid "Save the current scanner settings as a new scan preset set"
-msgstr ""
+msgstr "Сохранить текущие параметры сканера как новый набор профилей"
 
 #: scanpresetsdialog.cpp:94
 #, kde-format
 msgid "Delete the selected scan preset set"
-msgstr ""
+msgstr "Удалить выбранный набор профилей"
 
 #: scanpresetsdialog.cpp:98
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "Изменить..."
 
 #: scanpresetsdialog.cpp:100
 #, kde-format
 msgid "Change the name or description of the selected scan preset set"
-msgstr ""
+msgstr "Изменить название или описание выбранного набора профилей"
 
 #: scanpresetsdialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "-No format selected-"
+#, kde-format
 msgid "No preset set selected."
-msgstr "-Формат не выбран-"
+msgstr "Набор профилей не выбран."
 
 #: scanpresetsdialog.cpp:211
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
-msgstr "%1 x %2"
+msgstr "%1, %2 точек на дюйм"
 
 #: scanpresetsdialog.cpp:288
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Do you really want to delete the folder %1\n"
-#| "and all the images inside?"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
-msgstr ""
-"Вы хотите удалить папку %1\n"
-"со всеми изображениями?"
+msgstr "Удалить набор <resource>%1</resource>?"
 
 #: scanpresetsdialog.cpp:289
-#, fuzzy, kde-format
-#| msgid "Scan Parameter"
+#, kde-format
 msgid "Delete Scan Preset Set"
-msgstr "Параметр сканирования"
+msgstr "Удаление набора профилей"
 
 #: statusbarmanager.cpp:52
 #, kde-format
 msgctxt "@info:status"
 msgid "Ready"
-msgstr ""
+msgstr "Готово"
 
 #: statusbarmanager.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The size of the image being viewed in the gallery"
-msgstr ""
+msgstr "Размер изображения, просматриваемого в галерее"
 
 #: statusbarmanager.cpp:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The size of the selected area that will be scanned"
-msgstr ""
+msgstr "Размер выделенной области, которая будет отсканирована"
 
 #: statusbarmanager.cpp:75
 #, kde-format
@@ -3197,19 +3096,20 @@ msgid ""
 "<qt>This is the uncompressed size of the scanned image. It tries to warn you "
 "if you try to produce too big an image by changing its background color."
 msgstr ""
+"<qt>Это размер отсканированного изображения без сжатия. Цвет фона меняется, "
+"предупреждая о слишком большом изображении."
 
 #: statusbarmanager.cpp:108
-#, fuzzy, kde-format
-#| msgid "image %1"
+#, kde-format
 msgctxt "@info:status"
 msgid "Image: %1"
-msgstr "изображение %1"
+msgstr "Изображение: %1"
 
 #: statusbarmanager.cpp:112
 #, kde-format
 msgctxt "@info:status"
 msgid "Scan: %1"
-msgstr ""
+msgstr "Сканирование: %1"
 
 #: thumbview.cpp:96
 #, kde-format
@@ -3219,38 +3119,37 @@ msgstr "Миниатюры"
 #: thumbview.cpp:107
 #, kde-format
 msgid "Preview Size"
-msgstr ""
+msgstr "Размер миниатюр"
 
 #: thumbview.cpp:331
 #, kde-format
 msgid "Very Large"
-msgstr ""
+msgstr "Очень большой"
 
 #: thumbview.cpp:332
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Large"
-msgstr "Изображение"
+msgstr "Большой"
 
 #: thumbview.cpp:333
 #, kde-format
 msgid "Medium"
-msgstr ""
+msgstr "Средний"
 
 #: thumbview.cpp:334
 #, kde-format
 msgid "Small"
-msgstr ""
+msgstr "Маленький"
 
 #: thumbview.cpp:335
 #, kde-format
 msgid "Very Small"
-msgstr ""
+msgstr "Очень маленький"
 
 #: thumbview.cpp:336
 #, kde-format
 msgid "Tiny"
-msgstr ""
+msgstr "Крошечный"
 
 #, fuzzy
 #~| msgid ""
