@@ -820,7 +820,7 @@ msgid ""
 "OCR with the KADMOS engine is not possible."
 msgstr ""
 "Не удаётся загрузить необходимый файл классификатора для распознавания: %1\n"
-"Распознавание через движок KADMOS невозможно."
+"Распознавание через модуль KADMOS невозможно."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
