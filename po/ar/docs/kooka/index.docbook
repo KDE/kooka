@@ -1,0 +1,997 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Arabic "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>دليل كوكا</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>مطوّر</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2017-07-17</date>
+<releaseinfo
+>كوكا 0.90</releaseinfo>
+
+<abstract
+><para
+>يتيح لك كوكا مسح الصور ضوئيًا وحفظها وعرضها بأي تنسيق صور يدعمه &Qt;، ويمكنه إجراء التعرف البصري على الأحرف.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>تعرف المحارف ضوئيًا</keyword>
+<keyword
+>ماسح ضوئي</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>مقدمة</title>
+
+<para
+>كوكا هو تطبيق يوفر الوصول إلى عتاد الماسح الضوئي باستخدام مكتبة <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+>. لذلك، يجب تثبيت حزمة <acronym
+>SANE</acronym
+> لاستخدام كوكا.</para>
+
+<para
+>يتيح لك كوكا مسح الصور ضوئيًا وحفظها وعرضها بأي تنسيق صور يدعمه &Qt;.</para>
+
+<para
+>يُوفر التعرف على الأحرف أيضًا باستخدام برامج المصدر المفتوح <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> أو <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+>، أو المكتبة التجارية <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
+>KADMOS</ulink
+>. يجب تثبيت حزمة برامج واحدة على الأقل من هذه الحزم لاستخدام هذه الوظيفة. بعد اكتمال التعرف على الأحرف، يُبدأ آليًا تدقيق إملائي للمادة المُتعرف عليها. يمكنك تحرير المحتوى في نافذة <guilabel
+>OCR</guilabel
+> وتصديره كنص عادي. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>تعليمات التطبيق</title>
+
+<para
+>يحتوي الموقع الإلكتروني <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> على معلومات حول الماسحات الضوئية المدعومة. ارجع إليه قبل شراء ماسح ضوئي، إن أمكن.</para>
+
+<sect1 id="screen">
+<title
+>النافذة الرئيسة لـ كوكا</title>
+
+<screenshot
+> 
+<screeninfo
+>النافذة الرئيسة لـ كوكا </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>ابدأ كوكا من وحدة التحكم بمجرد إدخال <userinput
+><command
+>kooka</command
+></userinput
+> أو اختره من القائمة الفرعية <guilabel
+>رسوميات</guilabel
+> في مشغل التطبيقات. أنشئ رابطًا على سطح المكتب يستخدم أيقونة ماسح ضوئي، إذا رغبت.</para>
+
+<para
+>لاستخدام كوكا فقط للتعرف البصري على الأحرف دون الاتصال بماسح ضوئي، ابدأ التطبيق في وضع المعرض بـ <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>تتكون النافذة الرئيسة في كوكا من ثلاثة أُطر. في الأعلى، ترى لوحتي الأيقونات والقوائم. استخدم الفأرة لتكبير النوافذ أو تصغيرها حسب الحاجة.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>تتكون نافذة التنقل من ثلاث لسانيات، تتيح لك التبديل بين <guilabel
+>مسح ضوئي</guilabel
+> و<guilabel
+>OCR</guilabel
+> ومتصفح الملفات المدمج المسمى <guilabel
+>المعرض</guilabel
+>. يُعرض مجلد العمل في الجزء العلوي من النافذة مع المجلد الذي سيُحفظ فيه المسح الضوئي.</para
+> 
+</listitem>
+
+<listitem>
+<para
+>اضبط إعداداتك المعتمدة على الماسح الضوئي، والتي تعتمد على الماسح الضوئي المتصل، في النافذة السفلية اليسرى. عادةً، هذه إعدادات للدقة والسطوع والتباين ووضع المسح (مثل، لوني أو رمادي أو ثنائي) وقيم جاما.</para>
+
+<para
+>اضبط إعداداتك هنا أولًا. بعد ذلك، ابدأ المسح الضوئي الأولي بـ <guimenuitem
+>معاينة</guimenuitem
+>. ستظهر نتيجة المسح بعد ذلك في اللوحة اليمنى.</para>
+
+<para
+>حدد المنطقة المراد مسحها ضوئيًا في صورة المعاينة نفسها بالفأرة لتحديد الأبعاد النهائية.</para>
+
+<para
+>بعد الانتهاء من ذلك، انقر <guimenu
+>مسح ضوئي</guimenu
+> لمسح التحديد الذي أُجري في المعاينة ضوئيًا. بعد المسح، سيُطلب منك تحديد التنسيق الذي سيُحفظ به الصورة وما إذا كان سيُجعل هذا تنسيقك القياسي (دون المطالبة بتأكيد اختيارك مستقبلًا).</para>
+
+<note
+><para
+>إذا حددت أنك لا تريد أن يُسأل عن تنسيق الحفظ، فلن يظهر مساعد الذاكرة بعد الآن. لتغيير التنسيق في وقت لاحق، اختر <menuchoice
+> <guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>اضبط كوكا...</guimenuitem
+> <guimenuitem
+>حفظ الصور</guimenuitem
+> <guimenuitem
+>استخدم دائمًا مساعد الحفظ</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>تُظهر النافذة الكبيرة كيف تظهر الصورة بعد مسح ضوئي نهائي.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands-configuration">
+<title
+>مرجع الأوامر والضبط</title>
+
+<sect1 id="command">
+<title
+>شريط القوائم لكوكا</title>
+
+<sect2>
+<title
+>قائمة ملف</title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>مجلد جديد...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>أنشئ مجلدًا جديدًا لحفظ صورك في <guilabel
+>معرض كوكا</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>احفظ الصورة</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>احفظ الصورة المحددة أسفل <guilabel
+>معرض كوكا</guilabel
+> في مجلد مختلف على قرصك.</para>
+<para
+>انظر قسم <link linkend="save"
+>الحفظ</link
+> للتفاصيل.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>Del</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>احذف المجلد</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>احذف المجلد المحدد أسفل <guilabel
+>معرض كوكا</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>صورة جديدة من التحديد</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>إذا تضمنت الصورة الممسوحة ضوئيًا أكثر مما تريد ظهوره في الصورة النهائية، استخدم هذه الأداة لقص صورتك بوضع علامة على التحديد في عرض الصورة الأكبر إلى اليمين ثم اختيار هذه الأداة. تُقص الصورة وفقًا لتحديدك. قد تكون على دراية بهذه الوظيفة من أداة القص في &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>أفرغ الصورة</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>أزل الصورة المعروضة في عارض الصور.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>اطبع</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>اطبع الصورة المعروضة.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>أنهِ</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>أنهِ كوكا.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>قائمة المسح</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>مسح ضوئي</guimenu
+> <guimenuitem
+>صورة OCR...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>ابدأ التعرف البصري على الأحرف (<acronym
+>OCR</acronym
+>) للصورة بأكملها باستخدام نظام التعرف المُعرّف في صفحة <guilabel
+>OCR</guilabel
+> في حوار الإعدادات. يبدأ هذا التعرف على الأحرف لصورة المعاينة.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>مسح ضوئي</guimenu
+> <guimenuitem
+>تحديد OCR...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>ستظهر نافذة مرة أخرى للتعرف على الأحرف. هنا، مع ذلك، يكون التعرف على الأحرف فقط للمنطقة المظللة في المسح النهائي.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>قائمة الصورة</title>
+
+<para
+>الإجراءات في هذه القائمة متاحة أيضًا في قائمة السياق لنافذة المعاينة.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>قس إلى العرض</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>يقيس هذا الصورة في اللوحة الكبيرة بشكل متناسب إلى عرض الشاشة.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>تغيير الحجم إلى الارتفاع</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>يغير حجم الصورة تناسبيًا ليتناسب مع ارتفاع الشاشة.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>الحجم الأصلي</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>يستعيد حجم المسح الأصلي بتصغير الصورة أو تكبيرها في الشاشة.</para
+> 
+
+<para
+>توجد طرق إضافية لتحجيم الصورة: <mousebutton
+>أيمن</mousebutton
+> انقر على عرض الصورة. أعد تعريف الخيارات الثلاثة المذكورة واضبط التكبير نفسه. يمكن فعل ذلك أيضًا في نافذة <guilabel
+>معاينة</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>عكس عموديًا</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>يقلب الصورة عموديًا.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>عكس أفقيًا</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>يقلب الصورة أفقيًا.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>تدوير عكس عقارب الساعة</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>يدير الصورة تسعين درجة عكس عقارب الساعة.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>تدوير مع عقارب الساعة</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>يدير الصورة تسعين درجة مع عقارب الساعة.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>صورة</guimenu
+> <guimenuitem
+>تدوير الصورة 180 درجة</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>يدير الصورة 180 درجة.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>قائمة إعدادات</title>
+
+<para
+>بالإضافة إلى قائمتي &kde; <guimenu
+>إعدادات</guimenu
+> و<guimenu
+>مساعدة</guimenu
+> المعتادتين الموصوفتين في فصل <ulink url="help:/fundamentals/menus.html"
+>قائمة</ulink
+> من وثائق أساسيات &kde;، يحتوي كوكا على إدخالات القائمة الخاصة بالتطبيق التالية: </para>
+
+<variablelist>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>اختر جهاز مسح...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>إذا كان لديك ماسحات ضوئية متعددة، استخدم هذا الإجراء لاختيار ماسح ضوئي واستخدام جهاز معين دائمًا عند بدء التشغيل.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>أضف جهاز مسح...</guimenuitem
+> </menuchoice>
+</term
+><listitem>
+<para
+>أضف جهازًا لا يُكتشف آليًا عند بدء تشغيل كوكا.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>ضبط Kooka</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>عامّ</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>استخدم الزر في هذا القسم لإعادة تفعيل جميع الرسائل والأسئلة المخفية باستخدام <guibutton
+>لا تسألني مجددًا</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>بدء التشغيل</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>قد ترغب في إلغاء تحديد <guilabel
+>أظهر حوار اختيار الماسح الضوئي</guilabel
+>، إذا كان لديك ماسح ضوئي واحد فقط. إذا كان لديك حاسوب واحد فقط، فقد ترغب أيضًا في إلغاء تحديد <guilabel
+>استعلام الشبكة عن الماسحات الضوئية المتاحة</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>حفظ الصورة</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>استخدم دائمًا مساعد الحفظ</guilabel
+> <guilabel
+>اسأل عن اسم الملف عند الحفظ</guilabel
+> <guilabel
+>قبل بدء المسح</guilabel
+> / <guilabel
+>بعد انتهاء المسح</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>معرض &amp; صور مصغرة</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>هنا يمكن ضبط حجم الصور المصغرة؛ وكذلك الخلفية. على سبيل المثال، قد ترغب في تقليل حجم الصور المصغرة إذا كنت تمسح العديد من الصفحات من كتاب. </para>
+<para
+>في القسم <guilabel
+>معرض الصور</guilabel
+> اختر كيف وأين تظهر المجلدات الحديثة.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>تعرف المحارف ضوئيًا</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>اختر محرك التعرف البصري على الحروف والمسار إلى الملف التنفيذي. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>احفظ</title>
+<subtitle
+>المزيد عن حفظ الصور</subtitle>
+
+<para
+>تختلف طريقة حفظ الصورة في كوكا بعض الشيء عن العديد من التطبيقات الأخرى. انقر على لسان <guilabel
+>معرض</guilabel
+> لفتح مستعرض ملفات صغير. هذا هو المجلد <filename class="directory"
+>~/Documents/KookaGallery</filename
+>. في النافذة، يُعرض مجلدك الفرعي الحالي في المعرض. هذا هو المكان الذي تُحفظ فيه جميع الصور الممسوحة ضوئيًا كملفات أولًا. عند بدء تشغيل كوكا لأول مرة، سترى فقط <filename class="directory"
+>KookaGallery</filename
+>. أنشئ مجلدات فرعية بالنقر <mousebutton
+>الأيمن</mousebutton
+> على هذا المجلد. المجلد المحدد، المظلل باللون الأزرق، هو موقع الحفظ الأول للصور الممسوحة ضوئيًا. تُسمى عمليات المسح بترتيب رقمي تصاعدي كما في <filename
+>kscan_0001</filename
+> و<filename
+>kscan_0002</filename
+>.</para>
+
+<para
+>لحفظ صورة بشكل دائم، استخدم <guimenuitem
+>أعد تسمية الصورة</guimenuitem
+> وأعطِ اسمًا جديدًا والنهاية المناسبة لتنسيق الصورة المختار عند المسح. إذا أدخلت امتدادًا مختلفًا، ستتلقى رسالة تفيد بأنه لا يتوافق مع التنسيق الممسوح ضوئيًا. على الرغم من أنه لا يزال بإمكانك حفظ الصورة بهذا الاسم، إلا أنها ستحتفظ بتنسيقها الأصلي. في الوقت الحالي، لا يُقدم التحويل <quote
+>أثناء التنفيذ</quote
+>.</para
+><para
+>إذا كنت لا ترغب في استخدام هذه الطريقة لإدارة صورك في <filename class="directory"
+>~/Documents/KookaGallery/</filename
+>، يمكنك بالطبع حفظها في موقع آخر. لفعل ذلك، <mousebutton
+>أيمن</mousebutton
+> انقر على اسم الصورة واختر <guilabel
+>حفظ الصورة</guilabel
+>. اختر أي مسار هنا. بالإضافة إلى ذلك، أغلق أو احذف الصور بشكل دائم هنا.</para>
+
+<para
+>لإدراج صور أخرى في المعرض، استخدم <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>استيراد صورة</guimenuitem
+> </menuchoice
+> أو أضفها بالسحب والإفلات. افتح مدير الملفات إلى المجلد الذي يحتوي على الصور المطلوبة. ثم أضفها إلى معرض كوكا بسحبها وإفلاتها في المعرض.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>التعرف على الحروف</title>
+
+<para
+>كما ذُكر سابقًا، يجب تثبيت <application
+>gocr</application
+>. امسح معاينة لمستندك بتدرج الرمادي أو بالألوان. يمكنك المسح في الوضع الثنائي فقط إذا كان لديك ورقة بيضاء نقية مع طباعة سوداء. بعد ذلك، ظلل النص المراد التعرف عليه في نافذة المعاينة. ثم قم بمسحك النهائي في الوضع الثنائي باستخدام <guibutton
+>مسح</guibutton
+>.</para>
+
+<para
+>انقر الآن على أيقونة <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> في شريط الأدوات، <guilabel
+>تحديد OCR</guilabel
+>، أو اختر هذا العنصر في قائمة <guilabel
+>مسح</guilabel
+>. لمحاولتك الأولى، لا تغير الإعدادات المبدئية المعروضة في نافذة <acronym
+>OCR</acronym
+> الناشئة. هذه عادةً ما تكون مناسبة وتلبي معظم الاحتياجات. انقر الآن على <guimenuitem
+>ابدأ OCR</guimenuitem
+>. سترى الآن نافذة تحتوي على نتائج <acronym
+>OCR</acronym
+>. تعتمد الجودة بشكل كبير على جودة المستند نفسه. </para>
+
+<screenshot
+> <screeninfo
+>نافذة gocr</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>بعد اكتمال التعرف على الحروف، ابدأ تدقيقًا إملائيًا للمادة المعترف بها. يمكنك تحرير المحتوى في نافذة <guilabel
+>OCR</guilabel
+> وتصديره كنص عادي. </para>
+<para
+>بعد المسح النهائي، حدد اختيارًا في عرض الصورة على اليمين لتحميل جزء فقط من النص أو الصورة إلى <acronym
+>OCR</acronym
+>. بعد ذلك، في شريط الأدوات، انقر على أيقونة <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> أو انقر في القائمة على <guimenuitem
+>تحديد OCR</guimenuitem
+>. تابع الآن كما هو موصوف في القسم السابق.</para>
+
+<screenshot
+> 
+<screeninfo
+>نتائج <acronym
+>OCR</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>الحقوق والترخيص</title>
+ 
+<para
+>كوكا</para>
+
+<para
+>حقوق النشر للتطبيق 2000-2010، مطورو ومساهمو كوكا</para>
+
+<para
+>حقوق النشر للتوثيق 2002 مارتن سومر <email
+>msommer@suse.de</email
+></para>
+
+<para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; &underGPL; </chapter
+>  
+</book>
+
