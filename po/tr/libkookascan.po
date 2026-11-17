@@ -4,21 +4,21 @@
 # Translators:
 # Volkan, 2013.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2025-10-29 17:20+0300\n"
-"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
+"PO-Revision-Date: 2026-11-16 19:21+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -824,11 +824,11 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
-"Önizlemedeki görsellerin kendiliğinden algılaması, önizleme görselinin arka "
-"planına bağlıdır (belge yüklemeden tarama sonucu).\n"
+"Ön izlemedeki görsellerin kendiliğinden algılaması, ön izleme görselinin "
+"arka planına bağlıdır (belge yüklemeden tarama sonucu).\n"
 "\n"
-"Lütfen önizleme görselinin arka planının siyah mı yoksa beyaz mı olacağını "
-"seçin.s"
+"Lütfen ön izleme görselinin arka planının siyah mı yoksa beyaz mı olacağını "
+"seçin."
 
 #: previewer.cpp:336
 #, kde-format
@@ -929,12 +929,12 @@ msgstr "Çoklu taramalar etkin.<nl/><link url=\"1\">Bir daha gösterme</link>"
 #: scanparams.cpp:175
 #, kde-format
 msgid "Pre&view"
-msgstr "Ön&izleme"
+msgstr "Ö&n izle"
 
 #: scanparams.cpp:176
 #, kde-format
 msgid "Start a preview scan and show the preview image"
-msgstr "Bir önizleme taraması başlat ve önizleme görselini göster"
+msgstr "Bir ön izleme taraması başlat ve ön izleme görselini göster"
 
 #: scanparams.cpp:181
 #, kde-format
@@ -1136,7 +1136,7 @@ msgstr "Tarama sürüyor<nl/><nl/>%1"
 #: scanparams.cpp:764
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
-msgstr "Sanal Tarayıcı kipinde önizleme yapılamaz"
+msgstr "Sanal Tarayıcı kipinde ön izleme yapılamaz"
 
 #: scanparams.cpp:775
 #, kde-format
@@ -1145,8 +1145,8 @@ msgid ""
 "take the first sheet from the feeder.<br/><br/>Are you sure you want to "
 "preview?"
 msgstr ""
-"Tarama kaynağı besleyici olarak ayarlanmış.<br/>Önizleme, ilk yaprağı "
-"besleyiciden alabilir.<br/><br/>Önizlemek istediğinizden emin misiniz?"
+"Tarama kaynağı besleyici olarak ayarlanmış.<br/>Ön izleme, ilk yaprağı "
+"besleyiciden alabilir.<br/><br/>Ön izlemek istediğinizden emin misiniz?"
 
 #: scanparams.cpp:779
 #, kde-format
@@ -1156,7 +1156,7 @@ msgstr "ADF seçili"
 #: scanparams.cpp:780
 #, kde-format
 msgid "Preview"
-msgstr "Önizle"
+msgstr "Ön izle"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:20
