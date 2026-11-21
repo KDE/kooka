@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-09-06 16:34+0200\n"
+"PO-Revision-Date: 2026-11-20 16:48+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -936,7 +936,7 @@ msgctxt "@info"
 msgid ""
 "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"
 msgstr ""
-"S'han activat diverses escaneigs.<nl/><link url=\"1\">No ho tornis a "
+"S'han activat diversos escaneigs.<nl/><link url=\"1\">No ho tornis a "
 "mostrar</link>"
 
 #: scanparams.cpp:175
@@ -1290,8 +1290,8 @@ msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
-"<div>Seleccioneu si un escaneig amb la safata d'escaneig buida resultarà en "
-"una imatge en negre o en blanc</div>"
+"<div>Seleccioneu si un escaneig amb la safata d'escaneig buida donarà com a "
+"resultat una imatge negra o blanca</div>"
 
 #: scansizeselector.cpp:57
 #, kde-format
